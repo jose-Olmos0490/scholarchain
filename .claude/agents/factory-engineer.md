@@ -92,9 +92,8 @@ invariant, refuse that part and report it.
    `git reset --hard`, `git clean -fdx`, disk or filesystem wipes).
 2. **Test-stop hook.** A `Stop` (and, where used, `SubagentStop`) hook runs the
    project's test check and blocks completion when tests fail.
-3. **Formatter behavior.** The post-edit formatter hook stays in place, with its
-   configured formatters and scope unchanged unless a ratified change says
-   otherwise. It must never exit in a way that hides edit failures.
+3. **Formatter behavior.** The post-edit Scala formatter hook must remain in place.  
+   Its configured formatters, scope, and behavior must not be weakend, bypassed, disabled, or removed. It must never exit in a way that hides edit failures.
 4. **Secret-read denial.** Permission rules deny reading secret material:
    `.env*`, `**/secrets/**`, credential files, private keys (`*.pem`, `*.key`,
    `id_*`), and cloud credential directories such as `~/.aws/**`.
