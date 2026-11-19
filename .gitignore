@@ -1,0 +1,47 @@
+# Build outputs
+target/
+project/target/
+project/project/
+.bsp/
+.metals/
+.bloop/
+.scala-build/
+metals.sbt
+
+# IDEs and editors
+.idea/
+.vscode/
+*.iml
+
+# Secrets and local environment (never committed)
+.env*
+*.pem
+*.key
+.claude/settings.local.json
+id_rsa*
+id_ed25519*
+*.p12
+*.jks
+*.pfx
+credentials*
+*.secret.tfvars
+
+# Terraform local state and caches
+.terraform/
+*.tfstate*
+.terraform.tfstate.lock.info
+
+# Datasets: raw downloads stay local
+datasets/raw/
+
+# Generated test marker (written only by sbt markTestRun)
+.claude/.last-test-run
+
+# Local experiment and load-test outputs
+experiments/**/local/
+experiments/**/tmp/
+load-tests/**/local/
+load-tests/**/results-local/
+
+# OS noise
+.DS_Store
