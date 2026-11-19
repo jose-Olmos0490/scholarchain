@@ -1,0 +1,214 @@
+{
+  "permissions": {
+    "disableBypassPermissionsMode": "disable",
+    "allow": [
+      "Read",
+      "Grep",
+      "Glob",
+      "Bash(sbt:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git ls-files:*)",
+      "Bash(git describe:*)",
+      "Bash(bash -n:*)",
+      "Bash(shellcheck:*)",
+      "Bash(jq:*)",
+      "Bash(python3 -I -m json.tool:*)",
+      "Bash(test -x:*)",
+      "Bash(ls:*)",
+      "Bash(sha256sum:*)",
+      "Bash(gzip -t:*)",
+      "Bash(scalafmt:*)",
+      "Bash(terraform fmt:*)",
+      "Bash(terraform validate:*)",
+      "Bash(terraform plan:*)",
+      "Bash(terraform show:*)",
+      "Bash(aws sts get-caller-identity:*)",
+      "Bash(scripts/check.sh:*)",
+      "Bash(scripts/plan.sh:*)",
+      "Bash(.claude/hooks/validate-agent-files.sh:*)",
+      "mcp__github",
+      "mcp__terraform",
+      "mcp__aws-docs",
+      "mcp__aws-api__suggest_aws_commands"
+    ],
+    "ask": [
+      "Bash(terraform init:*)",
+      "Bash(scripts/package.sh:*)",
+      "Bash(scripts/deploy.sh:*)",
+      "Bash(scripts/rollback.sh:*)",
+      "Bash(scripts/smoke-test.sh:*)",
+      "Bash(scripts/run-bounded-pipeline.sh:*)",
+      "Bash(scripts/run-experiment.sh:*)",
+      "Bash(scripts/archive-evidence.sh:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "mcp__aws-api__call_aws",
+      "Edit(./CLAUDE.md)",
+      "Write(./CLAUDE.md)",
+      "Edit(./docs/agents.md)",
+      "Write(./docs/agents.md)",
+      "Edit(./.mcp.json)",
+      "Write(./.mcp.json)",
+      "Edit(./.claude/**)",
+      "Write(./.claude/**)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env*)",
+      "Read(**/.env)",
+      "Read(**/.env*)",
+      "Read(**/secrets/**)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/id_*)",
+      "Read(**/*.p12)",
+      "Read(**/*.pfx)",
+      "Read(**/credentials)",
+      "Read(**/credentials.*)",
+      "Read(**/*credentials*.json)",
+      "Read(**/.netrc)",
+      "Read(**/.git-credentials)",
+      "Read(**/*.tfstate)",
+      "Read(**/*.tfstate.*)",
+      "Read(~/.aws/**)",
+      "Read(~/.ssh/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.kube/**)",
+      "Read(~/.docker/config.json)",
+      "Read(~/.config/gh/**)",
+      "Edit(**/.env*)",
+      "Write(**/.env*)",
+      "Edit(**/secrets/**)",
+      "Write(**/secrets/**)",
+      "Edit(./spec/**)",
+      "Write(./spec/**)",
+      "Edit(./docs/agent-runs/**/human-gate.md)",
+      "Write(./docs/agent-runs/**/human-gate.md)",
+      "Edit(./docs/agent-runs/**/commit.txt)",
+      "Write(./docs/agent-runs/**/commit.txt)",
+      "Edit(./docs/agent-runs/**/prompt.md)",
+      "Write(./docs/agent-runs/**/prompt.md)",
+      "Edit(./.claude/settings.local.json)",
+      "Write(./.claude/settings.local.json)",
+      "Edit(./.claude/.last-test-run)",
+      "Write(./.claude/.last-test-run)",
+      "Bash(terraform apply:*)",
+      "Bash(terraform destroy:*)",
+      "Bash(terraform state rm:*)",
+      "Bash(terraform state push:*)",
+      "Bash(terraform force-unlock:*)",
+      "Bash(tofu apply:*)",
+      "Bash(tofu destroy:*)",
+      "Bash(terragrunt apply:*)",
+      "Bash(terragrunt destroy:*)",
+      "Bash(terragrunt run-all:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push --force-with-lease:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean -f:*)",
+      "Bash(git clean -fd:*)",
+      "Bash(git clean -fdx:*)",
+      "Bash(rm -rf /:*)",
+      "Bash(rm -rf ~:*)",
+      "Bash(rm -rf .git:*)",
+      "Bash(sudo:*)",
+      "Bash(mkfs:*)",
+      "Bash(dd:*)",
+      "Bash(shred:*)",
+      "Bash(printenv:*)",
+      "Bash(aws s3 rm:*)",
+      "Bash(aws s3 rb:*)",
+      "Bash(aws s3api delete-bucket:*)",
+      "Bash(aws s3api delete-object:*)",
+      "Bash(aws s3api delete-objects:*)",
+      "Bash(aws dynamodb delete-table:*)",
+      "Bash(aws dynamodb delete-item:*)",
+      "Bash(aws dynamodb batch-write-item:*)",
+      "Bash(aws neptune delete-db-cluster:*)",
+      "Bash(aws neptune delete-db-instance:*)",
+      "Bash(aws neptune-graph delete-graph:*)",
+      "Bash(aws s3vectors delete-vector-bucket:*)",
+      "Bash(aws s3vectors delete-index:*)",
+      "Bash(aws s3vectors delete-vectors:*)",
+      "Bash(aws ecr delete-repository:*)",
+      "Bash(aws ecr batch-delete-image:*)",
+      "Bash(aws kms schedule-key-deletion:*)",
+      "Bash(aws kms disable-key:*)",
+      "Bash(aws emr terminate-clusters:*)",
+      "Bash(aws emr modify-instance-groups:*)",
+      "Bash(aws emr modify-instance-fleet:*)",
+      "Bash(aws emr put-managed-scaling-policy:*)",
+      "Bash(aws emr create-cluster:*)",
+      "Bash(aws secretsmanager get-secret-value:*)",
+      "Bash(aws cloudformation delete-stack:*)",
+      "Bash(scripts/cleanup.sh:*)",
+      "Bash(./scripts/cleanup.sh:*)",
+      "Bash(bash scripts/cleanup.sh:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": false,
+  "enabledMcpjsonServers": [
+    "github",
+    "aws-api",
+    "terraform",
+    "aws-docs"
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Write|Edit|MultiEdit|NotebookEdit|mcp__aws-api__call_aws",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard-dangerous.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/format-scala.sh",
+            "timeout": 120
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/validate-agent-files.sh --hook",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/verify-tests-ran.sh",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/verify-tests-ran.sh",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}
