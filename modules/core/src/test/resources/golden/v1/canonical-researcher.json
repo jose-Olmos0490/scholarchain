@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "researcher-v1",
+  "researcherId": "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d",
+  "displayName": "Henry Samueli",
+  "orcid": "0000-0003-3175-3913",
+  "dblpPid": null,
+  "openAlexAuthorId": "A5023877407",
+  "dblpAuthorKeys": [
+    "Henry Samueli"
+  ],
+  "identityVersion": null,
+  "affiliationInstitutionIds": [],
+  "identityConfidence": 0.97,
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "mention:2de847637b147dddd1cd4fe5d3e7f1e051e37782c85e3f8b71344d49e0d1c6b1",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": "illustrative-er-policy-v1",
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": [
+      "mention:2de847637b147dddd1cd4fe5d3e7f1e051e37782c85e3f8b71344d49e0d1c6b1"
+    ]
+  }
+}

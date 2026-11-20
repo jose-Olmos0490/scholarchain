@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "evidence-bundle-v1",
+  "bundleId": "bundle:c063bb8db8d474c37b0e40cd0bd03c770bb9ae006b67d6ab2f2307c0b30a985a",
+  "queryId": "query:4b375f581335a0c654bbd34e34121a4777af5b722a93b9e048ea8fee51d5e524",
+  "graphEvidence": [
+    {
+      "schemaVersion": "evidence-v1",
+      "evidenceId": "evidence:57a64a00f8fe17db5b118d0e01ea0d71ca3e2b9326d6e838128f4fa20b3fc304",
+      "evidenceType": "COAUTHOR_EDGE",
+      "referencedIds": [
+        "coauthor-edge:7b9fc7a1202b37cb966d8b9003b431fba718c2ecacb348de47bcd61429e794ee"
+      ],
+      "workId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+      "sourceUri": "s3://${GRAPH_BUCKET}/edges/type=coauthored_with/",
+      "chunkId": null,
+      "graphPath": [
+        "researcher:openalex:c2e53727f9756b062f5a17732f0d9985ec0aa7335a8d45197742d2eb8b135c7a",
+        "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d"
+      ],
+      "score": null,
+      "textHash": null,
+      "text": null,
+      "provenance": {
+        "schemaVersion": "provenance-v1",
+        "sourceDataset": "SCHOLARCHAIN",
+        "sourceRecordId": "pair-candidate:0c5ef98b1e3ac539ba51727c2acb06781876ab8074f630fd5892b23eef4f9fd7",
+        "snapshot": "2026-11-01",
+        "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+        "policyVersion": "illustrative-coauthor-policy-v1",
+        "modelVersion": null,
+        "promptVersion": null,
+        "derivedFrom": [
+          "pair-candidate:0c5ef98b1e3ac539ba51727c2acb06781876ab8074f630fd5892b23eef4f9fd7"
+        ]
+      }
+    }
+  ],
+  "semanticEvidence": [
+    {
+      "schemaVersion": "evidence-v1",
+      "evidenceId": "evidence:87d8a4db0b56f774181ba946bb0b9c7a48bebe05ba3c6cf5032a2a5110c74ee2",
+      "evidenceType": "TEXT_CHUNK",
+      "referencedIds": [
+        "chunk:ccfe2e23328038d2a596c9c93f7de0df4e8b004871046cd25d5912dcd9e486b9"
+      ],
+      "workId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+      "sourceUri": "s3://${RAG_BUCKET}/chunks/",
+      "chunkId": "chunk:ccfe2e23328038d2a596c9c93f7de0df4e8b004871046cd25d5912dcd9e486b9",
+      "graphPath": null,
+      "score": 0.83,
+      "textHash": "sha256:5aba39701ed210c257ed36d38277fd037321c5a28bb650228c2e8bd71d0a2c3a",
+      "text": "Embedded systems design in the new millennium (panel session).",
+      "provenance": {
+        "schemaVersion": "provenance-v1",
+        "sourceDataset": "SCHOLARCHAIN",
+        "sourceRecordId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+        "snapshot": "2026-11-01",
+        "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+        "policyVersion": null,
+        "modelVersion": "illustrative-embedding-model",
+        "promptVersion": null,
+        "derivedFrom": []
+      }
+    }
+  ],
+  "identityConfidence": {
+    "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d": 0.97,
+    "researcher:openalex:c2e53727f9756b062f5a17732f0d9985ec0aa7335a8d45197742d2eb8b135c7a": 0.95
+  },
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "query:4b375f581335a0c654bbd34e34121a4777af5b722a93b9e048ea8fee51d5e524",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": null,
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": []
+  }
+}

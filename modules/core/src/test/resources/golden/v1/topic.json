@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "topic-v1",
+  "topicId": "topic:openalex:de321d1e1bc19251ce368be447cb9f34071c9dbb7ea50f90efb4466b9a82527f",
+  "name": "Low-power high-performance VLSI design",
+  "parentTopicId": null,
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "OPENALEX",
+    "sourceRecordId": "https://openalex.org/T10363",
+    "snapshot": "api-2026-11-20",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": null,
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": []
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "work-v1",
+  "workId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+  "source": "DBLP",
+  "sourceRecordId": "conf/dac/NewtonRMSB00",
+  "recordType": "inproceedings",
+  "title": "Embedded systems design in the new millennium (panel session).",
+  "normalizedTitle": "embedded systems design in the new millennium panel session",
+  "year": 2000,
+  "venueId": "venue:dblp:b882801623ec87ce8c5063ee1b85bb934879df79d38c8d7ac9aa06ac54680c33",
+  "doi": "10.1145/337292.337434",
+  "arxivId": null,
+  "authors": [
+    {
+      "schemaVersion": "author-mention-v1",
+      "mentionId": "mention:508b2d74bd8214b27756a6be4721f87852a8c526f5318a6642ecb0adba383918",
+      "workId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+      "position": 1,
+      "rawName": "A. Richard Newton",
+      "normalizedName": "a richard newton",
+      "sourceAuthorKey": "A. Richard Newton",
+      "orcid": null,
+      "provenance": {
+        "schemaVersion": "provenance-v1",
+        "sourceDataset": "DBLP",
+        "sourceRecordId": "conf/dac/NewtonRMSB00",
+        "snapshot": "2026-11-01",
+        "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+        "policyVersion": null,
+        "modelVersion": null,
+        "promptVersion": null,
+        "derivedFrom": []
+      }
+    },
+    {
+      "schemaVersion": "author-mention-v1",
+      "mentionId": "mention:927138da3dcbf63fecadd6837fd31a8618535561ce3839df08120f336ca37961",
+      "workId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+      "position": 2,
+      "rawName": "Walden C. Rhines",
+      "normalizedName": "walden c rhines",
+      "sourceAuthorKey": "Walden C. Rhines",
+      "orcid": null,
+      "provenance": {
+        "schemaVersion": "provenance-v1",
+        "sourceDataset": "DBLP",
+        "sourceRecordId": "conf/dac/NewtonRMSB00",
+        "snapshot": "2026-11-01",
+        "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+        "policyVersion": null,
+        "modelVersion": null,
+        "promptVersion": null,
+        "derivedFrom": []
+      }
+    },
+    {
+      "schemaVersion": "author-mention-v1",
+      "mentionId": "mention:4e8df1f0297e9bcb9bbd86d8a35f8efe5fe1e9c663e30835cb2de6076eb639fd",
+      "workId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+      "position": 3,
+      "rawName": "Sünke Mehrgardt",
+      "normalizedName": "sunke mehrgardt",
+      "sourceAuthorKey": "Sünke Mehrgardt",
+      "orcid": null,
+      "provenance": {
+        "schemaVersion": "provenance-v1",
+        "sourceDataset": "DBLP",
+        "sourceRecordId": "conf/dac/NewtonRMSB00",
+        "snapshot": "2026-11-01",
+        "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+        "policyVersion": null,
+        "modelVersion": null,
+        "promptVersion": null,
+        "derivedFrom": []
+      }
+    },
+    {
+      "schemaVersion": "author-mention-v1",
+      "mentionId": "mention:2de847637b147dddd1cd4fe5d3e7f1e051e37782c85e3f8b71344d49e0d1c6b1",
+      "workId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+      "position": 4,
+      "rawName": "Henry Samueli",
+      "normalizedName": "henry samueli",
+      "sourceAuthorKey": "Henry Samueli",
+      "orcid": null,
+      "provenance": {
+        "schemaVersion": "provenance-v1",
+        "sourceDataset": "DBLP",
+        "sourceRecordId": "conf/dac/NewtonRMSB00",
+        "snapshot": "2026-11-01",
+        "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+        "policyVersion": null,
+        "modelVersion": null,
+        "promptVersion": null,
+        "derivedFrom": []
+      }
+    },
+    {
+      "schemaVersion": "author-mention-v1",
+      "mentionId": "mention:f57964a78ac2d6cbedc0603fdbad0073a7c7462d44a5e6125bb0bc03106704d3",
+      "workId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+      "position": 5,
+      "rawName": "Tudor Brown",
+      "normalizedName": "tudor brown",
+      "sourceAuthorKey": "Tudor Brown",
+      "orcid": null,
+      "provenance": {
+        "schemaVersion": "provenance-v1",
+        "sourceDataset": "DBLP",
+        "sourceRecordId": "conf/dac/NewtonRMSB00",
+        "snapshot": "2026-11-01",
+        "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+        "policyVersion": null,
+        "modelVersion": null,
+        "promptVersion": null,
+        "derivedFrom": []
+      }
+    }
+  ],
+  "abstractTextRef": null,
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "DBLP",
+    "sourceRecordId": "conf/dac/NewtonRMSB00",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": null,
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": []
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "venue-v1",
+  "venueId": "venue:dblp:b882801623ec87ce8c5063ee1b85bb934879df79d38c8d7ac9aa06ac54680c33",
+  "name": "DAC",
+  "venueType": "conference",
+  "sourceVenueKey": "conf/dac",
+  "issns": [
+    "0738-100X"
+  ],
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "DBLP",
+    "sourceRecordId": "conf/dac/2000",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": null,
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": []
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "match-decision-v1",
+  "decisionId": "match:7f5708785316fbc7ab483c8d7765cd029e5bce1684d56d1386109c8d3d83e93f",
+  "sourceId": "mention:2de847637b147dddd1cd4fe5d3e7f1e051e37782c85e3f8b71344d49e0d1c6b1",
+  "targetId": "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d",
+  "features": {
+    "doiExact": 1,
+    "nameSimilarity": 1,
+    "authorPositionAgreement": 1
+  },
+  "rulesFired": [
+    "ILLUSTRATIVE_EXACT_DOI_WORK_LINK",
+    "ILLUSTRATIVE_AUTHOR_POSITION_MATCH"
+  ],
+  "decision": "ACCEPTED",
+  "confidence": 0.97,
+  "reasonCodes": [
+    "ILLUSTRATIVE_DOI_MATCH",
+    "ILLUSTRATIVE_NAME_MATCH",
+    "ILLUSTRATIVE_POSITION_MATCH"
+  ],
+  "policyVersion": "illustrative-er-policy-v1",
+  "modelVersion": null,
+  "promptVersion": null,
+  "decidedAt": "2026-11-19T00:00:00Z",
+  "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "mention:2de847637b147dddd1cd4fe5d3e7f1e051e37782c85e3f8b71344d49e0d1c6b1",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": "illustrative-er-policy-v1",
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": []
+  }
+}

@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE dblp SYSTEM "dblp-2023-06-28.dtd">
+<dblp>
+<incollection mdate="2019-01-09" key="reference/vision/Singh14" publtype="encyclopedia">
+<author>Manish Singh 0001</author>
+<title>Transparency and Translucency.</title>
+<pages>815-819</pages>
+<year>2014</year>
+<booktitle>Computer Vision, A Reference Guide</booktitle>
+<ee>https://doi.org/10.1007/978-0-387-31439-6_559</ee>
+<url>db/reference/vision/vision2014.html#Singh14</url>
+</incollection>
+<incollection mdate="2017-07-12" key="reference/vision/Wong14" publtype="encyclopedia">
+<author>Tien-Tsin Wong</author>
+<title>Image-Based Lighting.</title>
+<pages>387-390</pages>
+<year>2014</year>
+<booktitle>Computer Vision, A Reference Guide</booktitle>
+<ee>https://doi.org/10.1007/978-0-387-31439-6_14</ee>
+<url>db/reference/vision/vision2014.html#Wong14</url>
+</incollection>
+<incollection mdate="2018-11-02" key="reference/vision/Pont14b" publtype="encyclopedia">
+<author orcid="0000-0002-9834-9600">Sylvia C. Pont</author>
+<title>Surface Roughness.</title>
+<pages>781-782</pages>
+<year>2014</year>
+<booktitle>Computer Vision, A Reference Guide</booktitle>
+<ee>https://doi.org/10.1007/978-0-387-31439-6_539</ee>
+<url>db/reference/vision/vision2014.html#Pont14b</url>
+</incollection>
+<book mdate="2017-05-16" key="reference/vision/2014">
+<editor>Katsushi Ikeuchi</editor>
+<title>Computer Vision, A Reference Guide</title>
+<publisher>Springer</publisher>
+<year>2014</year>
+<isbn>978-0-387-30771-8</isbn>
+<isbn>978-0-387-31439-6</isbn>
+<ee>https://doi.org/10.1007/978-0-387-31439-6</ee>
+<booktitle>Computer Vision, A Reference Guide</booktitle>
+<url>db/reference/vision/vision2014.html</url>
+</book>
+<book mdate="2017-05-16" key="reference/cn/2014">
+<editor>Dieter Jaeger</editor>
+<editor>Ranu Jung</editor>
+<title>Encyclopedia of Computational Neuroscience</title>
+<publisher>Springer</publisher>
+<year>2014</year>
+<isbn>978-1-4614-7320-6</isbn>
+<ee>https://doi.org/10.1007/978-1-4614-7320-6</ee>
+<url>db/reference/cn/cn2014.html</url>
+</book>
+<proceedings mdate="2017-05-16" key="reference/med/2013">
+<editor>Borko Furht</editor>
+<editor>Ankur Agarwal</editor>
+<title>Handbook of Medical and Healthcare Technologies</title>
+<year>2013</year>
+<publisher>Springer</publisher>
+<ee>https://doi.org/10.1007/978-1-4614-8495-0</ee>
+<isbn>978-1-4614-8494-3</isbn>
+<url>db/reference/med/med2013.html</url>
+</proceedings>
+<proceedings mdate="2020-03-27" key="reference/genetic/2015">
+<editor orcid="0000-0002-2798-0104">Amir Hossein Gandomi</editor>
+<editor orcid="0000-0002-7593-8509">Amir Hossein Alavi</editor>
+<editor orcid="0000-0002-7002-5815">Conor Ryan</editor>
+<title>Handbook of Genetic Programming Applications</title>
+<publisher>Springer</publisher>
+<year>2015</year>
+<isbn>978-3-319-20882-4</isbn>
+<ee>https://doi.org/10.1007/978-3-319-20883-1</ee>
+<url>db/reference/genetic/genetic2015.html</url>
+</proceedings>
+<mastersthesis mdate="2020-03-12" key="ms/Klaas2007">
+<author>Vanessa C. Klaas</author>
+<title>Who's Who in the World Wide Web: Approaches to Name Disambiguation</title>
+<year>2007</year>
+<school>Diplomarbeit, LMU M&uuml;nchen, Informatik</school>
+<ee type="oa">http://www.pms.ifi.lmu.de/publikationen/diplomarbeiten/Vanessa.Klaas/thesis.pdf</ee>
+</mastersthesis>
+<mastersthesis mdate="2020-03-12" key="ms/Ley2006">
+<author>Rita Ley</author>
+<title>Der Einfluss kleiner naturnaher Retentionsma&szlig;nahmen in der Fl&auml;che auf den Hochwasserabfluss - Kleinr&uuml;ckhaltebecken -.</title>
+<year>2006</year>
+<school>Diplomarbeit, Universit&auml;t Trier, FB VI, Physische Geographie</school>
+<ee type="oa">http://dblp.uni-trier.de/papers/DiplomarbeitRitaLey.pdf</ee>
+</mastersthesis>
+<data mdate="2026-10-30" key="data/13/WangB26a">
+<author orcid="0000-0003-0847-1029">Zhi-Wei Wang</author>
+<author orcid="0000-0003-4790-136X">Samuel Leon Braunstein</author>
+<title>Codes for &quot;Emergent Spacetime and the Large-angle CMB Anomalies: A Derived Primordial Cutoff&quot;.</title>
+<publisher>Zenodo</publisher>
+<year>2026</year>
+<month>August</month>
+<ee type="oa">https://doi.org/10.5281/zenodo.22115603</ee>
+<stream>streams/repo/zenodo</stream>
+<rel type="versionOf" uri="https://doi.org/10.5281/zenodo.22115602" label="Version 1" sort="1"></rel>
+</data>
+<data mdate="2026-10-29" key="data/13/VasilevaWRDJL26" publtype="version">
+<author orcid="0009-0006-2024-4653">Veronika Vasileva</author>
+<author orcid="0000-0003-0237-1342">Eduard Wolf</author>
+<author orcid="0000-0003-1461-7442">Volker Riediger</author>
+<author orcid="0009-0009-6876-8693">Buschmann Daniel</author>
+<author orcid="0000-0002-8938-0470">Jan J&uuml;rjens</author>
+<author orcid="0000-0003-0844-3722">Florian Lauf</author>
+<title>TITAN - Requirements Eliciation Evaluation: Analysis and Results.</title>
+<publisher>Zenodo</publisher>
+<year>2026</year>
+<month>August</month>
+<ee type="oa">https://doi.org/10.5281/zenodo.21906069</ee>
+<stream>streams/repo/zenodo</stream>
+<rel type="versionOf" uri="https://doi.org/10.5281/zenodo.18847477" label="Version 2" sort="2">data/13/VasilevaWRDJL26a</rel>
+</data>
+<data mdate="2026-10-30" key="data/13/Xu26" publtype="version">
+<author orcid="0009-0002-3789-8136">Yi Xu</author>
+<title>CODA-Net kath (Paderborn) first valid F1/F2 gate audit bundle - valid no-go, healthy instrument (2026-08-19).</title>
+<publisher>Zenodo</publisher>
+<year>2026</year>
+<month>August</month>
+<ee type="oa">https://doi.org/10.5281/zenodo.22013761</ee>
+<stream>streams/repo/zenodo</stream>
+<rel type="versionOf" uri="https://doi.org/10.5281/zenodo.22013760" label="Version 2026-08-19" sort="1">data/13/Xu26d</rel>
+</data>
+<article mdate="2017-06-08" key="dblpnote/neverpublished" publtype="informal">
+<title>(was never published)</title>
+</article>
+<article mdate="2017-06-08" key="dblpnote/error" publtype="informal">
+<title>(error)</title>
+</article>
+<proceedings mdate="2025-08-21" key="series/isrl/2023-238">
+<editor orcid="0000-0002-5150-0393">Vincenzo Arceri</editor>
+<editor orcid="0000-0002-0946-5440">Agostino Cortesi</editor>
+<editor orcid="0000-0002-4678-933X">Pietro Ferrara 0001</editor>
+<editor orcid="0000-0003-3712-5301">Martina Olliaro</editor>
+<title>Challenges of Software Verification</title>
+<publisher>Springer</publisher>
+<year>2023</year>
+<series href="db/series/isrl/index.html">Intelligent Systems Reference Library</series>
+<volume>238</volume>
+<isbn>978-981-19-9600-9</isbn>
+<isbn>978-981-19-9601-6</isbn>
+<isbn>978-981-19-9603-0</isbn>
+<ee>https://doi.org/10.1007/978-981-19-9601-6</ee>
+<url>db/series/isrl/isrl238.html</url>
+</proceedings>
+<inproceedings mdate="2023-09-30" key="series/sapere/BerkeleyR13">
+<author>Istvan S. N. Berkeley</author>
+<author orcid="0000-0002-4414-6920">Claiborne Rice</author>
+<title>Machine Mentality?</title>
+<pages>1-15</pages>
+<year>2011</year>
+<booktitle>PT-AI</booktitle>
+<ee>https://doi.org/10.1007/978-3-642-31674-6_1</ee>
+<crossref>series/sapere/2013-5</crossref>
+<url>db/series/sapere/sapere5.html#BerkeleyR13</url>
+</inproceedings>
+<inproceedings mdate="2025-09-06" key="series/sapere/NasutoB13">
+<author orcid="0000-0001-9414-9049">Slawomir J. Nasuto</author>
+<author>John Mark Bishop</author>
+<title>Of (Zombie) Mice and Animats.</title>
+<pages>85-106</pages>
+<year>2011</year>
+<booktitle>PT-AI</booktitle>
+<ee>https://doi.org/10.1007/978-3-642-31674-6_7</ee>
+<crossref>series/sapere/2013-5</crossref>
+<url>db/series/sapere/sapere5.html#NasutoB13</url>
+</inproceedings>
+<inproceedings mdate="2019-09-06" key="series/sapere/SchiaffonatiV13">
+<author>Viola Schiaffonati</author>
+<author>Mario Verdicchio</author>
+<title>The Influence of Engineering Theory and Practice on Philosophy of AI.</title>
+<pages>375-388</pages>
+<year>2011</year>
+<booktitle>PT-AI</booktitle>
+<ee>https://doi.org/10.1007/978-3-642-31674-6_28</ee>
+<crossref>series/sapere/2013-5</crossref>
+<url>db/series/sapere/sapere5.html#SchiaffonatiV13</url>
+</inproceedings>
+<phdthesis mdate="2021-07-17" key="series/ssw/Vougiouklis20">
+<author>Pavlos Vougiouklis</author>
+<title>Neural Generation of Textual Summaries from Knowledge Base Triples</title>
+<publisher>IOS Press</publisher>
+<year>2020</year>
+<series href="db/series/ssw/index.html">Studies on the Semantic Web</series>
+<volume>45</volume>
+<pages>1-152</pages>
+<school>University of Southampton, UK</school>
+<isbn>978-1-64368-066-8</isbn>
+<isbn>978-1-64368-067-5</isbn>
+<ee>https://doi.org/10.3233/SSW200006-mono</ee>
+<ee>https://d-nb.info/1210734702</ee>
+</phdthesis>
+<phdthesis mdate="2024-04-11" key="series/lnbip/Weber09">
+<author orcid="0000-0002-4833-5921">Ingo M. Weber</author>
+<title>Semantic Methods for Execution-level Business Process Modeling - Modeling Support Through Process Verification and Service Composition</title>
+<volume>40</volume>
+<year>2009</year>
+<pages>3-231</pages>
+<school>Karlsruhe Institute of Technology, Germany</school>
+<publisher>Springer</publisher>
+<series href="db/series/lnbip/index.html">Lecture Notes in Business Information Processing</series>
+<isbn>978-3-642-05084-8</isbn>
+<isbn>978-3-642-05085-5</isbn>
+<ee>https://doi.org/10.1007/978-3-642-05085-5</ee>
+<ee>https://nbn-resolving.org/urn:nbn:de:1111-20091214234</ee>
+<ee>https://d-nb.info/998030961</ee>
+<ee>https://d-nb.info/999067885</ee>
+<ee>https://www.wikidata.org/entity/Q58196259</ee>
+<note type="source">base-search.net (ftubkarlsruhe:oai:EVASTAR-Karlsruhe.de:1000014868)</note>
+<ee>https://publikationen.bibliothek.kit.edu/1000014868</ee>
+<ee>https://www.base-search.net/Record/5d16dd518a1db7bde08c3524814738c95866542e3e1f6d459caeb73b0571e41b</ee>
+</phdthesis>
+<inproceedings mdate="2018-11-06" key="conf/dac/NewtonRMSB00">
+<author>A. Richard Newton</author>
+<author>Walden C. Rhines</author>
+<author>S&uuml;nke Mehrgardt</author>
+<author>Henry Samueli</author>
+<author>Tudor Brown</author>
+<title>Embedded systems design in the new millennium (panel session).</title>
+<pages>338-339</pages>
+<year>2000</year>
+<crossref>conf/dac/2000</crossref>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/337292.337434</ee>
+<url>db/conf/dac/dac2000.html#NewtonRMSB00</url>
+</inproceedings>
+<inproceedings mdate="2026-10-31" key="conf/dac/GuoXJLHYZZS26">
+<author>Feng Guo</author>
+<author>Yueyue Xi</author>
+<author>Jingyu Jia</author>
+<author>Jiawei Liu 0006</author>
+<author>Tianshu Hou</author>
+<author>Yuyang Ye 0001</author>
+<author>Jianwang Zhai</author>
+<author>Kang Zhao</author>
+<author>Chuan Shi 0001</author>
+<title>GEMIR: Graph-Based Joint Modeling of Electromigration and IR Drop for Power Grid.</title>
+<pages>136:1-136:7</pages>
+<year>2026</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/3770743.3803897</ee>
+<crossref>conf/dac/2026</crossref>
+<url>db/conf/dac/dac2026.html#GuoXJLHYZZS26</url>
+</inproceedings>
+<inproceedings mdate="2018-11-06" key="conf/dac/SixCRM86">
+<author>Paul Six</author>
+<author>Luc J. M. Claesen</author>
+<author>Jan M. Rabaey</author>
+<author>Hugo De Man</author>
+<title>An intelligent module generator environment.</title>
+<pages>730-735</pages>
+<year>1986</year>
+<crossref>conf/dac/1986</crossref>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/318013.318151</ee>
+<url>db/conf/dac/dac1986.html#SixCRM86</url>
+</inproceedings>
+<inproceedings mdate="2018-11-06" key="conf/dac/YalcinMPBS99">
+<author>Hakan Yalcin</author>
+<author>Mohammad Mortazavi</author>
+<author>Robert Palermo</author>
+<author>Cyrus Bamji</author>
+<author>Karem A. Sakallah</author>
+<title>Functional Timing Analysis for IP Characterization.</title>
+<pages>731-736</pages>
+<year>1999</year>
+<crossref>conf/dac/1999</crossref>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/309847.310045</ee>
+<url>db/conf/dac/dac99.html#YalcinMPBS99</url>
+</inproceedings>
+<inproceedings mdate="2025-03-03" key="conf/dac/LiuPS98">
+<author>Ying Liu</author>
+<author orcid="0000-0002-8605-8240">Lawrence T. Pileggi</author>
+<author>Andrzej J. Strojwas</author>
+<title><i>ftd</i>: An Exact Frequency to Time Domain Conversion for Reduced Order RLC Interconnect Models.</title>
+<pages>469-472</pages>
+<year>1998</year>
+<crossref>conf/dac/1998</crossref>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/277044.277174</ee>
+<url>db/conf/dac/dac98.html#LiuPS98</url>
+</inproceedings>
+<inproceedings mdate="2018-11-06" key="conf/dac/MinS82">
+<author>Yinghua Min</author>
+<author>Stephen Y. H. Su</author>
+<title>Testing functional faults in VLSI.</title>
+<pages>384-392</pages>
+<year>1982</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/800263.809234</ee>
+<crossref>conf/dac/1982</crossref>
+<url>db/conf/dac/dac1982.html#MinS82</url>
+</inproceedings>
+<inproceedings mdate="2024-10-06" key="conf/dac/CasuM04">
+<author orcid="0000-0002-1026-0178">Mario R. Casu</author>
+<author orcid="0009-0004-1141-0344">Luca Macchiarulo</author>
+<title>A new approach to latency insensitive design.</title>
+<pages>576-581</pages>
+<year>2004</year>
+<crossref>conf/dac/2004</crossref>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/996566.996725</ee>
+<url>db/conf/dac/dac2004.html#CasuM04</url>
+</inproceedings>
+<inproceedings mdate="2018-11-06" key="conf/dac/RoyKG09">
+<author>Kaushik Roy 0001</author>
+<author>Jaydeep P. Kulkarni</author>
+<author>Sumeet Kumar Gupta</author>
+<title>Device/circuit interactions at 22nm technology node.</title>
+<pages>97-102</pages>
+<year>2009</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/1629911.1629942</ee>
+<crossref>conf/dac/2009</crossref>
+<url>db/conf/dac/dac2009.html#RoyKG09</url>
+</inproceedings>
+<inproceedings mdate="2018-11-06" key="conf/dac/SinghNLS05">
+<author>Jaskirat Singh</author>
+<author>Vidyasagar Nookala</author>
+<author>Zhi-Quan Luo</author>
+<author>Sachin S. Sapatnekar</author>
+<title>Robust gate sizing by geometric programming.</title>
+<pages>315-320</pages>
+<year>2005</year>
+<crossref>conf/dac/2005</crossref>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/1065579.1065662</ee>
+<url>db/conf/dac/dac2005.html#SinghNLS05</url>
+</inproceedings>
+<inproceedings mdate="2018-11-06" key="conf/dac/QiuM12">
+<author>Xiang Qiu</author>
+<author>Malgorzata Marek-Sadowska</author>
+<title>Can pin access limit the footprint scaling?</title>
+<pages>1100-1106</pages>
+<year>2012</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/2228360.2228560</ee>
+<crossref>conf/dac/2012</crossref>
+<url>db/conf/dac/dac2012.html#QiuM12</url>
+</inproceedings>
+<inproceedings mdate="2025-01-19" key="conf/dac/RoquetSRTSK24">
+<author orcid="0009-0001-8458-516X">Lucas Roquet</author>
+<author orcid="0000-0002-3504-9862">Fernando Fernandes dos Santos</author>
+<author orcid="0000-0002-0821-1879">Paolo Rech</author>
+<author orcid="0000-0003-1484-5162">Marcello Traiola</author>
+<author orcid="0000-0003-4334-6418">Olivier Sentieys</author>
+<author orcid="0000-0002-9293-469X">Angeliki Kritikakou</author>
+<title>Cross-Layer Reliability Evaluation and Efficient Hardening of Large Vision Transformers Models.</title>
+<pages>291:1-291:6</pages>
+<year>2024</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/3649329.3655688</ee>
+<ee>https://www.wikidata.org/entity/Q131132528</ee>
+<crossref>conf/dac/2024</crossref>
+<url>db/conf/dac/dac2024.html#RoquetSRTSK24</url>
+</inproceedings>
+<inproceedings mdate="2026-03-24" key="conf/dac/LiuZWCYHYJ22">
+<author>Fangxin Liu</author>
+<author>Wenbo Zhao 0005</author>
+<author>Zongwu Wang</author>
+<author>Yongbiao Chen</author>
+<author>Tao Yang 0031</author>
+<author>Zhezhi He</author>
+<author>Xiaokang Yang 0001</author>
+<author orcid="0000-0002-7353-8798">Li Jiang 0002</author>
+<title>SATO: spiking neural network acceleration via temporal-oriented dataflow and architecture.</title>
+<pages>1105-1110</pages>
+<year>2022</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/3489517.3530592</ee>
+<crossref>conf/dac/2022</crossref>
+<url>db/conf/dac/dac2022.html#LiuZWCYHYJ22</url>
+</inproceedings>
+<inproceedings mdate="2018-11-06" key="conf/dac/KoppelmanM80">
+<author>George M. Koppelman</author>
+<author>Klim Maling</author>
+<title>Verifying deep logic hierarchies with ALEX.</title>
+<pages>328-335</pages>
+<year>1980</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/800139.804546</ee>
+<crossref>conf/dac/1980</crossref>
+<url>db/conf/dac/dac1980.html#KoppelmanM80</url>
+</inproceedings>
+<inproceedings mdate="2026-06-22" key="conf/dac/AhnYLHKP20">
+<author>Sunwoo Ahn</author>
+<author>Hayoon Yi</author>
+<author orcid="0000-0001-8414-966X">Younghan Lee 0001</author>
+<author orcid="0000-0002-1787-4690">Whoi Ree Ha</author>
+<author>Giyeol Kim</author>
+<author>Yunheung Paek</author>
+<title>Hawkware: Network Intrusion Detection based on Behavior Analysis with ANNs on an IoT Device.</title>
+<pages>1-6</pages>
+<year>2020</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1109/DAC18072.2020.9218559</ee>
+<crossref>conf/dac/2020</crossref>
+<url>db/conf/dac/dac2020.html#AhnYLHKP20</url>
+</inproceedings>
+<inproceedings mdate="2018-11-06" key="conf/dac/ShiG03">
+<author>Kaijian Shi</author>
+<author>Graig Godwin</author>
+<title>Hybrid hierarchical timing closure methodology for a high performance and low power DSP.</title>
+<pages>850-855</pages>
+<year>2003</year>
+<crossref>conf/dac/2003</crossref>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/775832.776046</ee>
+<url>db/conf/dac/dac2003.html#ShiG03</url>
+</inproceedings>
+<inproceedings mdate="2024-11-30" key="conf/dac/ParkPVC24">
+<author orcid="0000-0001-7321-0269">Chanwoo Park</author>
+<author orcid="0009-0004-4602-9877">Junghwan Park</author>
+<author orcid="0000-0002-5002-3978">Premkumar Vincent</author>
+<author orcid="0009-0006-0425-5301">Hyunbo Cho</author>
+<title>Accelerating DTCO with a Sample-Efficient Active Learning Framework for TCAD Device Modeling.</title>
+<pages>132:1-132:6</pages>
+<year>2024</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/3649329.3655925</ee>
+<crossref>conf/dac/2024</crossref>
+<url>db/conf/dac/dac2024.html#ParkPVC24</url>
+</inproceedings>
+<inproceedings mdate="2026-07-10" key="conf/dac/PuL0HLC024">
+<author orcid="0000-0002-1322-5642">Yuan Pu 0001</author>
+<author orcid="0009-0008-9370-4504">Fangzhou Liu 0005</author>
+<author orcid="0009-0007-7835-3024">Yu Zhang 0189</author>
+<author orcid="0009-0009-4909-6588">Zhuolun He</author>
+<author orcid="0000-0002-0977-2774">Yibo Lin</author>
+<author orcid="0009-0006-1057-1319">Kai-Yuan Chao</author>
+<author orcid="0000-0001-6406-4810">Bei Yu 0001</author>
+<title>Lesyn: Placement-aware Logic Resynthesis for Non-Integer Multiple-Cell-Height Designs.</title>
+<pages>116:1-116:6</pages>
+<year>2024</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/3649329.3656243</ee>
+<crossref>conf/dac/2024</crossref>
+<url>db/conf/dac/dac2024.html#PuL0HLC024</url>
+</inproceedings>
+<inproceedings mdate="2025-03-03" key="conf/dac/ZhangDV22">
+<author>Bonan Zhang</author>
+<author orcid="0000-0001-8029-1060">Peter Deaville</author>
+<author>Naveen Verma</author>
+<title>Statistical computing framework and demonstration for in-memory computing systems.</title>
+<pages>979-984</pages>
+<year>2022</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/3489517.3530557</ee>
+<ee>https://www.wikidata.org/entity/Q130970879</ee>
+<crossref>conf/dac/2022</crossref>
+<url>db/conf/dac/dac2022.html#ZhangDV22</url>
+</inproceedings>
+<inproceedings mdate="2019-06-02" key="conf/dac/KravetsK04">
+<author orcid="0000-0002-4475-5427">Victor N. Kravets</author>
+<author>Prabhakar Kudva</author>
+<title>Implicit enumeration of structural changes in circuit optimization.</title>
+<pages>438-441</pages>
+<year>2004</year>
+<crossref>conf/dac/2004</crossref>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/996566.996691</ee>
+<ee>https://www.wikidata.org/entity/Q59276400</ee>
+<url>db/conf/dac/dac2004.html#KravetsK04</url>
+</inproceedings>
+<inproceedings mdate="2024-12-24" key="conf/dac/LeeCY22">
+<author>Suyong Lee</author>
+<author orcid="0009-0009-2016-6714">Insu Choi</author>
+<author>Joon-Sung Yang</author>
+<title>Bipolar vector classifier for fault-tolerant deep neural networks.</title>
+<pages>673-678</pages>
+<year>2022</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/3489517.3530498</ee>
+<crossref>conf/dac/2022</crossref>
+<url>db/conf/dac/dac2022.html#LeeCY22</url>
+</inproceedings>
+<inproceedings mdate="2021-08-08" key="conf/dac/HsiaoA19">
+<author>Hsuan Hsiao</author>
+<author>Jason Helge Anderson</author>
+<title>Thread Weaving: Static Resource Scheduling for Multithreaded High-Level Synthesis.</title>
+<pages>2</pages>
+<year>2019</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/3316781.3317924</ee>
+<ee>https://ieeexplore.ieee.org/document/8806996</ee>
+<crossref>conf/dac/2019</crossref>
+<url>db/conf/dac/dac2019.html#HsiaoA19</url>
+</inproceedings>
+<inproceedings mdate="2018-11-06" key="conf/dac/PomeranzR03">
+<author>Irith Pomeranz</author>
+<author>Sudhakar M. Reddy</author>
+<title>On test data compression and n-detection test sets.</title>
+<pages>748-751</pages>
+<year>2003</year>
+<crossref>conf/dac/2003</crossref>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/775832.776023</ee>
+<url>db/conf/dac/dac2003.html#PomeranzR03</url>
+</inproceedings>
+<inproceedings mdate="2018-11-06" key="conf/dac/SeshiaLB03">
+<author>Sanjit A. Seshia</author>
+<author>Shuvendu K. Lahiri</author>
+<author>Randal E. Bryant</author>
+<title>A hybrid SAT-based decision procedure for separation logic with uninterpreted functions.</title>
+<pages>425-430</pages>
+<year>2003</year>
+<crossref>conf/dac/2003</crossref>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/775832.775945</ee>
+<url>db/conf/dac/dac2003.html#SeshiaLB03</url>
+</inproceedings>
+<inproceedings mdate="2018-11-06" key="conf/dac/KhatriMBOS99">
+<author>Sunil P. Khatri</author>
+<author>Amit Mehrotra</author>
+<author>Robert K. Brayton</author>
+<author>Ralph H. J. M. Otten</author>
+<author>Alberto L. Sangiovanni-Vincentelli</author>
+<title>A Novel VLSI Layout Fabric for Deep Sub-Micron Applications.</title>
+<pages>491-496</pages>
+<year>1999</year>
+<crossref>conf/dac/1999</crossref>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/309847.309985</ee>
+<url>db/conf/dac/dac99.html#KhatriMBOS99</url>
+</inproceedings>
+<inproceedings mdate="2025-01-19" key="conf/dac/GordonO64">
+<author>Michael Gordon</author>
+<author>Arthur Oratorio</author>
+<title>Printer graphics: New horizons in graphic output on the IBM 1403 printer.</title>
+<year>1964</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/800265.810750</ee>
+<ee>https://www.wikidata.org/entity/Q130970752</ee>
+<crossref>conf/dac/1964</crossref>
+<url>db/conf/dac/dac1964.html#GordonO64</url>
+</inproceedings>
+<inproceedings mdate="2018-11-06" key="conf/dac/RohfleischKW96">
+<author>Bernhard Rohfleisch</author>
+<author>Alfred K&ouml;lbl</author>
+<author>Bernd Wurth</author>
+<title>Reducing Power Dissipation after Technology Mapping by Structural Transformations.</title>
+<pages>789-794</pages>
+<year>1996</year>
+<crossref>conf/dac/1996</crossref>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/240518.240667</ee>
+<url>db/conf/dac/dac96.html#RohfleischKW96</url>
+</inproceedings>
+<inproceedings mdate="2025-03-03" key="conf/dac/ZhouAZYUGUJ15">
+<author orcid="0000-0003-2070-4905">Boyou Zhou</author>
+<author>Ronen Adato</author>
+<author>Mahmoud Zangeneh</author>
+<author>Tianyu Yang</author>
+<author>Aydan Uyar</author>
+<author orcid="0000-0002-3434-2266">Bennett B. Goldberg</author>
+<author>M. Selim &Uuml;nl&uuml;</author>
+<author>Ajay Joshi</author>
+<title>Detecting hardware trojans using backside optical imaging of embedded watermarks.</title>
+<pages>111:1-111:6</pages>
+<year>2015</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/2744769.2744822</ee>
+<crossref>conf/dac/2015</crossref>
+<url>db/conf/dac/dac2015.html#ZhouAZYUGUJ15</url>
+</inproceedings>
+<inproceedings mdate="2024-05-07" key="conf/dac/GusmaoH0021">
+<author>Ant&oacute;nio Gusm&atilde;o 0001</author>
+<author orcid="0000-0002-1687-1447">Nuno Horta</author>
+<author orcid="0000-0002-9625-6435">Nuno Louren&ccedil;o 0003</author>
+<author>Ricardo Martins 0003</author>
+<title>Late Breaking Results: Attention in Graph2Seq Neural Networks towards Push-Button Analog IC Placement.</title>
+<pages>1360-1361</pages>
+<year>2021</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1109/DAC18074.2021.9586177</ee>
+<crossref>conf/dac/2021</crossref>
+<url>db/conf/dac/dac2021.html#GusmaoH0021</url>
+</inproceedings>
+<inproceedings mdate="2024-02-05" key="conf/dac/OgrasM06">
+<author orcid="0000-0002-5045-5535">&Uuml;mit Y. Ogras</author>
+<author orcid="0000-0003-1826-7646">Radu Marculescu</author>
+<title>Prediction-based flow control for network-on-chip traffic.</title>
+<pages>839-844</pages>
+<year>2006</year>
+<crossref>conf/dac/2006</crossref>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/1146909.1147123</ee>
+<url>db/conf/dac/dac2006.html#OgrasM06</url>
+</inproceedings>
+<inproceedings mdate="2024-12-04" key="conf/dac/HuWZMC19">
+<author orcid="0000-0002-5058-4660">Ming Hu 0003</author>
+<author>Tongquan Wei</author>
+<author orcid="0000-0003-1938-2902">Min Zhang 0002</author>
+<author orcid="0000-0002-9088-9821">Fr&eacute;d&eacute;ric Mallet</author>
+<author>Mingsong Chen 0001</author>
+<title>Sample-Guided Automated Synthesis for CCSL Specifications.</title>
+<pages>98</pages>
+<year>2019</year>
+<booktitle>DAC</booktitle>
+<ee>https://doi.org/10.1145/3316781.3317904</ee>
+<ee>https://ieeexplore.ieee.org/document/8806986</ee>
+<crossref>conf/dac/2019</crossref>
+<url>db/conf/dac/dac2019.html#HuWZMC19</url>
+</inproceedings>
+</dblp>

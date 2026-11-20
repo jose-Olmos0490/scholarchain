@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "query-plan-v1",
+  "queryId": "query:4b375f581335a0c654bbd34e34121a4777af5b722a93b9e048ea8fee51d5e524",
+  "operations": [
+    "DIRECT_COAUTHORS"
+  ],
+  "researcherNames": [
+    "Henry Samueli"
+  ],
+  "researcherIds": [
+    "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d"
+  ],
+  "windowStartYear": 2000,
+  "windowEndYear": 2005,
+  "topics": [],
+  "venues": [],
+  "institutions": [],
+  "rankingMetric": null,
+  "graphLimit": 100,
+  "vectorLimit": 30,
+  "maxPathDepth": 2,
+  "planVersion": "illustrative-query-plan-v1",
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "query:4b375f581335a0c654bbd34e34121a4777af5b722a93b9e048ea8fee51d5e524",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": null,
+    "modelVersion": "illustrative-planner-model",
+    "promptVersion": "illustrative-query-planner-prompt-v1",
+    "derivedFrom": []
+  }
+}

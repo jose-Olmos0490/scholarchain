@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "institution-v1",
+  "institutionId": "institution:openalex:a89309f45c23a1e8e5e2a50134bdb023dd585181e0c99ac3d75a01e453808df1",
+  "name": "Chinese University of Hong Kong",
+  "rorId": "00t33hh48",
+  "countryCode": "HK",
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "OPENALEX",
+    "sourceRecordId": "https://openalex.org/I177725633",
+    "snapshot": "api-2026-11-20",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": null,
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": []
+  }
+}

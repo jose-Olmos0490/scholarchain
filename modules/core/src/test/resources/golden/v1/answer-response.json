@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "answer-response-v1",
+  "queryId": "query:4b375f581335a0c654bbd34e34121a4777af5b722a93b9e048ea8fee51d5e524",
+  "summary": "Henry Samueli's direct coauthors in 2000 to 2005 include Walden C. Rhines.",
+  "claims": [
+    {
+      "schemaVersion": "answer-claim-v1",
+      "claimId": "claim:a912467f0669e0cfb51a6830a360434491e4ff97df2d4720a84f45cbef7ff43b",
+      "text": "Henry Samueli and Walden C. Rhines have 1 joint publication in the 2000 to 2005 window.",
+      "evidenceIds": [
+        "evidence:57a64a00f8fe17db5b118d0e01ea0d71ca3e2b9326d6e838128f4fa20b3fc304"
+      ],
+      "verificationStatus": "VERIFIED",
+      "uncertainty": "Illustrative example: identity confidences in this record are not from a pipeline run.",
+      "provenance": {
+        "schemaVersion": "provenance-v1",
+        "sourceDataset": "SCHOLARCHAIN",
+        "sourceRecordId": "query:4b375f581335a0c654bbd34e34121a4777af5b722a93b9e048ea8fee51d5e524",
+        "snapshot": "2026-11-01",
+        "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+        "policyVersion": null,
+        "modelVersion": null,
+        "promptVersion": null,
+        "derivedFrom": []
+      }
+    }
+  ],
+  "evidenceBundleId": "bundle:c063bb8db8d474c37b0e40cd0bd03c770bb9ae006b67d6ab2f2307c0b30a985a",
+  "abstained": false,
+  "uncertainty": null,
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "query:4b375f581335a0c654bbd34e34121a4777af5b722a93b9e048ea8fee51d5e524",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": null,
+    "modelVersion": "illustrative-synthesis-model",
+    "promptVersion": "illustrative-answer-synthesis-prompt-v1",
+    "derivedFrom": []
+  }
+}

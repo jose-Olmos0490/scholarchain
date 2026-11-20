@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "run-manifest-v1",
+  "pipelineStage": "hadoop-ingest",
+  "codeVersion": "illustrative-code-version",
+  "inputs": [
+    {
+      "sourceDataset": "DBLP",
+      "snapshot": "2026-11-01",
+      "location": "datasets/samples/dblp/dblp-2026-11-01-excerpt.xml",
+      "checksum": "sha256:b5d5c46dbe60284c46ddc50174ea2106fd6f55f4623611c310dc8e0b177428a1"
+    }
+  ],
+  "parameters": {
+    "datasets.dblpSubset.startYear": "2000",
+    "datasets.dblpSubset.endYear": "2000"
+  },
+  "policyVersions": {
+    "coauthorPolicy": "illustrative-coauthor-policy-v1"
+  }
+}

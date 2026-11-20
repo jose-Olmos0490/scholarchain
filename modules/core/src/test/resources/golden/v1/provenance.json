@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "provenance-v1",
+  "sourceDataset": "DBLP",
+  "sourceRecordId": "conf/dac/NewtonRMSB00",
+  "snapshot": "2026-11-01",
+  "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+  "policyVersion": null,
+  "modelVersion": null,
+  "promptVersion": null,
+  "derivedFrom": []
+}

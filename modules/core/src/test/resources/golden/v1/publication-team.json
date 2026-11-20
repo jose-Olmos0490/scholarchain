@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "publication-team-v1",
+  "workId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+  "year": 2000,
+  "memberMentionIds": [
+    "mention:508b2d74bd8214b27756a6be4721f87852a8c526f5318a6642ecb0adba383918",
+    "mention:927138da3dcbf63fecadd6837fd31a8618535561ce3839df08120f336ca37961",
+    "mention:4e8df1f0297e9bcb9bbd86d8a35f8efe5fe1e9c663e30835cb2de6076eb639fd",
+    "mention:2de847637b147dddd1cd4fe5d3e7f1e051e37782c85e3f8b71344d49e0d1c6b1",
+    "mention:f57964a78ac2d6cbedc0603fdbad0073a7c7462d44a5e6125bb0bc03106704d3"
+  ],
+  "teamSize": 5,
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "DBLP",
+    "sourceRecordId": "conf/dac/NewtonRMSB00",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": null,
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": []
+  }
+}

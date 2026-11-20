@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "authorship-v1",
+  "authorshipId": "authorship:32056f46478b2b8dfa4fe9c4a23eaada22eedd41ae34d47d339eb4cfcf8447ab",
+  "researcherId": "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d",
+  "workId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+  "mentionId": "mention:2de847637b147dddd1cd4fe5d3e7f1e051e37782c85e3f8b71344d49e0d1c6b1",
+  "position": 4,
+  "year": 2000,
+  "matchConfidence": 0.97,
+  "matchDecisionId": "match:7f5708785316fbc7ab483c8d7765cd029e5bce1684d56d1386109c8d3d83e93f",
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "mention:2de847637b147dddd1cd4fe5d3e7f1e051e37782c85e3f8b71344d49e0d1c6b1",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": "illustrative-er-policy-v1",
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": [
+      "match:7f5708785316fbc7ab483c8d7765cd029e5bce1684d56d1386109c8d3d83e93f"
+    ]
+  }
+}

@@ -1,0 +1,898 @@
+# datasets/dataset-manifest.yaml
+#
+# Owner: dataset-engineer (sole writer). Spec: "Dataset manifest" and
+# "Dataset portfolio" in spec/scholarchain-spec.md.
+#
+# Rules for every value in this file:
+#   - Facts (URLs, licenses, sizes, checksums, dates) were observed on the
+#     official page or in command output on the date in verification.*.
+#   - A fact that could not be confirmed is null, and verification.<path>
+#     records status UNVERIFIED plus what a human must check.
+#   - No bucket name is hardcoded. ${RAW_BUCKET} is resolved from
+#     configuration at run time.
+#   - Sample entries are cross-checked against datasets/samples/SHA256SUMS by
+#     datasets/scripts/validate-manifest.sh.
+#   - Sample caps: <= 50 records and <= 200,000 bytes per file ("200 KB" =
+#     200,000 bytes, human decision 2026-11-19, review finding 3).
+
+manifest_schema_version: 1
+owner: dataset-engineer
+verified_on: "2026-11-20" # UTC date of the checks recorded below
+sample_caps:
+  max_records_per_file: 50
+  max_bytes_per_file: 200000 # "200 KB" = 200,000 bytes (human decision 2026-11-19)
+self_tests:
+  - "datasets/scripts/test-download.sh   # offline: crossref batch identity, transfer caps, --max-time, openalex skip path"
+  - "python3 -I datasets/scripts/lib/test_validators.py   # validator negatives: 200,000-byte cap, OpenAlex abstracts, ORCID allowlist, DBLP subset cap/windows/config names"
+raw_prefix_template: "s3://${RAW_BUCKET}/{dataset}/snapshot={snapshot}/"
+selected_datasets: [dblp, openalex, orcid, crossref]
+
+datasets:
+  # ------------------------------------------------------------------ DBLP
+  dblp:
+    name: "dblp computer science bibliography (XML release)"
+    required: true
+    owning_agent: dataset-engineer
+    purpose: >-
+      Seed dataset. Computer-science publication records (key, title, ordered
+      author list, year, venue, electronic-edition links) from which
+      publication teams and coauthor-pair candidates are derived.
+    source:
+      landing_url: "https://doi.org/10.4230/dblp.xml.2026-11-01"
+      download_url: "https://drops.dagstuhl.de/storage/artifacts/dblp/xml/2026/dblp-2026-11-01.xml.gz"
+      checksum_url: "https://drops.dagstuhl.de/storage/artifacts/dblp/xml/2026/dblp-2026-11-01.xml.gz.md5"
+      dtd_url: "https://drops.dagstuhl.de/storage/artifacts/dblp/xml/2023/dblp-2023-06-28.dtd"
+      dtd_checksum_url: "https://drops.dagstuhl.de/storage/artifacts/dblp/xml/2023/dblp-2023-06-28.dtd.md5"
+      dtd_landing_url: "https://doi.org/10.4230/dblp.xml.dtd.2023-06-28"
+      release_collection_url: "https://drops.dagstuhl.de/entities/collection/10.4230/dblp.xml"
+      daily_dump_url: "https://dblp.org/xml/dblp.xml.gz"
+      documentation_urls:
+        - "https://dblp.org/xml/"
+        - "https://dblp.org/xml/README.txt"
+        - "https://dblp.org/xml/CHANGES.txt"
+        - "https://dblp.org/faq/16154937"
+        - "https://dblp.org/db/about/copyright.html"
+    license:
+      id: "CC0-1.0"
+      url: "https://creativecommons.org/publicdomain/zero/1.0/"
+      secondary: "ODC-BY-1.0 (http://opendatacommons.org/licenses/by/1.0/)"
+      notes: >-
+        dblp metadata (web pages and XML/JSON/RDF/RIS/BibTeX exports) is
+        released under CC0 1.0, with ODC-BY 1.0 as a secondary license for
+        compatibility. Attribution to dblp is requested, not required.
+    snapshot:
+      date: "2026-11-01"
+      label: "dblp Monthly Snapshot XML Release of November 2026"
+      artifact_last_modified: "Tue, 03 Nov 2026 09:01:15 GMT"
+    retrieval:
+      script: "datasets/scripts/download.sh"
+      command: "SCHOLARCHAIN_ALLOW_FULL_DOWNLOAD=1 datasets/scripts/download.sh --full --dataset dblp --out <local-dir>"
+      sample_command: "datasets/scripts/download.sh --dataset dblp"
+      dry_run_command: "datasets/scripts/download.sh --dataset dblp --dry-run"
+    full_retrieval:
+      byte_cap: "size.observed.remote_bytes (enforced during the transfer; a resumed transfer is capped at the remaining bytes)"
+      max_time_seconds: 7200 # curl --max-time per attempt; an interrupted transfer resumes on the next run
+      skip_rule: "skip only when local size == remote_bytes, the publisher MD5 matches and gzip -t passes; a full-size file that fails is quarantined as <file>.corrupt-<UTC> (never deleted) and fetched again"
+    format:
+      file_format: "xml"
+      compression: "gzip"
+      encoding: "ISO-8859-1 (declared in the XML prolog); named character entities defined in the DTD"
+      record_types: [article, inproceedings, proceedings, book, incollection, phdthesis, mastersthesis, www, data]
+    size:
+      expected:
+        stated: "1.03 GB"
+        source: "https://drops.dagstuhl.de/entities/artifact/10.4230/dblp.xml.2026-11-01 (Filesize)"
+      observed:
+        remote_bytes: 1116142729
+        method: "HTTP HEAD Content-Length of download_url"
+        local_bytes: null
+      record_count: null
+    s3_raw_prefix: "s3://${RAW_BUCKET}/dblp/snapshot=2026-11-01/"
+    integrity:
+      policy: >-
+        Verify the publisher MD5 (checksum_url) after download, then run
+        gzip -t, then compute SHA-256 and store it as <file>.sha256 beside the
+        raw object. Raw objects are immutable; a new release gets a new prefix.
+        The transfer is capped at remote_bytes during the transfer and bounded
+        by full_retrieval.max_time_seconds.
+      publisher_checksum:
+        algorithm: md5
+        value: "18ad5db59592406ec74289975c4b44cb"
+      sha256: null
+      http_etag_observed: "\"4286fc89-65f5b814192e5\""
+      dtd_md5: "96e4283e71886dec2173718957293648"
+    schema_version:
+      source_schema: "dblp-2023-06-28.dtd"
+      raw_schema_id: "dblp-xml/dtd-2023-06-28"
+    subset_rule:
+      functional_run: >-
+        APPROVED by the human architect (rule: Phase 03 run 2 work order,
+        decision 2a; values: human decision of 2026-11-20). Keep a dblp
+        record if and only if (1) its element name (record type) is article
+        or inproceedings, and (2) its <year> value is an integer Y with
+        2000 <= Y <= 2025 (both bounds inclusive). Records with no <year> or
+        a non-integer <year> are excluded. Partial-year 2026 is excluded (see
+        limitations). No other filter is applied by the subset rule. The
+        functional run is then bounded by a max-works cap of 100,000: it
+        processes at most 100,000 of the works that pass the rule. The
+        deterministic selection rule that decides which works are kept when
+        the subset exceeds the cap is NOT yet defined; it belongs to
+        hadoop-engineer (Phase 4) and is listed in
+        subset_parameters.open_questions. The values are read from
+        configuration at run time (subset_parameters.configuration), are not
+        hardcoded in dataset scripts, and are recorded in the run manifest.
+        The Hadoop extract counters are the evidence of how many works passed
+        the rule and how many the run kept (spec "At least 100,000 DBLP works
+        in the integrated functional run").
+      sample: "See samples[].subset_rule. The committed excerpt is a stratified format sample covering all record types, not an application of the functional-run rule."
+    subset_parameters:
+      decided_by: "human architect"
+      decided_on: "2026-11-20"
+      record_types: [article, inproceedings] # fixed by the approved rule, whatever DBLP_SUBSET_RECORD_TYPES says
+      year_field: "year"   # the record's <year> child element
+      year_window:         # approved functional-run values, both inclusive
+        start_year: 2000
+        end_year: 2025
+        constraint: "start_year <= end_year; end_year < year of snapshot.date (partial year excluded)"
+      max_works: 100000    # cap that bounds the functional run; positive integer
+      analysis_windows:    # default analysis windows: inclusive, sorted, non-overlapping, inside year_window
+        - {start_year: 2000, end_year: 2005}
+        - {start_year: 2006, end_year: 2010}
+        - {start_year: 2011, end_year: 2015}
+        - {start_year: 2016, end_year: 2020}
+        - {start_year: 2021, end_year: 2025}
+      configuration:
+        values_file: "modules/core/src/main/resources/scholarchain/conf/dev.conf"
+        values_file_owner: domain-engineer
+        env_bindings_file: "modules/core/src/main/resources/scholarchain/env-overrides.conf"
+        keys:
+          record_types:
+            config_key: "scholarchain.datasets.dblpSubset.recordTypes"
+            env_var: "DBLP_SUBSET_RECORD_TYPES"
+            dev_value: "article,inproceedings"
+            status: "PENDING human confirmation as a configurable key (domain-engineer repair 2, manual action 2). The approved rule fixes the types to article and inproceedings regardless of this key."
+          start_year:
+            config_key: "scholarchain.datasets.dblpSubset.startYear"
+            env_var: "DBLP_SUBSET_START_YEAR"
+            dev_value: 2000
+          end_year:
+            config_key: "scholarchain.datasets.dblpSubset.endYear"
+            env_var: "DBLP_SUBSET_END_YEAR"
+            dev_value: 2025
+          max_works:
+            config_key: "scholarchain.datasets.dblpSubset.maxWorks"
+            env_var: "DBLP_SUBSET_MAX_WORKS"
+            dev_value: 100000
+          analysis_windows:
+            config_key: "scholarchain.graph.windows"
+            env_var: "SCHOLARCHAIN_GRAPH_WINDOWS"
+            dev_value: "2000-2005,2006-2010,2011-2015,2016-2020,2021-2025"
+        note: >-
+          The values live in modules/core/src/main/resources/scholarchain/conf/dev.conf,
+          owned by domain-engineer, which also owns the configuration contract
+          and loader. Environment variables override that file. The values
+          are not hardcoded in dataset scripts: no script under
+          datasets/scripts/ reads or applies the subset rule (it is applied by
+          the Hadoop extract stage). This manifest mirrors the approved values
+          for review; if they change, dev.conf and this block must change
+          together.
+      open_questions:
+        - id: dblp-max-works-selection
+          owner: hadoop-engineer
+          phase: 4
+          question: >-
+            Which works are kept when the works passing the subset rule exceed
+            max_works? The deterministic selection rule (ordering and
+            tie-breaking) is not defined. It must be deterministic for a fixed
+            snapshot and configuration, and recorded in the run manifest.
+            dataset-engineer has not chosen one.
+    linkage_fields:
+      - dblp_key
+      - doi                  # from <ee> links of the form https://doi.org/...
+      - ee_urls              # other electronic editions, e.g. arXiv
+      - normalized_title
+      - normalized_author_sequence
+      - author_orcid_attribute  # <author orcid="..."> when dblp supplies it
+      - year
+      - venue                # journal / booktitle / stream
+      - crossref_key         # parent proceedings key (<crossref>), not Crossref Inc.
+    update_strategy: >-
+      dblp publishes a stable monthly XML snapshot (DOI 10.4230/dblp.xml.YYYY-MM-DD)
+      and a daily-changing dump at dblp.org/xml. Pin one monthly snapshot per
+      pipeline run. To update, verify the newer release (MD5, size, license),
+      ingest it under a new snapshot prefix, and re-run the pipeline. There is
+      no incremental diff feed; mdate attributes allow change detection.
+    privacy_notes:
+      - "Contains personal names of authors and editors and, in www records, person homepage URLs."
+      - "Names are public bibliographic facts, but derived profiles (collaboration metrics) are about real people; publish only aggregate results needed for the course."
+    limitations:
+      - "A matching author name is not sufficient evidence of author identity."
+      - "dblp disambiguates homonyms with numeric suffixes (e.g. 'Manish Singh 0001'); suffix assignment can change between releases."
+      - "Many reference/encyclopedia records have no author."
+      - "Record order in the dump is grouped by key prefix (reference/, data/, ms/, series/, conf/, ...); the first megabytes are not representative."
+      - "Records can be adjacent on one line (</incollection><incollection ...>); parsers must not assume one record per line."
+      - "DOIs exist only where dblp recorded an https://doi.org/ <ee> link."
+      - "Partial-year 2026 is excluded (human decision, 2026-11-20). The 2026-11-01 snapshot contains records with <year>2026</year> (the committed excerpt has 4: inproceedings conf/dac/GuoXJLHYZZS26 and data records data/13/WangB26a, data/13/VasilevaWRDJL26, data/13/Xu26); the functional-run rule drops them because end_year is 2025. Collaboration in 2026 is therefore absent from every graph and metric built on this subset."
+      - "The max-works cap (100,000) bounds the functional run, so the run can process only part of the works that pass the subset rule. Which works are kept is not yet defined (subset_parameters.open_questions, owner hadoop-engineer). Until it is, no completeness claim about the 2000-2025 article and inproceedings population can be made from a capped run."
+      - "The committed excerpt has no journals/ article records and no www (person/homepage) records, because the first 16 MiB of the dump do not reach those key prefixes. Per-record XML (https://dblp.org/rec/<key>.xml, https://dblp.org/pid/<pid>.xml) could not be used to add them: on 2026-11-20T02:31:57Z one request to https://dblp.org/rec/journals/cacm/DeanG08.xml returned HTTP 202 with an HTML bot-challenge page (title 'Making sure you're not a bot!'), not XML. It was not retried and the challenge was not bypassed; the pid endpoint was not attempted because the challenge applies to the dblp.org host."
+    validation_commands:
+      - "gzip -t dblp-2026-11-01.xml.gz"
+      - "echo '18ad5db59592406ec74289975c4b44cb  dblp-2026-11-01.xml.gz' | md5sum -c -"
+      - "sha256sum -c dblp-2026-11-01.xml.gz.sha256"
+      - "datasets/scripts/validate-samples.sh"
+    sampling:
+      output: "dblp/dblp-2026-11-01-excerpt.xml"
+      dtd_output: "dblp/dblp-2023-06-28.dtd"
+      max_compressed_bytes: 16777216
+    samples:
+      - path: "dblp/dblp-2026-11-01-excerpt.xml"
+        description: "50 complete records from the pinned November 2026 release, verbatim bytes, original XML declaration and DOCTYPE, closing </dblp> appended."
+        source_url: "https://drops.dagstuhl.de/storage/artifacts/dblp/xml/2026/dblp-2026-11-01.xml.gz"
+        retrieval_command: "curl --fail -sS -L --range 0-16777215 <source_url> | python3 -I datasets/scripts/lib/dblp_sample.py <out> 16777216"
+        script_equivalent: "datasets/scripts/download.sh --dataset dblp"
+        retrieved_at: "2026-11-20T02:06:06Z"
+        subset_rule: >-
+          Stream order over at most 16 MiB of the compressed release (7,798,784
+          bytes were read before all quotas filled). Each record goes to the
+          first stratum with quota left whose predicate matches:
+          conf/ inproceedings with >= 2 authors, a doi.org ee and an entity
+          reference in an author name (6); conf/ inproceedings with >= 2
+          authors and a doi.org ee (24); series/ inproceedings with >= 2
+          authors (3); reference/ incollection with an author (3); data (3);
+          mastersthesis (2); phdthesis (2); proceedings (3); book (2);
+          dblpnote/ article (2).
+        transformation: "Record selection only. Record bytes unchanged (ISO-8859-1, entity references intact)."
+        records: 50
+        bytes: 25538
+        sha256: "b5d5c46dbe60284c46ddc50174ea2106fd6f55f4623611c310dc8e0b177428a1"
+        license: "CC0-1.0"
+      - path: "dblp/dblp-2023-06-28.dtd"
+        description: "The DTD referenced by the release DOCTYPE; needed to resolve named character entities offline."
+        source_url: "https://drops.dagstuhl.de/storage/artifacts/dblp/xml/2023/dblp-2023-06-28.dtd"
+        retrieval_command: "curl --fail -sS -L --max-filesize 65536 -o dtd <source_url>; curl --fail -sS -L --max-filesize 1024 <source_url>.md5; md5sum dtd"
+        script_equivalent: "datasets/scripts/download.sh --dataset dblp"
+        retrieved_at: "2026-11-20T02:06:06Z"
+        subset_rule: "Whole file (13,134 bytes)."
+        transformation: "None. md5 96e4283e71886dec2173718957293648 equals the publisher .md5."
+        records: 0
+        bytes: 13134
+        sha256: "03ec35cb34a4227572a0e89da407b06b6e44a6cc23e19cabc3b49b702a5f897d"
+        license: "CC0-1.0"
+    verification:
+      source.landing_url: {status: VERIFIED, evidence: "curl -sSIL https://doi.org/10.4230/dblp.xml.2026-11-01 -> 302 to drops.dagstuhl.de artifact page, HTTP 200"}
+      source.download_url: {status: VERIFIED, evidence: "linked from the artifact page; HTTP HEAD 200, Content-Length 1116142729"}
+      source.checksum_url: {status: VERIFIED, evidence: "fetched; content '18ad5db59592406ec74289975c4b44cb  dblp-2026-11-01.xml.gz', same value shown as MD5 Sum on the artifact page"}
+      source.dtd_url: {status: VERIFIED, evidence: "linked from https://drops.dagstuhl.de/entities/artifact/10.4230/dblp.xml.dtd.2023-06-28; fetched"}
+      license: {status: VERIFIED, evidence: "https://dblp.org/xml/README.txt section 1 (CC0 1.0 primary, ODC-BY 1.0 secondary); artifact page schema.org license = https://creativecommons.org/publicdomain/zero/1.0/legalcode"}
+      snapshot.date: {status: VERIFIED, evidence: "release DOI 10.4230/dblp.xml.2026-11-01 and file name dblp-2026-11-01.xml.gz"}
+      size.expected: {status: VERIFIED, evidence: "artifact page 'Filesize: 1.03 GB'"}
+      size.observed.remote_bytes: {status: VERIFIED, evidence: "HTTP HEAD Content-Length: 1116142729"}
+      size.observed.local_bytes:
+        status: UNVERIFIED
+        note: "Official URL to check: https://drops.dagstuhl.de/entities/artifact/10.4230/dblp.xml.2026-11-01 (Filesize; download_url Content-Length 1116142729). The full release was not downloaded in Phase 03 (bounded sampling only). A human-approved full download must record the local byte count."
+      size.record_count:
+        status: UNVERIFIED
+        note: "Official URL to check: https://drops.dagstuhl.de/entities/artifact/10.4230/dblp.xml.2026-11-01 (no per-release record count is published there). Record it from the first full Hadoop extract run."
+      integrity.publisher_checksum: {status: VERIFIED, evidence: "checksum_url content and artifact page MD5 Sum agree"}
+      integrity.sha256:
+        status: UNVERIFIED
+        note: "Official URL to check: https://drops.dagstuhl.de/storage/artifacts/dblp/xml/2026/dblp-2026-11-01.xml.gz.md5 (dblp publishes MD5 only). SHA-256 must be computed after a full download (download.sh --full writes <file>.sha256) and copied here by a human-reviewed manifest update."
+      integrity.dtd_md5: {status: VERIFIED, evidence: "artifact page MD5 Sum for dblp-2023-06-28.dtd; download.sh compares it with the fetched file"}
+
+  # -------------------------------------------------------------- OpenAlex
+  openalex:
+    name: "OpenAlex standard-format snapshot (JSON Lines)"
+    required: false
+    owning_agent: dataset-engineer
+    purpose: >-
+      Canonical author candidates (OpenAlex author IDs, ORCID when present),
+      institutions (ROR), topics, sources/venues, and work identifiers used to
+      enrich and link DBLP works and researchers.
+    source:
+      landing_url: "https://help.openalex.org/access/snapshot/"
+      download_url: "https://openalex.s3.amazonaws.com/data/jsonl/"
+      snapshot_manifest_url: "https://openalex.s3.amazonaws.com/data/jsonl/manifest.json"
+      s3_uri: "s3://openalex/data/jsonl/"
+      release_notes_url: "https://openalex.s3.amazonaws.com/RELEASE_NOTES.txt"
+      license_file_url: "https://openalex.s3.amazonaws.com/LICENSE.txt"
+      api_url: "https://api.openalex.org/works"
+      documentation_urls:
+        - "https://help.openalex.org/access/snapshot/"
+        - "https://help.openalex.org/access/sync/"
+        - "https://help.openalex.org/tutorials/download-the-snapshot/"
+        - "https://openalex.s3.amazonaws.com/README.txt"
+    license:
+      id: "CC0-1.0"
+      url: "https://creativecommons.org/publicdomain/zero/1.0/"
+      notes: "Bucket README states 'License: LICENSE.txt (CC0)'; LICENSE.txt is the CC0 1.0 Universal legal code."
+    snapshot:
+      date: "2026-10-14"
+      label: "OpenAlex public snapshot RELEASE 2026-10-14 (quarterly)"
+      artifact_last_modified: "2026-10-14T18:27:44Z (data/jsonl/manifest.json)"
+    retrieval:
+      script: "datasets/scripts/download.sh"
+      command: "SCHOLARCHAIN_ALLOW_FULL_DOWNLOAD=1 datasets/scripts/download.sh --full --dataset openalex --openalex-entities works,authors,institutions,sources,topics --out <local-dir>"
+      sample_command: "datasets/scripts/download.sh --dataset openalex"
+      dry_run_command: "datasets/scripts/download.sh --dataset openalex --dry-run"
+    full_retrieval:
+      byte_cap: "each partition's manifest.json meta.content_length (enforced during the transfer)"
+      max_time_seconds: 3600 # curl --max-time per partition attempt
+      skip_rule: "skip a partition only when its size equals content_length, gzip -t passes, and its recorded <partition>.sha256 verifies (when present; written after every verified fetch). A shorter file is resumed; a full-length file that fails is quarantined as <file>.corrupt-<UTC> (never deleted) and fetched again."
+    sample_policy:
+      decided_by: "human architect, 2026-11-19 (Phase 03 review finding 4)"
+      strip_key: "abstract_inverted_index"
+      reason: >-
+        Same stance as Crossref: abstracts are publisher or author copyright
+        even when an aggregator redistributes them, and an inverted index can
+        be turned back into the abstract text. The key is removed from every
+        committed OpenAlex sample. Abstracts are not used for linking.
+      method: >-
+        datasets/scripts/lib/sample_tools.py strip_key_bytes removes the
+        top-level key and leaves every other byte of the line unchanged
+        (number formats such as 2.0E-4, escapes, key order). The result is
+        checked to parse to the original record minus that key. Snapshot
+        excerpts are stripped BEFORE the 50-record / 200,000-byte caps are
+        applied; API samples are stripped as they are written.
+      provenance: "Records keep their OpenAlex IDs (id field) and all other fields; each sample's transformation names the removed key and, where the strip changed the file, the sha256 and size of the unstripped excerpt."
+      enforcement:
+        - "download.sh strips the key before install, so a re-run reproduces the committed files"
+        - "validate-samples.sh (check_samples.py) fails when any OpenAlex sample line has a non-null, non-empty abstract_inverted_index"
+        - "validate-manifest.sh (validate_manifest.py) fails when this policy is missing or a sample transformation does not mention the key"
+    format:
+      file_format: "jsonl (one JSON entity per line), partitioned by updated_date=YYYY-MM-DD/part_NNNN.gz; parquet copy also published under data/parquet/"
+      compression: "gzip"
+      encoding: "UTF-8"
+    size:
+      expected:
+        all_jsonl_bytes: 755513952946
+        works_jsonl_bytes: 675298563638
+        authors_jsonl_bytes: 74121890690
+        works_records: 464765485
+        authors_records: 101066311
+        all_records: 586176148
+        source: "data/jsonl/manifest.json meta.content_length / meta.record_count and per-entity values"
+      observed:
+        remote_bytes: 755749312341
+        method: >-
+          Anonymous S3 ListObjectsV2 over https://openalex.s3.amazonaws.com/?prefix=data/jsonl/
+          (3,131 objects). Works prefix: 1,900 objects, 675,533,022,977 bytes =
+          manifest works files (675,298,563,638) + works/deleted_ids.csv.gz
+          (234,102,326) + works/manifest.json (357,013). Authors prefix: 518
+          objects, 74,121,988,400 bytes = manifest authors files + authors/manifest.json (97,710).
+        local_bytes: null
+      snapshot_manifest_bytes: 671964
+      snapshot_manifest_sha256: "2b3d611b3ec93912b7b655ee139310936048a689c0f3508052a73af03a6c453f"
+    s3_raw_prefix: "s3://${RAW_BUCKET}/openalex/snapshot=2026-10-14/"
+    integrity:
+      policy: >-
+        Keep the snapshot data/jsonl/manifest.json (sha256 recorded here) as
+        the file list. For each partition, the downloaded byte length must
+        equal manifest content_length (also the byte cap during the transfer)
+        and gzip -t must pass; download.sh then writes <partition>.sha256 and
+        re-verifies size, gzip -t and that sha256 before skipping a partition
+        on a later run. Record count may be checked against meta.record_count. OpenAlex publishes no per-file
+        content hash; S3 ETags are recorded for change detection only (they
+        are not MD5 for multipart uploads). SHA-256 is computed at ingest and
+        stored beside each raw object.
+      publisher_checksum: null
+      sha256: null
+    schema_version:
+      source_schema: "OpenAlex standard-format snapshot, release 2026-10-14 (entity JSON as documented at help.openalex.org)"
+      raw_schema_id: "openalex-jsonl/2026-10-14"
+    subset_rule:
+      functional_run: >-
+        Works whose DOI matches a DOI in the selected DBLP subset, plus the
+        authors, institutions, sources and topics those works reference.
+        Join performed by the Hadoop normalizer stage; the DOI list is the
+        Hadoop DBLP output for the same run.
+      sample: "See samples[].subset_rule."
+    linkage_fields:
+      - doi
+      - openalex_work_id
+      - ids                 # mag, pmid, pmcid when present
+      - title
+      - publication_year
+      - authorships.author.id
+      - authorships.author.orcid
+      - authorships.raw_author_name
+      - authorships.author_position
+      - authorships.institutions.id
+      - authorships.institutions.ror
+      - primary_location.source.id
+      - primary_location.source.issn_l
+      - topics.id
+    update_strategy: >-
+      Public snapshot is quarterly (second Wednesday of January, April, July
+      and October per RELEASE_NOTES.txt). The public bucket holds only the
+      latest release, so pin by copying the needed partitions to the raw
+      prefix. Incremental sync: partitions are keyed by updated_date; fetch
+      partitions newer than the last ingested updated_date and apply
+      works/deleted_ids.csv.gz. Records also drift continuously in the API.
+    privacy_notes:
+      - "Author entities contain personal names, ORCID iDs, and affiliation histories."
+      - "OpenAlex author profiles are algorithmic clusters; treat them as candidates, not identity ground truth."
+    limitations:
+      - "A matching author name is not sufficient evidence of author identity."
+      - "Release notes document past over-merged and split author profiles (e.g. 2026-04-29, 2026-05-22); author IDs can change between releases."
+      - "API default view excludes 'xpac' works; the snapshot includes them (is_xpac). Filter consistently."
+      - "The public bucket keeps only the latest release; earlier partitions disappear when a new release lands."
+      - "Abstracts are only available as abstract_inverted_index and are not used for linking. Committed samples do not contain them (sample_policy)."
+    validation_commands:
+      - "sha256sum manifest.json   # expect 2b3d611b3ec93912b7b655ee139310936048a689c0f3508052a73af03a6c453f"
+      - "gzip -t <partition>.gz"
+      - "python3 -I -c 'import gzip,json,sys; [json.loads(l) for l in gzip.open(sys.argv[1])]' <partition>.gz"
+      - "datasets/scripts/validate-samples.sh"
+    sampling:
+      https_base: "https://openalex.s3.amazonaws.com/"
+      api_works_url: "https://api.openalex.org/works"
+      api_select: "id,doi,title,display_name,publication_year,publication_date,ids,type,authorships,primary_location,primary_topic,topics,cited_by_count,referenced_works_count,is_retracted,updated_date,created_date"
+      linked_doi_count: 10
+      api_linked_output: "openalex/openalex-works-api-linked.jsonl"
+    samples:
+      - path: "openalex/openalex-works-snapshot-2026-10-14-excerpt.jsonl"
+        description: "First 30 works (whole JSON lines) of one partition of the pinned 2026-10-14 snapshot, with abstract_inverted_index removed (sample_policy)."
+        source_url: "https://openalex.s3.amazonaws.com/data/jsonl/works/updated_date=2025-12-09/part_0000.gz"
+        retrieval_command: "curl --fail -sS -L --max-time 120 --max-filesize 26695 <source_url> | head -c 26696 > <gz>; gzip -t <gz>; python3 -I datasets/scripts/lib/sample_tools.py jsonl-head <gz> <out> 50 200000 abstract_inverted_index"
+        script_equivalent: "datasets/scripts/download.sh --dataset openalex"
+        retrieved_at: "2026-11-20T02:07:26Z"
+        regenerated_at: "2026-11-20T06:48:14Z" # repair 1: datasets/scripts/download.sh --dataset openalex (manifest.json date 2026-10-14 re-checked by the script)
+        subset_rule: >-
+          From data/jsonl/manifest.json (date 2026-10-14), the most recent
+          works partition (last by URL) with 5-50 records and <= 102,400
+          gzip bytes (this one: 37 records, 26,695 bytes, sha256
+          33c6c112e397c3cc0917c6555509858446afe909b8b8023617275a728a86977a on
+          re-fetch); remove abstract_inverted_index from each line, then keep
+          whole lines from the start until 50 records or 200,000 bytes would
+          be exceeded (30 lines, 197,230 bytes; line 31 is 6,745 bytes). No
+          trim was needed after the strip.
+        transformation: >-
+          Line selection, then abstract_inverted_index removed from all 30
+          records (human decision 2026-11-19, review finding 4; non-empty in
+          1 record, https://openalex.org/W4417174297, null in the other 29).
+          Byte-preserving removal: every other byte of each line is unchanged
+          and each line parses to the original record minus that key. All 30
+          OpenAlex work IDs (id) are kept. Unstripped excerpt (Phase 03 run 1,
+          no longer committed): 200,355 bytes, sha256
+          fd3dc9fcf25a19387b667d059e97bb5ec244aaa980a0d168f8c874436453f282.
+        records: 30
+        bytes: 197230
+        sha256: "59935f5ba2b34620a2c31090f0102c414758143c54c3dc84c8db019deccf2db8"
+        license: "CC0-1.0"
+      - path: "openalex/openalex-authors-snapshot-2026-10-14-excerpt.jsonl"
+        description: "All 21 authors of one small partition of the pinned snapshot. These are sparse profiles (works_count 0), not typical linked authors."
+        source_url: "https://openalex.s3.amazonaws.com/data/jsonl/authors/updated_date=2026-09-29/part_0000.gz"
+        retrieval_command: "curl --fail -sS -L --max-time 120 --max-filesize 1425 <source_url> | head -c 1426 > <gz>; gzip -t <gz>; python3 -I datasets/scripts/lib/sample_tools.py jsonl-head <gz> <out> 50 200000 abstract_inverted_index"
+        script_equivalent: "datasets/scripts/download.sh --dataset openalex"
+        retrieved_at: "2026-11-20T02:07:26Z"
+        subset_rule: "Same partition rule as the works excerpt, applied to the authors entity (this one: 21 records, 1,425 bytes)."
+        transformation: "None (whole partition fits the caps). abstract_inverted_index is not present in author entities, so the strip step of sample_policy removes nothing; file bytes unchanged."
+        records: 21
+        bytes: 14403
+        sha256: "fbafa1af8db022dcf0336c39c0ba48df2e1eafc07c86f8382672f5af5a97d696"
+        license: "CC0-1.0"
+      - path: "openalex/openalex-works-api-linked.jsonl"
+        description: "OpenAlex API works for the first 10 DOIs of the DBLP excerpt (linkage fixture). Live API state, not the pinned snapshot."
+        source_url: "https://api.openalex.org/works"
+        retrieval_command: "curl --fail -sS -L --max-filesize 2097152 \"$(python3 -I datasets/scripts/lib/sample_tools.py openalex-url https://api.openalex.org/works <dois.txt> <sampling.api_select>)\"; python3 -I datasets/scripts/lib/sample_tools.py openalex-api-jsonl <resp> <dois.txt> <out>"
+        script_equivalent: "datasets/scripts/download.sh --dataset openalex"
+        retrieved_at: "2026-11-20T02:06:32Z"
+        subset_rule: >-
+          DOIs = first <ee> doi.org link of each conf/ inproceedings record in
+          the DBLP excerpt, first 10 distinct, lower-cased. One batch request
+          filter=doi:<10 DOIs>, select=sampling.api_select. Rows ordered by
+          the DOI list, then results whose primary DOI differs from every
+          requested DOI. 10 results returned; one (W2131909792) has primary
+          DOI 10.1109/dac.2005.193824 although it answered requested DOI
+          10.1145/1065579.1065662.
+        transformation: "Field projection by the API select parameter (abstract_inverted_index and other fields not requested, so the strip step of sample_policy removes nothing). Values unchanged; file bytes unchanged by this repair."
+        records: 10
+        bytes: 62272
+        sha256: "3121da4dfcc7f667d2a9923ac4593779339ab62b17bfa969fc1acd04c34280b8"
+        license: "CC0-1.0"
+    verification:
+      source.landing_url: {status: VERIFIED, evidence: "HTTP 200; page states the snapshot is in the openalex bucket under data/, free, no AWS account needed"}
+      source.download_url: {status: VERIFIED, evidence: "anonymous ListObjectsV2 listing returned data/jsonl/ entity prefixes"}
+      source.snapshot_manifest_url: {status: VERIFIED, evidence: "fetched; 671964 bytes; date 2026-10-14; sha256 2b3d611b3ec93912b7b655ee139310936048a689c0f3508052a73af03a6c453f"}
+      license: {status: VERIFIED, evidence: "README.txt 'License: LICENSE.txt (CC0)'; LICENSE.txt begins 'CC0 1.0 Universal'"}
+      snapshot.date: {status: VERIFIED, evidence: "manifest.json date 2026-10-14; RELEASE_NOTES.txt 'RELEASE 2026-10-14'"}
+      size.expected: {status: VERIFIED, evidence: "values copied from manifest.json"}
+      size.observed.remote_bytes: {status: VERIFIED, evidence: "S3 listing sums, reconciled with manifest.json as described in size.observed.method"}
+      size.observed.local_bytes:
+        status: UNVERIFIED
+        note: "Official URL to check: https://openalex.s3.amazonaws.com/data/jsonl/manifest.json (published content_length per partition). No full download in Phase 03. A human-approved bounded cloud copy must record bytes actually staged."
+      integrity.publisher_checksum:
+        status: UNVERIFIED
+        note: "Official URLs to check: https://help.openalex.org/access/snapshot/ and https://openalex.s3.amazonaws.com/data/jsonl/manifest.json . No per-file content hash was found in manifest.json (only content_length and record_count). A human should confirm OpenAlex publishes none; until then integrity relies on length + gzip -t + our SHA-256."
+      integrity.sha256:
+        status: UNVERIFIED
+        note: "Official URL to check: https://openalex.s3.amazonaws.com/data/jsonl/manifest.json (lists the partitions; no SHA-256 published). Computed per partition at ingest; not available before a download."
+
+  # ----------------------------------------------------------------- ORCID
+  orcid:
+    name: "ORCID Public Data File"
+    required: false
+    owning_agent: dataset-engineer
+    purpose: >-
+      Strong researcher-identity evidence: ORCID iDs, names, public works with
+      external identifiers (DOI), and public employment/education
+      affiliations.
+    source:
+      landing_url: "https://orcid.figshare.com/articles/dataset/ORCID_Public_Data_File_2026/34697766"
+      download_url: "https://api.figshare.com/v2/articles/34697766"
+      doi: "10.23640/07243.34697766.v1"
+      api_url: "https://pub.orcid.org/v3.0/"
+      documentation_urls:
+        - "https://info.orcid.org/documentation/integration-guide/working-with-bulk-data/"
+        - "https://info.orcid.org/public-data-file-use-policy/"
+        - "https://info.orcid.org/public-client-terms-of-service/"
+      files:
+        - {name: ORCID_2026_10_activities_0.tar.gz, url: "https://ndownloader.figshare.com/files/70335732", bytes: 22873370376, md5: b4408eaed823afbd42d6a800b01c821c}
+        - {name: ORCID_2026_10_activities_1.tar.gz, url: "https://ndownloader.figshare.com/files/70342284", bytes: 20750970476, md5: 17fd95ff1cd557902e219e6e5e1c3f9c}
+        - {name: ORCID_2026_10_activities_2.tar.gz, url: "https://ndownloader.figshare.com/files/70342578", bytes: 20472804989, md5: 21c7be85e944d8a0a9580e29c617cdaa}
+        - {name: ORCID_2026_10_activities_3.tar.gz, url: "https://ndownloader.figshare.com/files/70335711", bytes: 21754893809, md5: c350088e3653d51ff7f39467bf338bb1}
+        - {name: ORCID_2026_10_activities_4.tar.gz, url: "https://ndownloader.figshare.com/files/70335720", bytes: 22288197758, md5: 483d5a5c63bc5ec8f8bf88d0d92e41bd}
+        - {name: ORCID_2026_10_activities_5.tar.gz, url: "https://ndownloader.figshare.com/files/70346007", bytes: 21736843783, md5: 99ebd6b33c5d6ed39cbd62fae7550c89}
+        - {name: ORCID_2026_10_activities_6.tar.gz, url: "https://ndownloader.figshare.com/files/70335660", bytes: 20123581975, md5: 87a4b05d567436110b01b916a8c119fa}
+        - {name: ORCID_2026_10_activities_7.tar.gz, url: "https://ndownloader.figshare.com/files/70342662", bytes: 21116685124, md5: 378338721f5d913cb231a0fee0bb114e}
+        - {name: ORCID_2026_10_activities_8.tar.gz, url: "https://ndownloader.figshare.com/files/70335666", bytes: 20418791870, md5: 3d14bdda9e5ebb8c94b0701c99c9bb7f}
+        - {name: ORCID_2026_10_activities_9.tar.gz, url: "https://ndownloader.figshare.com/files/70342671", bytes: 21591658921, md5: 54f6739ed5de832fc32b79df6a39daf6}
+        - {name: ORCID_2026_10_activities_X.tar.gz, url: "https://ndownloader.figshare.com/files/70335672", bytes: 20540018885, md5: ba665d7d3471ac873d1d7b4ed93d3a1f}
+        - {name: ORCID_2026_10_summaries.tar.gz, url: "https://ndownloader.figshare.com/files/70342863", bytes: 57290954546, md5: a55a16fe0b292bda03cc6016546c8984}
+    license:
+      id: "CC0-1.0"
+      url: "https://creativecommons.org/publicdomain/zero/1.0/"
+      notes: >-
+        The Public Data File is CC0 1.0. Per the ORCID Public Data File Use
+        Policy the waiver does not cover linked resources, and the underlying
+        data elements remain subject to the privacy and publicity rights of
+        the individuals; ORCID asks users to follow its community norms. The
+        committed sample was fetched from the Public API, whose Terms of
+        Service grant a non-commercial license to use registry data marked
+        public.
+    snapshot:
+      date: "2026-10-13"
+      label: "ORCID Public Data File 2026 (public data as of October 13, 2026; published 2026-10-22)"
+      artifact_last_modified: "2026-10-27T19:39:02Z (figshare modified_date)"
+    retrieval:
+      script: "datasets/scripts/download.sh"
+      command: "SCHOLARCHAIN_ALLOW_FULL_DOWNLOAD=1 datasets/scripts/download.sh --full --dataset orcid --out <local-dir>"
+      sample_command: "datasets/scripts/download.sh --dataset orcid"
+      dry_run_command: "datasets/scripts/download.sh --dataset orcid --dry-run"
+    full_retrieval:
+      byte_cap: "source.files[].bytes per archive (enforced during the transfer)"
+      max_time_seconds: 21600 # curl --max-time per archive attempt (largest archive is about 57 GB); an interrupted transfer resumes on the next run
+      skip_rule: "skip an archive only when its size equals source.files[].bytes and its MD5 matches; a full-size archive that fails is quarantined as <file>.corrupt-<UTC> (never deleted) and fetched again"
+    format:
+      file_format: "tar archives of per-record XML (ORCID message schema v3.0, namespace http://www.orcid.org/ns/record); summaries/[3-digit checksum]/[iD].xml plus 11 activities archives"
+      compression: "gzip (tar.gz)"
+      encoding: "UTF-8"
+    size:
+      expected:
+        total_bytes: 290958772512
+        summaries_uncompressed_stated: "919.19 GB"
+        source: "figshare API file sizes for article 34697766; uncompressed size from the article description"
+      observed:
+        remote_bytes: 290958772512
+        method: "HTTP GET Range bytes=0-0 on each ndownloader URL; Content-Range totals equal the figshare sizes for all 12 files"
+        local_bytes: null
+    s3_raw_prefix: "s3://${RAW_BUCKET}/orcid/snapshot=2026-10-13/"
+    integrity:
+      policy: >-
+        Verify each archive against the figshare MD5 (source.files[].md5)
+        after download; skip archives whose MD5 already matches. Compute
+        SHA-256 at ingest and store it beside each raw object.
+      publisher_checksum:
+        algorithm: md5
+        value: "per file, see source.files[].md5 (figshare computed_md5 == supplied_md5 for all 12 files)"
+      sha256: null
+    schema_version:
+      source_schema: "ORCID message schema v3.0 (record namespace http://www.orcid.org/ns/record)"
+      raw_schema_id: "orcid-xml/v3.0-pdf-2026"
+    subset_rule:
+      functional_run: >-
+        Records from the summaries archive whose iD appears as an author ORCID
+        in the selected DBLP, OpenAlex or Crossref subsets, plus their
+        activities. Selection is by explicit iD list, never by name.
+      sample: "See samples[].subset_rule."
+    linkage_fields:
+      - orcid
+      - given_names
+      - family_name
+      - credit_name
+      - works.external_ids          # work identifiers only (doi, eid, ...); titles are not kept
+      - affiliations.organization.name
+      - affiliations.organization.disambiguated_organization   # RINGGOLD / ROR / GRID
+      - affiliations.start_date
+      - affiliations.end_date
+    privacy_policy:
+      decided_by: "human architect, Phase 03 run 2 work order, decision 2d"
+      scope: "public ORCID data only (visibility=public records from the Public Data File or Public API)"
+      kept_categories:
+        - "ORCID iD (common:orcid-identifier: uri, path, host)"
+        - "name (person:name: given-names, family-name, credit-name)"
+        - "affiliations (distinctions, educations, employments, invited-positions, memberships, qualifications, services; per summary: department-name, role-title, start-date, end-date, organization name and disambiguated-organization)"
+        - "work identifiers (works group common:external-ids: external-id-type, external-id-value, external-id-relationship)"
+      stripped: "everything else, explicitly including emails, biography, addresses (person addresses and organization addresses), other-names, keywords, researcher-urls, person external identifiers, history, preferences, sources, work titles, fundings, peer-reviews and research-resources"
+      max_real_person_sample_records: 5
+      enforcement:
+        - "datasets/scripts/lib/orcid_reduce.py builds the allowlisted record; download.sh never installs the raw API response"
+        - "validate-samples.sh (check_samples.py) enforces the allowlist: every element of an ORCID sample must sit on an allowed path (ORCID iD: uri, path, host; person name: given-names, family-name, credit-name; the 7 affiliation sections with department-name, role-title, start/end date, organization name and disambiguated-organization; works group external-ids with type, value, relationship) and carry only path, put-code or visibility attributes. Anything else fails, including person external-identifiers, work:title, common:source and history. Email(s), biography, address(es), other-name(s), keyword(s) and researcher-url(s) are also reported by name. More than 5 ORCID records in total fails."
+    update_strategy: >-
+      Published once per year. Pin one annual file per pipeline run. Between
+      files, specific iDs may be refreshed from the Public API (rate-limited,
+      non-commercial terms). On refresh, drop data that is no longer public.
+    privacy_notes:
+      - "POLICY (human decision 2d): public ORCID data only. Keep only the ORCID iD, name, affiliations and work identifiers. No emails, biographies or addresses; other-names, keywords and researcher-urls are also stripped. At most 5 real-person records in samples. See privacy_policy for the exact allowlist and its enforcement."
+      - "Every record describes a real person; data is public by the record holder's choice but remains subject to privacy and publicity rights (ORCID Public Data File Use Policy)."
+      - "The pipeline applies the same allowlist when it ingests ORCID records; fields outside the four kept categories are not stored in derived outputs."
+      - "The only committed sample is ORCID's fictitious demonstration record (Josiah Carberry), reduced to the kept categories. No real-person record is committed (0 of the allowed 5)."
+      - "Visibility can change; re-check on refresh and remove records or fields no longer public."
+    limitations:
+      - "A matching author name is not sufficient evidence of author identity."
+      - "An ORCID iD is strong evidence only when the iD itself is present on both sides of a link."
+      - "Works lists are self-asserted or member-asserted and can be incomplete or duplicated."
+      - "Only records created or claimed by individuals are included."
+    validation_commands:
+      - "md5sum -c <list built from source.files[].md5>"
+      - "tar -tzf ORCID_2026_10_summaries.tar.gz | head"
+      - "datasets/scripts/validate-samples.sh"
+    sampling:
+      api_base: "https://pub.orcid.org/v3.0"
+      orcid_id: "0000-0002-1825-0097"
+      output: "orcid/orcid-0000-0002-1825-0097-record.xml"
+    samples:
+      - path: "orcid/orcid-0000-0002-1825-0097-record.xml"
+        description: "Public record of Josiah Carberry, a fictitious person whose record ORCID maintains for demonstrations (stated in the biography of the fetched record, which is not retained), reduced to the four kept categories of privacy_policy. Same record:record root and namespace as the Public Data File summaries."
+        source_url: "https://pub.orcid.org/v3.0/0000-0002-1825-0097/record"
+        retrieval_command: "curl --fail -sS -L --max-filesize 1048576 -H 'Accept: application/vnd.orcid+xml' <source_url> > raw.xml; python3 -I datasets/scripts/lib/orcid_reduce.py raw.xml <out>"
+        script_equivalent: "datasets/scripts/download.sh --dataset orcid"
+        retrieved_at: "2026-11-20T02:07:36Z"
+        subset_rule: "One fixed iD chosen because it is fictitious, so no real person's data is committed."
+        transformation: "Allowlist reduction by orcid_reduce.py (Phase 03 run 2): kept the iD, name (given-names, family-name), 2 employment affiliations (organization name, disambiguated organization, department, role, start date) and the external identifiers of 6 work groups; dropped history, preferences, other-names, biography, researcher-urls, emails, addresses (including organization addresses), keywords, person external identifiers, sources, dates of record edits, work titles and peer-reviews. Raw API response: 44,666 bytes, sha256 dfff328197475e884fae052c4c52ffcb4e22f3fdc0777554612eb18297d960ff (run 1; not committed)."
+        records: 1
+        bytes: 6365
+        sha256: "d2816257d6788c06d37948ae0fa529ce093f9b022b387889da1d2f5203dbef1f"
+        license: "Registry data marked public, used under the ORCID Public APIs Terms of Service (non-commercial); the Public Data File itself is CC0-1.0"
+    verification:
+      source.landing_url: {status: VERIFIED, evidence: "linked from info.orcid.org working-with-bulk-data page as '2026 ORCID Public Data File'"}
+      source.download_url: {status: VERIFIED, evidence: "figshare API returned title 'ORCID Public Data File 2026', DOI 10.23640/07243.34697766.v1, 12 files"}
+      source.files: {status: VERIFIED, evidence: "names, sizes and md5 from the figshare API; sizes re-confirmed by Content-Range"}
+      license: {status: VERIFIED, evidence: "figshare license {name: CC0}; article description and https://info.orcid.org/public-data-file-use-policy/"}
+      snapshot.date: {status: VERIFIED, evidence: "figshare description: 'as of October 13, 2026'"}
+      size.expected: {status: VERIFIED, evidence: "figshare API sizes and description"}
+      size.observed.remote_bytes: {status: VERIFIED, evidence: "Content-Range totals for all 12 files"}
+      size.observed.local_bytes:
+        status: UNVERIFIED
+        note: "Official URL to check: https://orcid.figshare.com/articles/dataset/ORCID_Public_Data_File_2026/34697766 (file sizes). No full download in Phase 03 (about 291 GB). Requires human approval."
+      integrity.sha256:
+        status: UNVERIFIED
+        note: "Official URL to check: https://orcid.figshare.com/articles/dataset/ORCID_Public_Data_File_2026/34697766 (figshare publishes MD5 only). SHA-256 is computed at ingest after an approved full download."
+      format.file_format: {status: VERIFIED, evidence: "figshare description of directory layout; first entries of the summaries archive (bounded 128 KiB range read, not retained) have root element record:record in namespace http://www.orcid.org/ns/record"}
+
+  # -------------------------------------------------------------- Crossref
+  crossref:
+    name: "Crossref works metadata (REST API, bounded to DBLP-subset DOIs)"
+    required: false
+    owning_agent: dataset-engineer
+    purpose: >-
+      DOI-centred work metadata (titles, ordered contributors with ORCID and
+      affiliation/ROR when supplied, container titles, dates, references)
+      used to strengthen work matching between DBLP, OpenAlex and ORCID.
+    retrieval_route:
+      decided_by: "human architect, Phase 03 run 2 work order, decision 2c"
+      primary: >-
+        Crossref REST API /works, queried only for the DOIs of the selected
+        DBLP subset (batched filter=doi:... requests, bounded response size,
+        fixed interval between requests). Implemented by
+        download.sh --full --dataset crossref --doi-list <file>.
+      alternative: >-
+        Bulk Crossref Public Data File from the Requester Pays S3 bucket in
+        source.alternative_bulk. The REQUESTER IS BILLED for requests and data
+        transfer. Documented only; not implemented or executed by
+        download.sh. Requires human cost approval and an approved scripts/
+        entry point (infra-engineer).
+      excluded: "BitTorrent distribution of the Public Data File is not an approved route."
+    source:
+      landing_url: "https://www.crossref.org/documentation/retrieve-metadata/rest-api/"
+      download_url: "https://api.crossref.org/works"
+      api_url: "https://api.crossref.org/works"
+      documentation_urls:
+        - "https://www.crossref.org/documentation/retrieve-metadata/rest-api/"
+        - "https://www.crossref.org/documentation/retrieve-metadata/"
+        - "https://www.crossref.org/documentation/retrieve-metadata/bulk-downloads/"
+        - "https://www.crossref.org/services/metadata-retrieval/public-data-file/"
+        - "https://www.crossref.org/documentation/retrieve-metadata/rest-api/tips-for-using-public-data-files-and-plus-snapshots/"
+      alternative_bulk:
+        landing_url: "https://www.crossref.org/services/metadata-retrieval/public-data-file/"
+        release_notes_url: "https://www.crossref.org/blog/2026-public-data-file-now-available/"
+        dataset_doi: "10.13003/nggf-vt1j"
+        label: "March 2026 Public Data File from Crossref (records registered up to and including part of March 2026; release notes published 2026-03-17)"
+        requester_pays_bucket: "api-snapshots-reqpays-crossref"
+        requester_pays_object_key: null
+        billing: "Requester Pays. Crossref bulk-downloads documentation (checked 2026-11-20T02:38:55Z): 'rather than the bucket owner (Crossref) paying for bandwidth and transfer costs when downloading objects, the requester pays instead'; '--request-payer requester is mandatory'. Needs an authenticated AWS account and a human-approved cost."
+        stated_size: "208 GB compressed, metadata for 180 million records"
+        snapshot_date: null
+        object_bytes: null
+        publisher_checksum: null
+        encoding: null
+        item_schema: null
+    license:
+      id: "Bibliographic metadata: facts, not subject to copyright; Crossref-generated data: CC0-1.0; abstracts: publisher or author copyright"
+      url: "https://www.crossref.org/documentation/retrieve-metadata/"
+      notes: >-
+        Crossref states that almost all metadata is reusable without
+        restriction except abstracts, which keep the publisher or author
+        license. The same statement covers REST API output and the Public
+        Data File. Samples and API-route raw files drop the 'abstract' field.
+        Pipelines must not redistribute abstracts.
+    snapshot:
+      date: "${RETRIEVAL_DATE}"
+      label: >-
+        REST API route: Crossref metadata is live, so the snapshot of record
+        is the UTC date of <out>/RETRIEVED_AT (the latest batch retrieval
+        time; per-batch times are in the .meta files and the span in
+        <out>/RETRIEVAL_WINDOW), written by download.sh and recorded in the
+        run manifest.
+        The committed sample reflects API state at 2026-11-20T02:06:32Z.
+      sample_retrieval_date: "2026-11-20"
+    retrieval:
+      script: "datasets/scripts/download.sh"
+      command: "SCHOLARCHAIN_ALLOW_FULL_DOWNLOAD=1 datasets/scripts/download.sh --full --dataset crossref --out <local-dir> --doi-list <dblp-subset-dois.txt> [--max-dois N]"
+      alternative_command: "datasets/scripts/download.sh --full --dataset crossref --out <dir> --crossref-route requester-pays   # prints the documented bulk alternative and exits 3; performs no transfer"
+      sample_command: "datasets/scripts/download.sh --dataset crossref"
+      dry_run_command: "datasets/scripts/download.sh --dataset crossref --dry-run"
+    full_retrieval:
+      api_batch_size: 10                # DOIs per filter=doi:... request (10 per request observed working in Phase 03)
+      max_response_bytes: 8388608       # per-response byte cap, enforced during the transfer (head -c) and passed to curl --max-filesize
+      request_interval_seconds: 1       # pause between requests
+      request_max_time_seconds: 120     # curl --max-time per request
+      input: "--doi-list: DOIs of the selected DBLP subset (Hadoop DBLP output for the same run); lower-cased, de-duplicated, sorted; optional --max-dois cap"
+      output: >-
+        <out>/CROSSREF_RUN (doi_list_sha256, doi_count, batch_size, api_url)
+        and <out>/DOI_LIST.txt (the normalised list); per batch
+        <out>/crossref-api-batch-NNNNNN.jsonl (one works item per line,
+        abstract dropped), .jsonl.sha256, and .meta (doi_set_sha256,
+        doi_count, retrieved_at); <out>/RETRIEVED_AT (latest batch
+        retrieved_at) and <out>/RETRIEVAL_WINDOW (first and last
+        retrieved_at, batch count).
+      batch_identity: >-
+        An <out> is bound to one normalised DOI list and batch size by
+        CROSSREF_RUN. A non-empty <out> whose CROSSREF_RUN names a different
+        DOI-list sha256 or batch size, or that has no CROSSREF_RUN, is
+        refused before any request; the refusal names both hashes (review
+        finding 2: a different list was otherwise skipped silently).
+      idempotency: >-
+        A batch is skipped only when its .jsonl.sha256 verifies, its .meta
+        doi_set_sha256 equals the sha256 of the batch's DOIs, and every item
+        DOI belongs to that batch; otherwise it is fetched again.
+      provenance_dates: >-
+        Each batch records its own retrieved_at. RETRIEVED_AT is recomputed at
+        the end of every run as the latest batch retrieved_at, so a resumed
+        run on a later date updates it; a run that fetches nothing leaves it
+        unchanged.
+    format:
+      file_format: "JSON Lines written from REST API responses (message.items, one works item per line)"
+      compression: "none as written by download.sh (gzip may be applied when staged to S3)"
+      encoding: "UTF-8"
+      item_schema: "Crossref REST API works item, message-version 1.0.0"
+    size:
+      expected:
+        api_route: "one works item per DOI of the DBLP subset that Crossref knows; committed sample: 10 items, 47,915 bytes (about 4.8 KB per item, abstracts removed)"
+        bulk_alternative_stated: "208 GB compressed, metadata for 180 million records"
+        source: "committed sample (local observation) and https://www.crossref.org/services/metadata-retrieval/public-data-file/"
+      observed:
+        remote_bytes: null
+        method: "API route: no fixed remote object; volume depends on the DBLP subset DOI list. Bulk alternative: no byte-exact size observed."
+        local_bytes: null
+    s3_raw_prefix: "s3://${RAW_BUCKET}/crossref/snapshot=${RETRIEVAL_DATE}/"
+    integrity:
+      policy: >-
+        API route: every response must be HTTP 200 with status 'ok' and
+        message-type 'work-list' (sample_tools.py crossref-jsonl exits
+        otherwise), stay under max_response_bytes during the transfer, and
+        each written batch gets a SHA-256 file and a .meta with its DOI-set
+        hash; the batch set is immutable once staged under the snapshot
+        prefix. Bulk alternative (not implemented): record the
+        S3 object size and ETag, gzip -t every file, compute SHA-256 at
+        ingest.
+      publisher_checksum: "not applicable to the REST API route (responses carry no published checksum); see source.alternative_bulk.publisher_checksum for the bulk file"
+      sha256: "per batch file, written by download.sh as <batch>.jsonl.sha256 at retrieval time"
+    schema_version:
+      source_schema: "Crossref REST API works item JSON, message-version 1.0.0"
+      raw_schema_id: "crossref-api-jsonl/v1.0.0"
+    subset_rule:
+      functional_run: >-
+        Exactly the DOIs found in the selected DBLP subset (dblp subset_rule,
+        DOIs taken from https://doi.org/ <ee> links), lower-cased and
+        de-duplicated; one Crossref works item per DOI that Crossref
+        resolves. No title or name search is used.
+      sample: "See samples[].subset_rule."
+    linkage_fields:
+      - DOI
+      - title
+      - author.given
+      - author.family
+      - author.sequence
+      - author.ORCID
+      - author.affiliation        # name and, when supplied, ROR id
+      - issued
+      - container-title
+      - event.name
+      - ISSN
+      - ISBN
+      - reference.DOI
+    update_strategy: >-
+      API route: re-query the DOI list of a new DBLP subset (or the changed
+      DOIs) under a new snapshot=${RETRIEVAL_DATE} prefix; the REST API
+      from-update-date / from-index-date filters support incremental
+      refresh. Bulk alternative: annual Public Data File, pinned per run.
+    privacy_notes:
+      - "Contributor names, ORCID iDs and affiliations as deposited by members."
+      - "Abstracts are copyrighted and excluded from samples and from any redistributed output."
+      - "Optional CROSSREF_MAILTO contact is sent only when a human sets it; it has no default and is never committed."
+    limitations:
+      - "A matching author name is not sufficient evidence of author identity."
+      - "Metadata completeness varies by member; many records lack ORCID, affiliation or references."
+      - "API results are live state; two runs on different dates can differ. Record RETRIEVED_AT with every run."
+      - "Only DOIs registered with Crossref are covered; DataCite and other registrars are absent."
+      - "Works without a DOI in dblp cannot be retrieved by this route."
+      - "Observed rate-limit headers on 2026-11-20 for a single-DOI request: x-rate-limit-limit 5, x-rate-limit-interval 1s, x-api-pool public-single. Limits may change; respect the headers."
+    validation_commands:
+      - "(cd <out> && sha256sum -c crossref-api-batch-*.jsonl.sha256)"
+      - "(cd <out> && grep doi_list_sha256 CROSSREF_RUN && sha256sum DOI_LIST.txt)   # the two hashes must be equal"
+      - "python3 -I -c 'import json,sys; [json.loads(l) for l in open(sys.argv[1])]' <out>/crossref-api-batch-000000.jsonl"
+      - "datasets/scripts/validate-samples.sh"
+    sampling:
+      api_works_url: "https://api.crossref.org/works"
+      linked_doi_count: 10
+      output: "crossref/crossref-works-api-linked.jsonl"
+    samples:
+      - path: "crossref/crossref-works-api-linked.jsonl"
+        description: "Crossref REST API works items for the same 10 DOIs as the OpenAlex linked sample (linkage fixture). Live API state at retrieval time."
+        source_url: "https://api.crossref.org/works"
+        retrieval_command: "curl --fail -sS -L --max-filesize 2097152 \"$(python3 -I datasets/scripts/lib/sample_tools.py crossref-url https://api.crossref.org/works <dois.txt>)\"; python3 -I datasets/scripts/lib/sample_tools.py crossref-jsonl <resp> <dois.txt> <out>"
+        script_equivalent: "datasets/scripts/download.sh --dataset crossref"
+        retrieved_at: "2026-11-20T02:06:32Z"
+        subset_rule: "Same 10 DOIs as openalex-works-api-linked.jsonl; one request filter=doi:...,doi:...&rows=10; rows in DOI-list order. 10 of 10 found."
+        transformation: "The 'abstract' key is removed from every item (copyright). All other fields unchanged."
+        records: 10
+        bytes: 47915
+        sha256: "855c221447d1ab399bae0db0ab4c974a70c5f31bad65fdca53e06a05b14efa6c"
+        license: "Bibliographic metadata: facts, not subject to copyright (Crossref licensing statement); abstracts removed"
+    verification:
+      source.landing_url: {status: VERIFIED, evidence: "HTTP 200 (70,387 bytes) on 2026-11-20T02:38:55Z"}
+      source.download_url: {status: VERIFIED, evidence: "batch request on 2026-11-20T02:06:32Z returned status ok with 10 items; single-DOI request https://api.crossref.org/works/10.1145/337292.337434 on 2026-11-20T02:33:57Z returned HTTP 200"}
+      source.alternative_bulk.landing_url: {status: VERIFIED, evidence: "HTTP 200 in run 1; lists the 2026 public data file with DOI 10.13003/nggf-vt1j"}
+      source.alternative_bulk.dataset_doi: {status: VERIFIED, evidence: "run 1: doi.org resolves 10.13003/nggf-vt1j to a page titled 'March 2026 Public Data File from Crossref'"}
+      source.alternative_bulk.requester_pays_bucket: {status: VERIFIED, evidence: "bulk-downloads documentation, re-checked 2026-11-20T02:38:55Z: 'The bucket is called api-snapshots-reqpays-crossref'"}
+      source.alternative_bulk.billing: {status: VERIFIED, evidence: "bulk-downloads documentation text quoted in the billing field"}
+      source.alternative_bulk.requester_pays_object_key:
+        status: UNVERIFIED
+        note: "Official URL to check: https://www.crossref.org/documentation/retrieve-metadata/bulk-downloads/ . On 2026-11-20 the documentation still shows only the 2025 key (March-2025-public-data-file-from-crossref.tar); the 2026 key is not listed. Listing the Requester Pays bucket bills the caller and needs human approval."
+      source.alternative_bulk.snapshot_date:
+        status: UNVERIFIED
+        note: "Official URL to check: https://www.crossref.org/blog/2026-public-data-file-now-available/ . Crossref states only 'up to and including part of March 2026'; a human must find the exact cut-off date."
+      source.alternative_bulk.object_bytes:
+        status: UNVERIFIED
+        note: "Official URL to check: https://www.crossref.org/documentation/retrieve-metadata/bulk-downloads/ (Requester Pays object). Only the stated '208 GB' is published; a byte-exact size needs a billed S3 HEAD approved by a human."
+      source.alternative_bulk.publisher_checksum:
+        status: UNVERIFIED
+        note: "Official URL to check: https://www.crossref.org/documentation/retrieve-metadata/bulk-downloads/ . No published checksum was found for the bulk file; a human should confirm whether Crossref publishes one."
+      source.alternative_bulk.encoding:
+        status: UNVERIFIED
+        note: "Official URL to check: https://www.crossref.org/services/metadata-retrieval/public-data-file/ . No bulk file was opened; confirm on one bulk file before use."
+      source.alternative_bulk.item_schema:
+        status: UNVERIFIED
+        note: "Official URL to check: https://www.crossref.org/documentation/retrieve-metadata/rest-api/tips-for-using-public-data-files-and-plus-snapshots/ . Assumed equal to the REST API works item; confirm on one bulk file before the Hadoop normalizer relies on it."
+      license: {status: VERIFIED, evidence: "https://www.crossref.org/documentation/retrieve-metadata/ 'Licensing' section summary table"}
+      snapshot.sample_retrieval_date: {status: VERIFIED, evidence: "retrieved_at of the committed sample"}
+      size.expected: {status: VERIFIED, evidence: "api_route: local byte count of the committed sample (wc -c = 47915); bulk: public data file page '208 GB and contains metadata for 180 million records'"}
+      size.observed.remote_bytes:
+        status: UNVERIFIED
+        note: "Not applicable to the API route until a DOI list exists; the API returns no total size. For the bulk alternative see source.alternative_bulk.object_bytes (https://www.crossref.org/documentation/retrieve-metadata/bulk-downloads/)."
+      size.observed.local_bytes:
+        status: UNVERIFIED
+        note: "Known only after a human-approved full API-route run over the DBLP subset DOI list; download.sh writes per-batch files whose sizes must be recorded here (no official URL; local observation). EXCEPTION ACCEPTED: on 2026-11-19 the human architect accepted (Phase 03 review finding 8) that this field has no official URL, a departure from the run-2 decision that every UNVERIFIED field names one."
+        exception: {accepted_by: "human architect", accepted_on: "2026-11-19", reference: "Phase 03 review finding 8", scope: "no official URL exists for this local observation"}
+      format.encoding: {status: VERIFIED, evidence: "API response Content-Type application/json (JSON is UTF-8 per RFC 8259); committed sample and the 2026-11-20T02:33:57Z response parse as UTF-8"}
+      format.item_schema: {status: VERIFIED, evidence: "single-DOI response on 2026-11-20T02:33:57Z: status ok, message-type work, message-version 1.0.0; committed sample items are message.items of a work-list response"}

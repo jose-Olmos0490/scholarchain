@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "graph-edge-v1",
+  "edgeId": "graph-edge:6a9941062cc884b6706ea32015509f5a1e096700f7f3995bc100ee4bbbb5aacd",
+  "fromId": "researcher:openalex:c2e53727f9756b062f5a17732f0d9985ec0aa7335a8d45197742d2eb8b135c7a",
+  "edgeType": "COAUTHORED_WITH",
+  "toId": "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d",
+  "properties": {
+    "lastCollaborationYear": "2000",
+    "windowStartYear": "2000",
+    "windowEndYear": "2005",
+    "firstCollaborationYear": "2000",
+    "jointPublicationCount": "1"
+  },
+  "policyVersion": "illustrative-coauthor-policy-v1",
+  "sourceEvidenceIds": [
+    "coauthor-edge:7b9fc7a1202b37cb966d8b9003b431fba718c2ecacb348de47bcd61429e794ee"
+  ],
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "pair-candidate:0c5ef98b1e3ac539ba51727c2acb06781876ab8074f630fd5892b23eef4f9fd7",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": "illustrative-coauthor-policy-v1",
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": [
+      "pair-candidate:0c5ef98b1e3ac539ba51727c2acb06781876ab8074f630fd5892b23eef4f9fd7"
+    ]
+  }
+}
