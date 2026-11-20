@@ -290,6 +290,21 @@ else
   probe 0 hadoop-engineer - $B $C "scripts/run-bounded-pipeline.sh --local" "local bounded pipeline"
   probe 2 hadoop-engineer dev $B $C "scripts/run-bounded-pipeline.sh --env dev" "cloud pipeline by module owner"
   probe 2 test-engineer - $B $C "sed -i s/a/b/ modules/core/src/main/scala/A.scala" "test-engineer shell edit of production"
+  # Root scripts/*.sh authority vs dataset-engineer's datasets/scripts/*.sh (phase-03 repair-01).
+  probe 2 dataset-engineer - $B $C "scripts/deploy.sh" "dataset-engineer runs root scripts/deploy.sh"
+  probe 2 dataset-engineer - $B $C "./scripts/deploy.sh" "dataset-engineer runs ./scripts/deploy.sh"
+  probe 2 dataset-engineer - $B $C "bash scripts/deploy.sh" "dataset-engineer bash scripts/deploy.sh"
+  probe 2 dataset-engineer - $B $C "sh scripts/deploy.sh" "dataset-engineer sh scripts/deploy.sh"
+  probe 2 dataset-engineer - $B $C "$ROOT/scripts/deploy.sh" "dataset-engineer absolute root scripts/deploy.sh"
+  probe 2 dataset-engineer - $B $C "datasets/scripts/../../scripts/deploy.sh" "traversal datasets/scripts/../../scripts"
+  probe 2 dataset-engineer - $B $C "foo/../scripts/deploy.sh" "traversal foo/../scripts"
+  probe 2 dataset-engineer - $B $C "chmod +x scripts/deploy.sh" "dataset-engineer chmod root script"
+  probe 2 dataset-engineer - $B $C "datasets/scripts/download.sh scripts/deploy.sh" "own script with root script argument"
+  probe 0 dataset-engineer - $B $C "datasets/scripts/download.sh --dry-run" "dataset-engineer runs own dataset script"
+  probe 0 dataset-engineer - $B $C "bash datasets/scripts/download.sh --dry-run" "dataset-engineer bash own dataset script"
+  probe 0 dataset-engineer - $B $C "chmod +x datasets/scripts/download.sh" "dataset-engineer chmod +x own dataset script"
+  probe 2 hadoop-engineer - $B $C "datasets/scripts/download.sh --dry-run" "non-owner runs dataset script"
+  probe 2 hadoop-engineer - $B $C "chmod +x datasets/scripts/download.sh" "non-owner chmod dataset script"
   W=Write
   F=file_path
   probe 0 test-engineer - $W $F "$ROOT/tests/adversarial/DblpXmlSpec.scala" "test-engineer writes tests/"

@@ -544,8 +544,60 @@ check_rm_targets() {
   return 0
 }
 
+# dataset-engineer runs its own datasets/scripts/<name>.sh (docs/agents.md:
+# dataset-engineer owns datasets/scripts/** for bounded download and sampling).
+# The repository-root scripts/*.sh authority rule below stays unchanged.
+# ds_script_word_ok <word>: 0 only if the word resolves (".", "..", symlinks,
+# hook cwd) to <repo>/datasets/scripts/<name>.sh. Fails closed otherwise.
+ds_script_word_ok() {
+  local w="$1" base rr real
+  w="${w//\"/}"
+  w="${w//\'/}"
+  [[ -z "$w" ]] && return 1
+  case "$w" in *'$'* | *'`'* | *'*'* | *'?'* | *'['* | *'{'* | *'~'* | *'='*) return 1 ;; esac
+  command -v realpath >/dev/null 2>&1 || return 1
+  if [[ "$w" != /* ]]; then
+    base="$(field cwd)"
+    [[ "$base" == /* ]] || base="$ROOT"
+    w="$base/$w"
+  fi
+  real="$(realpath -m -- "$w" 2>/dev/null)" || return 1
+  rr="$(realpath -m -- "$ROOT" 2>/dev/null)" || return 1
+  [[ "$real" == "$rr"/datasets/scripts/* ]] || return 1
+  [[ "${real#"$rr"/datasets/scripts/}" =~ ^[A-Za-z0-9_-]+\.sh$ ]]
+}
+
+# dataset_own_scripts_only <segment>: 0 only for "<script> args", "bash|sh [-flags] <script> args",
+# "chmod [ugoa]+x <script>...", or "for v in <script>...", where every scripts/<name>.sh word is a
+# dataset-engineer script. Any other shape keeps the existing rule.
+dataset_own_scripts_only() {
+  local toks i w
+  read -r -a toks <<<"$1"
+  [[ ${#toks[@]} -eq 0 ]] && return 1
+  case "${toks[0]}" in
+    bash | sh)
+      i=1
+      while [[ $i -lt ${#toks[@]} && "${toks[$i]}" =~ ^-[A-Za-z]+$ && "${toks[$i]}" != *[co]* ]]; do i=$((i + 1)); done
+      ds_script_word_ok "${toks[$i]:-}" || return 1
+      ;;
+    chmod)
+      [[ "${toks[1]:-}" =~ ^[ugoa]*\+x$ && ${#toks[@]} -ge 3 ]] || return 1
+      for w in "${toks[@]:2}"; do ds_script_word_ok "$w" || return 1; done
+      ;;
+    for)
+      [[ "${toks[2]:-}" == "in" && ${#toks[@]} -ge 4 ]] || return 1
+      for w in "${toks[@]:3}"; do ds_script_word_ok "$w" || return 1; done
+      ;;
+    *) ds_script_word_ok "${toks[0]}" || return 1 ;;
+  esac
+  for w in "${toks[@]}"; do
+    if [[ "$w" =~ scripts/[A-Za-z0-9_-]+\.sh ]]; then ds_script_word_ok "$w" || return 1; fi
+  done
+  return 0
+}
+
 check_scripts_and_agent_fences() {
-  local seg s first name allowed
+  local seg s first name allowed own_ds
   while IFS= read -r seg; do
     s="$(strip_assignments "$seg")"
     if [[ "$seg" =~ (^|[[:space:]])SCHOLARCHAIN_APPROVED_ENVS= ]]; then
@@ -560,8 +612,10 @@ check_scripts_and_agent_fences() {
         "use describe/list/get, or route the change to the owning author"
     fi
 
-    # Script execution authority.
-    if [[ "$s" =~ (^|[[:space:]/])scripts/([A-Za-z0-9_-]+)\.sh ]]; then
+    # Script execution authority (repository-root scripts/*.sh).
+    own_ds=0
+    [[ "$WHO" == "dataset-engineer" ]] && dataset_own_scripts_only "$s" && own_ds=1
+    if [[ $own_ds -eq 0 && "$s" =~ (^|[[:space:]/])scripts/([A-Za-z0-9_-]+)\.sh ]]; then
       name="${BASH_REMATCH[2]}"
       case "$first" in
         cat | less | head | tail | wc | grep | rg | sha256sum | shellcheck | ls | stat | file | diff | git) continue ;;
