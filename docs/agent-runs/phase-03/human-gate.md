@@ -8,3 +8,4 @@ Remaining risk:
 - No automated check that dev.conf matches the manifest.
 - Full download mode has never run against live servers.
 - Guard bypasses noted in repair-01, scheduled for repair before Phase 13.
+Accepted commit: 09a76d31f33af261a6705a8655ba71f8b8446758
