@@ -9,3 +9,6 @@ Known risks: (1) a DOI with a leading/trailing zero-width character is treated a
 Not yet tested at scale: bzip2 multi-split DBLP (first EMR run must compare record count with a single-split count); possible large reducer group for a prolific ORCID; XML with an unrecognized charset declaration falls back to UTF-8 and rejects non-ASCII records.
 Follow-ups: F9 slow sbt check (tests run twice) -> build-engineer before Phase 5.
 Accepted commit: d56fbcba630f059a3ad45f0e3d69e30f96aef0fa
+
+## Correction (recorded 2026-11-21)
+The original commit.txt recorded d56fbcb, which is a Phase 3 commit; the Phase 4 code was never committed at gate time. The Phase 4 work was committed late in the commit now recorded in commit.txt, unchanged except: build.sbt also includes the entityResolution dependency on adversarialTests added during Phase 5 repair F5.
