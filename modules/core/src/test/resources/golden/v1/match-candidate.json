@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "match-candidate-v1",
+  "candidateId": "match-candidate:dc1df0b68d7630afe6b1f14e80f7738611c666bc1858882d7d1f5ac9a247eb2a",
+  "entityType": "WORK",
+  "leftRef": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+  "rightRef": "work:openalex:6e92d66735252212887fdf8c80f65c73f7fb333d1f18916b78d7b6e5d96530da",
+  "blockKey": "illustrative-block:embedded systems design|2000",
+  "features": {
+    "doiEqual": 1,
+    "titleTokenJaccard": 1,
+    "yearDelta": 0
+  },
+  "featureVersion": "illustrative-features-v1",
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": null,
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": [
+      "work:openalex:6e92d66735252212887fdf8c80f65c73f7fb333d1f18916b78d7b6e5d96530da"
+    ]
+  }
+}

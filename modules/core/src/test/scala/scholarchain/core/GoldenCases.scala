@@ -38,5 +38,9 @@ object GoldenCases:
     GoldenCase("query-plan.json", queryPlan),
     GoldenCase("answer-claim.json", claim),
     GoldenCase("answer-response.json", answer),
-    GoldenCase("run-manifest.json", runManifest)
+    GoldenCase("run-manifest.json", runManifest),
+    GoldenCase("author-paper-record.json", authorPaper),
+    GoldenCase("match-candidate.json", matchCandidate),
+    GoldenCase("exact-identifier-outcome.json", exactIdOutcome),
+    GoldenCase("reject-record.json", reject)
   )

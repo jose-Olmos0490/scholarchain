@@ -33,7 +33,11 @@ class WireContractSpec extends AnyFunSuite with Matchers:
     "EvidenceBundle",
     "QueryPlan",
     "AnswerClaim",
-    "AnswerResponse"
+    "AnswerResponse",
+    "AuthorPaperRecord",
+    "MatchCandidate",
+    "ExactIdentifierOutcome",
+    "RejectRecord"
   )
 
   test("golden cases cover every required record type plus the run manifest") {
@@ -98,6 +102,23 @@ class WireContractSpec extends AnyFunSuite with Matchers:
     VerificationStatus.values.foreach(v => read[VerificationStatus](write(v)) shouldBe v)
     NodeType.values.foreach(v => read[NodeType](write(v)) shouldBe v)
     EdgeType.values.foreach(v => read[EdgeType](write(v)) shouldBe v)
+    MatchEntityType.values.foreach(v => read[MatchEntityType](write(v)) shouldBe v)
+    ExactIdType.values.foreach(v => read[ExactIdType](write(v)) shouldBe v)
+    ExactIdOutcome.values.foreach(v => read[ExactIdOutcome](write(v)) shouldBe v)
+  }
+
+  test("Phase 4 enums have exactly these wire spellings") {
+    MatchEntityType.values.map(write(_)).toVector shouldBe Vector("\"RESEARCHER\"", "\"WORK\"")
+    ExactIdOutcome.values.map(_.toString).toVector shouldBe Vector("MATCH", "DUPLICATE", "CONFLICT")
+    ExactIdType.values.map(_.toString).toVector shouldBe Vector(
+      "DOI",
+      "ARXIV",
+      "DBLP_KEY",
+      "OPENALEX_WORK",
+      "ORCID",
+      "DBLP_PID",
+      "OPENALEX_AUTHOR"
+    )
   }
 
   test("an unknown enum value fails decoding instead of defaulting") {

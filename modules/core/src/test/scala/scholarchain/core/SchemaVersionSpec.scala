@@ -18,7 +18,8 @@ class SchemaVersionSpec extends AnyFunSuite with Matchers:
       "CanonicalResearcher" -> Set("researcher-v1"),
       "AuthorshipRecord" -> Set("authorship-v1"),
       "PublicationTeam" -> Set("publication-team-v1"),
-      "CoauthorPairCandidate" -> Set("coauthor-pair-candidate-v1"),
+      // Phase 4 repair: v2 adds author positions; v1 stays decodable.
+      "CoauthorPairCandidate" -> Set("coauthor-pair-candidate-v1", "coauthor-pair-candidate-v2"),
       "CoauthorEdge" -> Set("coauthor-edge-v1"),
       "ResearcherMetrics" -> Set("researcher-metrics-v1"),
       "Venue" -> Set("venue-v1"),
@@ -32,7 +33,12 @@ class SchemaVersionSpec extends AnyFunSuite with Matchers:
       "QueryPlan" -> Set("query-plan-v1"),
       "AnswerClaim" -> Set("answer-claim-v1"),
       "AnswerResponse" -> Set("answer-response-v1"),
-      "RunManifest" -> Set("run-manifest-v1")
+      "RunManifest" -> Set("run-manifest-v1"),
+      // Phase 4 additions (new record types, v1; no Phase 3 version changed).
+      "AuthorPaperRecord" -> Set("author-paper-v1"),
+      "MatchCandidate" -> Set("match-candidate-v1"),
+      "ExactIdentifierOutcome" -> Set("exact-identifier-outcome-v1"),
+      "RejectRecord" -> Set("reject-v1")
     )
   }
 
@@ -45,7 +51,8 @@ class SchemaVersionSpec extends AnyFunSuite with Matchers:
 
   GoldenCases.all.foreach { c =>
     test(s"${c.recordType}: a future schema version is rejected before field decoding") {
-      val future = goldenJson(c.file).obj("schemaVersion").str.replace("-v1", "-v2")
+      // -v99: -v2 is a supported version for some record types (coauthor-pair-candidate-v2).
+      val future = goldenJson(c.file).obj("schemaVersion").str.replace("-v1", "-v99")
       // Also break a field, to prove the version check runs first.
       val json = editObj(goldenJson(c.file)) { o =>
         o("schemaVersion") = ujson.Str(future)

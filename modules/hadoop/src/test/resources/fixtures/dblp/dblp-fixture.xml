@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE dblp SYSTEM "dblp-2023-06-28.dtd">
+<dblp>
+<inproceedings mdate="2024-01-01" key="conf/test/Multi01">
+<author orcid="0000-0002-8938-0470">Jan J&uuml;rjens</author>
+<author>Fr&eacute;d&eacute;ric Mallet</author>
+<author>Ming Hu 0003</author>
+<author>Ana Gómez</author>
+<author orcid="0000-0002-1825-0098">Li Wei</author>
+<title>Multiline
+  <i>Title</i> with
+   entities &amp; &micro;-markup.</title>
+<year>2001</year>
+<pages>1-10</pages>
+<booktitle>TEST</booktitle>
+<ee>https://doi.org/10.1145/TEST.0001</ee>
+<ee type="oa">https://example.org/p1.pdf</ee>
+<crossref>conf/test/2001</crossref>
+</inproceedings>
+<article mdate="2024-01-01" key="journals/test/Solo02">
+<author>Solo Author</author>
+<title>A paper with one author.</title>
+<year>2002</year>
+</article>
+<article mdate="2024-01-01" key="journals/test/Zero03">
+<title>An anonymous paper.</title>
+<year>2003</year>
+</article>
+<inproceedings mdate="2024-01-01" key="conf/test/Pair04">
+<author>Pat One</author>
+<author>Quinn Two</author>
+<title>Two authors.</title>
+<year>2004</year>
+<booktitle>TEST</booktitle>
+</inproceedings>
+<inproceedings mdate="2024-01-01" key="conf/test/Three05">
+<author>Ann Alpha</author>
+<author>Bob Beta</author>
+<author>Cy Gamma</author>
+<title>Three authors.</title>
+<year>2005</year>
+<booktitle>TEST</booktitle>
+</inproceedings>
+<inproceedings mdate="2024-01-01" key="conf/test/Dup06">
+<author>Dee Dup</author>
+<author>Eve Other</author>
+<author>Dee Dup</author>
+<title>Repeated author.</title>
+<year>2006</year>
+<booktitle>TEST</booktitle>
+</inproceedings>
+<inproceedings mdate="2024-01-01" key="conf/test/Big07">
+<author>Big Member1</author>
+<author>Big Member2</author>
+<author>Big Member3</author>
+<author>Big Member4</author>
+<author>Big Member5</author>
+<author>Big Member6</author>
+<author>Big Member7</author>
+<title>Seven authors.</title>
+<year>2007</year>
+<booktitle>TEST</booktitle>
+</inproceedings>
+<inproceedings mdate="2024-01-01" key="conf/test/Large08">
+<author>Large Member1</author>
+<author>Large Member2</author>
+<author>Large Member3</author>
+<author>Large Member4</author>
+<title>Four authors.</title>
+<year>2008</year>
+<booktitle>TEST</booktitle>
+</inproceedings>
+<article mdate="2024-01-01" key="journals/test/Unknown09">
+<author>Un Known</author>
+<title>Uses &bogus; entity.</title>
+<year>2009</year>
+</article>
+<article mdate="2024-01-01" key="journals/test/Old1999">
+<author>Old Timer</author>
+<author>Older Timer</author>
+<title>Too old.</title>
+<year>1999</year>
+</article>
+<article mdate="2024-01-01">
+<author>No Key</author>
+<title>Missing key attribute.</title>
+<year>2010</year>
+</article>
+<article mdate="2024-01-01" key="journals/test/Bad12">
+<author>Bad Nest</author>
+<title>Bad <i>nesting</title></i>
+<year>2012</year>
+</article>
+<proceedings mdate="2024-01-01" key="conf/test/2001">
+<title>Proceedings are not a configured type.</title>
+<year>2001</year>
+</proceedings>
+<article mdate="2024-01-01" key="journals/test/Same14"><author>Sam Fourteen</author><author>Sue Fourteen</author><title>Same line one.</title><year>2014</year></article><article mdate="2024-01-01" key="journals/test/Same15"><author>Sam Fifteen</author><author>Sue Fifteen</author><title>Same line two.</title><year>2015</year></article>
+<article mdate="2024-01-01" key="journals/test/Arxiv16">
+<author>Xi Arx</author>
+<author>Yu Arx</author>
+<author>Zo Arx</author>
+<title>An arXiv preprint.</title>
+<year>2016</year>
+<ee>https://doi.org/10.1145/ABC.DEF</ee>
+<ee>https://arxiv.org/abs/2101.00001v2</ee>
+<journal>CoRR</journal>
+</article>
+<article mdate="2024-01-01" key="journals/test/Future26">
+<author>Fu Ture</author>
+<author>Fa Ture</author>
+<title>Partial year.</title>
+<year>2026</year>
+</article>
+</dblp>

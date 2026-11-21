@@ -62,17 +62,30 @@ lazy val java17ClusterOpens = Seq(
   "-Dio.netty.tryReflectionSetAccessible=true"
 )
 
-// Settings for modules whose jobs run on EMR with Provided Hadoop/Spark.
-lazy val clusterJobSettings = Seq(
+// Forked, serial tests with the Java 17 openings that Hadoop/Spark need.
+lazy val clusterTestSettings = Seq(
   Test / fork := true,
   Test / javaOptions ++= java17ClusterOpens,
-  Test / parallelExecution := false,
+  Test / parallelExecution := false
+)
+
+// Settings for modules whose jobs run on EMR with Provided Hadoop/Spark.
+lazy val clusterJobSettings = clusterTestSettings ++ Seq(
   // Keep Provided cluster libraries on the classpath for local bounded runs.
+  // Both run and runMain use the full Compile classpath and the same forked
+  // runner (Java 17 openings). Assembly is unaffected: it uses its own classpath.
   Compile / run := Defaults
     .runTask(Compile / fullClasspath, Compile / run / mainClass, Compile / run / runner)
     .evaluated,
+  Compile / runMain := Defaults
+    .runMainTask(Compile / fullClasspath, Compile / run / runner)
+    .evaluated,
   run / fork := true,
-  run / javaOptions ++= java17ClusterOpens
+  run / javaOptions ++= java17ClusterOpens,
+  // Forked local runs start in the build root, so relative paths such as
+  // --input-root datasets/samples resolve from the repository root.
+  Compile / run / forkOptions := (Compile / run / forkOptions).value
+    .withWorkingDirectory((ThisBuild / baseDirectory).value)
 )
 
 // Deterministic merge strategy: discard signatures and module descriptors,
@@ -183,13 +196,42 @@ lazy val services = (project in file("modules/services"))
   )
 
 // ---------------------------------------------------------------------------
+// Test-only project: tests/** (test-engineer territory). Adversarial,
+// cross-module, contract, and integration suites. Layout:
+//   tests/src/test/scala/...  and  tests/src/test/resources/...
+// It has no main sources, publishes nothing, and builds no assembly.
+// ---------------------------------------------------------------------------
+lazy val adversarialTests = (project in file("tests"))
+  .dependsOn(core, hadoop, entityResolution)
+  .disablePlugins(AssemblyPlugin)
+  .settings(commonSettings, clusterTestSettings)
+  .settings(
+    name := "adversarial-tests",
+    // Provided deps of `hadoop` are not transitive; Provided is on the Test classpath.
+    libraryDependencies += Dependencies.hadoopClient,
+    // Forked tests start in the repository root so repo-relative paths such as
+    // datasets/samples/... resolve. Applies to this project only.
+    Test / forkOptions := (Test / forkOptions).value
+      .withWorkingDirectory((ThisBuild / baseDirectory).value)
+  )
+
+// ---------------------------------------------------------------------------
 // Root: aggregates everything, publishes nothing, owns the test marker.
 // ---------------------------------------------------------------------------
 lazy val markTestRun =
   taskKey[Unit]("Run all tests; only if they pass, touch .claude/.last-test-run")
 
 lazy val root = (project in file("."))
-  .aggregate(core, hadoop, entityResolution, sparkAnalytics, storage, rag, services)
+  .aggregate(
+    core,
+    hadoop,
+    entityResolution,
+    sparkAnalytics,
+    storage,
+    rag,
+    services,
+    adversarialTests
+  )
   .settings(
     name := "scholarchain",
     publish / skip := true,

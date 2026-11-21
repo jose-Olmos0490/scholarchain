@@ -36,6 +36,8 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
     "datasets.dblpSubset.startYear" -> "DBLP_SUBSET_START_YEAR",
     "datasets.dblpSubset.endYear" -> "DBLP_SUBSET_END_YEAR",
     "datasets.dblpSubset.maxWorks" -> "DBLP_SUBSET_MAX_WORKS",
+    "hadoop.numReducers" -> "SCHOLARCHAIN_HADOOP_NUM_REDUCERS",
+    "hadoop.dblpDtdPath" -> "SCHOLARCHAIN_HADOOP_DBLP_DTD_PATH",
     "graph.windows" -> "SCHOLARCHAIN_GRAPH_WINDOWS",
     "graph.coauthorPolicyVersion" -> "SCHOLARCHAIN_GRAPH_COAUTHOR_POLICY_VERSION",
     "entityResolution.policyVersion" -> "SCHOLARCHAIN_ER_POLICY_VERSION",
@@ -82,6 +84,8 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
     "DBLP_SUBSET_START_YEAR" -> "2010",
     "DBLP_SUBSET_END_YEAR" -> "2012",
     "DBLP_SUBSET_MAX_WORKS" -> "25",
+    "SCHOLARCHAIN_HADOOP_NUM_REDUCERS" -> "3",
+    "SCHOLARCHAIN_HADOOP_DBLP_DTD_PATH" -> "env/dblp.dtd",
     "SCHOLARCHAIN_GRAPH_WINDOWS" -> "2010-2011,2012-2012",
     "SCHOLARCHAIN_GRAPH_COAUTHOR_POLICY_VERSION" -> "env-graph-policy",
     "SCHOLARCHAIN_ER_POLICY_VERSION" -> "env-er-policy",
@@ -196,12 +200,25 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
     )
   }
 
-  test("no hardcoded defaults: reference.conf sets only the config schema version and app name") {
+  test(
+    "no hardcoded defaults: reference.conf sets only the schema version, app name and the " +
+      "human-approved Hadoop defaults"
+  ) {
     val base =
       ConfigFactory.parseResources(getClass.getClassLoader, ConfigLoader.BaseResource).resolve()
-    base.entrySet().asScala.map(_.getKey).toSet shouldBe Set(
-      "scholarchain.config.schemaVersion",
-      "scholarchain.application.name"
+    base
+      .entrySet()
+      .asScala
+      .map(e => e.getKey -> e.getValue.unwrapped().toString)
+      .toMap shouldBe Map(
+      "scholarchain.config.schemaVersion" -> "config-v1",
+      "scholarchain.application.name" -> "scholarchain",
+      // Phase 04 work order A (human-authored): the only defaulted parameters.
+      "scholarchain.hadoop.maxBlockSize" -> "200",
+      "scholarchain.hadoop.largeTeamThreshold" -> "50",
+      "scholarchain.hadoop.maxPairExpansionTeamSize" -> "2000",
+      "scholarchain.hadoop.intermediateCodec" -> "org.apache.hadoop.io.compress.DefaultCodec",
+      "scholarchain.hadoop.outputCodec" -> "org.apache.hadoop.io.compress.GzipCodec"
     )
   }
 
@@ -434,6 +451,9 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
       (2021, 2025)
     )
     c.graph.coauthorPolicyVersion shouldBe "env-graph-policy"
+    // The Hadoop subset parameters come from dev.conf's DBLP subset (the manifest rule).
+    c.hadoop.dblpRecordTypes shouldBe Vector("article", "inproceedings")
+    (c.hadoop.yearFrom, c.hadoop.yearTo) shouldBe (2000, 2025)
     c.models.embeddingModelId shouldBe "env-embedding-model"
     c.neptune shouldBe NeptuneConfig("env-neptune.example.invalid", 2222, 2000)
   }
@@ -595,7 +615,15 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
       requiredKeys.map(_._2).toSet ++ Set(
         "SCHOLARCHAIN_CONFIG_SCHEMA_VERSION",
         "SCHOLARCHAIN_APPLICATION_NAME",
-        "SCHOLARCHAIN_ENV"
+        "SCHOLARCHAIN_ENV",
+        "SCHOLARCHAIN_HADOOP_MAX_BLOCK_SIZE",
+        "SCHOLARCHAIN_HADOOP_LARGE_TEAM_THRESHOLD",
+        "SCHOLARCHAIN_HADOOP_MAX_PAIR_EXPANSION_TEAM_SIZE",
+        "SCHOLARCHAIN_HADOOP_INTERMEDIATE_CODEC",
+        "SCHOLARCHAIN_HADOOP_OUTPUT_CODEC",
+        "SCHOLARCHAIN_HADOOP_DBLP_RECORD_TYPES",
+        "SCHOLARCHAIN_HADOOP_YEAR_FROM",
+        "SCHOLARCHAIN_HADOOP_YEAR_TO"
       )
     )
   }

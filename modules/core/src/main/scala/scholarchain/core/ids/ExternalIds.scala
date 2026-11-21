@@ -1,6 +1,10 @@
 package scholarchain.core.ids
 
+import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
+import java.nio.charset.{CharacterCodingException, CodingErrorAction, StandardCharsets}
 import java.util.Locale
+import scholarchain.core.model.ExactIdType
 
 /** Normalization and validation of external identifiers used as stable-ID inputs.
   *
@@ -20,22 +24,109 @@ object ExternalIds:
 
   private val DoiPattern = "10\\.[0-9]{4,9}/\\S+".r
 
+  private val DoiResolverPrefixes = Seq(
+    "https://doi.org/",
+    "http://doi.org/",
+    "https://dx.doi.org/",
+    "http://dx.doi.org/"
+  )
+
+  /** Strict, single-pass RFC 3986 percent-decoding as UTF-8. Every `%` must start a `%HH` escape
+    * of two hex digits, and the decoded bytes must be well-formed UTF-8; otherwise `None`. `+` is
+    * left as is (it is not a space outside form encoding). Never throws.
+    */
+  private[ids] def percentDecodeStrict(s: String): Option[String] =
+    if s.indexOf('%') < 0 then Some(s)
+    else
+      val out = new ByteArrayOutputStream(s.length)
+      val n = s.length
+      var i = 0
+      var ok = true
+      while ok && i < n do
+        if s.charAt(i) == '%' then
+          val hi = if i + 1 < n then Character.digit(s.charAt(i + 1), 16) else -1
+          val lo = if i + 2 < n then Character.digit(s.charAt(i + 2), 16) else -1
+          if hi < 0 || lo < 0 then ok = false
+          else
+            out.write((hi << 4) | lo)
+            i += 3
+        else
+          // Copy the literal run up to the next '%' as UTF-8 (keeps surrogate pairs together).
+          val next = s.indexOf('%', i)
+          val end = if next < 0 then n else next
+          val bytes = s.substring(i, end).getBytes(StandardCharsets.UTF_8)
+          out.write(bytes, 0, bytes.length)
+          i = end
+      if !ok then None
+      else
+        val decoder = StandardCharsets.UTF_8
+          .newDecoder()
+          .onMalformedInput(CodingErrorAction.REPORT)
+          .onUnmappableCharacter(CodingErrorAction.REPORT)
+        try Some(decoder.decode(ByteBuffer.wrap(out.toByteArray)).toString)
+        catch case _: CharacterCodingException => None
+
   /** DOI: strips resolver or `doi:` prefixes, lower-cases, requires `10.<registrant>/<suffix>`.
+    *
+    * Percent-encoding (DOI Handbook: a DOI in URL form is percent-encoded and denotes the
+    * same DOI as its decoded form). Rules:
+    *   - Decoding applies ONLY to the resolver URL forms (`http(s)://doi.org/`,
+    *     `http(s)://dx.doi.org/`). A bare DOI or a `doi:` DOI is not a URL, and `%` is a legal
+    *     character in a DOI suffix, so those forms are never decoded.
+    *   - Decoding is a single strict pass, UTF-8, before lower-casing (so `%3A` and `%3a` agree).
+    *     `%25` decodes to a literal `%` and is not decoded again.
+    *   - `%2F` decodes to `/`, as doi.org does; `10.1000%2Fabc` and `10.1000/abc` are one DOI.
+    *   - A malformed escape (`%` not followed by two hex digits) or bytes that are not well-formed
+    *     UTF-8 make the URL invalid: the result is `Left("malformed DOI ...")`. Nothing throws.
+    *
+    * Non-graphic characters (see `isNonGraphic`) are rejected in every form (URL, `doi:` and
+    * bare) after decoding and trimming. A bare DOI whose only control characters are leading or
+    * trailing has them removed by `trim` and is accepted. Every accepted value `v` is a fixed
+    * point: `normalizeDoi(v) == Right(v)`.
     */
   def normalizeDoi(raw: String): Either[String, String] =
     if raw == null then nullInput("DOI")
     else
-      val v = stripPrefixIgnoreCase(
-        raw.trim,
-        Seq(
-          "https://doi.org/",
-          "http://doi.org/",
-          "https://dx.doi.org/",
-          "http://dx.doi.org/",
-          "doi:"
-        )
-      ).toLowerCase(Locale.ROOT)
-      if DoiPattern.matches(v) then Right(v) else Left(s"malformed DOI '$raw'")
+      val trimmed = raw.trim
+      val decoded: Option[String] =
+        DoiResolverPrefixes.find(p => trimmed.regionMatches(true, 0, p, 0, p.length)) match
+          case Some(p) => percentDecodeStrict(trimmed.substring(p.length))
+          case None => Some(stripPrefixIgnoreCase(trimmed, Seq("doi:")))
+      decoded match
+        case None => Left(s"malformed DOI '$raw' (invalid percent-encoding)")
+        case Some(d) =>
+          firstNonGraphic(d) match
+            case Some(cp) =>
+              Left(f"malformed DOI '${escapeNonGraphic(raw)}' (non-graphic character U+$cp%04X)")
+            case None =>
+              val v = d.toLowerCase(Locale.ROOT)
+              if DoiPattern.matches(v) then Right(v) else Left(s"malformed DOI '$raw'")
+
+  /** The first code point of `s` that may not appear in a DOI, if any. Rejected: ISO control
+    * characters (C0 U+0000-U+001F, DEL U+007F, C1 U+0080-U+009F), Unicode separators (general
+    * categories Zs, Zl, Zp, for example U+00A0 or U+2028), and unpaired surrogates. A DOI name is
+    * made of graphic characters only; these code points are invisible, are partly removed by
+    * `String.trim` (which would make normalization non-idempotent), or cannot be encoded as UTF-8
+    * for hashing. Format characters (Cf, for example ZWJ) and unassigned code points are not
+    * rejected: Cf is legitimate inside some scripts, and the set of unassigned code points depends
+    * on the JDK's Unicode version, which would make normalization JDK-dependent.
+    */
+  private def isNonGraphic(cp: Int): Boolean =
+    Character.isISOControl(cp) || (cp >= 0xd800 && cp <= 0xdfff) || {
+      val t = Character.getType(cp)
+      t == Character.SPACE_SEPARATOR || t == Character.LINE_SEPARATOR ||
+      t == Character.PARAGRAPH_SEPARATOR
+    }
+
+  private def firstNonGraphic(s: String): Option[Int] =
+    s.codePoints().toArray.find(isNonGraphic)
+
+  /** Makes non-graphic characters visible in a rejection message (`\\uXXXX`). */
+  private def escapeNonGraphic(s: String): String =
+    s.codePoints()
+      .toArray
+      .map(cp => if isNonGraphic(cp) then f"\\u$cp%04X" else new String(Character.toChars(cp)))
+      .mkString
 
   private val OrcidPattern = "[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]".r
 
@@ -157,3 +248,16 @@ object ExternalIds:
         val check = (11 - sum % 11) % 11
         val expected = if check == 10 then 'X' else ('0' + check).toChar
         if digits.last == expected then Right(v) else Left(s"ISSN '$raw' fails its checksum")
+
+  /** Normalizes `raw` with the normalizer that defines the normalized form of `idType`. */
+  def normalizeExactId(idType: ExactIdType, raw: String): Either[String, String] =
+    if idType == null then Left("idType must not be null")
+    else
+      idType match
+        case ExactIdType.DOI => normalizeDoi(raw)
+        case ExactIdType.ARXIV => normalizeArxiv(raw)
+        case ExactIdType.DBLP_KEY => normalizeDblpKey(raw)
+        case ExactIdType.OPENALEX_WORK => normalizeOpenAlex(raw, 'W')
+        case ExactIdType.ORCID => normalizeOrcid(raw)
+        case ExactIdType.DBLP_PID => normalizeDblpPid(raw)
+        case ExactIdType.OPENALEX_AUTHOR => normalizeOpenAlex(raw, 'A')

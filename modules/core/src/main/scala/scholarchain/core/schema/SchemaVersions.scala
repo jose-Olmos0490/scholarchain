@@ -14,6 +14,11 @@ object SchemaVersions:
   val AuthorshipRecord = "authorship-v1"
   val PublicationTeam = "publication-team-v1"
   val CoauthorPairCandidate = "coauthor-pair-candidate-v1"
+
+  /** Adds `positionA`/`positionB` to [[CoauthorPairCandidate]] (Phase 4). The version Phase 4
+    * producers emit; v1 stays decodable.
+    */
+  val CoauthorPairCandidateV2 = "coauthor-pair-candidate-v2"
   val CoauthorEdge = "coauthor-edge-v1"
   val ResearcherMetrics = "researcher-metrics-v1"
   val Venue = "venue-v1"
@@ -28,6 +33,10 @@ object SchemaVersions:
   val AnswerClaim = "answer-claim-v1"
   val AnswerResponse = "answer-response-v1"
   val RunManifest = "run-manifest-v1"
+  val AuthorPaperRecord = "author-paper-v1"
+  val MatchCandidate = "match-candidate-v1"
+  val ExactIdentifierOutcome = "exact-identifier-outcome-v1"
+  val RejectRecord = "reject-v1"
 
   /** Record type name to the set of schema versions this build accepts. */
   val supported: Map[String, Set[String]] = Map(
@@ -37,7 +46,7 @@ object SchemaVersions:
     "CanonicalResearcher" -> Set(CanonicalResearcher),
     "AuthorshipRecord" -> Set(AuthorshipRecord),
     "PublicationTeam" -> Set(PublicationTeam),
-    "CoauthorPairCandidate" -> Set(CoauthorPairCandidate),
+    "CoauthorPairCandidate" -> Set(CoauthorPairCandidate, CoauthorPairCandidateV2),
     "CoauthorEdge" -> Set(CoauthorEdge),
     "ResearcherMetrics" -> Set(ResearcherMetrics),
     "Venue" -> Set(Venue),
@@ -51,7 +60,11 @@ object SchemaVersions:
     "QueryPlan" -> Set(QueryPlan),
     "AnswerClaim" -> Set(AnswerClaim),
     "AnswerResponse" -> Set(AnswerResponse),
-    "RunManifest" -> Set(RunManifest)
+    "RunManifest" -> Set(RunManifest),
+    "AuthorPaperRecord" -> Set(AuthorPaperRecord),
+    "MatchCandidate" -> Set(MatchCandidate),
+    "ExactIdentifierOutcome" -> Set(ExactIdentifierOutcome),
+    "RejectRecord" -> Set(RejectRecord)
   )
 
   def supportedFor(recordType: String): Set[String] = supported.getOrElse(recordType, Set.empty)

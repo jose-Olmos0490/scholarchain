@@ -213,6 +213,14 @@ object Fixtures:
     provenance = dblpProv
   )
 
+  /** The same pair as [[pairCandidate]] in `coauthor-pair-candidate-v2`, built by the producer
+    * helper from the source positions (Samueli 4, Rhines 2), deliberately in non-canonical order.
+    */
+  val pairCandidateV2: CoauthorPairCandidate =
+    CoauthorPairCandidate
+      .fromPositions(workId, samueliMention.position, rhinesMention.position, 2000, 5, dblpProv)
+      .fold(m => throw new IllegalStateException(m), identity)
+
   private val researcherPair = CanonicalPair.of(samueliId, rhinesId).toOption.get
 
   val coauthorEdge: CoauthorEdge = CoauthorEdge(
@@ -430,4 +438,74 @@ object Fixtures:
       modelVersion = Some("illustrative-synthesis-model"),
       promptVersion = Some("illustrative-answer-synthesis-prompt-v1")
     )
+  )
+
+  // --- Phase 4 ingestion records ----------------------------------------------------------
+  // The OpenAlex work W2040559498 carries the same DOI as dblp conf/dac/NewtonRMSB00
+  // (datasets/samples/openalex/openalex-works-api-linked.jsonl).
+  val openAlexWorkId: String = ok(StableIds.workId(WorkNamespace.OpenAlex, "W2040559498"))
+  val featureVersion = "illustrative-features-v1"
+
+  val authorPaper: AuthorPaperRecord = AuthorPaperRecord(
+    schemaVersion = SV.AuthorPaperRecord,
+    mentionId = samueliMention.mentionId,
+    workId = workId,
+    position = 4,
+    teamSize = 5,
+    year = Some(2000),
+    normalizedName = "henry samueli",
+    sourceAuthorKey = Some("Henry Samueli"),
+    orcid = None,
+    provenance = dblpProv
+  )
+
+  private val workCandidatePair = CanonicalPair.of(openAlexWorkId, workId).toOption.get
+
+  val matchCandidate: MatchCandidate = MatchCandidate(
+    schemaVersion = SV.MatchCandidate,
+    candidateId = ok(
+      StableIds.matchCandidateId(MatchEntityType.WORK, openAlexWorkId, workId, featureVersion)
+    ),
+    entityType = MatchEntityType.WORK,
+    leftRef = workCandidatePair.a,
+    rightRef = workCandidatePair.b,
+    blockKey = "illustrative-block:embedded systems design|2000",
+    features = Map("doiEqual" -> 1.0, "titleTokenJaccard" -> 1.0, "yearDelta" -> 0.0),
+    featureVersion = featureVersion,
+    provenance = prov(
+      SourceType.SCHOLARCHAIN,
+      workCandidatePair.a,
+      DblpSnapshot,
+      derivedFrom = Vector(workCandidatePair.b)
+    )
+  )
+
+  val exactDoi = "10.1145/337292.337434"
+
+  val exactIdOutcome: ExactIdentifierOutcome = ExactIdentifierOutcome(
+    schemaVersion = SV.ExactIdentifierOutcome,
+    outcomeId = ok(StableIds.exactIdOutcomeId(ExactIdType.DOI, exactDoi)),
+    idType = ExactIdType.DOI,
+    normalizedId = exactDoi,
+    recordRefs = Vector(workId, openAlexWorkId).sorted,
+    outcome = ExactIdOutcome.MATCH,
+    provenance = prov(
+      SourceType.SCHOLARCHAIN,
+      workId,
+      DblpSnapshot,
+      derivedFrom = Vector(openAlexWorkId)
+    )
+  )
+
+  val rejectRef = "illustrative/dblp-2026-11-01-excerpt.xml@offset:0"
+
+  val reject: RejectRecord = RejectRecord(
+    schemaVersion = SV.RejectRecord,
+    source = SourceType.DBLP,
+    sourceRecordRef = rejectRef,
+    stage = "illustrative-dblp-extract",
+    reasonCode = "UNKNOWN_ENTITY",
+    rawExcerpt = "<title>Illustrative &unknownentity; title</title>",
+    runId = runId,
+    provenance = prov(SourceType.DBLP, rejectRef, DblpSnapshot)
   )

@@ -25,6 +25,20 @@ final class ConfigCursor private[config] (config: Config):
 
   def fail(key: String, reason: String): Unit = invalid += InvalidSetting(full(key), reason)
 
+  /** Whether `key` is present with a non-blank value. Records nothing. A present value of the
+    * wrong type counts as present, so that the reader reports it.
+    */
+  def has(key: String): Boolean =
+    val path = full(key)
+    try config.hasPath(path) && config.getString(path).trim.nonEmpty
+    catch case _: ConfigException.WrongType => true
+
+  /** Runs `f` on a fresh cursor over the same configuration and discards whatever problems it
+    * records. For cross-checks against another section's keys whose absence or invalidity is
+    * that section's to report, not the caller's.
+    */
+  def probe[A](f: ConfigCursor => A): A = f(new ConfigCursor(config))
+
   /** Raw string; absent, null or blank counts as missing. */
   private def raw(key: String, envVar: String): Option[String] =
     val path = full(key)

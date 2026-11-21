@@ -42,6 +42,8 @@ enum IdKind(
   case Query extends IdKind("query", Set.empty, None)
   case Run extends IdKind("run", Set.empty, None)
   case Snapshot extends IdKind("snapshot", Set.empty, None)
+  case MatchCandidate extends IdKind("match-candidate", Set.empty, None)
+  case ExactIdOutcome extends IdKind("exact-id", Set.empty, None)
 
   def hasNamespace: Boolean = namespaces.nonEmpty || versionedNamespacePrefix.nonEmpty
 

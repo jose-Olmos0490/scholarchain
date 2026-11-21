@@ -2,6 +2,7 @@ package scholarchain.core.validation
 
 import scholarchain.core.ids.*
 import scholarchain.core.model.*
+import scholarchain.core.schema.SchemaVersions
 import scholarchain.core.validation.Checks.*
 import scholarchain.core.validation.ValidationError.*
 
@@ -313,6 +314,7 @@ object RecordContract:
         id(at(path, "memberB"), c.memberB, IdKind.AuthorMention) ++
         pair(at(path, "memberA,memberB"), c.memberA, c.memberB) ++
         check(c.teamSize >= 2, InvalidValue(at(path, "teamSize"), "a pair needs teamSize >= 2")) ++
+        pairPositions(c, path) ++
         (if c.candidateId != null && c.memberA != c.memberB then
            matchesFormula(
              at(path, "candidateId"),
@@ -320,6 +322,51 @@ object RecordContract:
              StableIds.pairCandidateId(c.workId, c.memberA, c.memberB)
            )
          else ok)
+
+  /** Version-dependent position rules of [[CoauthorPairCandidate]]: v1 carries no positions; v2
+    * carries both, each >= 1, distinct, and each consistent with its member's mention ID.
+    */
+  private def pairPositions(c: CoauthorPairCandidate, path: String): Vector[ValidationError] =
+    val pa = at(path, "positionA")
+    val pb = at(path, "positionB")
+    if c.positionA == null || c.positionB == null then
+      (if c.positionA == null then Vector(InvalidValue(pa, "null option")) else ok) ++
+        (if c.positionB == null then Vector(InvalidValue(pb, "null option")) else ok)
+    else if c.schemaVersion == SchemaVersions.CoauthorPairCandidate then
+      check(
+        c.positionA.isEmpty,
+        InvalidValue(pa, s"not part of ${SchemaVersions.CoauthorPairCandidate}")
+      ) ++
+        check(
+          c.positionB.isEmpty,
+          InvalidValue(pb, s"not part of ${SchemaVersions.CoauthorPairCandidate}")
+        )
+    else if c.schemaVersion == SchemaVersions.CoauthorPairCandidateV2 then
+      def one(
+          p: String,
+          memberPath: String,
+          member: String,
+          position: Option[Int]
+      ): Vector[ValidationError] =
+        position match
+          case None =>
+            Vector(InvalidValue(p, s"required in ${SchemaVersions.CoauthorPairCandidateV2}"))
+          case Some(n) if n < 1 => Vector(InvalidValue(p, s"must be >= 1, got $n"))
+          case Some(n) =>
+            if member != null && c.workId != null then
+              matchesFormula(
+                memberPath,
+                member,
+                StableIds.mentionId(c.workId, n)
+              )
+            else ok
+      one(pa, at(path, "memberA"), c.memberA, c.positionA) ++
+        one(pb, at(path, "memberB"), c.memberB, c.positionB) ++
+        check(
+          c.positionA.isEmpty || c.positionA != c.positionB,
+          InvalidValue(at(path, "positionA,positionB"), "positions must be distinct")
+        )
+    else ok // an unsupported version is reported by the schemaVersion check
 
   given RecordContract[CoauthorEdge] with
     val recordType = "CoauthorEdge"
@@ -829,3 +876,180 @@ object RecordContract:
              )) ++
         notNull(at(path, "parameters"), m.parameters) ++
         notNull(at(path, "policyVersions"), m.policyVersions)
+
+  // ---------------------------------------------------------------------------
+  // Phase 4 ingestion records
+  // ---------------------------------------------------------------------------
+
+  private def normalizedOrcid(path: String, value: Option[String]): Vector[ValidationError] =
+    if value == null then Vector(InvalidValue(path, "null option"))
+    else
+      value.toVector.flatMap(o =>
+        ExternalIds
+          .normalizeOrcid(o)
+          .fold(
+            r => Vector(InvalidValue(path, r)),
+            n => check(n == o, InvalidValue(path, s"'$o' is not normalized ('$n')"))
+          )
+      )
+
+  given RecordContract[AuthorPaperRecord] with
+    val recordType = "AuthorPaperRecord"
+    def violations(r: AuthorPaperRecord, path: String) =
+      common(path, recordType, r.schemaVersion, r.provenance) ++
+        id(at(path, "mentionId"), r.mentionId, IdKind.AuthorMention) ++
+        id(at(path, "workId"), r.workId, IdKind.Work) ++
+        check(
+          r.position >= 1,
+          InvalidValue(at(path, "position"), s"must be >= 1, got ${r.position}")
+        ) ++
+        check(
+          r.teamSize >= 1,
+          InvalidValue(at(path, "teamSize"), s"must be >= 1, got ${r.teamSize}")
+        ) ++
+        check(r.year != null, InvalidValue(at(path, "year"), "null option")) ++
+        nonBlank(at(path, "normalizedName"), r.normalizedName) ++
+        optNonBlank(at(path, "sourceAuthorKey"), r.sourceAuthorKey) ++
+        normalizedOrcid(at(path, "orcid"), r.orcid) ++
+        (if r.workId != null && r.mentionId != null then
+           matchesFormula(
+             at(path, "mentionId"),
+             r.mentionId,
+             StableIds.mentionId(r.workId, r.position)
+           )
+         else ok)
+
+  given RecordContract[MatchCandidate] with
+    val recordType = "MatchCandidate"
+    def violations(c: MatchCandidate, path: String) =
+      val refKinds =
+        if c.entityType == null then Seq.empty
+        else StableIds.matchCandidateRefKinds(c.entityType).toSeq.sortBy(_.prefix)
+      val refErrors =
+        if c.entityType == null then
+          Vector(InvalidValue(at(path, "entityType"), "must not be null"))
+        else
+          id(at(path, "leftRef"), c.leftRef, refKinds*) ++
+            id(at(path, "rightRef"), c.rightRef, refKinds*)
+      common(path, recordType, c.schemaVersion, c.provenance) ++
+        id(at(path, "candidateId"), c.candidateId, IdKind.MatchCandidate) ++
+        refErrors ++
+        pair(at(path, "leftRef,rightRef"), c.leftRef, c.rightRef) ++
+        nonBlank(at(path, "blockKey"), c.blockKey) ++
+        (if c.features == null then Vector(InvalidValue(at(path, "features"), "must not be null"))
+         else
+           c.features.toVector.sortBy(_._1).flatMap { (k, v) =>
+             nonBlank(at(path, "features.<key>"), k) ++
+               check(
+                 !v.isNaN && !v.isInfinite,
+                 InvalidValue(at(path, s"features.$k"), "must be finite")
+               )
+           }) ++
+        nonBlank(at(path, "featureVersion"), c.featureVersion) ++
+        (if c.candidateId != null && refErrors.isEmpty && CanonicalPair.isCanonical(
+             c.leftRef,
+             c.rightRef
+           )
+         then
+           matchesFormula(
+             at(path, "candidateId"),
+             c.candidateId,
+             StableIds.matchCandidateId(c.entityType, c.leftRef, c.rightRef, c.featureVersion)
+           )
+         else ok)
+
+  /** Stable-ID kinds the records grouped under one exact identifier may have. */
+  def exactIdRecordKinds(idType: ExactIdType): Seq[IdKind] =
+    if idType.identifiesResearchers then Seq(IdKind.AuthorMention, IdKind.Researcher)
+    else Seq(IdKind.Work)
+
+  given RecordContract[ExactIdentifierOutcome] with
+    val recordType = "ExactIdentifierOutcome"
+    def violations(o: ExactIdentifierOutcome, path: String) =
+      val normalizedErrors =
+        if o.idType == null then Vector(InvalidValue(at(path, "idType"), "must not be null"))
+        else if isBlank(o.normalizedId) then Vector(BlankField(at(path, "normalizedId")))
+        else
+          ExternalIds
+            .normalizeExactId(o.idType, o.normalizedId)
+            .fold(
+              r => Vector(InvalidValue(at(path, "normalizedId"), r)),
+              n =>
+                check(
+                  n == o.normalizedId,
+                  InvalidValue(
+                    at(path, "normalizedId"),
+                    s"'${o.normalizedId}' is not normalized ('$n')"
+                  )
+                )
+            )
+      common(path, recordType, o.schemaVersion, o.provenance) ++
+        id(at(path, "outcomeId"), o.outcomeId, IdKind.ExactIdOutcome) ++
+        normalizedErrors ++
+        (if o.recordRefs == null then
+           Vector(InvalidValue(at(path, "recordRefs"), "must not be null"))
+         else
+           ids(
+             at(path, "recordRefs"),
+             o.recordRefs,
+             (if o.idType == null then Seq.empty else exactIdRecordKinds(o.idType))*
+           ) ++
+             check(
+               o.recordRefs.size >= 2,
+               InvalidValue(at(path, "recordRefs"), "an outcome groups at least two records")
+             ) ++
+             distinct(at(path, "recordRefs"), o.recordRefs) ++
+             check(
+               o.recordRefs.contains(null) || o.recordRefs == o.recordRefs.sorted,
+               InvalidValue(at(path, "recordRefs"), "must be sorted ascending")
+             )) ++
+        notNull(at(path, "outcome"), o.outcome) ++
+        (if o.outcomeId != null && normalizedErrors.isEmpty then
+           matchesFormula(
+             at(path, "outcomeId"),
+             o.outcomeId,
+             StableIds.exactIdOutcomeId(o.idType, o.normalizedId)
+           )
+         else ok)
+
+  private val ReasonCodePattern = "[A-Z][A-Z0-9_]*".r
+
+  given RecordContract[RejectRecord] with
+    val recordType = "RejectRecord"
+    def violations(r: RejectRecord, path: String) =
+      val p = r.provenance
+      common(path, recordType, r.schemaVersion, p) ++
+        notNull(at(path, "source"), r.source) ++
+        nonBlank(at(path, "sourceRecordRef"), r.sourceRecordRef) ++
+        nonBlank(at(path, "stage"), r.stage) ++
+        check(
+          r.reasonCode != null && ReasonCodePattern.matches(r.reasonCode),
+          InvalidValue(
+            at(path, "reasonCode"),
+            s"'${r.reasonCode}' must match [A-Z][A-Z0-9_]*"
+          )
+        ) ++
+        (if r.rawExcerpt == null then
+           Vector(InvalidValue(at(path, "rawExcerpt"), "must not be null"))
+         else
+           val n = r.rawExcerpt.codePointCount(0, r.rawExcerpt.length)
+           check(
+             n <= RejectRecord.MaxExcerptCodePoints,
+             InvalidValue(
+               at(path, "rawExcerpt"),
+               s"$n code points exceed the limit of ${RejectRecord.MaxExcerptCodePoints}"
+             )
+           )) ++
+        id(at(path, "runId"), r.runId, IdKind.Run) ++
+        check(
+          p == null || r.runId == p.runId,
+          InvalidValue(at(path, "runId"), "must equal provenance.runId")
+        ) ++
+        check(
+          p == null || r.source == p.sourceDataset,
+          InvalidValue(at(path, "source"), "must equal provenance.sourceDataset")
+        ) ++
+        check(
+          p == null || r.sourceRecordRef == p.sourceRecordId,
+          InvalidValue(at(path, "sourceRecordRef"), "must equal provenance.sourceRecordId")
+        )

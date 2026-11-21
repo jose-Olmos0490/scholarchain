@@ -146,23 +146,181 @@ object DatasetConfig extends ConfigSection[DatasetConfig]:
             None
       case _ => None
 
+  /** Reads `datasets.dblpSubset.recordTypes`. `None` when missing or invalid (recorded). */
+  def readSubsetRecordTypes(c: ConfigCursor): Option[Vector[String]] =
+    recordTypes(c, "datasets.dblpSubset.recordTypes", "DBLP_SUBSET_RECORD_TYPES")
+
+  /** Reads a list of DBLP record element names; unknown names are recorded as invalid. */
+  private[config] def recordTypes(
+      c: ConfigCursor,
+      key: String,
+      envVar: String
+  ): Option[Vector[String]] =
+    c.stringList(key, envVar).flatMap { types =>
+      val unknown = types.filterNot(DblpRecordElements.contains)
+      if unknown.nonEmpty then
+        c.fail(
+          key,
+          s"not DBLP record elements: ${unknown.mkString(", ")}; allowed: " +
+            DblpRecordElements.toVector.sorted.mkString(", ")
+        )
+        None
+      else Some(types)
+    }
+
   def read(c: ConfigCursor): DatasetConfig =
-    val recordTypes =
-      c.stringList("datasets.dblpSubset.recordTypes", "DBLP_SUBSET_RECORD_TYPES")
-        .map { types =>
-          val unknown = types.filterNot(DblpRecordElements.contains)
-          if unknown.nonEmpty then
-            c.fail(
-              "datasets.dblpSubset.recordTypes",
-              s"not DBLP record elements: ${unknown.mkString(", ")}; allowed: " +
-                DblpRecordElements.toVector.sorted.mkString(", ")
-            )
-          types
-        }
-        .getOrElse(Vector.empty)
+    val recordTypes = readSubsetRecordTypes(c).getOrElse(Vector.empty)
     val years = readSubsetYears(c).getOrElse(YearWindow.Placeholder)
     val maxWorks = c.int("datasets.dblpSubset.maxWorks", "DBLP_SUBSET_MAX_WORKS", min = 1)
     DatasetConfig(DblpSubsetConfig(recordTypes, years, maxWorks))
+
+/** Hadoop MapReduce ingestion parameters (`scholarchain.hadoop`).
+  *
+  * Defaults for `maxBlockSize` (200), `largeTeamThreshold` (50), `maxPairExpansionTeamSize`
+  * (2000) and the two codecs live in `reference.conf` (human-approved, Phase 04 work order A).
+  * `dblpRecordTypes`, `yearFrom` and `yearTo` have no value of their own: when unset, the
+  * loader uses `datasets.dblpSubset.recordTypes/startYear/endYear` (the manifest subset rule),
+  * and a problem with those is reported once, at the `datasets.dblpSubset` path. When set, they
+  * may narrow but never widen the subset. `numReducers` and `dblpDtdPath` have no default.
+  *
+  * Validation:
+  *   - `numReducers >= 1`, `maxBlockSize >= 2`, `largeTeamThreshold >= 1`,
+  *     `maxPairExpansionTeamSize >= 2` and `maxPairExpansionTeamSize >= largeTeamThreshold`
+  *   - each codec is one of [[HadoopConfig.SupportedCodecs]]
+  *   - `dblpRecordTypes`: non-blank, no duplicates, DBLP DTD record elements, and a subset of
+  *     `datasets.dblpSubset.recordTypes` when that key is valid
+  *   - `yearFrom <= yearTo`, and the window lies inside the DBLP subset years when those are
+  *     valid
+  *   - `dblpDtdPath`: non-blank, ends in `.dtd`, not an `http(s)` URL (DTDs are never fetched
+  *     from the network)
+  */
+final case class HadoopConfig(
+    numReducers: Int,
+    maxBlockSize: Int,
+    largeTeamThreshold: Int,
+    maxPairExpansionTeamSize: Int,
+    intermediateCodec: String,
+    outputCodec: String,
+    dblpRecordTypes: Vector[String],
+    yearFrom: Int,
+    yearTo: Int,
+    dblpDtdPath: String
+):
+  /** `yearFrom..yearTo` (valid after a successful load). */
+  def years: YearWindow = YearWindow.of(yearFrom, yearTo).getOrElse(YearWindow.Placeholder)
+
+object HadoopConfig extends ConfigSection[HadoopConfig]:
+  /** Hadoop's built-in compression codec classes (`org.apache.hadoop.io.compress`). A format
+    * fact of the pinned Hadoop line, not a tunable: the configured codecs must name one of them.
+    */
+  val SupportedCodecs: Set[String] = Set(
+    "org.apache.hadoop.io.compress.DefaultCodec",
+    "org.apache.hadoop.io.compress.GzipCodec",
+    "org.apache.hadoop.io.compress.BZip2Codec",
+    "org.apache.hadoop.io.compress.Lz4Codec",
+    "org.apache.hadoop.io.compress.SnappyCodec",
+    "org.apache.hadoop.io.compress.ZStandardCodec"
+  )
+
+  private def codec(c: ConfigCursor, key: String, envVar: String): String =
+    val v = c.string(key, envVar)
+    if v.nonEmpty && !SupportedCodecs.contains(v) then
+      c.fail(
+        key,
+        s"'$v' is not a supported codec; supported: ${SupportedCodecs.toVector.sorted.mkString(", ")}"
+      )
+    v
+
+  def read(c: ConfigCursor): HadoopConfig =
+    val numReducers =
+      c.int("hadoop.numReducers", "SCHOLARCHAIN_HADOOP_NUM_REDUCERS", min = 1)
+    val maxBlockSize =
+      c.int("hadoop.maxBlockSize", "SCHOLARCHAIN_HADOOP_MAX_BLOCK_SIZE", min = 2)
+    val largeTeam =
+      c.intOption("hadoop.largeTeamThreshold", "SCHOLARCHAIN_HADOOP_LARGE_TEAM_THRESHOLD", min = 1)
+    val maxExpansion = c.intOption(
+      "hadoop.maxPairExpansionTeamSize",
+      "SCHOLARCHAIN_HADOOP_MAX_PAIR_EXPANSION_TEAM_SIZE",
+      min = 2
+    )
+    for l <- largeTeam; m <- maxExpansion if m < l do
+      c.fail(
+        "hadoop.maxPairExpansionTeamSize",
+        s"must be >= largeTeamThreshold ($l), got $m"
+      )
+    val intermediateCodec =
+      codec(c, "hadoop.intermediateCodec", "SCHOLARCHAIN_HADOOP_INTERMEDIATE_CODEC")
+    val outputCodec = codec(c, "hadoop.outputCodec", "SCHOLARCHAIN_HADOOP_OUTPUT_CODEC")
+
+    // Record types: the hadoop key narrows the subset when set; otherwise the subset value is
+    // read through the same reader as DatasetConfig, so a problem is reported once, at its path.
+    val recordTypes =
+      if c.has("hadoop.dblpRecordTypes") then
+        DatasetConfig
+          .recordTypes(c, "hadoop.dblpRecordTypes", "SCHOLARCHAIN_HADOOP_DBLP_RECORD_TYPES")
+          .map { types =>
+            c.probe(DatasetConfig.readSubsetRecordTypes).foreach { subset =>
+              val outside = types.filterNot(subset.contains)
+              if outside.nonEmpty then
+                c.fail(
+                  "hadoop.dblpRecordTypes",
+                  s"not in the DBLP subset record types (${subset.mkString(",")}): " +
+                    outside.mkString(", ")
+                )
+            }
+            types
+          }
+      else DatasetConfig.readSubsetRecordTypes(c)
+
+    // Years: likewise, the subset window unless a hadoop bound is set.
+    val (yearFrom, yearTo) =
+      if !c.has("hadoop.yearFrom") && !c.has("hadoop.yearTo") then
+        val w = DatasetConfig.readSubsetYears(c)
+        (w.map(_.startYear), w.map(_.endYear))
+      else
+        val from =
+          if c.has("hadoop.yearFrom") then
+            c.intOption("hadoop.yearFrom", "SCHOLARCHAIN_HADOOP_YEAR_FROM")
+          else c.intOption("datasets.dblpSubset.startYear", "DBLP_SUBSET_START_YEAR")
+        val to =
+          if c.has("hadoop.yearTo") then c.intOption("hadoop.yearTo", "SCHOLARCHAIN_HADOOP_YEAR_TO")
+          else c.intOption("datasets.dblpSubset.endYear", "DBLP_SUBSET_END_YEAR")
+        val checked = for f <- from; t <- to yield YearWindow.of(f, t) match
+          case Left(reason) =>
+            c.fail("hadoop.yearFrom,yearTo", reason)
+            None
+          case Right(w) =>
+            c.probe(DatasetConfig.readSubsetYears).foreach { subset =>
+              if !subset.contains(w) then
+                c.fail(
+                  "hadoop.yearFrom,yearTo",
+                  s"years ${w.render} lie outside the DBLP subset years ${subset.render}"
+                )
+            }
+            Some(w)
+        val w = checked.flatten
+        (w.map(_.startYear), w.map(_.endYear))
+
+    val dtd = c.string("hadoop.dblpDtdPath", "SCHOLARCHAIN_HADOOP_DBLP_DTD_PATH")
+    if dtd.nonEmpty then
+      val lower = dtd.toLowerCase(java.util.Locale.ROOT)
+      if lower.startsWith("http://") || lower.startsWith("https://") then
+        c.fail("hadoop.dblpDtdPath", "must be a file or object-store path, not an http(s) URL")
+      else if !lower.endsWith(".dtd") then
+        c.fail("hadoop.dblpDtdPath", s"'$dtd' does not name a .dtd file")
+
+    HadoopConfig(
+      numReducers = numReducers,
+      maxBlockSize = maxBlockSize,
+      largeTeamThreshold = largeTeam.getOrElse(0),
+      maxPairExpansionTeamSize = maxExpansion.getOrElse(0),
+      intermediateCodec = intermediateCodec,
+      outputCodec = outputCodec,
+      dblpRecordTypes = recordTypes.getOrElse(Vector.empty),
+      yearFrom = yearFrom.getOrElse(0),
+      yearTo = yearTo.getOrElse(0),
+      dblpDtdPath = dtd
+    )
 
 /** Coauthorship-graph parameters.
   *
@@ -305,6 +463,7 @@ final case class ScholarChainConfig(
     neptune: NeptuneConfig,
     vectorIndexes: VectorIndexConfig,
     datasets: DatasetConfig,
+    hadoop: HadoopConfig,
     graph: GraphConfig,
     entityResolution: EntityResolutionConfig,
     bridge: BridgeConfig,
@@ -324,6 +483,7 @@ object ScholarChainConfig:
         neptune = NeptuneConfig.read(c),
         vectorIndexes = VectorIndexConfig.read(c),
         datasets = DatasetConfig.read(c),
+        hadoop = HadoopConfig.read(c),
         graph = GraphConfig.read(c),
         entityResolution = EntityResolutionConfig.read(c),
         bridge = BridgeConfig.read(c),

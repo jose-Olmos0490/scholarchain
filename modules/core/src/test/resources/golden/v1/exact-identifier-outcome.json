@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "exact-identifier-outcome-v1",
+  "outcomeId": "exact-id:5f9181365b1a2194c61a6e8e9b4eef8bfc285e01ea12cfd4938065e6db02f08b",
+  "idType": "DOI",
+  "normalizedId": "10.1145/337292.337434",
+  "recordRefs": [
+    "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+    "work:openalex:6e92d66735252212887fdf8c80f65c73f7fb333d1f18916b78d7b6e5d96530da"
+  ],
+  "outcome": "MATCH",
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": null,
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": [
+      "work:openalex:6e92d66735252212887fdf8c80f65c73f7fb333d1f18916b78d7b6e5d96530da"
+    ]
+  }
+}

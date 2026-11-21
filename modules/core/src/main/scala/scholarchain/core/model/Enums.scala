@@ -112,3 +112,53 @@ enum EdgeType(val undirected: Boolean):
 
 object EdgeType:
   given ReadWriter[EdgeType] = WireEnum.readWriter("EdgeType", values.toIndexedSeq)
+
+/** Entity kind of a Phase 4 match candidate (blocking output, before any decision). */
+enum MatchEntityType:
+  case RESEARCHER, WORK
+
+object MatchEntityType:
+  given ReadWriter[MatchEntityType] = WireEnum.readWriter("MatchEntityType", values.toIndexedSeq)
+
+/** Identifier type checked by exact-identifier matching. Each type names the normalizer in
+  * [[scholarchain.core.ids.ExternalIds]] that defines its normalized form, and the stable-ID
+  * kinds its records may have.
+  */
+enum ExactIdType(val identifiesResearchers: Boolean):
+  /** DOI, normalized by `ExternalIds.normalizeDoi` (lower-case `10.<registrant>/<suffix>`). */
+  case DOI extends ExactIdType(false)
+
+  /** arXiv ID without version suffix (`ExternalIds.normalizeArxiv`). */
+  case ARXIV extends ExactIdType(false)
+
+  /** dblp record key (`ExternalIds.normalizeDblpKey`). */
+  case DBLP_KEY extends ExactIdType(false)
+
+  /** OpenAlex work ID `W<digits>` (`ExternalIds.normalizeOpenAlex(_, 'W')`). */
+  case OPENALEX_WORK extends ExactIdType(false)
+
+  /** ORCID iD, hyphenated with valid check character (`ExternalIds.normalizeOrcid`). */
+  case ORCID extends ExactIdType(true)
+
+  /** dblp person pid in bare form (`ExternalIds.normalizeDblpPid`). */
+  case DBLP_PID extends ExactIdType(true)
+
+  /** OpenAlex author ID `A<digits>` (`ExternalIds.normalizeOpenAlex(_, 'A')`). */
+  case OPENALEX_AUTHOR extends ExactIdType(true)
+
+object ExactIdType:
+  given ReadWriter[ExactIdType] = WireEnum.readWriter("ExactIdType", values.toIndexedSeq)
+
+/** Outcome of grouping records by one normalized identifier. The criteria that choose between
+  * the outcomes belong to the producing stage; core fixes only the names and the structural rule
+  * that every outcome groups at least two distinct records.
+  *
+  *   - `MATCH`: records from different sources carry the identifier and agree (a link)
+  *   - `DUPLICATE`: records from the same source repeat the identifier (one entity listed twice)
+  *   - `CONFLICT`: records carrying the identifier disagree on fields that must agree
+  */
+enum ExactIdOutcome:
+  case MATCH, DUPLICATE, CONFLICT
+
+object ExactIdOutcome:
+  given ReadWriter[ExactIdOutcome] = WireEnum.readWriter("ExactIdOutcome", values.toIndexedSeq)

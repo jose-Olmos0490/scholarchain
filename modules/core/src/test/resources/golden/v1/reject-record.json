@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "reject-v1",
+  "source": "DBLP",
+  "sourceRecordRef": "illustrative/dblp-2026-11-01-excerpt.xml@offset:0",
+  "stage": "illustrative-dblp-extract",
+  "reasonCode": "UNKNOWN_ENTITY",
+  "rawExcerpt": "<title>Illustrative &unknownentity; title</title>",
+  "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "DBLP",
+    "sourceRecordId": "illustrative/dblp-2026-11-01-excerpt.xml@offset:0",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": null,
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": []
+  }
+}

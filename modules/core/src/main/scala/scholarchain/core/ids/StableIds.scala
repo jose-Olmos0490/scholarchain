@@ -2,7 +2,15 @@ package scholarchain.core.ids
 
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
-import scholarchain.core.model.{EdgeType, EvidenceType, RunInput, RunManifest, SourceType}
+import scholarchain.core.model.{
+  EdgeType,
+  EvidenceType,
+  ExactIdType,
+  MatchEntityType,
+  RunInput,
+  RunManifest,
+  SourceType
+}
 import upickle.default.writeJs
 
 /** Authoritative namespaces for work IDs. */
@@ -353,6 +361,44 @@ object StableIds:
       t <- requireAnyId(targetId)
       v <- requireNonBlank("policyVersion", policyVersion)
     yield mk(IdKind.MatchDecision, None, Seq(field(s), field(t), field(v)))
+
+  /** Stable-ID kinds a match-candidate side may have, per entity type: author mentions or
+    * researcher IDs for `RESEARCHER`, work IDs for `WORK`.
+    */
+  def matchCandidateRefKinds(entityType: MatchEntityType): Set[IdKind] = entityType match
+    case MatchEntityType.RESEARCHER => Set(IdKind.AuthorMention, IdKind.Researcher)
+    case MatchEntityType.WORK => Set(IdKind.Work)
+
+  /** `match-candidate:sha256(entityType, a, b, featureVersion)` where `(a, b)` is the canonical
+    * pair of the two record refs. Input order does not matter; self-pairs are rejected.
+    *
+    * The block key is deliberately NOT an input: a pair reached through two blocks (for example
+    * a primary key and its fallback key) has one candidate ID, so duplicates collapse by ID.
+    */
+  def matchCandidateId(
+      entityType: MatchEntityType,
+      refX: String,
+      refY: String,
+      featureVersion: String
+  ): Either[String, String] =
+    for
+      et <- requireNotNull("entityType", entityType)
+      kinds = matchCandidateRefKinds(et)
+      x <- requireId(refX, kinds)
+      y <- requireId(refY, kinds)
+      p <- CanonicalPair.of(x, y)
+      v <- requireNonBlank("featureVersion", featureVersion)
+    yield mk(IdKind.MatchCandidate, None, Seq(field(et.toString), field(p.a), field(p.b), field(v)))
+
+  /** `exact-id:sha256(idType, normalizedId)`. The identifier is normalized first
+    * (`ExternalIds.normalizeExactId`), so any accepted spelling gives the same ID. One ID per
+    * identifier: the outcome and the grouped records are not inputs.
+    */
+  def exactIdOutcomeId(idType: ExactIdType, identifier: String): Either[String, String] =
+    for
+      t <- requireNotNull("idType", idType)
+      n <- ExternalIds.normalizeExactId(t, identifier)
+    yield mk(IdKind.ExactIdOutcome, None, Seq(field(t.toString), field(n)))
 
   /** `graph-edge:sha256(edgeType, from, to, policyVersion, sorted distinct sourceEvidenceIds)`.
     *
