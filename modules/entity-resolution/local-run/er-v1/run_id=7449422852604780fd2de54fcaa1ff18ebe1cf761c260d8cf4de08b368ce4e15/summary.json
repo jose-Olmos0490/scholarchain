@@ -1,0 +1,68 @@
+{
+  "runId": "run:7449422852604780fd2de54fcaa1ff18ebe1cf761c260d8cf4de08b368ce4e15",
+  "policyVersion": "er-v1",
+  "policyRevision": "er-v1-r2",
+  "featureVersion": "er-features-v2",
+  "thresholds": {
+    "acceptThreshold": 0.8,
+    "rejectThreshold": 0.45,
+    "llmBandMin": 0.6,
+    "llmBandMax": 0.8
+  },
+  "cutoffs": {
+    "minSurnameSimilarity": 0.85,
+    "minSharedIdTitleSimilarity": 0.5,
+    "llmMinConfidence": 0.7,
+    "sources": {
+      "llmMinConfidence": "properties-file:er-v1-thresholds.properties#llmMinConfidence",
+      "minSharedIdTitleSimilarity": "properties-file:er-v1-thresholds.properties#minSharedIdTitleSimilarity",
+      "minSurnameSimilarity": "properties-file:er-v1-thresholds.properties#minSurnameSimilarity"
+    },
+    "sourceSha256": "sha256:84ccc14967fed0b4b210d5b1dc1bf45508e3efa05d05f14eca868e03018fdf85",
+    "propertiesFile": "modules/entity-resolution/config/er-v1-thresholds.properties"
+  },
+  "adjudicator": "fake",
+  "adjudicationModelVersion": "fake-deterministic-adjudicator-v1",
+  "adjudicationPromptVersion": "er-adj-prompt-v1",
+  "adjudicatorIsFake": true,
+  "inputs": {
+    "files": 37,
+    "works": 69,
+    "matchCandidates": 91,
+    "exactIdentifierOutcomes": 20,
+    "researcherNodes": 22,
+    "invalidRows": {}
+  },
+  "pairs": {
+    "total": 92,
+    "fromMatchCandidates": 91,
+    "fromExactOutcomesOnly": 1,
+    "unknownRefs": 0,
+    "skippedSameWorkMentions": 0
+  },
+  "decisionsByKindAndOutcome": {
+    "researcher/ACCEPTED": 59,
+    "researcher/CONFLICT": 1,
+    "researcher/UNRESOLVED": 11,
+    "work/ACCEPTED": 18,
+    "work/CONFLICT": 2,
+    "work/REJECTED": 1
+  },
+  "decisionsByKindAndPath": {
+    "researcher/DETERMINISTIC_BIBLIOGRAPHIC": 49,
+    "researcher/EXACT_ID": 11,
+    "researcher/PROBABILISTIC": 11,
+    "work/EXACT_ID": 21
+  },
+  "unresolvedRateByKind": {
+    "researcher": 0.15492957746478872,
+    "work": 0
+  },
+  "llmBand": {
+    "pairsInBand": 0,
+    "adjudicated": 0,
+    "decidedByLlm": 0
+  },
+  "reviewQueue": null,
+  "outputDir": "modules/entity-resolution/local-run/er-v1/run_id=7449422852604780fd2de54fcaa1ff18ebe1cf761c260d8cf4de08b368ce4e15"
+}

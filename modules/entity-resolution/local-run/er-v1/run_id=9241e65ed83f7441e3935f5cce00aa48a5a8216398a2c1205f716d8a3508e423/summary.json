@@ -1,0 +1,73 @@
+{
+  "runId": "run:9241e65ed83f7441e3935f5cce00aa48a5a8216398a2c1205f716d8a3508e423",
+  "policyVersion": "er-v1",
+  "featureVersion": "er-features-v1",
+  "thresholds": {
+    "acceptThreshold": 0.8,
+    "rejectThreshold": 0.45,
+    "llmBandMin": 0.6,
+    "llmBandMax": 0.8
+  },
+  "adjudicator": "fake",
+  "adjudicationModelVersion": "fake-deterministic-adjudicator-v1",
+  "adjudicationPromptVersion": "er-adj-prompt-v1",
+  "adjudicatorIsFake": true,
+  "inputs": {
+    "files": 37,
+    "works": 69,
+    "matchCandidates": 91,
+    "exactIdentifierOutcomes": 20,
+    "researcherNodes": 22,
+    "invalidRows": {}
+  },
+  "pairs": {
+    "total": 92,
+    "fromMatchCandidates": 91,
+    "fromExactOutcomesOnly": 1,
+    "unknownRefs": 0,
+    "skippedSameWorkMentions": 0
+  },
+  "decisionsByKindAndOutcome": {
+    "researcher/ACCEPTED": 67,
+    "researcher/CONFLICT": 1,
+    "researcher/REJECTED": 3,
+    "work/ACCEPTED": 18,
+    "work/CONFLICT": 2,
+    "work/REJECTED": 1
+  },
+  "decisionsByKindAndPath": {
+    "researcher/DETERMINISTIC_BIBLIOGRAPHIC": 41,
+    "researcher/EXACT_ID": 14,
+    "researcher/PROBABILISTIC": 16,
+    "work/EXACT_ID": 21
+  },
+  "unresolvedRateByKind": {
+    "researcher": 0,
+    "work": 0
+  },
+  "llmBand": {
+    "pairsInBand": 0,
+    "adjudicated": 0,
+    "cacheHits": 0,
+    "decidedByLlm": 0
+  },
+  "reviewQueue": {
+    "queuePath": "modules/entity-resolution/review-queue/review-queue-v1.csv",
+    "keyPath": "modules/entity-resolution/local-run/er-v1/review-queue-v1-key.csv",
+    "requested": 200,
+    "available": 92,
+    "selected": 92,
+    "shortfall": 108,
+    "selectedByStratum": {
+      "BORDERLINE": 3,
+      "HIGH_SCORE": 57,
+      "LIKELY_NON_MATCH": 4,
+      "SHARED_EXACT_ID": 28
+    },
+    "selectedByKind": {
+      "researcher": 71,
+      "work": 21
+    }
+  },
+  "outputDir": "modules/entity-resolution/local-run/er-v1/run_id=9241e65ed83f7441e3935f5cce00aa48a5a8216398a2c1205f716d8a3508e423"
+}

@@ -1,0 +1,38 @@
+{
+  "policyVersion": "er-v1",
+  "policyRevision": "er-v1-r2",
+  "featureVersion": "er-features-v2",
+  "genericTitlesResource": "scholarchain/er/policy/generic-titles-v1.txt",
+  "researcherWeights": {
+    "nameSimilarity": 0.25,
+    "initialsCompatibility": 0.1,
+    "coauthorOverlap": 0.25,
+    "affiliationCompatibility": 0.1,
+    "titleSimilarity": 0.08,
+    "yearDistance": 0.04,
+    "venueCompatibility": 0.05,
+    "authorOrder": 0.05,
+    "citationNeighborhood": 0.03,
+    "sourceReliability": 0.05
+  },
+  "workWeights": {
+    "titleSimilarity": 0.4,
+    "yearDistance": 0.1,
+    "venueCompatibility": 0.1,
+    "coauthorOverlap": 0.2,
+    "authorOrder": 0.05,
+    "citationNeighborhood": 0.05,
+    "sourceReliability": 0.1
+  },
+  "missingFeatureValue": 0.5,
+  "researcherYearScale": 15.0,
+  "workYearScale": 3.0,
+  "sourceReliability": {
+    "ORCID": 1.0,
+    "CROSSREF": 0.95,
+    "DBLP": 0.95,
+    "OPENALEX": 0.85,
+    "SEMANTIC_SCHOLAR": 0.8,
+    "SCHOLARCHAIN": 0.5
+  }
+}

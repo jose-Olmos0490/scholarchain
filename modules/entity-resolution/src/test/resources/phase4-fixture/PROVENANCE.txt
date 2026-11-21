@@ -1,0 +1,11 @@
+Phase 4 output fixture for entity-resolution tests (read-only test input).
+
+Copied unchanged from the local bounded Phase 4 run target/phase04/run-b4 (Hadoop
+run run:fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315,
+feature version hadoop-blocking-features-v2), which was produced from the
+committed samples under datasets/samples/ (DBLP 2026-11-01 excerpt, OpenAlex,
+Crossref and ORCID samples). Only the tables entity resolution reads were
+copied: <dataset>/{work,work_node,mention_node,researcher_node,venue,institution}
+and scholarchain/{match_candidate,exact_identifier_outcome}.
+
+Contains no human labels.

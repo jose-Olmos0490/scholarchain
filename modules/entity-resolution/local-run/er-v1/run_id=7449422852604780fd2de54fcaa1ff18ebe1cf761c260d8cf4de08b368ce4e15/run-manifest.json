@@ -1,0 +1,256 @@
+{
+  "codeVersion": "scholarchain-entity-resolution-0.1.0-phase05-r2@sha256:f6ebe3b7e045fa61ad0957faea1c28d5867c1ff0a0bc6a793d942dd8cf371ff4",
+  "inputs": [
+    {
+      "checksum": "sha256:86bee5f26d94816e7bc165c41d71e8ba7ffbaca51fdf102ab07cc2706ccb5dbd",
+      "location": "crossref/mention_node/snapshot=undated-855c221447d1/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "undated-855c221447d1",
+      "sourceDataset": "CROSSREF"
+    },
+    {
+      "checksum": "sha256:667e5604e42841b1e4de71a9b44eee19fa253323aa5852341010bc15a2d4d97f",
+      "location": "crossref/mention_node/snapshot=undated-855c221447d1/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "undated-855c221447d1",
+      "sourceDataset": "CROSSREF"
+    },
+    {
+      "checksum": "sha256:12aff1ee29ff8eb76a3d80265c3ec4ada2873f1dfb6c1a0cf1e0ec2d70b4a451",
+      "location": "crossref/work/snapshot=undated-855c221447d1/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "undated-855c221447d1",
+      "sourceDataset": "CROSSREF"
+    },
+    {
+      "checksum": "sha256:8d4ae6ab513c3ad7bbee9003607e17804ee906c8e444433e0c3cae9cdf8d08b9",
+      "location": "crossref/work/snapshot=undated-855c221447d1/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "undated-855c221447d1",
+      "sourceDataset": "CROSSREF"
+    },
+    {
+      "checksum": "sha256:8e134d780cd8fdde7b88fb4b589dd2e19cb26eef4d7f51d7345131dd9e46c2e8",
+      "location": "crossref/work_node/snapshot=undated-855c221447d1/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "undated-855c221447d1",
+      "sourceDataset": "CROSSREF"
+    },
+    {
+      "checksum": "sha256:5749d7090fbe9290c745c244defd6c1e26ad2364bbf3f15e18b34625fbe11486",
+      "location": "crossref/work_node/snapshot=undated-855c221447d1/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "undated-855c221447d1",
+      "sourceDataset": "CROSSREF"
+    },
+    {
+      "checksum": "sha256:efc4c2c94a5a56ede4193a3170c982c6719608219193b48f50453feee1059516",
+      "location": "dblp/venue/snapshot=2026-11-01/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "2026-11-01",
+      "sourceDataset": "DBLP"
+    },
+    {
+      "checksum": "sha256:c8aa782a258eed08430efeafc30b07ba6e294506b70998799b36bdd421513833",
+      "location": "dblp/work/snapshot=2026-11-01/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "2026-11-01",
+      "sourceDataset": "DBLP"
+    },
+    {
+      "checksum": "sha256:39c0ddb175da7a5a79852f43d1ccd93a169e33d1a5ad741479e18eb62425fbfd",
+      "location": "dblp/work/snapshot=2026-11-01/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "2026-11-01",
+      "sourceDataset": "DBLP"
+    },
+    {
+      "checksum": "sha256:f4e5a306583d5ffd41d6cfc7788fece1d3a7c36a30514bd762c21eda5b768bc6",
+      "location": "dblp/work_node/snapshot=2026-11-01/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "2026-11-01",
+      "sourceDataset": "DBLP"
+    },
+    {
+      "checksum": "sha256:29649b0f901bf7fca59a34701d52054309389fc661de98e62b930e1a23abaa0a",
+      "location": "dblp/work_node/snapshot=2026-11-01/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "2026-11-01",
+      "sourceDataset": "DBLP"
+    },
+    {
+      "checksum": "sha256:9f120618b84a37fa615b6c824c6f2abfb82fa4f98583b70b1822ee9450e3907e",
+      "location": "openalex/institution/snapshot=2026-10-14/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "2026-10-14",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:9494bfb7b6c60abba3297766ba7b5a835dd9529c4a5d54612af747eb7e75d3b1",
+      "location": "openalex/institution/snapshot=2026-10-14/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "2026-10-14",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:48e9500202128dfddf5fb755932b1bcee177365e26b947460a3b28f07ab3eaa4",
+      "location": "openalex/mention_node/snapshot=2026-10-14/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "2026-10-14",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:7b7dac0f553508a24aa08600a9e88d57a2f4c184f81f7a671ae2781029484a07",
+      "location": "openalex/mention_node/snapshot=2026-10-14/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "2026-10-14",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:711c796a2223f55a136dd5187d9167517842f5ccf28f348d9234326965cf6c2c",
+      "location": "openalex/researcher_node/snapshot=2026-10-14/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "2026-10-14",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:46115d4b2e30755d15efeabf1aaca2e664bb57cb1822c9e2dcb5c747ea264dac",
+      "location": "openalex/researcher_node/snapshot=2026-10-14/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "2026-10-14",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:c2a3df90cdd6715e8d0c6340412ca3d2d30417768b9313c034a7522c9528e6b5",
+      "location": "openalex/venue/snapshot=2026-10-14/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "2026-10-14",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:562ca85376ef7d6e4a047720e846630ca1a8fd6fca93f3bcc587b4b5930530b4",
+      "location": "openalex/venue/snapshot=2026-10-14/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "2026-10-14",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:e598827c635af7299559b311d5b5ebba85cb1126daaff47da191475d32ea9d86",
+      "location": "openalex/work/snapshot=2026-10-14/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "2026-10-14",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:7b4616d8fea0d2dfbb697fb4659c62b838e4169fdb59a23010883011792542e1",
+      "location": "openalex/work/snapshot=2026-10-14/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "2026-10-14",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:95dcfc0202d33dc0215b69bc33dca5d075a87f3dbbffd2d61c2f7461b153084f",
+      "location": "openalex/work_node/snapshot=2026-10-14/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "2026-10-14",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:9073fab224deb609c069ebca7c88d1e2608d3174afe87cb3d566c70624e8026a",
+      "location": "openalex/work_node/snapshot=2026-10-14/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "2026-10-14",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:be6d796e1298596355014b57809550fa5d5f4cd5f3ec7790cae0425f482555f1",
+      "location": "openalex/institution/snapshot=undated-3121da4dfcc7/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "undated-3121da4dfcc7",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:711e236097517847e61bba2011d52a58ae97b800161410cb2a6e3f4ed3776fdd",
+      "location": "openalex/institution/snapshot=undated-3121da4dfcc7/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "undated-3121da4dfcc7",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:1c39e140ebf607888c43c6b52f1e66cf6e274e361cc1be648a5fb9104085d1ec",
+      "location": "openalex/mention_node/snapshot=undated-3121da4dfcc7/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "undated-3121da4dfcc7",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:ac57eda4ef470e3bb3c0bf435c1fb4e668e5cb4ab2334fc041b79d6770be3a44",
+      "location": "openalex/mention_node/snapshot=undated-3121da4dfcc7/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "undated-3121da4dfcc7",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:b139c8cb7cf7be6fe92054a4fbbccb948f88abe15258c3b36637cc119f3eb2eb",
+      "location": "openalex/venue/snapshot=undated-3121da4dfcc7/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "undated-3121da4dfcc7",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:7250fbb1549419a4f23741084222458f287453603f215317ac08a19a1a898a78",
+      "location": "openalex/work/snapshot=undated-3121da4dfcc7/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "undated-3121da4dfcc7",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:20cb05cb8909989c421058352ffb8119a1f7e3ff039907e2c2395408a9062cee",
+      "location": "openalex/work/snapshot=undated-3121da4dfcc7/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "undated-3121da4dfcc7",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:c4e594077acec887da4968bbc0deee663923bbf448e361b9178a4bb2c31df552",
+      "location": "openalex/work_node/snapshot=undated-3121da4dfcc7/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "undated-3121da4dfcc7",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:160241680ff16b06df76ee234a8505f0ace9e2b98228493ae1462bf828000e67",
+      "location": "openalex/work_node/snapshot=undated-3121da4dfcc7/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "undated-3121da4dfcc7",
+      "sourceDataset": "OPENALEX"
+    },
+    {
+      "checksum": "sha256:feb7220be3a4575d354d5a51dacda4066ecf2274828f946675c5cc621152558f",
+      "location": "orcid/researcher_node/snapshot=undated-d2816257d678/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "undated-d2816257d678",
+      "sourceDataset": "ORCID"
+    },
+    {
+      "checksum": "sha256:a618c2e1a8fdfb4cc6a81eb84baf5d46338e31c84c31f17b139d5ac12867c51f",
+      "location": "scholarchain/exact_identifier_outcome/snapshot=2026-11-01/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "2026-11-01",
+      "sourceDataset": "SCHOLARCHAIN"
+    },
+    {
+      "checksum": "sha256:fefe28d2154913d555d285f535c6d768e9381dec1205aafa6eabc0fdbe3ecc85",
+      "location": "scholarchain/exact_identifier_outcome/snapshot=2026-11-01/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "2026-11-01",
+      "sourceDataset": "SCHOLARCHAIN"
+    },
+    {
+      "checksum": "sha256:a128d91a0f822d0f01ef002d41f22f4dadcd0d2d70be707a77768a76b8e04fe6",
+      "location": "scholarchain/match_candidate/snapshot=2026-11-01/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00000.gz",
+      "snapshot": "2026-11-01",
+      "sourceDataset": "SCHOLARCHAIN"
+    },
+    {
+      "checksum": "sha256:ae757cca3e5e9aa17f799068a3eed2eaafbfbcb666ce64b8f55d4501ea556c78",
+      "location": "scholarchain/match_candidate/snapshot=2026-11-01/run_id=fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315/part-r-00001.gz",
+      "snapshot": "2026-11-01",
+      "sourceDataset": "SCHOLARCHAIN"
+    }
+  ],
+  "parameters": {
+    "adjudicator": "fake",
+    "entityResolution.acceptThreshold": "0.8",
+    "entityResolution.cutoffsSourceSha256": "sha256:84ccc14967fed0b4b210d5b1dc1bf45508e3efa05d05f14eca868e03018fdf85",
+    "entityResolution.llmBandMax": "0.8",
+    "entityResolution.llmBandMin": "0.6",
+    "entityResolution.llmMinConfidence": "0.7",
+    "entityResolution.llmMinConfidence.source": "properties-file:er-v1-thresholds.properties#llmMinConfidence",
+    "entityResolution.minSharedIdTitleSimilarity": "0.5",
+    "entityResolution.minSharedIdTitleSimilarity.source": "properties-file:er-v1-thresholds.properties#minSharedIdTitleSimilarity",
+    "entityResolution.minSurnameSimilarity": "0.85",
+    "entityResolution.minSurnameSimilarity.source": "properties-file:er-v1-thresholds.properties#minSurnameSimilarity",
+    "entityResolution.rejectThreshold": "0.45",
+    "hadoopRunId": "fa68b48b0cfb87ca7514ba90feeeabdb926a3cb60fb6a9483affdb4169fdb315"
+  },
+  "pipelineStage": "entity-resolution",
+  "policyVersions": {
+    "adjudicationModelVersion": "fake-deterministic-adjudicator-v1",
+    "adjudicationPromptSha256": "sha256:e860c7c198d14e28661989068a8740ac3bff82c722a696c009f17785f2879497",
+    "adjudicationPromptVersion": "er-adj-prompt-v1",
+    "adjudicationResponseSchema": "er-adjudication-response-v1",
+    "entityResolutionPolicyRevision": "er-v1-r2",
+    "entityResolutionPolicySha256": "sha256:ccbcef6938c015a44642ad079a11f4bfb59d88ccaa62c1c832b91ab5ad9ccbee",
+    "entityResolutionPolicyVersion": "er-v1",
+    "erFeatureVersion": "er-features-v2",
+    "genericTitlesResource": "scholarchain/er/policy/generic-titles-v1.txt",
+    "genericTitlesSha256": "sha256:2ac355031e25ca597915627ab016dc8d7fa170f543369fea43cbb7425d99c0e3"
+  },
+  "schemaVersion": "run-manifest-v1"
+}

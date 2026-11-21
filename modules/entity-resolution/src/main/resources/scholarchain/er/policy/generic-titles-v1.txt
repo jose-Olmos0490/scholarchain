@@ -1,0 +1,96 @@
+# generic-titles-v1: titles that do not identify a work on their own.
+# Owner: entity-resolution-engineer. Referenced by policy er-v1 revision er-v1-r2
+# (genericTitlesResource in er-v1.json). Changing this list changes policy behaviour: bump the
+# file version (generic-titles-v2.txt), point the policy at it, and record the change in
+# modules/entity-resolution/POLICY-CHANGELOG.md.
+#
+# Format: one entry per line, already in normalized form (TextNormalize.normalizeTitle: markup
+# removed, trailing period dropped, folded to lower-case ASCII-ish tokens separated by one
+# space). Lines starting with '#' and blank lines are ignored.
+#
+# Matching (scholarchain.er.policy.GenericTitles.isGeneric): a title is generic when its
+# normalized form, or its normalized form with purely numeric and roman-numeral tokens removed
+# ("Editorial 2018", "Erratum II"), equals an entry. An empty normalized title is also treated
+# as generic.
+#
+# Effect (MatchPolicy, er-v1-r2): a work pair where either title is generic is never ACCEPTED
+# on title, year, author or venue equality (exact-bibliographic or score path, or LLM). Only
+# an exact-identifier agreement can accept it; otherwise it is UNRESOLVED, or REJECTED when
+# the score is below the reject threshold. Generic titles are also excluded from the
+# researcher title-similarity feature and from same-work bibliographic evidence.
+abstract
+abstracts
+acknowledgement
+acknowledgements
+acknowledgment
+acknowledgments
+addendum
+announcement
+announcements
+author index
+authors index
+back matter
+book review
+book reviews
+call for papers
+commentary
+comments
+conclusion
+conclusions
+contents
+copyright
+copyright page
+corrigendum
+corrigenda
+correction
+corrections
+cover
+editor s note
+editors note
+editorial
+editorial board
+editorials
+errata
+erratum
+expression of concern
+foreword
+forward
+from the editor
+from the editors
+front matter
+frontmatter
+guest editorial
+in memoriam
+index
+introduction
+invited talk
+keynote
+keynote address
+keynote talk
+letter from the editor
+letter to the editor
+letters
+letters to the editor
+list of reviewers
+masthead
+message from the general chair
+message from the general chairs
+message from the program chairs
+news
+obituary
+panel
+panel discussion
+poster
+preface
+program committee
+organizing committee
+reply
+response
+retraction
+retraction notice
+reviewers
+subject index
+summary
+table of contents
+title page
+welcome message
