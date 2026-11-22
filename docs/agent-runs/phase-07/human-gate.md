@@ -5,9 +5,9 @@ Reviewed:
 - Neptune CSV headers and COAUTHORED_WITH evidence pointer
 - DynamoDB key design against each stated access pattern
 - S3 Vectors, DynamoDB, and Neptune limits sourced from aws-docs with URLs and dates
-- My own sbt check: <paste the test summary lines from /tmp/phase07-check.log>
+- My own sbt check: not rerun by the human; storage-engineer observed sbt check exit 0 (core 664, storage 147, entity-resolution 212, hadoop 75, spark 66, adversarial 352; 0 failed). Next phase sbt check will re-verify.
 
-Decision: <ACCEPTED, or REJECTED + reason>
+Decision: ACCEPTED WITH DEFERRED FINDINGS. review-report.md returned REQUEST_CHANGES (3 major, 12 minor); all findings deferred to the Phase 11 repair loop due to deadline and 35-minute sbt check.
 
 Manual changes: none to generated artifacts.
 
@@ -32,6 +32,11 @@ Remaining risks:
 - Config overrides with a mistyped variable name silently fall back to defaults.
 - Guard hook false positives on harmless text such as run_id=; route to factory-engineer.
 - aws-docs MCP package version unpinned in .mcp.json; route to factory-engineer.
-- <any minor review findings accepted without fixing, or delete this line>
+- Deferred to Phase 11: major #1 (Neptune LIMIT must be literal; affects Phase 9 PathFinder), #2 (metric cache rejects second Spark run), #3 (putBundle not atomic), #6 (evidencePointer resolver missing; Phase 7 gate item "COAUTHORED_WITH traceable to evidence" NOT yet met), and minor #4-#15.
 
 Accepted commit: see commit.txt
+
+## Commit sequence (disclosed)
+- 71fcf46 was committed and pushed by the human before the review findings were resolved. This was a human process decision, not an agent action. History was not rewritten.
+- repair-01.md and repair-02.md were missing from 71fcf46 and are added in the follow-up commit.
+- Open findings are tracked for the Phase 11 repair loop.
