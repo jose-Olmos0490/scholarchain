@@ -38,7 +38,20 @@ class SchemaVersionSpec extends AnyFunSuite with Matchers:
       "AuthorPaperRecord" -> Set("author-paper-v1"),
       "MatchCandidate" -> Set("match-candidate-v1"),
       "ExactIdentifierOutcome" -> Set("exact-identifier-outcome-v1"),
-      "RejectRecord" -> Set("reject-v1")
+      "RejectRecord" -> Set("reject-v1"),
+      // Phase 6 additions (new record types, v1; no earlier version changed).
+      "CoauthorEdgeSupport" -> Set("coauthor-edge-support-v1"),
+      "ComponentMembership" -> Set("component-membership-v1"),
+      "CommunityMembership" -> Set("community-membership-v1"),
+      "CrossCommunityEdge" -> Set("cross-community-edge-v1"),
+      "BridgeMeasures" -> Set("bridge-measures-v1"),
+      "CorenessRecord" -> Set("coreness-v1"),
+      "PathEvidence" -> Set("path-evidence-v1"),
+      "SemanticFact" -> Set("semantic-fact-v1"),
+      "LoadManifest" -> Set("load-manifest-v1"),
+      "IdentityConflict" -> Set("identity-conflict-v1"),
+      "WindowGraphSummary" -> Set("window-graph-summary-v1"),
+      "ResearcherWindowChange" -> Set("researcher-window-change-v1")
     )
   }
 

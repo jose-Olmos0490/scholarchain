@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "path-evidence-v1",
+  "pathId": "path:b6c5b06688270f3c34e076f8591ddfe218a1382752128d0ea720cb7dd553406e",
+  "sourceResearcherId": "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d",
+  "targetResearcherId": "researcher:openalex:c2e53727f9756b062f5a17732f0d9985ec0aa7335a8d45197742d2eb8b135c7a",
+  "windowStartYear": 2000,
+  "windowEndYear": 2005,
+  "selection": "BENCHMARK",
+  "status": "FOUND",
+  "maxDepth": 2,
+  "length": 1,
+  "hops": [
+    {
+      "fromResearcherId": "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d",
+      "toResearcherId": "researcher:openalex:c2e53727f9756b062f5a17732f0d9985ec0aa7335a8d45197742d2eb8b135c7a",
+      "edgeId": "coauthor-edge:7b9fc7a1202b37cb966d8b9003b431fba718c2ecacb348de47bcd61429e794ee",
+      "jointPublicationCount": 1,
+      "supportingWorkIds": [
+        "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8"
+      ]
+    }
+  ],
+  "policyVersion": "illustrative-coauthor-policy-v1",
+  "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": "illustrative-coauthor-policy-v1",
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": [
+      "coauthor-edge:7b9fc7a1202b37cb966d8b9003b431fba718c2ecacb348de47bcd61429e794ee"
+    ]
+  }
+}

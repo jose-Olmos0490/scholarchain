@@ -42,5 +42,18 @@ object GoldenCases:
     GoldenCase("author-paper-record.json", authorPaper),
     GoldenCase("match-candidate.json", matchCandidate),
     GoldenCase("exact-identifier-outcome.json", exactIdOutcome),
-    GoldenCase("reject-record.json", reject)
+    GoldenCase("reject-record.json", reject),
+    // Phase 6 Spark analytics records.
+    GoldenCase("coauthor-edge-support.json", edgeSupport),
+    GoldenCase("component-membership.json", componentMembership),
+    GoldenCase("community-membership.json", communityMembership),
+    GoldenCase("cross-community-edge.json", crossCommunityEdge),
+    GoldenCase("bridge-measures.json", bridgeMeasures),
+    GoldenCase("coreness.json", coreness),
+    GoldenCase("path-evidence.json", pathEvidence),
+    GoldenCase("semantic-fact.json", semanticFact),
+    GoldenCase("load-manifest.json", loadManifest),
+    GoldenCase("identity-conflict.json", identityConflict),
+    GoldenCase("window-graph-summary.json", windowGraphSummary),
+    GoldenCase("researcher-window-change.json", researcherWindowChange)
   )

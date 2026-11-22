@@ -8,7 +8,10 @@ import upickle.default.ReadWriter
   * lastCollaborationYear <= windowEndYear`, `jointPublicationCount >= 1`.
   *
   * @param supportingWorkIdsRef
-  *   stable pointer to the full supporting work-ID list when it is too long to inline
+  *   pointer to the full supporting work-ID list: when set it must equal
+  *   `CoauthorEdgeSupport.supportRef(edgeId)` (`coauthor-edge-support-v1:<edgeId>`), meaning all
+  *   [[CoauthorEdgeSupport]] rows with this `edgeId` in the run `provenance.runId`; their number
+  *   equals `jointPublicationCount`
   */
 final case class CoauthorEdge(
     schemaVersion: String,

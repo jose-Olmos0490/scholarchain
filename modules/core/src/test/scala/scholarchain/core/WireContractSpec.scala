@@ -37,7 +37,19 @@ class WireContractSpec extends AnyFunSuite with Matchers:
     "AuthorPaperRecord",
     "MatchCandidate",
     "ExactIdentifierOutcome",
-    "RejectRecord"
+    "RejectRecord",
+    "CoauthorEdgeSupport",
+    "ComponentMembership",
+    "CommunityMembership",
+    "CrossCommunityEdge",
+    "BridgeMeasures",
+    "CorenessRecord",
+    "PathEvidence",
+    "SemanticFact",
+    "LoadManifest",
+    "IdentityConflict",
+    "WindowGraphSummary",
+    "ResearcherWindowChange"
   )
 
   test("golden cases cover every required record type plus the run manifest") {
@@ -105,6 +117,31 @@ class WireContractSpec extends AnyFunSuite with Matchers:
     MatchEntityType.values.foreach(v => read[MatchEntityType](write(v)) shouldBe v)
     ExactIdType.values.foreach(v => read[ExactIdType](write(v)) shouldBe v)
     ExactIdOutcome.values.foreach(v => read[ExactIdOutcome](write(v)) shouldBe v)
+    PathStatus.values.foreach(v => read[PathStatus](write(v)) shouldBe v)
+    PathSelection.values.foreach(v => read[PathSelection](write(v)) shouldBe v)
+    BetweennessMethod.values.foreach(v => read[BetweennessMethod](write(v)) shouldBe v)
+    SemanticSubjectType.values.foreach(v => read[SemanticSubjectType](write(v)) shouldBe v)
+    LoadTarget.values.foreach(v => read[LoadTarget](write(v)) shouldBe v)
+    IdentityConflictReason.values.foreach(v => read[IdentityConflictReason](write(v)) shouldBe v)
+  }
+
+  test("Phase 6 enums have exactly these wire spellings") {
+    PathStatus.values.map(_.toString).toVector shouldBe
+      Vector("FOUND", "NOT_FOUND_WITHIN_DEPTH", "NO_PATH")
+    PathSelection.values.map(_.toString).toVector shouldBe Vector("BENCHMARK", "SAMPLED")
+    BetweennessMethod.values.map(_.toString).toVector shouldBe Vector("EXACT", "SAMPLED_SOURCES")
+    SemanticSubjectType.values.map(_.toString).toVector shouldBe
+      Vector("RESEARCHER", "COMMUNITY", "PATH", "TOPIC", "INSTITUTION")
+    LoadTarget.values.map(write(_)).toVector shouldBe
+      Vector("\"NEPTUNE\"", "\"DYNAMODB\"", "\"S3VECTORS_INPUT\"", "\"S3\"")
+    IdentityConflictReason.values.map(_.toString).toVector shouldBe Vector(
+      "SAME_WORK_MENTIONS",
+      "MULTIPLE_ORCIDS",
+      "MULTIPLE_OPENALEX_AUTHOR_IDS",
+      "MULTIPLE_DBLP_PIDS",
+      "MULTIPLE_DBLP_AUTHOR_KEYS",
+      "CLUSTER_TOO_LARGE"
+    )
   }
 
   test("Phase 4 enums have exactly these wire spellings") {

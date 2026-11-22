@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "load-manifest-v1",
+  "target": "S3",
+  "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+  "tables": [
+    {
+      "tableName": "coauthor_edges",
+      "recordType": "CoauthorEdge",
+      "recordSchemaVersion": "coauthor-edge-v1",
+      "location": "illustrative-output/graph/edges/type=coauthored_with/",
+      "format": "parquet",
+      "partitionColumns": [
+        "windowStartYear",
+        "windowEndYear",
+        "runId"
+      ],
+      "rowCount": 1,
+      "files": [
+        {
+          "path": "illustrative-output/graph/edges/type=coauthored_with/part-00000.parquet",
+          "sizeBytes": 2048,
+          "checksum": "sha256:f63952eb073333c611dc9658acd5e6b62a719ac5a242d7d354a87de40a5cd9d5"
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": "illustrative-coauthor-policy-v1",
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": []
+  }
+}

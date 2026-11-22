@@ -202,13 +202,15 @@ lazy val services = (project in file("modules/services"))
 // It has no main sources, publishes nothing, and builds no assembly.
 // ---------------------------------------------------------------------------
 lazy val adversarialTests = (project in file("tests"))
-  .dependsOn(core, hadoop, entityResolution)
+  .dependsOn(core, hadoop, entityResolution, sparkAnalytics)
   .disablePlugins(AssemblyPlugin)
   .settings(commonSettings, clusterTestSettings)
   .settings(
     name := "adversarial-tests",
-    // Provided deps of `hadoop` are not transitive; Provided is on the Test classpath.
-    libraryDependencies += Dependencies.hadoopClient,
+    // Provided deps of `hadoop` and `sparkAnalytics` are not transitive; Provided
+    // is on the Test classpath. spark-sql brings spark-core transitively.
+    // clusterTestSettings already supplies the forked Java 17 openings.
+    libraryDependencies ++= Seq(Dependencies.hadoopClient, Dependencies.sparkSql),
     // Forked tests start in the repository root so repo-relative paths such as
     // datasets/samples/... resolve. Applies to this project only.
     Test / forkOptions := (Test / forkOptions).value

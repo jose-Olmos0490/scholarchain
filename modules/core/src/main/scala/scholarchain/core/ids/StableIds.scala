@@ -9,6 +9,7 @@ import scholarchain.core.model.{
   MatchEntityType,
   RunInput,
   RunManifest,
+  SemanticSubjectType,
   SourceType
 }
 import upickle.default.writeJs
@@ -510,6 +511,109 @@ object StableIds:
       d <- requireNotNull("sourceDataset", sourceDataset)
       s <- requireNonBlank("snapshot", snapshot)
     yield mk(IdKind.Snapshot, None, Seq(field(d.toString), field(s)))
+
+  // ---------------------------------------------------------------------------
+  // Phase 6 analytics IDs
+  // ---------------------------------------------------------------------------
+
+  /** `path:sha256(source, target, windowStartYear, windowEndYear, policyVersion, runId)`.
+    *
+    * Directed: the source and target order is part of the identity (the chosen path is the
+    * lexicographically smallest one read from the source). Same-endpoint queries and inverted
+    * windows are rejected.
+    */
+  def pathId(
+      sourceResearcherId: String,
+      targetResearcherId: String,
+      windowStartYear: Int,
+      windowEndYear: Int,
+      policyVersion: String,
+      runId: String
+  ): Either[String, String] =
+    for
+      s <- requireId(sourceResearcherId, Set(IdKind.Researcher))
+      t <- requireId(targetResearcherId, Set(IdKind.Researcher))
+      _ <- if s != t then Right(()) else Left(s"path source and target are the same: '$s'")
+      _ <- requireWindow(windowStartYear, windowEndYear)
+      v <- requireNonBlank("policyVersion", policyVersion)
+      run <- requireId(runId, Set(IdKind.Run))
+    yield mk(
+      IdKind.Path,
+      None,
+      Seq(
+        field(s),
+        field(t),
+        field(windowStartYear.toString),
+        field(windowEndYear.toString),
+        field(v),
+        field(run)
+      )
+    )
+
+  /** Stable-ID kinds a semantic fact's subject may have: researcher IDs for `RESEARCHER` and
+    * `COMMUNITY` (a community is identified by its label, a researcher ID), path IDs for `PATH`,
+    * topic IDs for `TOPIC`, institution IDs for `INSTITUTION`.
+    */
+  def semanticSubjectKinds(subjectType: SemanticSubjectType): Set[IdKind] = subjectType match
+    case SemanticSubjectType.RESEARCHER => Set(IdKind.Researcher)
+    case SemanticSubjectType.COMMUNITY => Set(IdKind.Researcher)
+    case SemanticSubjectType.PATH => Set(IdKind.Path)
+    case SemanticSubjectType.TOPIC => Set(IdKind.Topic)
+    case SemanticSubjectType.INSTITUTION => Set(IdKind.Institution)
+
+  /** `semantic-fact:sha256(subjectType, subjectId, windowStartYear, windowEndYear,
+    * metricVersion, runId)`.
+    */
+  def semanticFactId(
+      subjectType: SemanticSubjectType,
+      subjectId: String,
+      windowStartYear: Int,
+      windowEndYear: Int,
+      metricVersion: String,
+      runId: String
+  ): Either[String, String] =
+    for
+      st <- requireNotNull("subjectType", subjectType)
+      sid <- requireId(subjectId, semanticSubjectKinds(st))
+      _ <- requireWindow(windowStartYear, windowEndYear)
+      v <- requireNonBlank("metricVersion", metricVersion)
+      run <- requireId(runId, Set(IdKind.Run))
+    yield mk(
+      IdKind.SemanticFact,
+      None,
+      Seq(
+        field(st.toString),
+        field(sid),
+        field(windowStartYear.toString),
+        field(windowEndYear.toString),
+        field(v),
+        field(run)
+      )
+    )
+
+  /** `identity-conflict:sha256(identityVersion, policyVersion, sorted distinct memberIds)`.
+    *
+    * Members are author-mention or researcher IDs; at least two distinct members. Member order
+    * and duplicates do not change the ID.
+    */
+  def identityConflictId(
+      identityVersion: String,
+      policyVersion: String,
+      memberIds: Seq[String]
+  ): Either[String, String] =
+    for
+      _ <-
+        if identityVersion != null && IdKind.VersionTag.matches(identityVersion) then Right(())
+        else Left(s"identity version '$identityVersion' must match v<N>")
+      v <- requireNonBlank("policyVersion", policyVersion)
+      members <- requireIds("memberIds", memberIds, Set(IdKind.AuthorMention, IdKind.Researcher))
+      set = members.distinct.sorted
+      _ <- if set.size >= 2 then Right(()) else Left("an identity conflict needs >= 2 members")
+    yield mk(
+      IdKind.IdentityConflict,
+      None,
+      Seq(field(identityVersion), field(v), listField(set))
+    )
 
   // ---------------------------------------------------------------------------
   // Run ID

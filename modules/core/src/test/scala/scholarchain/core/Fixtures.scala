@@ -509,3 +509,271 @@ object Fixtures:
     runId = runId,
     provenance = prov(SourceType.DBLP, rejectRef, DblpSnapshot)
   )
+
+  // --- Phase 6 Spark analytics records (illustrative values) -----------------------------
+  val analyticsMetricVersion = "illustrative-graph-metrics-v1"
+  private val (edgeA, edgeB) = (researcherPair.a, researcherPair.b)
+
+  def analyticsProv(sourceRecordId: String, derivedFrom: Vector[String] = Vector.empty) =
+    prov(
+      SourceType.SCHOLARCHAIN,
+      sourceRecordId,
+      DblpSnapshot,
+      policyVersion = Some(coauthorPolicy),
+      derivedFrom = derivedFrom
+    )
+
+  val edgeSupport: CoauthorEdgeSupport = CoauthorEdgeSupport(
+    schemaVersion = SV.CoauthorEdgeSupport,
+    edgeId = coauthorEdge.edgeId,
+    researcherA = edgeA,
+    researcherB = edgeB,
+    windowStartYear = 2000,
+    windowEndYear = 2005,
+    workId = workId,
+    workYear = Some(2000),
+    policyVersion = coauthorPolicy,
+    runId = runId,
+    provenance = analyticsProv(coauthorEdge.edgeId, Vector(pairCandidate.candidateId))
+  )
+
+  val componentMembership: ComponentMembership = ComponentMembership(
+    schemaVersion = SV.ComponentMembership,
+    researcherId = samueliId,
+    componentId = edgeA,
+    componentSize = 2,
+    windowStartYear = 2000,
+    windowEndYear = 2005,
+    metricVersion = analyticsMetricVersion,
+    runId = runId,
+    provenance = analyticsProv(samueliId, Vector(coauthorEdge.edgeId))
+  )
+
+  val communityMembership: CommunityMembership = CommunityMembership(
+    schemaVersion = SV.CommunityMembership,
+    researcherId = samueliId,
+    communityId = edgeA,
+    communitySize = 2,
+    windowStartYear = 2000,
+    windowEndYear = 2005,
+    metricVersion = analyticsMetricVersion,
+    runId = runId,
+    provenance = analyticsProv(samueliId, Vector(coauthorEdge.edgeId))
+  )
+
+  val crossCommunityEdge: CrossCommunityEdge = CrossCommunityEdge(
+    schemaVersion = SV.CrossCommunityEdge,
+    edgeId = coauthorEdge.edgeId,
+    researcherA = edgeA,
+    researcherB = edgeB,
+    communityA = edgeA,
+    communityB = edgeB,
+    windowStartYear = 2000,
+    windowEndYear = 2005,
+    jointPublicationCount = 1,
+    policyVersion = coauthorPolicy,
+    metricVersion = analyticsMetricVersion,
+    runId = runId,
+    provenance = analyticsProv(coauthorEdge.edgeId, Vector(coauthorEdge.edgeId))
+  )
+
+  val bridgeMeasures: BridgeMeasures = BridgeMeasures(
+    schemaVersion = SV.BridgeMeasures,
+    researcherId = samueliId,
+    communityId = edgeB,
+    windowStartYear = 2000,
+    windowEndYear = 2005,
+    degree = 1,
+    crossCommunityDegree = 1,
+    communitiesConnected = 2,
+    participationCoefficient = 0.0,
+    betweenness = Some(0.0),
+    betweennessMethod = Some(BetweennessMethod.SAMPLED_SOURCES),
+    betweennessSampleSources = Some(10),
+    betweennessSeed = Some(7L),
+    metricVersion = analyticsMetricVersion,
+    runId = runId,
+    provenance = analyticsProv(samueliId, Vector(coauthorEdge.edgeId))
+  )
+
+  val coreness: CorenessRecord = CorenessRecord(
+    schemaVersion = SV.CorenessRecord,
+    researcherId = samueliId,
+    windowStartYear = 2000,
+    windowEndYear = 2005,
+    coreness = 1,
+    degree = 1,
+    metricVersion = analyticsMetricVersion,
+    runId = runId,
+    provenance = analyticsProv(samueliId, Vector(coauthorEdge.edgeId))
+  )
+
+  val pathHop: PathHop = PathHop(
+    fromResearcherId = samueliId,
+    toResearcherId = rhinesId,
+    edgeId = coauthorEdge.edgeId,
+    jointPublicationCount = 1,
+    supportingWorkIds = Vector(workId)
+  )
+
+  val pathEvidence: PathEvidence = PathEvidence(
+    schemaVersion = SV.PathEvidence,
+    pathId = ok(StableIds.pathId(samueliId, rhinesId, 2000, 2005, coauthorPolicy, runId)),
+    sourceResearcherId = samueliId,
+    targetResearcherId = rhinesId,
+    windowStartYear = 2000,
+    windowEndYear = 2005,
+    selection = PathSelection.BENCHMARK,
+    status = PathStatus.FOUND,
+    maxDepth = 2,
+    length = Some(1),
+    hops = Vector(pathHop),
+    policyVersion = coauthorPolicy,
+    runId = runId,
+    provenance = analyticsProv(samueliId, Vector(coauthorEdge.edgeId))
+  )
+
+  val semanticFact: SemanticFact = SemanticFact(
+    schemaVersion = SV.SemanticFact,
+    factId = ok(
+      StableIds.semanticFactId(
+        SemanticSubjectType.RESEARCHER,
+        samueliId,
+        2000,
+        2005,
+        analyticsMetricVersion,
+        runId
+      )
+    ),
+    subjectType = SemanticSubjectType.RESEARCHER,
+    subjectId = samueliId,
+    displayName = Some("Henry Samueli"),
+    windowStartYear = 2000,
+    windowEndYear = 2005,
+    metrics = Vector(
+      MetricValue(CollaborationMetric.PUBLICATION_COUNT, 1.0),
+      MetricValue(CollaborationMetric.DISTINCT_COAUTHOR_COUNT, 1.0)
+    ),
+    topTopics = Vector(RankedEntity(topic.topicId, topic.name, 1)),
+    topVenues = Vector(RankedEntity(venueId, venue.name, 1)),
+    topInstitutions = Vector(RankedEntity(institution.institutionId, institution.name, 1)),
+    relatedResearcherIds = Vector(rhinesId),
+    representativeWorks = Vector(RepresentativeWork(workId, work.title, Some(2000))),
+    metricVersion = analyticsMetricVersion,
+    runId = runId,
+    provenance = analyticsProv(samueliId, Vector(metrics.metricsId, coauthorEdge.edgeId))
+  )
+
+  val loadManifest: LoadManifest = LoadManifest(
+    schemaVersion = SV.LoadManifest,
+    target = LoadTarget.S3,
+    runId = runId,
+    tables = Vector(
+      LoadTable(
+        tableName = "coauthor_edges",
+        recordType = "CoauthorEdge",
+        recordSchemaVersion = SV.CoauthorEdge,
+        location = "illustrative-output/graph/edges/type=coauthored_with/",
+        format = "parquet",
+        partitionColumns = Vector("windowStartYear", "windowEndYear", "runId"),
+        rowCount = 1,
+        files = Vector(
+          LoadFile(
+            path = "illustrative-output/graph/edges/type=coauthored_with/part-00000.parquet",
+            sizeBytes = 2048,
+            checksum = ok(StableIds.textHash("illustrative parquet bytes"))
+          )
+        )
+      )
+    ),
+    provenance = analyticsProv(runId)
+  )
+
+  /** A valid ORCID iD that is not Samueli's (the ORCID documentation example). */
+  val otherOrcid = "0000-0002-1825-0097"
+
+  val identityConflict: IdentityConflict = IdentityConflict(
+    schemaVersion = SV.IdentityConflict,
+    conflictId = ok(
+      StableIds.identityConflictId(
+        "v1",
+        erPolicy,
+        Seq(rhinesMention.mentionId, samueliMention.mentionId)
+      )
+    ),
+    memberIds = Vector(rhinesMention.mentionId, samueliMention.mentionId).sorted,
+    clusterSize = 2,
+    maxClusterSize = 4,
+    details = Vector(
+      IdentityConflictDetail(IdentityConflictReason.SAME_WORK_MENTIONS, Vector(workId)),
+      IdentityConflictDetail(
+        IdentityConflictReason.MULTIPLE_ORCIDS,
+        Vector("0000-0003-3175-3913", otherOrcid).sorted
+      )
+    ),
+    matchDecisionIds = Vector(matchDecision.decisionId),
+    identityVersion = "v1",
+    policyVersion = erPolicy,
+    runId = runId,
+    provenance = prov(
+      SourceType.SCHOLARCHAIN,
+      samueliMention.mentionId,
+      DblpSnapshot,
+      policyVersion = Some(erPolicy),
+      derivedFrom = Vector(matchDecision.decisionId)
+    )
+  )
+
+  val windowGraphSummary: WindowGraphSummary = WindowGraphSummary(
+    schemaVersion = SV.WindowGraphSummary,
+    windowStartYear = 2000,
+    windowEndYear = 2005,
+    allYearsWindow = false,
+    researcherCount = 5,
+    workCount = 1,
+    yearlessWorkCount = 0,
+    coauthorEdgeCount = 10,
+    selfPairsDropped = 0,
+    oversizeTeamWorkCount = 0,
+    componentCount = 1,
+    largestComponentSize = 5,
+    singletonComponentCount = 0,
+    communityCount = Some(1),
+    communitySizeHistogram = Vector(SizeCount(5, 1)),
+    maxCoreness = Some(4),
+    iterations = Vector(
+      IterationReport("connected-components", 2, 20, converged = true),
+      IterationReport("label-propagation", 2, 20, converged = true),
+      IterationReport("k-core", 1, 30, converged = true)
+    ),
+    metricVersion = analyticsMetricVersion,
+    runId = runId,
+    provenance = analyticsProv(runId)
+  )
+
+  val windowSnapshot: ResearcherWindowSnapshot = ResearcherWindowSnapshot(
+    publicationCount = 1,
+    distinctCoauthorCount = 4,
+    averageCoauthorsPerPaper = 4.0,
+    maximumCoauthorsOnOnePaper = 4,
+    componentSize = 5,
+    communitySize = Some(5),
+    crossCommunityDegree = Some(0),
+    communitiesConnected = Some(1),
+    participationCoefficient = Some(0.0),
+    coreness = Some(4)
+  )
+
+  val researcherWindowChange: ResearcherWindowChange = ResearcherWindowChange(
+    schemaVersion = SV.ResearcherWindowChange,
+    researcherId = samueliId,
+    fromWindowStartYear = 2000,
+    fromWindowEndYear = 2005,
+    toWindowStartYear = 2006,
+    toWindowEndYear = 2010,
+    from = Some(windowSnapshot),
+    to = None,
+    metricVersion = analyticsMetricVersion,
+    runId = runId,
+    provenance = analyticsProv(samueliId, Vector(metrics.metricsId))
+  )

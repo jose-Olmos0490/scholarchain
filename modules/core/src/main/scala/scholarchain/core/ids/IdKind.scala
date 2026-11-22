@@ -44,6 +44,9 @@ enum IdKind(
   case Snapshot extends IdKind("snapshot", Set.empty, None)
   case MatchCandidate extends IdKind("match-candidate", Set.empty, None)
   case ExactIdOutcome extends IdKind("exact-id", Set.empty, None)
+  case Path extends IdKind("path", Set.empty, None)
+  case SemanticFact extends IdKind("semantic-fact", Set.empty, None)
+  case IdentityConflict extends IdKind("identity-conflict", Set.empty, None)
 
   def hasNamespace: Boolean = namespaces.nonEmpty || versionedNamespacePrefix.nonEmpty
 

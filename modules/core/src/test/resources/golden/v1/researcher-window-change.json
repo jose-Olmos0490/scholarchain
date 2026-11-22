@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "researcher-window-change-v1",
+  "researcherId": "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d",
+  "fromWindowStartYear": 2000,
+  "fromWindowEndYear": 2005,
+  "toWindowStartYear": 2006,
+  "toWindowEndYear": 2010,
+  "from": {
+    "publicationCount": 1,
+    "distinctCoauthorCount": 4,
+    "averageCoauthorsPerPaper": 4,
+    "maximumCoauthorsOnOnePaper": 4,
+    "componentSize": 5,
+    "communitySize": 5,
+    "crossCommunityDegree": 0,
+    "communitiesConnected": 1,
+    "participationCoefficient": 0,
+    "coreness": 4
+  },
+  "to": null,
+  "metricVersion": "illustrative-graph-metrics-v1",
+  "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": "illustrative-coauthor-policy-v1",
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": [
+      "metrics:5583406dfe1a82434e305683555dfbc28a9a6e69735ff69f095e08304e005cbe"
+    ]
+  }
+}

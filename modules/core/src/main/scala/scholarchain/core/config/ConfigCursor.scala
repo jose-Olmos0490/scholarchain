@@ -58,6 +58,29 @@ final class ConfigCursor private[config] (config: Config):
 
   def string(key: String, envVar: String): String = raw(key, envVar).getOrElse("")
 
+  /** An optional value: absent, null or blank is `None` and records nothing. A non-scalar value
+    * is recorded as invalid.
+    */
+  def optionalString(key: String): Option[String] =
+    val path = full(key)
+    try
+      if config.hasPath(path) then Option(config.getString(path)).map(_.trim).filter(_.nonEmpty)
+      else None
+    catch
+      case _: ConfigException.WrongType =>
+        fail(key, "expected a scalar value")
+        None
+
+  /** Exactly `true` or `false` (lower case). `None` when missing or invalid (recorded). */
+  def booleanOption(key: String, envVar: String): Option[Boolean] =
+    raw(key, envVar).flatMap {
+      case "true" => Some(true)
+      case "false" => Some(false)
+      case other =>
+        fail(key, s"'$other' is not a boolean (true or false)")
+        None
+    }
+
   def int(key: String, envVar: String, min: Int = Int.MinValue, max: Int = Int.MaxValue): Int =
     intOption(key, envVar, min, max).getOrElse(0)
 
@@ -143,6 +166,9 @@ object ConfigCursor:
 final case class YearWindow private (startYear: Int, endYear: Int):
   def contains(other: YearWindow): Boolean =
     startYear <= other.startYear && other.endYear <= endYear
+
+  /** Whether `year` lies in `[startYear, endYear]`. */
+  def containsYear(year: Int): Boolean = startYear <= year && year <= endYear
 
   /** `YYYY-YYYY`, the configuration syntax. */
   def render: String = s"$startYear-$endYear"

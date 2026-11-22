@@ -43,5 +43,11 @@ experiments/**/tmp/
 load-tests/**/local/
 load-tests/**/results-local/
 
+# Module local-run outputs (generated, e.g. Spark Parquet); ignored at any depth.
+# Exception: the entity-resolution local-run tree was committed in phase 05 and
+# stays tracked until a human decides to untrack it.
+local-run/
+!modules/entity-resolution/local-run/
+
 # OS noise
 .DS_Store

@@ -25,7 +25,7 @@ trait RecordContract[A]:
     */
   def violations(a: A, path: String): Vector[ValidationError]
 
-object RecordContract:
+object RecordContract extends AnalyticsContracts:
   def apply[A](using c: RecordContract[A]): RecordContract[A] = c
 
   private def at(path: String, field: String): String =
@@ -405,7 +405,19 @@ object RecordContract:
           e.representativeWorkIds == null || e.representativeWorkIds.size <= e.jointPublicationCount,
           InvalidValue(at(path, "representativeWorkIds"), "more works than jointPublicationCount")
         ) ++
-        optNonBlank(at(path, "supportingWorkIdsRef"), e.supportingWorkIdsRef) ++
+        (if e.supportingWorkIdsRef == null then
+           Vector(InvalidValue(at(path, "supportingWorkIdsRef"), "null option"))
+         else
+           e.supportingWorkIdsRef.toVector.flatMap(r =>
+             check(
+               r == CoauthorEdgeSupport.supportRef(e.edgeId),
+               InvalidValue(
+                 at(path, "supportingWorkIdsRef"),
+                 s"must be '${CoauthorEdgeSupport.supportRef(e.edgeId)}' (the edge's rows in " +
+                   "the coauthor-edge-support table)"
+               )
+             )
+           )) ++
         nonBlank(at(path, "policyVersion"), e.policyVersion) ++
         (if e.edgeId != null && CanonicalPair.isCanonical(
              String.valueOf(e.researcherA),

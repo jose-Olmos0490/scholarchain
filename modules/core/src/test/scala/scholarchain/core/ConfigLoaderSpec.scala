@@ -40,6 +40,8 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
     "hadoop.dblpDtdPath" -> "SCHOLARCHAIN_HADOOP_DBLP_DTD_PATH",
     "graph.windows" -> "SCHOLARCHAIN_GRAPH_WINDOWS",
     "graph.coauthorPolicyVersion" -> "SCHOLARCHAIN_GRAPH_COAUTHOR_POLICY_VERSION",
+    "graph.includeAllYearsWindow" -> "SCHOLARCHAIN_GRAPH_INCLUDE_ALL_YEARS_WINDOW",
+    "graph.representativeWorkLimit" -> "SCHOLARCHAIN_GRAPH_REPRESENTATIVE_WORK_LIMIT",
     "entityResolution.policyVersion" -> "SCHOLARCHAIN_ER_POLICY_VERSION",
     "entityResolution.acceptThreshold" -> "SCHOLARCHAIN_ER_ACCEPT_THRESHOLD",
     "entityResolution.rejectThreshold" -> "SCHOLARCHAIN_ER_REJECT_THRESHOLD",
@@ -60,7 +62,25 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
     "models.verificationModelId" -> "VERIFICATION_MODEL_ID",
     "operations.synchronousDeadlineMs" -> "SCHOLARCHAIN_OPS_SYNCHRONOUS_DEADLINE_MS",
     "operations.maxWorkflowRetries" -> "SCHOLARCHAIN_OPS_MAX_WORKFLOW_RETRIES",
-    "operations.maxConcurrentLlmCalls" -> "SCHOLARCHAIN_OPS_MAX_CONCURRENT_LLM_CALLS"
+    "operations.maxConcurrentLlmCalls" -> "SCHOLARCHAIN_OPS_MAX_CONCURRENT_LLM_CALLS",
+    "spark.hadoopInputRoot" -> "SCHOLARCHAIN_SPARK_HADOOP_INPUT_ROOT",
+    "spark.matchDecisionsDir" -> "SCHOLARCHAIN_SPARK_MATCH_DECISIONS_DIR",
+    "spark.outputRoot" -> "SCHOLARCHAIN_SPARK_OUTPUT_ROOT",
+    "spark.shufflePartitions" -> "SCHOLARCHAIN_SPARK_SHUFFLE_PARTITIONS",
+    "spark.checkpointDir" -> "SCHOLARCHAIN_SPARK_CHECKPOINT_DIR",
+    "spark.checkpointInterval" -> "SCHOLARCHAIN_SPARK_CHECKPOINT_INTERVAL",
+    "graph.identity.version" -> "SCHOLARCHAIN_GRAPH_IDENTITY_VERSION",
+    "graph.identity.maxClusterSize" -> "SCHOLARCHAIN_GRAPH_IDENTITY_MAX_CLUSTER_SIZE",
+    "graph.components.maxIterations" -> "SCHOLARCHAIN_GRAPH_COMPONENTS_MAX_ITERATIONS",
+    "graph.kcore.maxIterations" -> "SCHOLARCHAIN_GRAPH_KCORE_MAX_ITERATIONS",
+    "graph.paths.maxDepth" -> "SCHOLARCHAIN_GRAPH_PATHS_MAX_DEPTH",
+    "graph.paths.samplePairCount" -> "SCHOLARCHAIN_GRAPH_PATHS_SAMPLE_PAIR_COUNT",
+    "graph.paths.seed" -> "SCHOLARCHAIN_GRAPH_PATHS_SEED",
+    "graph.diameter.sampleSources" -> "SCHOLARCHAIN_GRAPH_DIAMETER_SAMPLE_SOURCES",
+    "graph.diameter.seed" -> "SCHOLARCHAIN_GRAPH_DIAMETER_SEED",
+    "graph.diameter.minComponentSize" -> "SCHOLARCHAIN_GRAPH_DIAMETER_MIN_COMPONENT_SIZE",
+    "graph.semanticFacts.topEntityLimit" -> "SCHOLARCHAIN_GRAPH_SEMANTIC_TOP_ENTITY_LIMIT",
+    "graph.semanticFacts.memberLimit" -> "SCHOLARCHAIN_GRAPH_SEMANTIC_MEMBER_LIMIT"
   )
 
   /** Valid fictitious values for every required environment variable. */
@@ -108,7 +128,27 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
     "VERIFICATION_MODEL_ID" -> "env-verification-model",
     "SCHOLARCHAIN_OPS_SYNCHRONOUS_DEADLINE_MS" -> "3000",
     "SCHOLARCHAIN_OPS_MAX_WORKFLOW_RETRIES" -> "2",
-    "SCHOLARCHAIN_OPS_MAX_CONCURRENT_LLM_CALLS" -> "5"
+    "SCHOLARCHAIN_OPS_MAX_CONCURRENT_LLM_CALLS" -> "5",
+    "SCHOLARCHAIN_GRAPH_INCLUDE_ALL_YEARS_WINDOW" -> "true",
+    "SCHOLARCHAIN_GRAPH_REPRESENTATIVE_WORK_LIMIT" -> "5",
+    "SCHOLARCHAIN_SPARK_HADOOP_INPUT_ROOT" -> "env/hadoop",
+    "SCHOLARCHAIN_SPARK_MATCH_DECISIONS_DIR" -> "env/er",
+    "SCHOLARCHAIN_SPARK_OUTPUT_ROOT" -> "env/out",
+    "SCHOLARCHAIN_SPARK_SHUFFLE_PARTITIONS" -> "8",
+    "SCHOLARCHAIN_SPARK_CHECKPOINT_DIR" -> "env/checkpoint",
+    "SCHOLARCHAIN_SPARK_CHECKPOINT_INTERVAL" -> "3",
+    "SCHOLARCHAIN_GRAPH_IDENTITY_VERSION" -> "v1",
+    "SCHOLARCHAIN_GRAPH_IDENTITY_MAX_CLUSTER_SIZE" -> "10",
+    "SCHOLARCHAIN_GRAPH_COMPONENTS_MAX_ITERATIONS" -> "20",
+    "SCHOLARCHAIN_GRAPH_KCORE_MAX_ITERATIONS" -> "30",
+    "SCHOLARCHAIN_GRAPH_PATHS_MAX_DEPTH" -> "6",
+    "SCHOLARCHAIN_GRAPH_PATHS_SAMPLE_PAIR_COUNT" -> "4",
+    "SCHOLARCHAIN_GRAPH_PATHS_SEED" -> "42",
+    "SCHOLARCHAIN_GRAPH_DIAMETER_SAMPLE_SOURCES" -> "3",
+    "SCHOLARCHAIN_GRAPH_DIAMETER_SEED" -> "43",
+    "SCHOLARCHAIN_GRAPH_DIAMETER_MIN_COMPONENT_SIZE" -> "2",
+    "SCHOLARCHAIN_GRAPH_SEMANTIC_TOP_ENTITY_LIMIT" -> "5",
+    "SCHOLARCHAIN_GRAPH_SEMANTIC_MEMBER_LIMIT" -> "10"
   )
 
   private def loaded(e: Map[String, String]): ScholarChainConfig =
@@ -572,7 +612,9 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
       "DBLP_SUBSET_START_YEAR" -> "2000",
       "DBLP_SUBSET_END_YEAR" -> "2005",
       "SCHOLARCHAIN_GRAPH_WINDOWS" -> "2000-2006",
-      "SCHOLARCHAIN_GRAPH_COAUTHOR_POLICY_VERSION" -> "p"
+      "SCHOLARCHAIN_GRAPH_COAUTHOR_POLICY_VERSION" -> "p",
+      "SCHOLARCHAIN_GRAPH_INCLUDE_ALL_YEARS_WINDOW" -> "false",
+      "SCHOLARCHAIN_GRAPH_REPRESENTATIVE_WORK_LIMIT" -> "1"
     )
     ConfigLoader.loadSection(GraphConfig, env("empty-test") ++ vars) shouldBe Left(
       ConfigError.Invalid(
@@ -623,7 +665,10 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
         "SCHOLARCHAIN_HADOOP_OUTPUT_CODEC",
         "SCHOLARCHAIN_HADOOP_DBLP_RECORD_TYPES",
         "SCHOLARCHAIN_HADOOP_YEAR_FROM",
-        "SCHOLARCHAIN_HADOOP_YEAR_TO"
+        "SCHOLARCHAIN_HADOOP_YEAR_TO",
+        // Optional Phase 6 keys (no MissingKey when absent).
+        "SCHOLARCHAIN_SPARK_HADOOP_RUN_ID",
+        "SCHOLARCHAIN_GRAPH_PATHS_BENCHMARK_PAIRS"
       )
     )
   }

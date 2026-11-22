@@ -38,6 +38,20 @@ object SchemaVersions:
   val ExactIdentifierOutcome = "exact-identifier-outcome-v1"
   val RejectRecord = "reject-v1"
 
+  // Phase 6 Spark analytics records (new record types, v1; no earlier version changed).
+  val CoauthorEdgeSupport = "coauthor-edge-support-v1"
+  val ComponentMembership = "component-membership-v1"
+  val CommunityMembership = "community-membership-v1"
+  val CrossCommunityEdge = "cross-community-edge-v1"
+  val BridgeMeasures = "bridge-measures-v1"
+  val CorenessRecord = "coreness-v1"
+  val PathEvidence = "path-evidence-v1"
+  val SemanticFact = "semantic-fact-v1"
+  val LoadManifest = "load-manifest-v1"
+  val IdentityConflict = "identity-conflict-v1"
+  val WindowGraphSummary = "window-graph-summary-v1"
+  val ResearcherWindowChange = "researcher-window-change-v1"
+
   /** Record type name to the set of schema versions this build accepts. */
   val supported: Map[String, Set[String]] = Map(
     "Provenance" -> Set(Provenance),
@@ -64,7 +78,19 @@ object SchemaVersions:
     "AuthorPaperRecord" -> Set(AuthorPaperRecord),
     "MatchCandidate" -> Set(MatchCandidate),
     "ExactIdentifierOutcome" -> Set(ExactIdentifierOutcome),
-    "RejectRecord" -> Set(RejectRecord)
+    "RejectRecord" -> Set(RejectRecord),
+    "CoauthorEdgeSupport" -> Set(CoauthorEdgeSupport),
+    "ComponentMembership" -> Set(ComponentMembership),
+    "CommunityMembership" -> Set(CommunityMembership),
+    "CrossCommunityEdge" -> Set(CrossCommunityEdge),
+    "BridgeMeasures" -> Set(BridgeMeasures),
+    "CorenessRecord" -> Set(CorenessRecord),
+    "PathEvidence" -> Set(PathEvidence),
+    "SemanticFact" -> Set(SemanticFact),
+    "LoadManifest" -> Set(LoadManifest),
+    "IdentityConflict" -> Set(IdentityConflict),
+    "WindowGraphSummary" -> Set(WindowGraphSummary),
+    "ResearcherWindowChange" -> Set(ResearcherWindowChange)
   )
 
   def supportedFor(recordType: String): Set[String] = supported.getOrElse(recordType, Set.empty)

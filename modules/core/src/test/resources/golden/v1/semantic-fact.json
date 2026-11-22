@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "semantic-fact-v1",
+  "factId": "semantic-fact:394446de2905d5e5570ebf72f6039b1e5b89cd0ccd095e560ddb29dab3dff83f",
+  "subjectType": "RESEARCHER",
+  "subjectId": "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d",
+  "displayName": "Henry Samueli",
+  "windowStartYear": 2000,
+  "windowEndYear": 2005,
+  "metrics": [
+    {
+      "metric": "PUBLICATION_COUNT",
+      "value": 1
+    },
+    {
+      "metric": "DISTINCT_COAUTHOR_COUNT",
+      "value": 1
+    }
+  ],
+  "topTopics": [
+    {
+      "entityId": "topic:openalex:de321d1e1bc19251ce368be447cb9f34071c9dbb7ea50f90efb4466b9a82527f",
+      "label": "Low-power high-performance VLSI design",
+      "count": 1
+    }
+  ],
+  "topVenues": [
+    {
+      "entityId": "venue:dblp:b882801623ec87ce8c5063ee1b85bb934879df79d38c8d7ac9aa06ac54680c33",
+      "label": "DAC",
+      "count": 1
+    }
+  ],
+  "topInstitutions": [
+    {
+      "entityId": "institution:openalex:a89309f45c23a1e8e5e2a50134bdb023dd585181e0c99ac3d75a01e453808df1",
+      "label": "Chinese University of Hong Kong",
+      "count": 1
+    }
+  ],
+  "relatedResearcherIds": [
+    "researcher:openalex:c2e53727f9756b062f5a17732f0d9985ec0aa7335a8d45197742d2eb8b135c7a"
+  ],
+  "representativeWorks": [
+    {
+      "workId": "work:dblp:c052950cbcb85c8a57918631ac869dd2dcf014996d311adf4fbc63c6a2d981f8",
+      "title": "Embedded systems design in the new millennium (panel session).",
+      "year": 2000
+    }
+  ],
+  "metricVersion": "illustrative-graph-metrics-v1",
+  "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "researcher:orcid:26ed21108b722489f94bd746bbfaade3675a6bb3264fa8c36fc9fdf70eac337d",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2439ecf7fe23fdbc3fce38038deb00c663b1e0302f1fcee7d34be779b5ce53c",
+    "policyVersion": "illustrative-coauthor-policy-v1",
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": [
+      "metrics:5583406dfe1a82434e305683555dfbc28a9a6e69735ff69f095e08304e005cbe",
+      "coauthor-edge:7b9fc7a1202b37cb966d8b9003b431fba718c2ecacb348de47bcd61429e794ee"
+    ]
+  }
+}
