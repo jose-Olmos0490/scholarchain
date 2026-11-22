@@ -3,46 +3,48 @@ package scholarchain.storage
 import java.util.UUID
 import org.scalatest.Tag
 import scholarchain.core.config.{DistanceMetric, VectorIndexType}
-import scholarchain.core.ids.StableIds
 import scholarchain.storage.common.*
 import scholarchain.storage.vectors.*
 
-/** Builders for vector records with Phase 3 profile IDs as keys. */
+/** Builders for vector records keyed by the frozen vector-key formula. */
 object Vectors:
-  private def ok(e: Either[String, String]): String =
-    e.fold(m => throw new IllegalStateException(m), identity)
-
   val Model = "test-embedding-model-v1"
+  val ModelVersion = "2026-01"
+  val DocumentType = "researcher-profile"
 
-  /** A unique text, its hash and the profile ID built from them (the vector key). */
+  /** A unique text, its hash and the vector key built from a unique ordinal. */
   final case class Text(text: String, hash: String, key: String)
 
   def text(label: String = "profile"): Text =
     val t = s"$label ${UUID.randomUUID}"
-    val h = ok(StableIds.textHash(t))
-    Text(t, h, ok(StableIds.profileId(Fixture.resA.researcherId, "v1", "researcher-profile", 0, h)))
+    val ordinal = scala.util.Random.nextInt(Int.MaxValue)
+    val key = VectorKeys
+      .of(Fixture.resA.researcherId, DocumentType, 2010, 2013, ordinal)
+      .fold(e => throw new IllegalStateException(e.message), identity)
+    Text(t, Sha256.of(t), key)
 
   def meta(
       t: Text,
       scope: String = "scope",
       model: String = Model,
-      researcherId: Option[String] = Some(Fixture.resA.researcherId),
-      communityId: Option[String] = None,
-      window: Option[(Int, Int)] = Some((2010, 2013))
+      entityId: String = Fixture.resA.researcherId,
+      window: (Int, Int) = (2010, 2013)
   ): VectorMetadata =
     VectorMetadata(
-      researcherId = researcherId,
-      communityId = communityId.orElse(Some(scope)),
-      windowStartYear = window.map(_._1),
-      windowEndYear = window.map(_._2),
-      topicId = None,
-      institutionId = None,
-      documentType = "researcher-profile",
+      entityId = entityId,
+      documentType = DocumentType,
+      windowStartYear = window._1,
+      windowEndYear = window._2,
+      topicIds = Vector.empty,
+      institutionIds = Vector.empty,
       sourceDataset = "SCHOLARCHAIN",
-      textS3Uri = s"s3://test-rag/profiles/${t.key.takeRight(16)}.txt",
+      communityId = Some(scope),
+      textS3Uri = s"s3://test-rag/profiles/${t.key.takeRight(16)}.json",
       textHash = t.hash,
       embeddingModel = model,
-      runId = Fixture.runId
+      embeddingModelVersion = ModelVersion,
+      runId = Fixture.runId,
+      schemaVersion = MetadataSchema.Version
     )
 
   def record(t: Text, v: Vector[Float], scope: String = "scope"): VectorRecord =

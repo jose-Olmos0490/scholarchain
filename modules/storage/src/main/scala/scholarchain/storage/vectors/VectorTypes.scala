@@ -16,6 +16,11 @@ object VectorServiceLimits:
   val MaxTotalMetadataKeys = 50
   val MaxNonFilterableKeysPerIndex = 10
   val MaxFilterableStringBytes = 2 * 1000
+
+  /** Project rule (work order, Phase 8): filterable metadata of one vector never exceeds 2 KB, on
+    * every index mode. "KB" is read as 1000 bytes, as for the service limit above.
+    */
+  val IngestFilterableBudgetBytes = 2 * 1000
   val MaxPutBatch = 500
   val MaxGetBatch = 100
   val MaxTopK = 10000
@@ -45,7 +50,14 @@ final case class IndexDefinition(
 object IndexDefinition:
   /** Index keys that are never filterable: pointers and versions, not search dimensions. */
   val NonFilterableMetadataKeys: Vector[String] =
-    Vector("textS3Uri", "textHash", "embeddingModel", "runId")
+    Vector(
+      "textS3Uri",
+      "textHash",
+      "embeddingModel",
+      "embeddingModelVersion",
+      "runId",
+      "schemaVersion"
+    )
 
   /** The five configured indexes with their configured settings. */
   def fromSettings(s: StorageSettings): Vector[IndexDefinition] =
@@ -61,58 +73,66 @@ object IndexDefinition:
       d(n.topicInstitutions, c.topicInstitutions)
     )
 
-/** Compact metadata of one vector. There is no free-text field: long text lives only in ordinary
-  * S3 and is reached through `textS3Uri`; `textHash` pins the exact text the vector was made from.
+/** Compact metadata of one vector (schema [[MetadataSchema.Version]]). There is no free-text field:
+  * long text lives only in ordinary S3 and is reached through `textS3Uri`; `textHash` pins the
+  * exact text the vector was made from.
   *
-  * Filterable: researcherId, communityId, windowStartYear, windowEndYear, topicId, institutionId,
-  * documentType, sourceDataset. Non-filterable: textS3Uri, textHash, embeddingModel, runId.
+  * Filterable: entityId, documentType, windowStartYear, windowEndYear, topicIds, institutionIds,
+  * sourceDataset, communityId (when applicable). Non-filterable: textS3Uri, textHash,
+  * embeddingModel, embeddingModelVersion, runId, schemaVersion.
   */
 final case class VectorMetadata(
-    researcherId: Option[String],
-    communityId: Option[String],
-    windowStartYear: Option[Int],
-    windowEndYear: Option[Int],
-    topicId: Option[String],
-    institutionId: Option[String],
+    entityId: String,
     documentType: String,
+    windowStartYear: Int,
+    windowEndYear: Int,
+    topicIds: Vector[String],
+    institutionIds: Vector[String],
     sourceDataset: String,
+    communityId: Option[String],
     textS3Uri: String,
     textHash: String,
     embeddingModel: String,
-    runId: String
+    embeddingModelVersion: String,
+    runId: String,
+    schemaVersion: String
 ):
-  /** Filterable entries, in a fixed order. */
+  /** Filterable entries, in a fixed order. Empty lists and an absent communityId are omitted. */
   def filterable: Vector[(String, ujson.Value)] =
     Vector(
-      researcherId.map("researcherId" -> ujson.Str(_)),
-      communityId.map("communityId" -> ujson.Str(_)),
-      windowStartYear.map("windowStartYear" -> ujson.Num(_)),
-      windowEndYear.map("windowEndYear" -> ujson.Num(_)),
-      topicId.map("topicId" -> ujson.Str(_)),
-      institutionId.map("institutionId" -> ujson.Str(_)),
+      Some("entityId" -> ujson.Str(entityId)),
       Some("documentType" -> ujson.Str(documentType)),
-      Some("sourceDataset" -> ujson.Str(sourceDataset))
+      Some("windowStartYear" -> ujson.Num(windowStartYear)),
+      Some("windowEndYear" -> ujson.Num(windowEndYear)),
+      Option.when(topicIds.nonEmpty)("topicIds" -> ujson.Arr.from(topicIds.map(ujson.Str(_)))),
+      Option.when(institutionIds.nonEmpty)(
+        "institutionIds" -> ujson.Arr.from(institutionIds.map(ujson.Str(_)))
+      ),
+      Some("sourceDataset" -> ujson.Str(sourceDataset)),
+      communityId.map("communityId" -> ujson.Str(_))
     ).flatten
 
   def nonFilterable: Vector[(String, ujson.Value)] = Vector(
     "textS3Uri" -> ujson.Str(textS3Uri),
     "textHash" -> ujson.Str(textHash),
     "embeddingModel" -> ujson.Str(embeddingModel),
-    "runId" -> ujson.Str(runId)
+    "embeddingModelVersion" -> ujson.Str(embeddingModelVersion),
+    "runId" -> ujson.Str(runId),
+    "schemaVersion" -> ujson.Str(schemaVersion)
   )
 
   def toJson: ujson.Obj = ujson.Obj.from(filterable ++ nonFilterable)
 
 object VectorMetadata:
   val FilterableKeys: Set[String] = Set(
-    "researcherId",
-    "communityId",
+    "entityId",
+    "documentType",
     "windowStartYear",
     "windowEndYear",
-    "topicId",
-    "institutionId",
-    "documentType",
-    "sourceDataset"
+    "topicIds",
+    "institutionIds",
+    "sourceDataset",
+    "communityId"
   )
 
   /** Decodes stored metadata; a missing or mistyped required field is a clear error. */
@@ -127,25 +147,37 @@ object VectorMetadata:
       case Some(ujson.Str(s)) => Right(Some(s))
       case Some(other) =>
         Left(StorageError.InvalidRecord(s"metadata '$k' must be a string, got ${other.render()}"))
-    def optI(k: String): Result[Option[Int]] = o.value.get(k) match
-      case None | Some(ujson.Null) => Right(None)
-      case Some(ujson.Num(n)) if n.isWhole => Right(Some(n.toInt))
+    def reqI(k: String): Result[Int] = o.value.get(k) match
+      case Some(ujson.Num(n)) if n.isWhole => Right(n.toInt)
       case Some(other) =>
         Left(StorageError.InvalidRecord(s"metadata '$k' must be an integer, got ${other.render()}"))
+      case None => Left(StorageError.InvalidRecord(s"metadata '$k' is missing"))
+    def strings(k: String): Result[Vector[String]] = o.value.get(k) match
+      case None | Some(ujson.Null) => Right(Vector.empty)
+      case Some(ujson.Arr(items)) =>
+        items.foldLeft[Result[Vector[String]]](Right(Vector.empty)) {
+          case (acc, ujson.Str(s)) => acc.map(_ :+ s)
+          case (_, other) =>
+            Left(StorageError.InvalidRecord(s"metadata '$k' holds a non-string ${other.render()}"))
+        }
+      case Some(other) =>
+        Left(StorageError.InvalidRecord(s"metadata '$k' must be a list, got ${other.render()}"))
     for
-      r <- optS("researcherId")
-      c <- optS("communityId")
-      ws <- optI("windowStartYear")
-      we <- optI("windowEndYear")
-      t <- optS("topicId")
-      i <- optS("institutionId")
+      e <- req("entityId")
       dt <- req("documentType")
+      ws <- reqI("windowStartYear")
+      we <- reqI("windowEndYear")
+      topics <- strings("topicIds")
+      insts <- strings("institutionIds")
       sd <- req("sourceDataset")
+      c <- optS("communityId")
       uri <- req("textS3Uri")
       th <- req("textHash")
       em <- req("embeddingModel")
+      emv <- req("embeddingModelVersion")
       run <- req("runId")
-    yield VectorMetadata(r, c, ws, we, t, i, dt, sd, uri, th, em, run)
+      sv <- req("schemaVersion")
+    yield VectorMetadata(e, dt, ws, we, topics, insts, sd, c, uri, th, em, emv, run, sv)
 
 final case class VectorRecord(key: String, embedding: Vector[Float], metadata: VectorMetadata)
 

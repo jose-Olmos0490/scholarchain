@@ -166,7 +166,7 @@ lazy val storage = (project in file("modules/storage"))
   )
 
 lazy val rag = (project in file("modules/rag"))
-  .dependsOn(core)
+  .dependsOn(core, storage)
   .settings(commonSettings)
   .settings(
     name := "rag",
