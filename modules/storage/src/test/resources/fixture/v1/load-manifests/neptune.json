@@ -1,0 +1,197 @@
+{
+  "schemaVersion": "load-manifest-v1",
+  "target": "NEPTUNE",
+  "runId": "run:e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd",
+  "tables": [
+    {
+      "tableName": "researcher",
+      "recordType": "CanonicalResearcher",
+      "recordSchemaVersion": "researcher-v1",
+      "location": "graph/nodes/type=researcher",
+      "format": "parquet",
+      "partitionColumns": [
+        "run_id"
+      ],
+      "rowCount": 3,
+      "files": [
+        {
+          "path": "graph/nodes/type=researcher/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 7007,
+          "checksum": "sha256:a349a7d6f4b31dfb2e2fe868307d343b269837bffd4e1820492dcf132ec5e825"
+        }
+      ]
+    },
+    {
+      "tableName": "work",
+      "recordType": "WorkRecord",
+      "recordSchemaVersion": "work-v1",
+      "location": "graph/nodes/type=work",
+      "format": "parquet",
+      "partitionColumns": [
+        "run_id"
+      ],
+      "rowCount": 3,
+      "files": [
+        {
+          "path": "graph/nodes/type=work/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 9914,
+          "checksum": "sha256:11690ac73135ff014e3a22aa134b7226ccacfdf38c6e595c90c87fbd1c73edcc"
+        }
+      ]
+    },
+    {
+      "tableName": "venue",
+      "recordType": "Venue",
+      "recordSchemaVersion": "venue-v1",
+      "location": "graph/nodes/type=venue",
+      "format": "parquet",
+      "partitionColumns": [
+        "run_id"
+      ],
+      "rowCount": 1,
+      "files": [
+        {
+          "path": "graph/nodes/type=venue/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 4379,
+          "checksum": "sha256:2c032d196ae8879c770262e4608d3c91b8fb10e98a2fc3a29dfe7fc978fb8aab"
+        }
+      ]
+    },
+    {
+      "tableName": "topic",
+      "recordType": "Topic",
+      "recordSchemaVersion": "topic-v1",
+      "location": "graph/nodes/type=topic",
+      "format": "parquet",
+      "partitionColumns": [
+        "run_id"
+      ],
+      "rowCount": 1,
+      "files": [
+        {
+          "path": "graph/nodes/type=topic/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 4254,
+          "checksum": "sha256:b82c59f5f22d56d7eead3f284792d0d76c1b94d9548c6c1820089d15ef19a9d0"
+        }
+      ]
+    },
+    {
+      "tableName": "institution",
+      "recordType": "Institution",
+      "recordSchemaVersion": "institution-v1",
+      "location": "graph/nodes/type=institution",
+      "format": "parquet",
+      "partitionColumns": [
+        "run_id"
+      ],
+      "rowCount": 1,
+      "files": [
+        {
+          "path": "graph/nodes/type=institution/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 4556,
+          "checksum": "sha256:1a1500e89365ee331d2adbafe7b3edba9d9268f3f6aac5df6eedda8d157a5535"
+        }
+      ]
+    },
+    {
+      "tableName": "authored",
+      "recordType": "AuthorshipRecord",
+      "recordSchemaVersion": "authorship-v1",
+      "location": "graph/edges/type=authored",
+      "format": "parquet",
+      "partitionColumns": [
+        "run_id"
+      ],
+      "rowCount": 6,
+      "files": [
+        {
+          "path": "graph/edges/type=authored/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 6477,
+          "checksum": "sha256:2f8cfd76851e5ef40fc8f990244b0f96026f349153cf5b772528056ab4b75489"
+        },
+        {
+          "path": "graph/edges/type=authored/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00001.snappy.parquet",
+          "sizeBytes": 6489,
+          "checksum": "sha256:8474bfeab1687071c560730511acf1a1f589288a21881f33d1ce4e65d9043d1c"
+        }
+      ]
+    },
+    {
+      "tableName": "has_topic",
+      "recordType": "GraphEdge",
+      "recordSchemaVersion": "graph-edge-v1",
+      "location": "graph/edges/type=has_topic",
+      "format": "parquet",
+      "partitionColumns": [
+        "run_id"
+      ],
+      "rowCount": 1,
+      "files": [
+        {
+          "path": "graph/edges/type=has_topic/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 7750,
+          "checksum": "sha256:f4b8efc72139c7a5f9c86cbd3772b2dcb73cebda217c15b4664fad63f1548bd1"
+        }
+      ]
+    },
+    {
+      "tableName": "coauthored_with",
+      "recordType": "CoauthorEdge",
+      "recordSchemaVersion": "coauthor-edge-v1",
+      "location": "graph/edges/type=coauthored_with",
+      "format": "parquet",
+      "partitionColumns": [
+        "window",
+        "run_id"
+      ],
+      "rowCount": 3,
+      "files": [
+        {
+          "path": "graph/edges/type=coauthored_with/window=2010-2012/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 9075,
+          "checksum": "sha256:2ca6e40aa0338e990a93911fc332d90d3b52c10b251348d1e4be7df058f15e1c"
+        },
+        {
+          "path": "graph/edges/type=coauthored_with/window=2010-2013/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 9144,
+          "checksum": "sha256:bb315740fb39f6a2125af3de332c89e022e78ea02a3a2fd8e65c8cbbe54a4bf5"
+        }
+      ]
+    },
+    {
+      "tableName": "researcher_collaboration",
+      "recordType": "ResearcherMetrics",
+      "recordSchemaVersion": "researcher-metrics-v1",
+      "location": "graph/metrics/type=researcher_collaboration",
+      "format": "parquet",
+      "partitionColumns": [
+        "window",
+        "run_id"
+      ],
+      "rowCount": 5,
+      "files": [
+        {
+          "path": "graph/metrics/type=researcher_collaboration/window=2010-2012/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 10230,
+          "checksum": "sha256:4fe1b2019f07147bc538dc3b74a7c633c4fa89ccb78d66a45241b8c126a84594"
+        },
+        {
+          "path": "graph/metrics/type=researcher_collaboration/window=2010-2013/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 10367,
+          "checksum": "sha256:9d0e2ceea27ca148425a316d13c5cffce2450df59681a719a1185258e88fe16c"
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "run:e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd",
+    "snapshot": "2026-11-01",
+    "runId": "run:e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd",
+    "policyVersion": null,
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": []
+  }
+}

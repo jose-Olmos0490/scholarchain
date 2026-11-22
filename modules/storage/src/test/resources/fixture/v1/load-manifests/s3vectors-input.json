@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "load-manifest-v1",
+  "target": "S3VECTORS_INPUT",
+  "runId": "run:e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd",
+  "tables": [
+    {
+      "tableName": "semantic_fact",
+      "recordType": "SemanticFact",
+      "recordSchemaVersion": "semantic-fact-v1",
+      "location": "graph/semantic/type=semantic_fact",
+      "format": "parquet",
+      "partitionColumns": [
+        "window",
+        "run_id"
+      ],
+      "rowCount": 1,
+      "files": [
+        {
+          "path": "graph/semantic/type=semantic_fact/window=2010-2013/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 11354,
+          "checksum": "sha256:bdbe1d9bed5f95dd8f4bb7764e97a6afbf1956b14add9bd9977e6fd814b3e63a"
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "run:e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd",
+    "snapshot": "2026-11-01",
+    "runId": "run:e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd",
+    "policyVersion": null,
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": []
+  }
+}

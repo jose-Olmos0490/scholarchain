@@ -258,8 +258,28 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
       "scholarchain.hadoop.largeTeamThreshold" -> "50",
       "scholarchain.hadoop.maxPairExpansionTeamSize" -> "2000",
       "scholarchain.hadoop.intermediateCodec" -> "org.apache.hadoop.io.compress.DefaultCodec",
-      "scholarchain.hadoop.outputCodec" -> "org.apache.hadoop.io.compress.GzipCodec"
-    )
+      "scholarchain.hadoop.outputCodec" -> "org.apache.hadoop.io.compress.GzipCodec",
+      // Phase 07 repair (human-authored work order): storage defaults.
+      "scholarchain.dynamodb.tablePrefix" -> "scholarchain",
+      "scholarchain.s3Prefixes.reports" -> "reports/",
+      "scholarchain.s3Prefixes.logs" -> "logs/",
+      "scholarchain.s3Prefixes.neptuneExport" -> "neptune-export/",
+      "scholarchain.batch.putVectors" -> "500",
+      "scholarchain.batch.getVectors" -> "100",
+      "scholarchain.batch.dynamoBatchWrite" -> "25",
+      "scholarchain.batch.neptuneLoaderParallelism" -> "MEDIUM",
+      "scholarchain.retry.maxAttempts" -> "5",
+      "scholarchain.retry.baseDelayMs" -> "200",
+      "scholarchain.retry.maxDelayMs" -> "5000",
+      "scholarchain.querySession.ttlDays" -> "7",
+      "scholarchain.integration.awsProfileVariable" -> "SCHOLARCHAIN_AWS_PROFILE"
+    ) ++ Seq("researchers", "communities", "abstracts", "paths", "topicInstitutions").flatMap { n =>
+      Seq(
+        s"scholarchain.vectorIndexSettings.$n.dimension" -> "1024",
+        s"scholarchain.vectorIndexSettings.$n.distanceMetric" -> "cosine",
+        s"scholarchain.vectorIndexSettings.$n.indexType" -> "CLASSIC"
+      )
+    }
   }
 
   test("no hardcoded defaults: env-overrides.conf contains only optional ${?VAR} bindings") {
@@ -668,8 +688,35 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
         "SCHOLARCHAIN_HADOOP_YEAR_TO",
         // Optional Phase 6 keys (no MissingKey when absent).
         "SCHOLARCHAIN_SPARK_HADOOP_RUN_ID",
-        "SCHOLARCHAIN_GRAPH_PATHS_BENCHMARK_PAIRS"
-      )
+        "SCHOLARCHAIN_GRAPH_PATHS_BENCHMARK_PAIRS",
+        // Phase 07 repair: storage runtime keys (all optional or defaulted).
+        "SCHOLARCHAIN_DDB_TABLE_PREFIX",
+        "SCHOLARCHAIN_DDB_TABLE_RUN_LEDGER",
+        "SCHOLARCHAIN_DDB_TABLE_ENTITY_LINK_CACHE",
+        "SCHOLARCHAIN_DDB_TABLE_QUERY_SESSION",
+        "SCHOLARCHAIN_DDB_TABLE_EVIDENCE_BUNDLE",
+        "SCHOLARCHAIN_DDB_TABLE_ARTIFACT_REGISTRY",
+        "SCHOLARCHAIN_DDB_TABLE_RESEARCHER_METRIC_CACHE",
+        "SCHOLARCHAIN_S3_PREFIX_REPORTS",
+        "SCHOLARCHAIN_S3_PREFIX_LOGS",
+        "SCHOLARCHAIN_S3_PREFIX_NEPTUNE_EXPORT",
+        "SCHOLARCHAIN_STORAGE_PUT_VECTORS_BATCH_SIZE",
+        "SCHOLARCHAIN_STORAGE_GET_VECTORS_BATCH_SIZE",
+        "SCHOLARCHAIN_STORAGE_DYNAMODB_BATCH_WRITE_SIZE",
+        "SCHOLARCHAIN_NEPTUNE_LOADER_PARALLELISM",
+        "SCHOLARCHAIN_STORAGE_RETRY_MAX_ATTEMPTS",
+        "SCHOLARCHAIN_STORAGE_RETRY_BASE_DELAY_MS",
+        "SCHOLARCHAIN_STORAGE_RETRY_MAX_DELAY_MS",
+        "SCHOLARCHAIN_QUERY_SESSION_TTL_DAYS",
+        "SCHOLARCHAIN_ENDPOINT_S3",
+        "SCHOLARCHAIN_ENDPOINT_DYNAMODB",
+        "SCHOLARCHAIN_ENDPOINT_S3_VECTORS",
+        "SCHOLARCHAIN_IT_AWS_PROFILE_VARIABLE",
+        "NEPTUNE_LOADER_ROLE_ARN"
+      ) ++ Seq("RESEARCHERS", "COMMUNITIES", "ABSTRACTS", "PATHS", "TOPIC_INSTITUTIONS").flatMap {
+        n =>
+          Seq("DIMENSION", "DISTANCE_METRIC", "TYPE").map(f => s"SCHOLARCHAIN_VECTOR_INDEX_${n}_$f")
+      }
     )
   }
 

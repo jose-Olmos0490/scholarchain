@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "load-manifest-v1",
+  "target": "DYNAMODB",
+  "runId": "run:e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd",
+  "tables": [
+    {
+      "tableName": "researcher_collaboration",
+      "recordType": "ResearcherMetrics",
+      "recordSchemaVersion": "researcher-metrics-v1",
+      "location": "graph/metrics/type=researcher_collaboration",
+      "format": "parquet",
+      "partitionColumns": [
+        "window",
+        "run_id"
+      ],
+      "rowCount": 5,
+      "files": [
+        {
+          "path": "graph/metrics/type=researcher_collaboration/window=2010-2012/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 10230,
+          "checksum": "sha256:4fe1b2019f07147bc538dc3b74a7c633c4fa89ccb78d66a45241b8c126a84594"
+        },
+        {
+          "path": "graph/metrics/type=researcher_collaboration/window=2010-2013/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 10367,
+          "checksum": "sha256:9d0e2ceea27ca148425a316d13c5cffce2450df59681a719a1185258e88fe16c"
+        }
+      ]
+    },
+    {
+      "tableName": "coauthored_with",
+      "recordType": "CoauthorEdge",
+      "recordSchemaVersion": "coauthor-edge-v1",
+      "location": "graph/edges/type=coauthored_with",
+      "format": "parquet",
+      "partitionColumns": [
+        "window",
+        "run_id"
+      ],
+      "rowCount": 3,
+      "files": [
+        {
+          "path": "graph/edges/type=coauthored_with/window=2010-2012/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 9075,
+          "checksum": "sha256:2ca6e40aa0338e990a93911fc332d90d3b52c10b251348d1e4be7df058f15e1c"
+        },
+        {
+          "path": "graph/edges/type=coauthored_with/window=2010-2013/run_id=e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd/part-00000.snappy.parquet",
+          "sizeBytes": 9144,
+          "checksum": "sha256:bb315740fb39f6a2125af3de332c89e022e78ea02a3a2fd8e65c8cbbe54a4bf5"
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "run:e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd",
+    "snapshot": "2026-11-01",
+    "runId": "run:e2324467cd0be2763997d9c5c7dd280c34681724620b08e41e4cac7f05a5b2cd",
+    "policyVersion": null,
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": []
+  }
+}

@@ -45,6 +45,11 @@ object Dependencies {
     val hadoop = "3.4.2"
     val spark = "4.1.1"
 
+    // Parquet and snappy-java exactly as spark-sql 4.1.1 resolves them in this
+    // build (storage reads Spark-written Parquet off-cluster; keep them equal).
+    val parquet = "1.16.0"
+    val snappyJava = "1.1.10.8"
+
     // Project-wide libraries.
     val upickle = "4.4.3"
     val scalatest = "3.2.20"
@@ -75,6 +80,19 @@ object Dependencies {
 
   // Hadoop MapReduce API, supplied by EMR.
   val hadoopClient = "org.apache.hadoop" % "hadoop-client" % Versions.hadoop % Provided
+
+  // Off-cluster Parquet reading for storage loaders, which do not run inside
+  // EMR, so Hadoop is Compile-scoped here (unlike hadoopClient above). The
+  // shaded hadoop-client-api/-runtime pair is what spark-sql itself resolves,
+  // so storage sees the same Hadoop and Parquet versions as the Spark module.
+  // parquet-hadoop declares Hadoop as provided, hence the explicit pair.
+  val parquetHadoop = "org.apache.parquet" % "parquet-hadoop" % Versions.parquet
+  val hadoopClientApi = "org.apache.hadoop" % "hadoop-client-api" % Versions.hadoop
+  val hadoopClientRuntime = "org.apache.hadoop" % "hadoop-client-runtime" % Versions.hadoop
+  // Pinned as a direct dependency: parquet-hadoop 1.16.0 asks for 1.1.10.7,
+  // Spark resolves 1.1.10.8. A direct Compile dependency (not an override) also
+  // propagates to projects that depend on storage, so they resolve the same jar.
+  val snappyJava = "org.xerial.snappy" % "snappy-java" % Versions.snappyJava
 
   // Spark, supplied by EMR. Spark publishes Scala 2.13 artifacts only.
   // scala-xml_2.13 is excluded because ScalaTest brings scala-xml_3 and sbt
@@ -119,9 +137,11 @@ object Dependencies {
 
   val sparkAnalytics: Seq[ModuleID] = Seq(sparkSql, sparkGraphx)
 
-  // S3, Neptune, DynamoDB, S3 Vectors adapters and the SQS embedding work queue.
+  // S3, Neptune, DynamoDB, S3 Vectors adapters, the SQS embedding work queue,
+  // and off-cluster Parquet reading of Spark outputs.
   val storage: Seq[ModuleID] =
-    Seq(Aws.s3, Aws.dynamodb, Aws.s3vectors, Aws.neptunedata, Aws.sqs)
+    Seq(Aws.s3, Aws.dynamodb, Aws.s3vectors, Aws.neptunedata, Aws.sqs) ++
+      Seq(parquetHadoop, hadoopClientApi, hadoopClientRuntime, snappyJava)
 
   // Model invocation for runtime agents and embeddings.
   val rag: Seq[ModuleID] = Seq(Aws.bedrockruntime)

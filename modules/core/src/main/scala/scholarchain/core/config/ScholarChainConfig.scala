@@ -758,7 +758,8 @@ final case class ScholarChainConfig(
     models: ModelConfig,
     operations: OperationsConfig,
     spark: SparkJobConfig,
-    analytics: GraphAnalyticsConfig
+    analytics: GraphAnalyticsConfig,
+    storageRuntime: StorageRuntimeConfig
 )
 
 object ScholarChainConfig:
@@ -780,5 +781,6 @@ object ScholarChainConfig:
         models = ModelConfig.read(c),
         operations = OperationsConfig.read(c),
         spark = SparkJobConfig.read(c),
-        analytics = GraphAnalyticsConfig.read(c)
+        analytics = GraphAnalyticsConfig.read(c),
+        storageRuntime = StorageRuntimeConfig.section(environment).read(c)
       )
