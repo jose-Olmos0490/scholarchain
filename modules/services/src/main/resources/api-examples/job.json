@@ -1,0 +1,17 @@
+{
+  "jobId": "job-00000000000000000000000000000007",
+  "queryId": "query:171ff60b5d8b1a0a66bc0ae238a23dc590e84f3ffa0b19a866cf745034fb958f",
+  "state": "SUCCEEDED",
+  "stage": "done",
+  "traceId": "trace-00000000000000000000000000000005",
+  "attempts": 1,
+  "createdAt": "2023-11-14T22:13:20Z",
+  "updatedAt": "2023-11-14T22:13:20Z",
+  "links": {
+    "self": "/v1/jobs/job-00000000000000000000000000000007",
+    "explain": "/v1/explain/query:171ff60b5d8b1a0a66bc0ae238a23dc590e84f3ffa0b19a866cf745034fb958f",
+    "result": "/v1/jobs/job-00000000000000000000000000000007/result"
+  },
+  "startedAt": "2023-11-14T22:13:20Z",
+  "finishedAt": "2023-11-14T22:13:20Z"
+}

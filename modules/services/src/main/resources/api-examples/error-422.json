@@ -1,0 +1,11 @@
+{
+  "error": {
+    "code": "UNPROCESSABLE",
+    "status": 422,
+    "message": "an operation is not in the allowlist of runtime operations",
+    "retryable": false,
+    "reason": "UNSUPPORTED_OPERATION"
+  },
+  "requestId": "req-00000000000000000000000000000012",
+  "traceId": "trace-00000000000000000000000000000013"
+}

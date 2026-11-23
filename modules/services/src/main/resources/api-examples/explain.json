@@ -1,0 +1,105 @@
+{
+  "queryId": "query:08af586f6dd95e1d593ec71692ae918062678b213eaa10f4f05f741f08cff4ed",
+  "runId": "run:a2aa5e1710b60db247abb6da34e41165ba9d4007637bf0cc637c586f87e100cf",
+  "plan": {
+    "schemaVersion": "query-plan-v1",
+    "queryId": "query:08af586f6dd95e1d593ec71692ae918062678b213eaa10f4f05f741f08cff4ed",
+    "operations": [
+      "DIRECT_COAUTHORS"
+    ],
+    "researcherNames": [],
+    "researcherIds": [
+      "researcher:orcid:cfffda985bade820091700e59f466d5366135a58f7e67aeac6f79fa80793118d"
+    ],
+    "windowStartYear": 2010,
+    "windowEndYear": 2013,
+    "topics": [],
+    "venues": [],
+    "institutions": [],
+    "rankingMetric": null,
+    "graphLimit": 5,
+    "vectorLimit": 5,
+    "maxPathDepth": 2,
+    "planVersion": "services-test-plan-v1",
+    "provenance": {
+      "schemaVersion": "provenance-v1",
+      "sourceDataset": "SCHOLARCHAIN",
+      "sourceRecordId": "query:08af586f6dd95e1d593ec71692ae918062678b213eaa10f4f05f741f08cff4ed",
+      "snapshot": "2026-11-01",
+      "runId": "run:a2aa5e1710b60db247abb6da34e41165ba9d4007637bf0cc637c586f87e100cf",
+      "policyVersion": "services-test-policy-v1",
+      "modelVersion": null,
+      "promptVersion": null,
+      "derivedFrom": []
+    }
+  },
+  "stagesExecuted": [
+    {
+      "stage": "plan",
+      "latencyMillis": 3,
+      "outcome": "ok"
+    },
+    {
+      "stage": "evidence",
+      "latencyMillis": 5,
+      "outcome": "ok"
+    },
+    {
+      "stage": "audit",
+      "latencyMillis": 2,
+      "outcome": "ok"
+    }
+  ],
+  "promptVersions": [
+    "answer-synthesis-prompt-v3"
+  ],
+  "modelVersions": [
+    "test-model-v1"
+  ],
+  "metricVersions": [
+    "metrics-v1"
+  ],
+  "researcherIds": [
+    "researcher:orcid:cfffda985bade820091700e59f466d5366135a58f7e67aeac6f79fa80793118d"
+  ],
+  "evidenceIds": [
+    "evidence:4f1f7c9c752e8caa32f68d83ac0c4a750b73337ce43d4b72cabd7377cad2cad9"
+  ],
+  "scoreComponents": [
+    {
+      "evidenceId": "evidence:448e0a066045d2e84d5158d95075ebe5ee68f9f844239b6c256fc66d01645e54",
+      "evidenceType": "TEXT_CHUNK",
+      "retrievalScore": 0.5,
+      "textHash": "sha256:36f698efee0ccfdd438325e6a3c2ae002b78d014dfb0c463c0021fc15a073c4f"
+    },
+    {
+      "evidenceId": "evidence:4f1f7c9c752e8caa32f68d83ac0c4a750b73337ce43d4b72cabd7377cad2cad9",
+      "evidenceType": "COAUTHOR_EDGE",
+      "retrievalScore": null,
+      "textHash": null
+    }
+  ],
+  "counters": {
+    "inputTokens": 120,
+    "outputTokens": 40,
+    "latencyMillis": 12,
+    "evidenceItems": 2,
+    "claims": 1
+  },
+  "verification": {
+    "status": "VERIFIED",
+    "answerHash": "sha256:b8136ecce240000639200f89e1b41225005a460372b019e0074f875ecdb92b57"
+  },
+  "provenance": {
+    "schemaVersion": "provenance-v1",
+    "sourceDataset": "SCHOLARCHAIN",
+    "sourceRecordId": "query:08af586f6dd95e1d593ec71692ae918062678b213eaa10f4f05f741f08cff4ed",
+    "snapshot": "2026-11-01",
+    "runId": "run:a2aa5e1710b60db247abb6da34e41165ba9d4007637bf0cc637c586f87e100cf",
+    "policyVersion": "services-test-policy-v1",
+    "modelVersion": null,
+    "promptVersion": null,
+    "derivedFrom": []
+  },
+  "note": "hidden model reasoning is never stored or returned"
+}

@@ -1,0 +1,16 @@
+{
+  "error": {
+    "code": "UNAVAILABLE",
+    "status": 503,
+    "message": "the service is not ready",
+    "retryable": true,
+    "reason": "NOT_READY",
+    "details": {
+      "checks": {
+        "evidenceStore": "failing"
+      }
+    }
+  },
+  "requestId": "req-00000000000000000000000000000014",
+  "traceId": "trace-00000000000000000000000000000015"
+}

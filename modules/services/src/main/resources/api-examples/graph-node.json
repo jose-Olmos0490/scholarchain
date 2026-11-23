@@ -1,0 +1,26 @@
+{
+  "nodeId": "researcher:orcid:cfffda985bade820091700e59f466d5366135a58f7e67aeac6f79fa80793118d",
+  "nodeType": "Researcher",
+  "displayName": "Ada Example",
+  "orcid": null,
+  "metrics": {
+    "window": "2010-2013",
+    "publicationCount": 7,
+    "distinctCoauthorCount": 3,
+    "totalCoauthorOccurrences": 9,
+    "averageCoauthorsPerPaper": 2.5,
+    "maximumCoauthorsOnOnePaper": 4,
+    "weightedDegree": 7,
+    "componentId": "component-1",
+    "communityId": "community-1",
+    "bridgeScore": null,
+    "coreness": 2,
+    "metricVersion": "metrics-v1"
+  },
+  "provenance": {
+    "runId": "run:a2aa5e1710b60db247abb6da34e41165ba9d4007637bf0cc637c586f87e100cf"
+  },
+  "links": {
+    "neighbors": "/v1/graph/nodes/researcher:orcid:cfffda985bade820091700e59f466d5366135a58f7e67aeac6f79fa80793118d/neighbors"
+  }
+}
