@@ -688,7 +688,11 @@ final case class RetrievalConfig(
     vectorLimit: Int,
     maxPathDepth: Int,
     contextTokenBudget: Int,
-    fusionPolicyVersion: String
+    fusionPolicyVersion: String,
+    pathResultLimit: Int,
+    pathTimeoutMillis: Int,
+    evidenceMaxItems: Int,
+    coauthorPageSize: Int
 )
 
 object RetrievalConfig extends ConfigSection[RetrievalConfig]:
@@ -703,8 +707,72 @@ object RetrievalConfig extends ConfigSection[RetrievalConfig]:
       min = 1
     ),
     fusionPolicyVersion =
-      c.string("retrieval.fusionPolicyVersion", "SCHOLARCHAIN_RETRIEVAL_FUSION_POLICY_VERSION")
+      c.string("retrieval.fusionPolicyVersion", "SCHOLARCHAIN_RETRIEVAL_FUSION_POLICY_VERSION"),
+    pathResultLimit = c.int(
+      "retrieval.pathResultLimit",
+      "SCHOLARCHAIN_RETRIEVAL_PATH_RESULT_LIMIT",
+      min = 1
+    ),
+    pathTimeoutMillis = c.int(
+      "retrieval.pathTimeoutMillis",
+      "SCHOLARCHAIN_RETRIEVAL_PATH_TIMEOUT_MILLIS",
+      min = 1
+    ),
+    evidenceMaxItems = c.int(
+      "retrieval.evidenceMaxItems",
+      "SCHOLARCHAIN_RETRIEVAL_EVIDENCE_MAX_ITEMS",
+      min = 1
+    ),
+    coauthorPageSize = c.int(
+      "retrieval.coauthorPageSize",
+      "SCHOLARCHAIN_RETRIEVAL_COAUTHOR_PAGE_SIZE",
+      min = 1
+    )
   )
+
+/** Researcher-name resolver limits (Phase 9). `minConfidence` and `minMargin` are in [0, 1]. */
+final case class ResolverConfig(minConfidence: Double, minMargin: Double, maxCandidates: Int)
+
+object ResolverConfig extends ConfigSection[ResolverConfig]:
+  def read(c: ConfigCursor): ResolverConfig = ResolverConfig(
+    minConfidence =
+      c.unitInterval("rag.resolver.minConfidence", "SCHOLARCHAIN_RAG_RESOLVER_MIN_CONFIDENCE"),
+    minMargin = c.unitInterval("rag.resolver.minMargin", "SCHOLARCHAIN_RAG_RESOLVER_MIN_MARGIN"),
+    maxCandidates = c.int(
+      "rag.resolver.maxCandidates",
+      "SCHOLARCHAIN_RAG_RESOLVER_MAX_CANDIDATES",
+      min = 1
+    )
+  )
+
+/** Runtime LLM call limits. `maxRetries` may be 0 (no retry); `maxOutputTokens` is >= 1. */
+final case class RagLlmConfig(maxRetries: Int, maxOutputTokens: Int)
+
+object RagLlmConfig extends ConfigSection[RagLlmConfig]:
+  def read(c: ConfigCursor): RagLlmConfig = RagLlmConfig(
+    maxRetries = c.int("rag.llm.maxRetries", "SCHOLARCHAIN_RAG_LLM_MAX_RETRIES", min = 0),
+    maxOutputTokens =
+      c.int("rag.llm.maxOutputTokens", "SCHOLARCHAIN_RAG_LLM_MAX_OUTPUT_TOKENS", min = 1)
+  )
+
+/** The selected query-planner prompt version and plan schema version (version strings only; the
+  * prompt text and JSON schema live under `prompts/`).
+  */
+final case class PlannerConfig(promptVersion: String, schemaVersion: String)
+
+object PlannerConfig extends ConfigSection[PlannerConfig]:
+  def read(c: ConfigCursor): PlannerConfig = PlannerConfig(
+    promptVersion =
+      c.string("rag.planner.promptVersion", "SCHOLARCHAIN_RAG_PLANNER_PROMPT_VERSION"),
+    schemaVersion = c.string("rag.planner.schemaVersion", "SCHOLARCHAIN_RAG_PLANNER_SCHEMA_VERSION")
+  )
+
+/** Runtime RAG settings (Phase 9 repair). */
+final case class RagConfig(resolver: ResolverConfig, llm: RagLlmConfig, planner: PlannerConfig)
+
+object RagConfig extends ConfigSection[RagConfig]:
+  def read(c: ConfigCursor): RagConfig =
+    RagConfig(ResolverConfig.read(c), RagLlmConfig.read(c), PlannerConfig.read(c))
 
 final case class ModelConfig(
     embeddingModelId: String,
@@ -755,6 +823,7 @@ final case class ScholarChainConfig(
     bridge: BridgeConfig,
     community: CommunityConfig,
     retrieval: RetrievalConfig,
+    rag: RagConfig,
     models: ModelConfig,
     operations: OperationsConfig,
     spark: SparkJobConfig,
@@ -778,6 +847,7 @@ object ScholarChainConfig:
         bridge = BridgeConfig.read(c),
         community = CommunityConfig.read(c),
         retrieval = RetrievalConfig.read(c),
+        rag = RagConfig.read(c),
         models = ModelConfig.read(c),
         operations = OperationsConfig.read(c),
         spark = SparkJobConfig.read(c),

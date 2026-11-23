@@ -125,7 +125,7 @@ abstract class GraphReaderContract extends StorageSuite with PortGate:
 /** The whole Neptune load on fakes, plus the reader contract over the loaded graph. */
 class GraphFakeSpec extends GraphReaderContract:
   protected val limits: GraphReaderLimits =
-    GraphReaderLimits(TestEnv.settings.graphLimit, TestEnv.settings.maxPathDepth)
+    TestEnv.settings.graphReaderLimits
   private val graph = new InMemoryGraph
   private val objects = new InMemoryObjectStore
   protected val reader: GraphReader = new FakeGraphReader(graph, limits)
@@ -258,7 +258,7 @@ class GraphFakeSpec extends GraphReaderContract:
 
 /** Queries are constants; caller values only travel as parameters. */
 class CypherTemplatesSpec extends StorageSuite:
-  private val templates = new CypherTemplates(GraphReaderLimits(25, 4))
+  private val templates = new CypherTemplates(GraphReaderLimits(25, 4, 5000L))
   private val injection = "x' }) DETACH DELETE n //"
 
   test("a template's text never contains a caller value: the same text for any input") {

@@ -55,5 +55,6 @@ object GoldenCases:
     GoldenCase("load-manifest.json", loadManifest),
     GoldenCase("identity-conflict.json", identityConflict),
     GoldenCase("window-graph-summary.json", windowGraphSummary),
-    GoldenCase("researcher-window-change.json", researcherWindowChange)
+    GoldenCase("researcher-window-change.json", researcherWindowChange),
+    GoldenCase("query-audit-record.json", queryAudit)
   )

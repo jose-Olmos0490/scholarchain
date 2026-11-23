@@ -115,6 +115,19 @@ trait QuerySessions:
   /** The queryId that used `idempotencyKey`, if any. */
   def queryIdForIdempotencyKey(idempotencyKey: String): Result[Option[String]]
 
+/** Per-query audit records, stored in the `querySession` table as a distinct item type next to
+  * the session of the same query: `pk = query#<queryId>`, `sk = AUDIT#<queryId>`. Audit items
+  * never carry the table's TTL attribute: the audit trail of an answer is not disposable.
+  */
+trait QueryAuditLog:
+  /** Strict conditional create. A second append for the same queryId, identical or not, is
+    * [[StorageError.AlreadyExists]]: a query has exactly one audit record, and it is never
+    * overwritten. A record that fails its core contract is [[StorageError.InvalidRecord]]; one
+    * that would exceed the DynamoDB item size limit is [[StorageError.LimitExceeded]].
+    */
+  def append(record: QueryAuditRecord): Result[Unit]
+  def get(queryId: String): Result[Option[QueryAuditRecord]]
+
 /** Evidence items are immutable and shared; a bundle only references them.
   * Keys: item `pk = evidence#<evidenceId>, sk = ITEM`; membership `pk = query#<queryId>,
   * sk = E#<evidenceId>`; bundle header `pk = query#<queryId>, sk = BUNDLE`.

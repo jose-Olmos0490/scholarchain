@@ -96,6 +96,9 @@ class EntityLinkCacheIT extends EntityLinkCacheContract with AwsGate:
 class QuerySessionsIT extends QuerySessionsContract with AwsGate:
   protected lazy val sessions: QuerySessions = AwsIt.dynamo.querySessions
 
+class QueryAuditLogIT extends QueryAuditLogContract with AwsGate:
+  protected lazy val audit: QueryAuditLog = AwsIt.dynamo.queryAudit
+
 class EvidenceStoreIT extends EvidenceStoreContract with AwsGate:
   protected lazy val evidence: EvidenceStore = AwsIt.dynamo.evidence
 
@@ -121,7 +124,7 @@ class S3VectorsIT extends VectorIndexContract with AwsGate:
   */
 class NeptuneGraphIT extends GraphReaderContract with AwsGate:
   private def s = AwsIt.settings.toOption.get
-  protected lazy val limits: GraphReaderLimits = GraphReaderLimits(s.graphLimit, s.maxPathDepth)
+  protected lazy val limits: GraphReaderLimits = s.graphReaderLimits
   protected lazy val reader: GraphReader =
     new NeptuneGraphReader(AwsIt.clients.neptune, limits, AwsIt.retrier)
   private var loaded = false

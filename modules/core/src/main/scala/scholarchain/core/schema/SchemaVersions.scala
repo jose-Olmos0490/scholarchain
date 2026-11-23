@@ -52,6 +52,9 @@ object SchemaVersions:
   val WindowGraphSummary = "window-graph-summary-v1"
   val ResearcherWindowChange = "researcher-window-change-v1"
 
+  // Phase 9 repair: query audit record (new record type, v1; no earlier version changed).
+  val QueryAuditRecord = "query-audit-v1"
+
   /** Record type name to the set of schema versions this build accepts. */
   val supported: Map[String, Set[String]] = Map(
     "Provenance" -> Set(Provenance),
@@ -90,7 +93,8 @@ object SchemaVersions:
     "LoadManifest" -> Set(LoadManifest),
     "IdentityConflict" -> Set(IdentityConflict),
     "WindowGraphSummary" -> Set(WindowGraphSummary),
-    "ResearcherWindowChange" -> Set(ResearcherWindowChange)
+    "ResearcherWindowChange" -> Set(ResearcherWindowChange),
+    "QueryAuditRecord" -> Set(QueryAuditRecord)
   )
 
   def supportedFor(recordType: String): Set[String] = supported.getOrElse(recordType, Set.empty)

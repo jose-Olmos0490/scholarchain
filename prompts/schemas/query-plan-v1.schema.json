@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "scholarchain:query-plan-v1",
+  "title": "Fields a model may extract from a free-text collaboration question",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "operations",
+    "researcherNames",
+    "windowStartYear",
+    "windowEndYear",
+    "topics",
+    "venues",
+    "institutions",
+    "rankingMetric"
+  ],
+  "properties": {
+    "operations": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+        "type": "string",
+        "enum": [
+          "RESEARCHER_RANKING",
+          "MAXIMUM_TEAM_SIZE",
+          "DIRECT_COAUTHORS",
+          "SHORTEST_PATH",
+          "COMPONENT_LOOKUP",
+          "COMMUNITY_COMPARISON",
+          "BRIDGE_RANKING",
+          "TEMPORAL_COMPARISON",
+          "TOPIC_FILTER",
+          "VENUE_FILTER",
+          "INSTITUTION_FILTER",
+          "SEMANTIC_EXPLANATION"
+        ]
+      }
+    },
+    "researcherNames": {
+      "type": "array",
+      "maxItems": 10,
+      "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+    },
+    "windowStartYear": { "type": ["integer", "null"], "minimum": 1900, "maximum": 2100 },
+    "windowEndYear": { "type": ["integer", "null"], "minimum": 1900, "maximum": 2100 },
+    "topics": {
+      "type": "array",
+      "maxItems": 10,
+      "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+    },
+    "venues": {
+      "type": "array",
+      "maxItems": 10,
+      "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+    },
+    "institutions": {
+      "type": "array",
+      "maxItems": 10,
+      "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+    },
+    "rankingMetric": {
+      "type": ["string", "null"],
+      "enum": [
+        "PUBLICATION_COUNT",
+        "DISTINCT_COAUTHOR_COUNT",
+        "TOTAL_COAUTHOR_OCCURRENCES",
+        "AVERAGE_COAUTHORS_PER_PAPER",
+        "MAXIMUM_COAUTHORS_ON_ONE_PAPER",
+        "WEIGHTED_DEGREE",
+        "COMPONENT_SIZE",
+        "SHORTEST_PATH_LENGTH",
+        "COMMUNITY_SIZE",
+        "APPROX_BETWEENNESS",
+        "CROSS_COMMUNITY_DEGREE",
+        "PARTICIPATION_COEFFICIENT",
+        "COMMUNITIES_CONNECTED",
+        "CORENESS",
+        null
+      ]
+    }
+  }
+}

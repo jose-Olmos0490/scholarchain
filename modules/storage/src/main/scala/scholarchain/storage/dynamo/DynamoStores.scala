@@ -218,6 +218,43 @@ final class DynamoQuerySessions(items: ItemStore, table: String, ttlSeconds: Lon
       items.get(table, s"idem#$k", IdemSk).map(_.map(_("record")("queryId").str))
     }
 
+/** Maximum DynamoDB item size, 400 KB: "the maximum item size in DynamoDB is 400 KB, which
+  * includes both attribute name binary length (UTF-8 length) and attribute value lengths"
+  * (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Constraints.html).
+  */
+private[storage] object DynamoItemLimits:
+  val MaxItemBytes: Long = 400L * 1024
+
+final class DynamoQueryAuditLog(items: ItemStore, table: String) extends QueryAuditLog:
+  private def keys(queryId: String): Result[(String, String)] =
+    ItemCodec.part("queryId", queryId).map(q => (s"query#$q", s"AUDIT#$q"))
+
+  def append(record: QueryAuditRecord): Result[Unit] =
+    for
+      valid <- ItemCodec.contract(record)
+      k <- keys(valid.queryId)
+      _ <- ItemCodec.key(k._1, k._2)
+      // no expiresAt: audit records are kept
+      item = ItemCodec.item(k._1, k._2, "QueryAudit", valid)
+      bytes = ujson.write(item).getBytes(StandardCharsets.UTF_8).length.toLong
+      _ <-
+        if bytes > DynamoItemLimits.MaxItemBytes then
+          Left(StorageError.LimitExceeded("audit item bytes", DynamoItemLimits.MaxItemBytes, bytes))
+        else Right(())
+      _ <- items.putIfAbsent(table, item).left.map {
+        case _: StorageError.AlreadyExists => StorageError.AlreadyExists(k._2)
+        case other => other
+      }
+    yield ()
+
+  def get(queryId: String): Result[Option[QueryAuditRecord]] =
+    keys(queryId).flatMap { (pk, sk) =>
+      items.get(table, pk, sk).flatMap {
+        case None => Right(None)
+        case Some(i) => ItemCodec.decode[QueryAuditRecord](i).map(Some(_))
+      }
+    }
+
 final class DynamoEvidenceStore(items: ItemStore, table: String) extends EvidenceStore:
   private val EvidenceSk = "ITEM"
 
@@ -407,7 +444,8 @@ final case class DynamoPorts(
     querySessions: QuerySessions,
     evidence: EvidenceStore,
     artifacts: ArtifactRegistry,
-    metricCache: Option[ResearcherMetricCache]
+    metricCache: Option[ResearcherMetricCache],
+    queryAudit: QueryAuditLog
 )
 
 object DynamoPorts:
@@ -422,7 +460,8 @@ object DynamoPorts:
       new DynamoQuerySessions(items, tables.querySession, querySessionTtlSeconds),
       new DynamoEvidenceStore(items, tables.evidenceBundle),
       new DynamoArtifactRegistry(items, tables.artifactRegistry),
-      tables.researcherMetricCache.map(new DynamoResearcherMetricCache(items, _))
+      tables.researcherMetricCache.map(new DynamoResearcherMetricCache(items, _)),
+      new DynamoQueryAuditLog(items, tables.querySession)
     )
 
 /** Sequence-with-short-circuit over [[Result]]. */

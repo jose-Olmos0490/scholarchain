@@ -440,6 +440,28 @@ object Fixtures:
     )
   )
 
+  /** Audit record of the illustrative answer. `answerHash` is the SHA-256 of the answer summary. */
+  val queryAudit: QueryAuditRecord = QueryAuditRecord(
+    schemaVersion = SV.QueryAuditRecord,
+    queryId = queryId,
+    runId = runId,
+    planJson = upickle.default.write(queryPlan),
+    researcherIds = Vector(samueliId, rhinesId),
+    evidenceIds = Vector(edgeEvidence.evidenceId),
+    metricVersions = Vector("illustrative-coauthor-metrics-v1"),
+    promptVersions = Vector(
+      "illustrative-query-planner-prompt-v1",
+      "illustrative-answer-synthesis-prompt-v1"
+    ),
+    modelVersions = Vector("illustrative-planner-model", "illustrative-synthesis-model"),
+    inputTokens = 1200L,
+    outputTokens = 240L,
+    latencyMillis = 850L,
+    verificationResult = VerificationStatus.VERIFIED,
+    answerHash = "sha256:744bf056aeb58504d4ef99b9d86ae95943a6b65b19808748774774da5c0a074e",
+    provenance = runtimeProv
+  )
+
   // --- Phase 4 ingestion records ----------------------------------------------------------
   // The OpenAlex work W2040559498 carries the same DOI as dblp conf/dac/NewtonRMSB00
   // (datasets/samples/openalex/openalex-works-api-linked.jsonl).

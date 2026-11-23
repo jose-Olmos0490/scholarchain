@@ -95,6 +95,39 @@ final case class AnswerResponse(
     provenance: Provenance
 ) derives ReadWriter
 
+/** Audit record of one answered query (Phase 9). Stored by the storage layer in the QuerySession
+  * table under sort key `AUDIT#<queryId>`.
+  *
+  * It holds the plan as JSON text, the IDs of everything the answer cited, the versions that
+  * produced it, usage counters, the claim verification outcome and the SHA-256 of the answer text.
+  * It deliberately has no field for model reasoning or raw prompts: hidden model reasoning is
+  * never stored.
+  *
+  * @param planJson
+  *   the validated [[QueryPlan]] as JSON text
+  * @param verificationResult
+  *   overall outcome of claim verification for the answer
+  * @param answerHash
+  *   `sha256:<64 lower-case hex>` of the answer text
+  */
+final case class QueryAuditRecord(
+    schemaVersion: String,
+    queryId: String,
+    runId: String,
+    planJson: String,
+    researcherIds: Vector[String],
+    evidenceIds: Vector[String],
+    metricVersions: Vector[String],
+    promptVersions: Vector[String],
+    modelVersions: Vector[String],
+    inputTokens: Long,
+    outputTokens: Long,
+    latencyMillis: Long,
+    verificationResult: VerificationStatus,
+    answerHash: String,
+    provenance: Provenance
+) derives ReadWriter
+
 /** One input of a pipeline run.
   *
   * @param location

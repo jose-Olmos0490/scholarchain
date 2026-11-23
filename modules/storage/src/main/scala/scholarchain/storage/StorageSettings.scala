@@ -14,6 +14,7 @@ final case class StorageSettings(
     runtime: StorageRuntimeConfig,
     graphLimit: Int,
     maxPathDepth: Int,
+    pathTimeoutMillis: Int,
     embeddingModelId: String
 )
 
@@ -27,12 +28,13 @@ object StorageSettings:
     runtime = c.storageRuntime,
     graphLimit = c.retrieval.graphLimit,
     maxPathDepth = c.retrieval.maxPathDepth,
+    pathTimeoutMillis = c.retrieval.pathTimeoutMillis,
     embeddingModelId = c.models.embeddingModelId
   )
 
   /** Section that reads only the keys the storage module uses (a storage process must not need,
     * say, the Hadoop or entity-resolution settings). It reuses the core sections for buckets,
-    * Neptune, index names and storage runtime; the Region, the two retrieval bounds and the
+    * Neptune, index names and storage runtime; the Region, the three retrieval bounds and the
     * embedding model ID are read by the same keys and environment variables as the core config.
     */
   def section(environment: String): ConfigSection[StorageSettings] =
@@ -52,6 +54,11 @@ object StorageSettings:
           graphLimit = c.int("retrieval.graphLimit", "SCHOLARCHAIN_RETRIEVAL_GRAPH_LIMIT", min = 1),
           maxPathDepth =
             c.int("retrieval.maxPathDepth", "SCHOLARCHAIN_RETRIEVAL_MAX_PATH_DEPTH", min = 1),
+          pathTimeoutMillis = c.int(
+            "retrieval.pathTimeoutMillis",
+            "SCHOLARCHAIN_RETRIEVAL_PATH_TIMEOUT_MILLIS",
+            min = 1
+          ),
           embeddingModelId = c.string("models.embeddingModelId", "EMBEDDING_MODEL_ID")
         )
 
@@ -61,3 +68,9 @@ object StorageSettings:
   def load(env: Map[String, String]): Either[ConfigError, StorageSettings] =
     val name = env.get(ConfigLoader.EnvironmentVariable).map(_.trim).getOrElse("")
     ConfigLoader.loadSection(section(name), env)
+
+extension (s: StorageSettings)
+  /** The read-port bounds: graph limit, path depth and the path time-limit ceiling. */
+  def graphReaderLimits: scholarchain.storage.graph.GraphReaderLimits =
+    scholarchain.storage.graph
+      .GraphReaderLimits(s.graphLimit, s.maxPathDepth, s.pathTimeoutMillis.toLong)

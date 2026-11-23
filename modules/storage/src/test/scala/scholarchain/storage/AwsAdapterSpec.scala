@@ -143,7 +143,7 @@ class S3ObjectStoreAdapterSpec extends StorageSuite:
 /** Neptune: parameterized queries through the data API, and bulk-load requests. */
 class NeptuneAdapterSpec extends StorageSuite:
   private val policy = RetryPolicyConfig(maxAttempts = 3, baseDelayMs = 10, maxDelayMs = 100)
-  private val limits = GraphReaderLimits(TestEnv.settings.graphLimit, TestEnv.settings.maxPathDepth)
+  private val limits = TestEnv.settings.graphReaderLimits
   private val layout = ok(
     ObjectLayout.fromConfig(
       TestEnv.settings.buckets,

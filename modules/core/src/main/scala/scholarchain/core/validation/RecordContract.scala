@@ -857,6 +857,31 @@ object RecordContract extends AnalyticsContracts:
           InvalidValue(at(path, "uncertainty"), "an abstaining answer must state its uncertainty")
         )
 
+  given RecordContract[QueryAuditRecord] with
+    val recordType = "QueryAuditRecord"
+    def violations(r: QueryAuditRecord, path: String) =
+      def versions(field: String, values: Vector[String]) =
+        if values == null then Vector(InvalidValue(at(path, field), "must not be null"))
+        else
+          values.zipWithIndex.flatMap((v, i) => nonBlank(at(path, s"$field[$i]"), v)) ++
+            distinct(at(path, field), values)
+      common(path, recordType, r.schemaVersion, r.provenance) ++
+        id(at(path, "queryId"), r.queryId, IdKind.Query) ++
+        id(at(path, "runId"), r.runId, IdKind.Run) ++
+        nonBlank(at(path, "planJson"), r.planJson) ++
+        ids(at(path, "researcherIds"), r.researcherIds, IdKind.Researcher) ++
+        distinct(at(path, "researcherIds"), r.researcherIds) ++
+        ids(at(path, "evidenceIds"), r.evidenceIds, IdKind.Evidence) ++
+        distinct(at(path, "evidenceIds"), r.evidenceIds) ++
+        versions("metricVersions", r.metricVersions) ++
+        versions("promptVersions", r.promptVersions) ++
+        versions("modelVersions", r.modelVersions) ++
+        nonNegative(at(path, "inputTokens"), r.inputTokens) ++
+        nonNegative(at(path, "outputTokens"), r.outputTokens) ++
+        nonNegative(at(path, "latencyMillis"), r.latencyMillis) ++
+        notNull(at(path, "verificationResult"), r.verificationResult) ++
+        textHash(at(path, "answerHash"), r.answerHash)
+
   given RecordContract[RunManifest] with
     val recordType = "RunManifest"
     override val requiresProvenance = false

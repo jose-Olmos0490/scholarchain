@@ -51,7 +51,8 @@ class SchemaVersionSpec extends AnyFunSuite with Matchers:
       "LoadManifest" -> Set("load-manifest-v1"),
       "IdentityConflict" -> Set("identity-conflict-v1"),
       "WindowGraphSummary" -> Set("window-graph-summary-v1"),
-      "ResearcherWindowChange" -> Set("researcher-window-change-v1")
+      "ResearcherWindowChange" -> Set("researcher-window-change-v1"),
+      "QueryAuditRecord" -> Set("query-audit-v1")
     )
   }
 

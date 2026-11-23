@@ -2,9 +2,14 @@ package scholarchain.storage.aws
 
 import scala.jdk.CollectionConverters.*
 import scholarchain.core.config.LoaderParallelism
+import scholarchain.core.model.CollaborationMetric
 import scholarchain.storage.common.*
 import scholarchain.storage.graph.*
 import scholarchain.storage.objects.ObjectLayout
+import software.amazon.awssdk.core.exception.{
+  ApiCallAttemptTimeoutException,
+  ApiCallTimeoutException
+}
 import software.amazon.awssdk.services.neptunedata.NeptunedataClient
 import software.amazon.awssdk.services.neptunedata.model.*
 
@@ -73,27 +78,36 @@ final class NeptuneBulkLoader(
         case None => GraphLoadState.Failed("no overallStatus in the loader response")
     }
 
-/** Executes the named templates of [[CypherTemplates]] with bound parameters through the
-  * neptunedata `ExecuteOpenCypherQuery` API. Caller values are sent only in the `parameters`
-  * JSON document. Runtime credentials are read-only by IAM policy (Terraform), and no template
-  * contains a write clause.
+/** Runs [[GraphQuery]] values through the neptunedata `ExecuteOpenCypherQuery` API and maps the
+  * rows. Caller values are sent only in the `parameters` JSON document. A query that runs out of
+  * time (the service's `TimeLimitExceededException`, or a client-side call timeout) becomes
+  * [[StorageError.Timeout]] at once and is not retried inside the adapter: repeating a query that
+  * already ran out of time is the caller's decision. For queries without their own limit the
+  * reported `timeoutMillis` is the configured ceiling `limits.maxTimeoutMillis`.
   */
-final class NeptuneGraphReader(
+final private[aws] class NeptuneQueryRunner(
     client: NeptunedataClient,
     limits: GraphReaderLimits,
     retrier: Retrier
-) extends GraphReader:
-  private val templates = new CypherTemplates(limits)
-
-  private def run(q: GraphQuery): Result[Vector[ujson.Obj]] =
-    retrier.run(s"Neptune openCypher ${q.name}") {
-      val r = client.executeOpenCypherQuery(
-        ExecuteOpenCypherQueryRequest
-          .builder()
-          .openCypherQuery(q.text)
-          .parameters(ujson.write(ujson.Obj.from(q.parameters)))
-          .build()
-      )
+):
+  def run(q: GraphQuery): Result[Vector[ujson.Obj]] =
+    val operation = s"Neptune openCypher ${q.name}"
+    retrier.run(operation) {
+      val r =
+        try
+          client.executeOpenCypherQuery(
+            ExecuteOpenCypherQueryRequest
+              .builder()
+              .openCypherQuery(q.text)
+              .parameters(ujson.write(ujson.Obj.from(q.parameters)))
+              .build()
+          )
+        catch
+          case _: TimeLimitExceededException | _: ClientTimeoutException |
+              _: ApiCallTimeoutException | _: ApiCallAttemptTimeoutException =>
+            throw new StorageException(
+              StorageError.Timeout(operation, q.timeoutMillis.getOrElse(limits.maxTimeoutMillis))
+            )
       Docs.toJson(r.results()) match
         case ujson.Arr(rows) => rows.collect { case o: ujson.Obj => o }.toVector
         case ujson.Null => Vector.empty
@@ -105,18 +119,20 @@ final class NeptuneGraphReader(
           )
     }
 
-  private def s(o: ujson.Obj, k: String): String =
+/** Row mapping shared by the Neptune read adapters. */
+private[aws] object NeptuneRows:
+  def s(o: ujson.Obj, k: String): String =
     o.value.get(k).collect { case ujson.Str(x) => x }.getOrElse("")
-  private def os(o: ujson.Obj, k: String): Option[String] =
+  def os(o: ujson.Obj, k: String): Option[String] =
     o.value.get(k).collect { case ujson.Str(x) => x }
-  private def l(o: ujson.Obj, k: String): Long =
+  def l(o: ujson.Obj, k: String): Long =
     o.value.get(k).collect { case ujson.Num(x) => x.toLong }.getOrElse(0L)
-  private def d(o: ujson.Obj, k: String): Double =
+  def d(o: ujson.Obj, k: String): Double =
     o.value.get(k).collect { case ujson.Num(x) => x }.getOrElse(0.0)
-  private def od(o: ujson.Obj, k: String): Option[Double] =
+  def od(o: ujson.Obj, k: String): Option[Double] =
     o.value.get(k).collect { case ujson.Num(x) => x }
 
-  private def edge(o: ujson.Obj): CoauthorEdgeView = CoauthorEdgeView(
+  def edge(o: ujson.Obj): CoauthorEdgeView = CoauthorEdgeView(
     s(o, "edgeId"),
     s(o, "researcherA"),
     s(o, "researcherB"),
@@ -130,30 +146,44 @@ final class NeptuneGraphReader(
     s(o, "policyVersion")
   )
 
+  def nodeMetrics(o: ujson.Obj): Option[ResearcherNodeMetrics] = os(o, "window").map { w =>
+    ResearcherNodeMetrics(
+      w,
+      l(o, "P_r"),
+      l(o, "C_r"),
+      l(o, "T_r"),
+      d(o, "A_r"),
+      l(o, "M_r"),
+      d(o, "W_r"),
+      s(o, "componentId"),
+      os(o, "communityId"),
+      od(o, "bridgeScore"),
+      o.value.get("coreness").collect { case ujson.Num(x) => x.toInt },
+      s(o, "metricVersion")
+    )
+  }
+
+/** Executes the named templates of [[CypherTemplates]] through [[NeptuneQueryRunner]]. Runtime
+  * access is read-only by IAM policy (Terraform), and no template contains a write clause.
+  */
+final class NeptuneGraphReader(
+    client: NeptunedataClient,
+    limits: GraphReaderLimits,
+    retrier: Retrier
+) extends GraphReader:
+  import NeptuneRows.*
+  private val templates = new CypherTemplates(limits)
+  private val runner = new NeptuneQueryRunner(client, limits, retrier)
+  private def run(q: GraphQuery): Result[Vector[ujson.Obj]] = runner.run(q)
+
   def getResearcher(researcherId: String): Result[Option[ResearcherView]] =
     run(templates.getResearcher(researcherId)).map(_.headOption.map { o =>
-      val metrics = os(o, "window").map { w =>
-        ResearcherNodeMetrics(
-          w,
-          l(o, "P_r"),
-          l(o, "C_r"),
-          l(o, "T_r"),
-          d(o, "A_r"),
-          l(o, "M_r"),
-          d(o, "W_r"),
-          s(o, "componentId"),
-          os(o, "communityId"),
-          od(o, "bridgeScore"),
-          o.value.get("coreness").collect { case ujson.Num(x) => x.toInt },
-          s(o, "metricVersion")
-        )
-      }
       ResearcherView(
         s(o, "researcherId"),
         s(o, "displayName"),
         os(o, "orcid"),
         s(o, "runId"),
-        metrics
+        nodeMetrics(o)
       )
     })
 
@@ -167,6 +197,23 @@ final class NeptuneGraphReader(
       .directCoauthors(researcherId, windowStartYear, windowEndYear, limit)
       .flatMap(run)
       .map(_.map(o => CoauthorView(s(o, "coauthorId"), edge(o))))
+
+  def directCoauthorsPage(
+      researcherId: String,
+      windowStartYear: Int,
+      windowEndYear: Int,
+      page: PageRequest
+  ): Result[Page[CoauthorView]] =
+    templates
+      .directCoauthorsPage(researcherId, windowStartYear, windowEndYear, page)
+      .flatMap(run)
+      .map { rows =>
+        PageCursor.page(
+          PageCursor.scope(researcherId, windowStartYear, windowEndYear),
+          page.limit,
+          rows.map(o => CoauthorView(s(o, "coauthorId"), edge(o)))
+        )
+      }
 
   def coauthorEdge(
       researcherA: String,
@@ -184,6 +231,26 @@ final class NeptuneGraphReader(
             s"more than one stored edge for $researcherA / $researcherB in the window"
           )
         )
+    }
+
+  def paths(
+      source: String,
+      target: String,
+      windowStartYear: Int,
+      windowEndYear: Int,
+      q: PathQueryLimits
+  ): Result[Vector[EdgePath]] =
+    templates.paths(source, target, windowStartYear, windowEndYear, q).flatMap(run).map { rows =>
+      rows
+        .map { o =>
+          EdgePath(
+            o("researcherIds").arr.map(_.str).toVector,
+            o("hops").arr.map(h => edge(h.obj)).toVector
+          )
+        }
+        // the query already excludes repeated researchers; this keeps a path whose shape ever
+        // differs from that out of the evidence
+        .filter(p => p.researcherIds.distinct.size == p.researcherIds.size)
     }
 
   def shortestPath(
@@ -211,3 +278,42 @@ final class NeptuneGraphReader(
           val shortest = paths.map(_.length).min
           Some(paths.filter(_.length == shortest).minBy(_.researcherIds.mkString("\u0000")))
       }
+
+/** [[MetricReader]] over the metrics stored on Researcher nodes. */
+final class NeptuneMetricReader(
+    client: NeptunedataClient,
+    limits: GraphReaderLimits,
+    retrier: Retrier
+) extends MetricReader:
+  import NeptuneRows.*
+  private val templates = new CypherTemplates(limits)
+  private val runner = new NeptuneQueryRunner(client, limits, retrier)
+
+  def loadedWindows: Result[Vector[(Int, Int)]] =
+    runner
+      .run(templates.loadedWindows())
+      .map(_.flatMap(o => MetricRanking.parseWindow(s(o, "window"))))
+
+  def topK(
+      metric: CollaborationMetric,
+      windowStartYear: Int,
+      windowEndYear: Int,
+      filter: ResearcherFilter,
+      limit: Int
+  ): Result[Vector[RankedResearcher]] =
+    for
+      q <- templates.topK(metric, windowStartYear, windowEndYear, filter, limit)
+      rows <- runner.run(q)
+      ranked = rows.flatMap { o =>
+        nodeMetrics(o).map(m =>
+          RankedResearcher(s(o, "researcherId"), s(o, "displayName"), d(o, "metricValue"), m)
+        )
+      }
+      out <-
+        if ranked.nonEmpty then Right(ranked)
+        else
+          loadedWindows.flatMap { loaded =>
+            if loaded.contains((windowStartYear, windowEndYear)) then Right(ranked)
+            else Left(MetricRanking.windowNotLoaded(windowStartYear, windowEndYear, loaded))
+          }
+    yield out

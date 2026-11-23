@@ -272,7 +272,19 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
       "scholarchain.retry.baseDelayMs" -> "200",
       "scholarchain.retry.maxDelayMs" -> "5000",
       "scholarchain.querySession.ttlDays" -> "7",
-      "scholarchain.integration.awsProfileVariable" -> "SCHOLARCHAIN_AWS_PROFILE"
+      "scholarchain.integration.awsProfileVariable" -> "SCHOLARCHAIN_AWS_PROFILE",
+      // Phase 9 repair (human-authored work order): retrieval and rag defaults.
+      "scholarchain.retrieval.pathResultLimit" -> "10",
+      "scholarchain.retrieval.pathTimeoutMillis" -> "5000",
+      "scholarchain.retrieval.evidenceMaxItems" -> "50",
+      "scholarchain.retrieval.coauthorPageSize" -> "25",
+      "scholarchain.rag.resolver.minConfidence" -> "0.8",
+      "scholarchain.rag.resolver.minMargin" -> "0.1",
+      "scholarchain.rag.resolver.maxCandidates" -> "5",
+      "scholarchain.rag.llm.maxRetries" -> "2",
+      "scholarchain.rag.llm.maxOutputTokens" -> "1024",
+      "scholarchain.rag.planner.promptVersion" -> "query-planner-prompt-v1",
+      "scholarchain.rag.planner.schemaVersion" -> "query-plan-v1"
     ) ++ Seq("researchers", "communities", "abstracts", "paths", "topicInstitutions").flatMap { n =>
       Seq(
         s"scholarchain.vectorIndexSettings.$n.dimension" -> "1024",
@@ -690,6 +702,18 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
         "SCHOLARCHAIN_SPARK_HADOOP_RUN_ID",
         "SCHOLARCHAIN_GRAPH_PATHS_BENCHMARK_PAIRS",
         // Phase 07 repair: storage runtime keys (all optional or defaulted).
+        // Phase 9 repair: retrieval and rag keys (all defaulted).
+        "SCHOLARCHAIN_RETRIEVAL_PATH_RESULT_LIMIT",
+        "SCHOLARCHAIN_RETRIEVAL_PATH_TIMEOUT_MILLIS",
+        "SCHOLARCHAIN_RETRIEVAL_EVIDENCE_MAX_ITEMS",
+        "SCHOLARCHAIN_RETRIEVAL_COAUTHOR_PAGE_SIZE",
+        "SCHOLARCHAIN_RAG_RESOLVER_MIN_CONFIDENCE",
+        "SCHOLARCHAIN_RAG_RESOLVER_MIN_MARGIN",
+        "SCHOLARCHAIN_RAG_RESOLVER_MAX_CANDIDATES",
+        "SCHOLARCHAIN_RAG_LLM_MAX_RETRIES",
+        "SCHOLARCHAIN_RAG_LLM_MAX_OUTPUT_TOKENS",
+        "SCHOLARCHAIN_RAG_PLANNER_PROMPT_VERSION",
+        "SCHOLARCHAIN_RAG_PLANNER_SCHEMA_VERSION",
         "SCHOLARCHAIN_DDB_TABLE_PREFIX",
         "SCHOLARCHAIN_DDB_TABLE_RUN_LEDGER",
         "SCHOLARCHAIN_DDB_TABLE_ENTITY_LINK_CACHE",
@@ -747,4 +771,127 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
   test("YearWindow rejects start year > end year and accepts start == end") {
     YearWindow.of(2006, 2005).isLeft shouldBe true
     YearWindow.of(2005, 2005).map(w => (w.startYear, w.endYear)) shouldBe Right((2005, 2005))
+  }
+
+  // --- Phase 9 repair: retrieval and rag keys (defaults, env overrides, validation) ---------
+
+  private val ragEnvOverrides: Map[String, String] = Map(
+    "SCHOLARCHAIN_RETRIEVAL_PATH_RESULT_LIMIT" -> "11",
+    "SCHOLARCHAIN_RETRIEVAL_PATH_TIMEOUT_MILLIS" -> "1234",
+    "SCHOLARCHAIN_RETRIEVAL_EVIDENCE_MAX_ITEMS" -> "77",
+    "SCHOLARCHAIN_RETRIEVAL_COAUTHOR_PAGE_SIZE" -> "13",
+    "SCHOLARCHAIN_RAG_RESOLVER_MIN_CONFIDENCE" -> "0.65",
+    "SCHOLARCHAIN_RAG_RESOLVER_MIN_MARGIN" -> "0.25",
+    "SCHOLARCHAIN_RAG_RESOLVER_MAX_CANDIDATES" -> "9",
+    "SCHOLARCHAIN_RAG_LLM_MAX_RETRIES" -> "0",
+    "SCHOLARCHAIN_RAG_LLM_MAX_OUTPUT_TOKENS" -> "333",
+    "SCHOLARCHAIN_RAG_PLANNER_PROMPT_VERSION" -> "env-planner-prompt",
+    "SCHOLARCHAIN_RAG_PLANNER_SCHEMA_VERSION" -> "env-planner-schema"
+  )
+
+  private def ragBase = env("empty-test") ++ allEnvVars
+
+  test("rag defaults: with none of the 11 new variables set, the shipped defaults load") {
+    val c = loaded(ragBase)
+    c.retrieval.pathResultLimit shouldBe 10
+    c.retrieval.pathTimeoutMillis shouldBe 5000
+    c.retrieval.evidenceMaxItems shouldBe 50
+    c.retrieval.coauthorPageSize shouldBe 25
+    c.rag shouldBe RagConfig(
+      ResolverConfig(0.8, 0.1, 5),
+      RagLlmConfig(2, 1024),
+      PlannerConfig("query-planner-prompt-v1", "query-plan-v1")
+    )
+    // The pre-existing retrieval keys are unchanged by the new ones.
+    c.retrieval.graphLimit shouldBe 7
+    c.retrieval.fusionPolicyVersion shouldBe "env-fusion"
+  }
+
+  test("rag defaults are not required keys: the missing-key list does not name them") {
+    val names = invalid(env("empty-test")).missingKeys.map(_.path)
+    names.filter(n => n.startsWith("scholarchain.rag.")) shouldBe empty
+    names should not contain "scholarchain.retrieval.pathResultLimit"
+  }
+
+  test("rag env overrides: every one of the 11 variables overrides its default") {
+    val c = loaded(ragBase ++ ragEnvOverrides)
+    c.retrieval.pathResultLimit shouldBe 11
+    c.retrieval.pathTimeoutMillis shouldBe 1234
+    c.retrieval.evidenceMaxItems shouldBe 77
+    c.retrieval.coauthorPageSize shouldBe 13
+    c.rag shouldBe RagConfig(
+      ResolverConfig(0.65, 0.25, 9),
+      RagLlmConfig(0, 333),
+      PlannerConfig("env-planner-prompt", "env-planner-schema")
+    )
+  }
+
+  test("rag env overrides: the variables are bound by env-overrides.conf") {
+    val bound = ConfigLoader.boundVariables().fold(e => fail(e.message), identity)
+    ragEnvOverrides.keySet.foreach(v => bound should contain(v))
+  }
+
+  private val ragKeyForVariable: Map[String, String] = Map(
+    "SCHOLARCHAIN_RETRIEVAL_PATH_RESULT_LIMIT" -> "retrieval.pathResultLimit",
+    "SCHOLARCHAIN_RETRIEVAL_PATH_TIMEOUT_MILLIS" -> "retrieval.pathTimeoutMillis",
+    "SCHOLARCHAIN_RETRIEVAL_EVIDENCE_MAX_ITEMS" -> "retrieval.evidenceMaxItems",
+    "SCHOLARCHAIN_RETRIEVAL_COAUTHOR_PAGE_SIZE" -> "retrieval.coauthorPageSize",
+    "SCHOLARCHAIN_RAG_RESOLVER_MIN_CONFIDENCE" -> "rag.resolver.minConfidence",
+    "SCHOLARCHAIN_RAG_RESOLVER_MIN_MARGIN" -> "rag.resolver.minMargin",
+    "SCHOLARCHAIN_RAG_RESOLVER_MAX_CANDIDATES" -> "rag.resolver.maxCandidates",
+    "SCHOLARCHAIN_RAG_LLM_MAX_RETRIES" -> "rag.llm.maxRetries",
+    "SCHOLARCHAIN_RAG_LLM_MAX_OUTPUT_TOKENS" -> "rag.llm.maxOutputTokens",
+    "SCHOLARCHAIN_RAG_PLANNER_PROMPT_VERSION" -> "rag.planner.promptVersion",
+    "SCHOLARCHAIN_RAG_PLANNER_SCHEMA_VERSION" -> "rag.planner.schemaVersion"
+  )
+
+  private def rejectedRag(variable: String, value: String): Unit =
+    val err = invalid(ragBase + (variable -> value))
+    withClue(s"$variable=$value: ")(
+      err.invalidSettings.map(_.path) shouldBe Vector(
+        s"scholarchain.${ragKeyForVariable(variable)}"
+      )
+    )
+
+  test("rag validation: positive limits must be >= 1") {
+    Seq(
+      "SCHOLARCHAIN_RETRIEVAL_PATH_RESULT_LIMIT",
+      "SCHOLARCHAIN_RETRIEVAL_PATH_TIMEOUT_MILLIS",
+      "SCHOLARCHAIN_RETRIEVAL_EVIDENCE_MAX_ITEMS",
+      "SCHOLARCHAIN_RETRIEVAL_COAUTHOR_PAGE_SIZE",
+      "SCHOLARCHAIN_RAG_RESOLVER_MAX_CANDIDATES",
+      "SCHOLARCHAIN_RAG_LLM_MAX_OUTPUT_TOKENS"
+    ).foreach { v =>
+      rejectedRag(v, "0")
+      rejectedRag(v, "-3")
+      rejectedRag(v, "many")
+      loaded(ragBase + (v -> "1")) // the boundary is accepted
+    }
+  }
+
+  test("rag validation: llm.maxRetries allows 0 but rejects negatives and non-integers") {
+    loaded(ragBase + ("SCHOLARCHAIN_RAG_LLM_MAX_RETRIES" -> "0")).rag.llm.maxRetries shouldBe 0
+    rejectedRag("SCHOLARCHAIN_RAG_LLM_MAX_RETRIES", "-1")
+    rejectedRag("SCHOLARCHAIN_RAG_LLM_MAX_RETRIES", "x")
+  }
+
+  test("rag validation: resolver minConfidence and minMargin must lie in [0, 1]") {
+    Seq("SCHOLARCHAIN_RAG_RESOLVER_MIN_CONFIDENCE", "SCHOLARCHAIN_RAG_RESOLVER_MIN_MARGIN")
+      .foreach { v =>
+        rejectedRag(v, "1.01")
+        rejectedRag(v, "-0.01")
+        rejectedRag(v, "high")
+        loaded(ragBase + (v -> "0")) // both boundaries are accepted
+        loaded(ragBase + (v -> "1"))
+      }
+  }
+
+  test("rag validation: planner version strings must be non-empty") {
+    Seq(
+      "SCHOLARCHAIN_RAG_PLANNER_PROMPT_VERSION" -> "rag.planner.promptVersion",
+      "SCHOLARCHAIN_RAG_PLANNER_SCHEMA_VERSION" -> "rag.planner.schemaVersion"
+    ).foreach { (v, key) =>
+      val err = invalid(ragBase + (v -> "   "))
+      err.missingKeys.map(_.path) shouldBe Vector(s"scholarchain.$key")
+    }
   }

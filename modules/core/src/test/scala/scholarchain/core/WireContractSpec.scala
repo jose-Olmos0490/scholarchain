@@ -49,7 +49,8 @@ class WireContractSpec extends AnyFunSuite with Matchers:
     "LoadManifest",
     "IdentityConflict",
     "WindowGraphSummary",
-    "ResearcherWindowChange"
+    "ResearcherWindowChange",
+    "QueryAuditRecord"
   )
 
   test("golden cases cover every required record type plus the run manifest") {

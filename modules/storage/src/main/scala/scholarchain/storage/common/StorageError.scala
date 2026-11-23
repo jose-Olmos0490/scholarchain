@@ -6,6 +6,12 @@ package scholarchain.storage.common
 sealed trait StorageError:
   def message: String
 
+  /** Whether the same request may succeed if the caller repeats it later. The ports never retry a
+    * [[StorageError.Timeout]] themselves: a repeat of a query that already ran out of time is the
+    * caller's decision.
+    */
+  def retryable: Boolean = false
+
 object StorageError:
   /** A file's SHA-256 differs from its load-manifest entry. The load fails. */
   final case class ChecksumMismatch(path: String, expected: String, actual: String)
@@ -59,6 +65,20 @@ object StorageError:
   /** A transient failure that survived the bounded retries. */
   final case class Transient(operation: String, attempts: Int, cause: String) extends StorageError:
     def message = s"$operation failed transiently after $attempts attempt(s): $cause"
+    override def retryable: Boolean = true
+
+  /** A query ran past its time limit and was stopped. Typed so that a caller never has to parse a
+    * message to find out; retryable by the caller (with a smaller scope or a later attempt).
+    */
+  final case class Timeout(operation: String, timeoutMillis: Long) extends StorageError:
+    def message = s"$operation exceeded its time limit of $timeoutMillis ms"
+    override def retryable: Boolean = true
+
+  /** The store holds no data for the request (a metric, filter or window that was never loaded).
+    * Not a bound violation and not retryable: repeating changes nothing until data is loaded.
+    */
+  final case class Unsupported(what: String) extends StorageError:
+    def message = s"unsupported: $what"
 
   /** A failure that is not retried. */
   final case class Permanent(operation: String, cause: String) extends StorageError:

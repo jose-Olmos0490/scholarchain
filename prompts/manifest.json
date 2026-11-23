@@ -1,0 +1,17 @@
+{
+  "manifestVersion": "prompts-manifest-v1",
+  "prompts": [
+    {
+      "version": "query-planner-prompt-v1",
+      "file": "query-planner-prompt-v1.prompt.txt",
+      "sha256": "a3a166f21cfc82668a0f36e9fc84aa05f03e99c83b365706adbbb6405c564160"
+    }
+  ],
+  "schemas": [
+    {
+      "version": "query-plan-v1",
+      "file": "schemas/query-plan-v1.schema.json",
+      "sha256": "82f7e493272b470e6e36818ab9f8c9ac2b07ed7dc83d91ae0f584c3795cd33f6"
+    }
+  ]
+}

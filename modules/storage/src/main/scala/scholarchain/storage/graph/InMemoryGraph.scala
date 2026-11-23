@@ -24,6 +24,7 @@ final class InMemoryGraph:
 
   def node(id: String): Option[Node] = synchronized(nodes.get(id))
   def allRels: Vector[Rel] = synchronized(rels.values.toVector)
+  def allNodes: Vector[Node] = synchronized(nodes.values.toVector)
 
   /** Deterministic, comparable rendering of the whole state. */
   def state: Vector[String] = synchronized {
@@ -139,8 +140,17 @@ final class FakeGraphLoader(objects: ObjectStore, graph: InMemoryGraph) extends 
   def status(job: GraphLoadJob): Result[GraphLoadState] =
     synchronized(jobs.get(job.jobId).toRight(StorageError.NotFound(job.jobId)))
 
-/** Fake [[GraphReader]] with the same bounds and the same results the Cypher templates define. */
-final class FakeGraphReader(graph: InMemoryGraph, limits: GraphReaderLimits) extends GraphReader:
+/** Fake [[GraphReader]] with the same bounds and the same results the Cypher templates define.
+  *
+  * @param maxExpansions
+  *   a deterministic stand-in for a query time limit: a path search that expands more nodes than
+  *   this fails with [[StorageError.Timeout]] (the default never does)
+  */
+final class FakeGraphReader(
+    graph: InMemoryGraph,
+    limits: GraphReaderLimits,
+    maxExpansions: Long = Long.MaxValue
+) extends GraphReader:
   private val templates = new CypherTemplates(limits)
 
   private def str(p: Map[String, ujson.Value], k: String): Option[String] =
@@ -149,6 +159,9 @@ final class FakeGraphReader(graph: InMemoryGraph, limits: GraphReaderLimits) ext
     p.get(k).collect { case ujson.Num(n) => n.toLong }
   private def dbl(p: Map[String, ujson.Value], k: String): Option[Double] =
     p.get(k).collect { case ujson.Num(n) => n }
+
+  private[graph] def displayNameOf(researcherId: String): String =
+    graph.node(researcherId).flatMap(n => str(n.props, "displayName")).getOrElse("")
 
   def getResearcher(researcherId: String): Result[Option[ResearcherView]] =
     Right(graph.node(researcherId).filter(_.labels.contains("Researcher")).map { n =>
@@ -212,6 +225,71 @@ final class FakeGraphReader(graph: InMemoryGraph, limits: GraphReaderLimits) ext
         .map(r => CoauthorView(if r.start == researcherId then r.end else r.start, edgeView(r)))
         .sortBy(c => (-c.edge.jointPublicationCount, c.coauthorId))
         .take(limit)
+    }
+
+  def directCoauthorsPage(
+      researcherId: String,
+      windowStartYear: Int,
+      windowEndYear: Int,
+      page: PageRequest
+  ): Result[Page[CoauthorView]] =
+    val scope = PageCursor.scope(researcherId, windowStartYear, windowEndYear)
+    templates.directCoauthorsPage(researcherId, windowStartYear, windowEndYear, page).flatMap { q =>
+      val after = q.parameters.get("afterCoauthorId").map { id =>
+        (q.parameters("afterJointPublicationCount").num.toLong, id.str)
+      }
+      val ordered = graph
+        .relsOf(researcherId)
+        .filter(inWindow(_, windowStartYear, windowEndYear))
+        .map(r => CoauthorView(if r.start == researcherId then r.end else r.start, edgeView(r)))
+        .sortBy(c => (-c.edge.jointPublicationCount, c.coauthorId))
+      val remaining = after match
+        case None => ordered
+        case Some((n, id)) =>
+          ordered.filter(c =>
+            c.edge.jointPublicationCount < n ||
+              (c.edge.jointPublicationCount == n && c.coauthorId > id)
+          )
+      Right(PageCursor.page(scope, page.limit, remaining.take(page.limit + 1)))
+    }
+
+  def paths(
+      source: String,
+      target: String,
+      windowStartYear: Int,
+      windowEndYear: Int,
+      q: PathQueryLimits
+  ): Result[Vector[EdgePath]] =
+    templates.paths(source, target, windowStartYear, windowEndYear, q).flatMap { query =>
+      var expansions = 0L
+      var timedOut = false
+      val found = Vector.newBuilder[EdgePath]
+      def walk(at: String, nodes: Vector[String], edges: Vector[graph.Rel]): Unit =
+        if !timedOut then
+          expansions += 1
+          if expansions > maxExpansions then timedOut = true
+          else if at == target && edges.nonEmpty then found += EdgePath(nodes, edges.map(edgeView))
+          else if edges.size < q.maxDepth then
+            graph
+              .relsOf(at)
+              .filter(inWindow(_, windowStartYear, windowEndYear))
+              .foreach { r =>
+                val next = if r.start == at then r.end else r.start
+                if !nodes.contains(next) && !edges.exists(_.id == r.id) then
+                  walk(next, nodes :+ next, edges :+ r)
+              }
+      walk(source, Vector(source), Vector.empty)
+      if timedOut then
+        Left(StorageError.Timeout(query.name, query.timeoutMillis.getOrElse(q.timeoutMillis)))
+      else
+        Right(
+          found
+            .result()
+            .sortBy(p =>
+              (p.length, p.researcherIds.mkString("|"), p.edges.map(_.edgeId).mkString("|"))
+            )
+            .take(q.resultLimit)
+        )
     }
 
   def coauthorEdge(
