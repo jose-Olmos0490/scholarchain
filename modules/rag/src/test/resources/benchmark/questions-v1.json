@@ -1,0 +1,1822 @@
+{
+ "benchmarkVersion": "benchmark-v1",
+ "fixture": "World (modules/rag/src/test/scala/scholarchain/rag/agents/AgentFixture.scala)",
+ "questions": [
+  {
+   "id": "B01",
+   "category": "coauthor_breadth",
+   "question": "Who has the most distinct coauthors between 2010 and 2013?",
+   "request": {
+    "operations": [
+     "RESEARCHER_RANKING"
+    ],
+    "metric": "DISTINCT_COAUTHOR_COUNT",
+    "names": [],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "RESEARCHER_RANKING"
+   ],
+   "expectedTemplates": [
+    "topK/DISTINCT_COAUTHOR_COUNT"
+   ],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "METRIC",
+     "subject": "r3",
+     "object": null,
+     "field": "DISTINCT_COAUTHOR_COUNT",
+     "value": 45,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "DISTINCT_COAUTHOR_COUNT",
+     "value": 6,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r3",
+     "object": null,
+     "field": "RANK_BY_DISTINCT_COAUTHOR_COUNT",
+     "value": 1,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "RANK_BY_DISTINCT_COAUTHOR_COUNT",
+     "value": 2,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r4",
+     "object": null,
+     "field": "RANK_BY_DISTINCT_COAUTHOR_COUNT",
+     "value": 3,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "B02",
+   "category": "coauthor_breadth",
+   "question": "Which researchers have the highest total coauthor occurrences?",
+   "request": {
+    "operations": [
+     "RESEARCHER_RANKING"
+    ],
+    "metric": "TOTAL_COAUTHOR_OCCURRENCES",
+    "names": [],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "RESEARCHER_RANKING"
+   ],
+   "expectedTemplates": [
+    "topK/TOTAL_COAUTHOR_OCCURRENCES"
+   ],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "METRIC",
+     "subject": "r3",
+     "object": null,
+     "field": "TOTAL_COAUTHOR_OCCURRENCES",
+     "value": 60,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r3",
+     "object": null,
+     "field": "RANK_BY_TOTAL_COAUTHOR_OCCURRENCES",
+     "value": 1,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "RANK_BY_TOTAL_COAUTHOR_OCCURRENCES",
+     "value": 2,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r1",
+     "object": null,
+     "field": "RANK_BY_TOTAL_COAUTHOR_OCCURRENCES",
+     "value": 3,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "B03",
+   "category": "coauthor_breadth",
+   "question": "Who collaborates most intensely (weighted degree), as opposed to with the most distinct people?",
+   "request": {
+    "operations": [
+     "RESEARCHER_RANKING"
+    ],
+    "metric": "WEIGHTED_DEGREE",
+    "names": [],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "RESEARCHER_RANKING"
+   ],
+   "expectedTemplates": [
+    "topK/WEIGHTED_DEGREE"
+   ],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "WEIGHTED_DEGREE",
+     "value": 20.0,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "RANK_BY_WEIGHTED_DEGREE",
+     "value": 1,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r4",
+     "object": null,
+     "field": "RANK_BY_WEIGHTED_DEGREE",
+     "value": 2,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r3",
+     "object": null,
+     "field": "RANK_BY_WEIGHTED_DEGREE",
+     "value": 3,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r3",
+     "object": null,
+     "field": "WEIGHTED_DEGREE",
+     "value": 12.5,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "M01",
+   "category": "max_team_size",
+   "question": "Which paper had the largest team and who is on it?",
+   "request": {
+    "operations": [
+     "MAXIMUM_TEAM_SIZE"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "MAXIMUM_TEAM_SIZE"
+   ],
+   "expectedTemplates": [
+    "topK/MAXIMUM_COAUTHORS_ON_ONE_PAPER"
+   ],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "METRIC",
+     "subject": "r3",
+     "object": null,
+     "field": "MAXIMUM_COAUTHORS_ON_ONE_PAPER",
+     "value": 41,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r3",
+     "object": null,
+     "field": "RANK_BY_MAXIMUM_COAUTHORS_ON_ONE_PAPER",
+     "value": 1,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "RANK_BY_MAXIMUM_COAUTHORS_ON_ONE_PAPER",
+     "value": 2,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r3",
+     "object": null,
+     "field": "MAXIMUM_TEAM_WORK",
+     "value": "w900",
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "M02",
+   "category": "max_team_size",
+   "question": "Who has the largest average team size per paper?",
+   "request": {
+    "operations": [
+     "RESEARCHER_RANKING"
+    ],
+    "metric": "AVERAGE_COAUTHORS_PER_PAPER",
+    "names": [],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "RESEARCHER_RANKING"
+   ],
+   "expectedTemplates": [
+    "topK/AVERAGE_COAUTHORS_PER_PAPER"
+   ],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "METRIC",
+     "subject": "r3",
+     "object": null,
+     "field": "AVERAGE_COAUTHORS_PER_PAPER",
+     "value": 4.0,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r3",
+     "object": null,
+     "field": "RANK_BY_AVERAGE_COAUTHORS_PER_PAPER",
+     "value": 1,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "RANK_BY_AVERAGE_COAUTHORS_PER_PAPER",
+     "value": 2,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "AVERAGE_COAUTHORS_PER_PAPER",
+     "value": 2.5,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "M03",
+   "category": "max_team_size",
+   "question": "What is the largest team Lin Chen has worked in?",
+   "request": {
+    "operations": [
+     "MAXIMUM_TEAM_SIZE"
+    ],
+    "metric": null,
+    "names": [
+     "Lin Chen"
+    ],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "MAXIMUM_TEAM_SIZE"
+   ],
+   "expectedTemplates": [
+    "topK/MAXIMUM_COAUTHORS_ON_ONE_PAPER"
+   ],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "METRIC",
+     "subject": "r4",
+     "object": null,
+     "field": "MAXIMUM_COAUTHORS_ON_ONE_PAPER",
+     "value": 3,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "IDENTITY",
+     "subject": "r4",
+     "object": null,
+     "field": "CONFIDENCE",
+     "value": 0.95,
+     "window": null
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "D01",
+   "category": "direct_collaboration",
+   "question": "Who are Ada Example's direct coauthors and how often did they publish together?",
+   "request": {
+    "operations": [
+     "DIRECT_COAUTHORS"
+    ],
+    "metric": null,
+    "names": [
+     "Ada Example"
+    ],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "DIRECT_COAUTHORS"
+   ],
+   "expectedTemplates": [
+    "directCoauthorsPage/first",
+    "directCoauthorsPage/after"
+   ],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "COAUTHOR_EDGE",
+     "subject": "r1",
+     "object": "r3",
+     "field": "JOINT_PUBLICATION_COUNT",
+     "value": 3,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COAUTHOR_EDGE",
+     "subject": "r1",
+     "object": "r3",
+     "field": "FIRST_COLLABORATION_YEAR",
+     "value": 2010,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COAUTHOR_EDGE",
+     "subject": "r1",
+     "object": "r3",
+     "field": "LAST_COLLABORATION_YEAR",
+     "value": 2013,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COAUTHOR_EDGE",
+     "subject": "r1",
+     "object": "r2",
+     "field": "JOINT_PUBLICATION_COUNT",
+     "value": 2,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COAUTHOR_EDGE",
+     "subject": "r1",
+     "object": "r2",
+     "field": "LAST_COLLABORATION_YEAR",
+     "value": 2012,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COAUTHOR_EDGE",
+     "subject": "r1",
+     "object": "r3",
+     "field": "COAUTHOR",
+     "value": "e1-3",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r1",
+     "object": null,
+     "field": "DISTINCT_COAUTHOR_COUNT",
+     "value": 4,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "IDENTITY",
+     "subject": "r1",
+     "object": null,
+     "field": "CONFIDENCE",
+     "value": 0.97,
+     "window": null
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "D02",
+   "category": "direct_collaboration",
+   "question": "Which works did Lin Chen and her closest coauthor publish together?",
+   "request": {
+    "operations": [
+     "DIRECT_COAUTHORS"
+    ],
+    "metric": null,
+    "names": [
+     "Lin Chen"
+    ],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "DIRECT_COAUTHORS"
+   ],
+   "expectedTemplates": [
+    "directCoauthorsPage/first",
+    "directCoauthorsPage/after"
+   ],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "COAUTHOR_EDGE",
+     "subject": "r4",
+     "object": "r5",
+     "field": "JOINT_PUBLICATION_COUNT",
+     "value": 4,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COAUTHOR_EDGE",
+     "subject": "r4",
+     "object": "r3",
+     "field": "JOINT_PUBLICATION_COUNT",
+     "value": 2,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COAUTHOR_EDGE",
+     "subject": "r4",
+     "object": "r3",
+     "field": "FIRST_COLLABORATION_YEAR",
+     "value": 2011,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "PUBLICATION",
+     "subject": "w450",
+     "object": null,
+     "field": "SUPPORTING_WORK",
+     "value": "e4-5",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "PUBLICATION",
+     "subject": "w453",
+     "object": null,
+     "field": "SUPPORTING_WORK",
+     "value": "e4-5",
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "P01",
+   "category": "shortest_paths",
+   "question": "How are researchers 1 and 5 connected?",
+   "request": {
+    "operations": [
+     "SHORTEST_PATH"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [
+     1,
+     5
+    ],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "SHORTEST_PATH"
+   ],
+   "expectedTemplates": [
+    "paths/4"
+   ],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "PATH_HOP",
+     "subject": "r1",
+     "object": "r5",
+     "field": "PATH_LENGTH",
+     "value": 3,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "PATH_HOP",
+     "subject": "r1",
+     "object": "r3",
+     "field": "HOP",
+     "value": "e1-3",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "PATH_HOP",
+     "subject": "r3",
+     "object": "r4",
+     "field": "HOP",
+     "value": "e3-4",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "PATH_HOP",
+     "subject": "r4",
+     "object": "r5",
+     "field": "HOP",
+     "value": "e4-5",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "PATH_HOP",
+     "subject": "r4",
+     "object": "r5",
+     "field": "HOP_JOINT_PUBLICATION_COUNT",
+     "value": 4,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "P02",
+   "category": "shortest_paths",
+   "question": "How are researchers 1 and 7 connected?",
+   "request": {
+    "operations": [
+     "SHORTEST_PATH"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [
+     1,
+     7
+    ],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "SHORTEST_PATH"
+   ],
+   "expectedTemplates": [
+    "paths/4"
+   ],
+   "expectedAbstain": {
+    "code": "NO_DETERMINISTIC_EVIDENCE",
+    "candidateNumbers": []
+   },
+   "expectedFacts": [],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "P03",
+   "category": "shortest_paths",
+   "question": "What is the shortest chain between researchers 8 and 12?",
+   "request": {
+    "operations": [
+     "SHORTEST_PATH"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [
+     8,
+     12
+    ],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "SHORTEST_PATH"
+   ],
+   "expectedTemplates": [
+    "paths/4"
+   ],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "PATH_HOP",
+     "subject": "r8",
+     "object": "r12",
+     "field": "PATH_LENGTH",
+     "value": 4,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "PATH_HOP",
+     "subject": "r9",
+     "object": "r10",
+     "field": "HOP",
+     "value": "e9-10",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "PATH_HOP",
+     "subject": "r9",
+     "object": "r10",
+     "field": "HOP_JOINT_PUBLICATION_COUNT",
+     "value": 3,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "PATH_HOP",
+     "subject": "r11",
+     "object": "r12",
+     "field": "HOP_JOINT_PUBLICATION_COUNT",
+     "value": 2,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "P04",
+   "category": "shortest_paths",
+   "question": "Did researchers 5 and 6 publish together, and through which edge?",
+   "request": {
+    "operations": [
+     "SHORTEST_PATH"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [
+     5,
+     6
+    ],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "SHORTEST_PATH"
+   ],
+   "expectedTemplates": [
+    "paths/4"
+   ],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "PATH_HOP",
+     "subject": "r5",
+     "object": "r6",
+     "field": "PATH_LENGTH",
+     "value": 1,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "PATH_HOP",
+     "subject": "r5",
+     "object": "r6",
+     "field": "HOP",
+     "value": "e5-6",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "PATH_HOP",
+     "subject": "r5",
+     "object": "r6",
+     "field": "HOP_JOINT_PUBLICATION_COUNT",
+     "value": 1,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "C01",
+   "category": "components",
+   "question": "Which connected component is researcher 1 in and how large is it?",
+   "request": {
+    "operations": [
+     "COMPONENT_LOOKUP"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [
+     1
+    ],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "COMPONENT_LOOKUP"
+   ],
+   "expectedTemplates": [],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "COMMUNITY",
+     "subject": "r1",
+     "object": null,
+     "field": "COMPONENT_ID",
+     "value": "r1",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COMMUNITY",
+     "subject": "r1",
+     "object": null,
+     "field": "COMPONENT_SIZE",
+     "value": 12,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "C02",
+   "category": "components",
+   "question": "How large is the component of researcher 12?",
+   "request": {
+    "operations": [
+     "COMPONENT_LOOKUP"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [
+     12
+    ],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "COMPONENT_LOOKUP"
+   ],
+   "expectedTemplates": [],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "COMMUNITY",
+     "subject": "r12",
+     "object": null,
+     "field": "COMPONENT_ID",
+     "value": "r1",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COMMUNITY",
+     "subject": "r12",
+     "object": null,
+     "field": "COMPONENT_SIZE",
+     "value": 12,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r12",
+     "object": null,
+     "field": "COMPONENT_SIZE",
+     "value": 12,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "C03",
+   "category": "components",
+   "question": "Are researchers 3 and 9 in the same component?",
+   "request": {
+    "operations": [
+     "COMPONENT_LOOKUP"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [
+     3,
+     9
+    ],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "COMPONENT_LOOKUP"
+   ],
+   "expectedTemplates": [],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "COMMUNITY",
+     "subject": "r3",
+     "object": null,
+     "field": "COMPONENT_ID",
+     "value": "r1",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COMMUNITY",
+     "subject": "r9",
+     "object": null,
+     "field": "COMPONENT_ID",
+     "value": "r1",
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "K01",
+   "category": "communities",
+   "question": "Are researchers 2 and 8 in the same community?",
+   "request": {
+    "operations": [
+     "COMMUNITY_COMPARISON"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [
+     2,
+     8
+    ],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "COMMUNITY_COMPARISON"
+   ],
+   "expectedTemplates": [],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "COMMUNITY",
+     "subject": "r2",
+     "object": null,
+     "field": "COMMUNITY_ID",
+     "value": "r1",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COMMUNITY",
+     "subject": "r8",
+     "object": null,
+     "field": "COMMUNITY_ID",
+     "value": "r7",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COMMUNITY",
+     "subject": "r2",
+     "object": null,
+     "field": "COMMUNITY_SIZE",
+     "value": 6,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COMMUNITY",
+     "subject": "r8",
+     "object": null,
+     "field": "COMMUNITY_SIZE",
+     "value": 6,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "K02",
+   "category": "communities",
+   "question": "Do Ada Example and Lin Chen belong to one community?",
+   "request": {
+    "operations": [
+     "COMMUNITY_COMPARISON"
+    ],
+    "metric": null,
+    "names": [
+     "Ada Example",
+     "Lin Chen"
+    ],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "COMMUNITY_COMPARISON"
+   ],
+   "expectedTemplates": [],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "COMMUNITY",
+     "subject": "r1",
+     "object": null,
+     "field": "COMMUNITY_ID",
+     "value": "r1",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COMMUNITY",
+     "subject": "r4",
+     "object": null,
+     "field": "COMMUNITY_ID",
+     "value": "r1",
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COMMUNITY",
+     "subject": "r4",
+     "object": null,
+     "field": "COMMUNITY_SIZE",
+     "value": 6,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "G01",
+   "category": "bridges",
+   "question": "Is researcher 6 a bridge between communities, and how does that differ from how many people they work with?",
+   "request": {
+    "operations": [
+     "COMMUNITY_COMPARISON"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [
+     6
+    ],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "COMMUNITY_COMPARISON"
+   ],
+   "expectedTemplates": [],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "BRIDGE",
+     "subject": "r6",
+     "object": null,
+     "field": "CROSS_COMMUNITY_DEGREE",
+     "value": 1,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "BRIDGE",
+     "subject": "r6",
+     "object": null,
+     "field": "CROSS_COMMUNITY_EDGE_COUNT",
+     "value": 1,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "BRIDGE",
+     "subject": "r6",
+     "object": null,
+     "field": "COMMUNITIES_CONNECTED",
+     "value": 1,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r6",
+     "object": null,
+     "field": "DISTINCT_COAUTHOR_COUNT",
+     "value": 4,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "COMMUNITY",
+     "subject": "r6",
+     "object": null,
+     "field": "COMMUNITY_ID",
+     "value": "r1",
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "G02",
+   "category": "bridges",
+   "question": "Rank researchers by their bridge score.",
+   "request": {
+    "operations": [
+     "BRIDGE_RANKING"
+    ],
+    "metric": "CROSS_COMMUNITY_DEGREE",
+    "names": [],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "BRIDGE_RANKING"
+   ],
+   "expectedTemplates": [
+    "topK/CROSS_COMMUNITY_DEGREE"
+   ],
+   "expectedAbstain": {
+    "code": "NO_DETERMINISTIC_EVIDENCE",
+    "candidateNumbers": []
+   },
+   "expectedFacts": [],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "G03",
+   "category": "bridges",
+   "question": "Is researcher 5 a bridge?",
+   "request": {
+    "operations": [
+     "COMMUNITY_COMPARISON"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [
+     5
+    ],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "COMMUNITY_COMPARISON"
+   ],
+   "expectedTemplates": [],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "BRIDGE",
+     "subject": "r5",
+     "object": null,
+     "field": "CROSS_COMMUNITY_EDGE_COUNT",
+     "value": 1,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "BRIDGE",
+     "subject": "r5",
+     "object": null,
+     "field": "COMMUNITIES_CONNECTED",
+     "value": 1,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "DISTINCT_COAUTHOR_COUNT",
+     "value": 6,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [
+    {
+     "kind": "BRIDGE",
+     "subject": "r5",
+     "field": "CROSS_COMMUNITY_DEGREE"
+    },
+    {
+     "kind": "BRIDGE",
+     "subject": "r5",
+     "field": "APPROX_BETWEENNESS"
+    }
+   ],
+   "expectedSemantic": null
+  },
+  {
+   "id": "T01",
+   "category": "temporal_change",
+   "question": "How did researcher 1's collaboration change over time?",
+   "request": {
+    "operations": [
+     "TEMPORAL_COMPARISON"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [
+     1
+    ],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "TEMPORAL_COMPARISON"
+   ],
+   "expectedTemplates": [],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "METRIC",
+     "subject": "r1",
+     "object": null,
+     "field": "PUBLICATION_COUNT",
+     "value": 10,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r1",
+     "object": null,
+     "field": "DISTINCT_COAUTHOR_COUNT",
+     "value": 4,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r1",
+     "object": null,
+     "field": "WEIGHTED_DEGREE",
+     "value": 8.0,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "T02",
+   "category": "temporal_change",
+   "question": "How did researcher 5's weighted degree develop?",
+   "request": {
+    "operations": [
+     "TEMPORAL_COMPARISON"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [
+     5
+    ],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "TEMPORAL_COMPARISON"
+   ],
+   "expectedTemplates": [],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "WEIGHTED_DEGREE",
+     "value": 20.0,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "PUBLICATION_COUNT",
+     "value": 12,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "CORENESS",
+     "value": 2,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "T03",
+   "category": "temporal_change",
+   "question": "Who had the most publications between 2006 and 2009?",
+   "request": {
+    "operations": [
+     "RESEARCHER_RANKING"
+    ],
+    "metric": "PUBLICATION_COUNT",
+    "names": [],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2006,
+     2009
+    ]
+   },
+   "expectedOperations": [
+    "RESEARCHER_RANKING"
+   ],
+   "expectedTemplates": [
+    "topK/PUBLICATION_COUNT"
+   ],
+   "expectedAbstain": {
+    "code": "NO_DETERMINISTIC_EVIDENCE",
+    "candidateNumbers": []
+   },
+   "expectedFacts": [],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "F01",
+   "category": "topic_filters",
+   "question": "Who has the highest weighted degree on topic 1?",
+   "request": {
+    "operations": [
+     "RESEARCHER_RANKING",
+     "TOPIC_FILTER"
+    ],
+    "metric": "WEIGHTED_DEGREE",
+    "names": [],
+    "researcherNumbers": [],
+    "topics": [
+     "topic1"
+    ],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "RESEARCHER_RANKING",
+    "TOPIC_FILTER"
+   ],
+   "expectedTemplates": [
+    "topK/WEIGHTED_DEGREE",
+    "topK/WEIGHTED_DEGREE/topics"
+   ],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "TOPIC_RANK_BY_WEIGHTED_DEGREE",
+     "value": 1,
+     "window": [
+      2010,
+      2013
+     ]
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r5",
+     "object": null,
+     "field": "WEIGHTED_DEGREE",
+     "value": 20.0,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "F02",
+   "category": "topic_filters",
+   "question": "Who has the most publications on graph mining?",
+   "request": {
+    "operations": [
+     "RESEARCHER_RANKING",
+     "TOPIC_FILTER"
+    ],
+    "metric": "PUBLICATION_COUNT",
+    "names": [],
+    "researcherNumbers": [],
+    "topics": [
+     "graph mining"
+    ],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "RESEARCHER_RANKING",
+    "TOPIC_FILTER"
+   ],
+   "expectedTemplates": [
+    "topK/PUBLICATION_COUNT",
+    "topK/PUBLICATION_COUNT/topics"
+   ],
+   "expectedAbstain": {
+    "code": "NO_DETERMINISTIC_EVIDENCE",
+    "candidateNumbers": []
+   },
+   "expectedFacts": [],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "A01",
+   "category": "ambiguous_identity",
+   "question": "Who does Wei Zhang work with?",
+   "request": {
+    "operations": [
+     "DIRECT_COAUTHORS"
+    ],
+    "metric": null,
+    "names": [
+     "Wei Zhang"
+    ],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "DIRECT_COAUTHORS"
+   ],
+   "expectedTemplates": [
+    "directCoauthorsPage/first",
+    "directCoauthorsPage/after"
+   ],
+   "expectedAbstain": {
+    "code": "AMBIGUOUS_RESEARCHER",
+    "candidateNumbers": [
+     2,
+     8
+    ]
+   },
+   "expectedFacts": [],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "A02",
+   "category": "ambiguous_identity",
+   "question": "Who does Sam Low work with?",
+   "request": {
+    "operations": [
+     "DIRECT_COAUTHORS"
+    ],
+    "metric": null,
+    "names": [
+     "Sam Low"
+    ],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "DIRECT_COAUTHORS"
+   ],
+   "expectedTemplates": [
+    "directCoauthorsPage/first",
+    "directCoauthorsPage/after"
+   ],
+   "expectedAbstain": {
+    "code": "AMBIGUOUS_RESEARCHER",
+    "candidateNumbers": [
+     5
+    ]
+   },
+   "expectedFacts": [],
+   "expectedAbsent": [],
+   "expectedSemantic": null
+  },
+  {
+   "id": "E01",
+   "category": "evidence",
+   "question": "What is Ada Example's research about?",
+   "request": {
+    "operations": [
+     "SEMANTIC_EXPLANATION"
+    ],
+    "metric": null,
+    "names": [
+     "Ada Example"
+    ],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": [
+     2010,
+     2013
+    ]
+   },
+   "expectedOperations": [
+    "SEMANTIC_EXPLANATION"
+   ],
+   "expectedTemplates": [],
+   "expectedAbstain": null,
+   "expectedFacts": [
+    {
+     "kind": "IDENTITY",
+     "subject": "r1",
+     "object": null,
+     "field": "NAME",
+     "value": "Ada Example",
+     "window": null
+    },
+    {
+     "kind": "METRIC",
+     "subject": "r1",
+     "object": null,
+     "field": "PUBLICATION_COUNT",
+     "value": 10,
+     "window": [
+      2010,
+      2013
+     ]
+    }
+   ],
+   "expectedAbsent": [],
+   "expectedSemantic": {
+    "firstEntityNumber": 1,
+    "documentType": "researcher-profile"
+   }
+  },
+  {
+   "id": "E02",
+   "category": "evidence",
+   "question": "Which community works on stream processing?",
+   "request": {
+    "operations": [
+     "SEMANTIC_EXPLANATION"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": null
+   },
+   "expectedOperations": [
+    "SEMANTIC_EXPLANATION"
+   ],
+   "expectedTemplates": [],
+   "expectedAbstain": null,
+   "expectedFacts": [],
+   "expectedAbsent": [],
+   "expectedSemantic": {
+    "firstEntityNumber": 7,
+    "documentType": "collaboration-community"
+   }
+  },
+  {
+   "id": "E03",
+   "category": "evidence",
+   "question": "Who bridges the two communities?",
+   "request": {
+    "operations": [
+     "SEMANTIC_EXPLANATION"
+    ],
+    "metric": null,
+    "names": [],
+    "researcherNumbers": [],
+    "topics": [],
+    "window": null
+   },
+   "expectedOperations": [
+    "SEMANTIC_EXPLANATION"
+   ],
+   "expectedTemplates": [],
+   "expectedAbstain": null,
+   "expectedFacts": [],
+   "expectedAbsent": [],
+   "expectedSemantic": {
+    "firstEntityNumber": 6,
+    "documentType": "researcher-profile"
+   }
+  }
+ ]
+}

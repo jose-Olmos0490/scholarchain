@@ -151,6 +151,10 @@ lazy val sparkAnalytics = (project in file("modules/spark"))
   .dependsOn(core)
   .settings(commonSettings, clusterJobSettings)
   .settings(
+    // Explicit heap for the forked Spark test JVM. Sized from `free -g` on the
+    // dev host (7 GiB total, ~6 GiB available): 3 GiB here leaves room for sbt
+    // itself. The JVM default (1/4 of RAM, ~1.8 GiB) caused broadcast OOMs.
+    Test / javaOptions ++= Seq("-Xms1g", "-Xmx3g"),
     name := "spark-analytics",
     libraryDependencies ++= Dependencies.sparkAnalytics
   )
@@ -248,10 +252,16 @@ lazy val root = (project in file("."))
     }
   )
 
+// Run at most one forked test JVM at a time across all projects, so the Spark
+// test heap never competes with sibling modules' forked test JVMs.
+Global / concurrentRestrictions += Tags.limit(Tags.ForkedTestGroup, 1)
+
 addCommandAlias("fmt", "; scalafmtAll; scalafmtSbt")
 addCommandAlias(
   "check",
-  "; scalafmtCheckAll; scalafmtSbtCheck; Test/compile; test; markTestRun"
+  // markTestRun itself depends on Test/test of every aggregated project, so a
+  // separate `test` step would run the whole suite twice.
+  "; scalafmtCheckAll; scalafmtSbtCheck; Test/compile; markTestRun"
 )
 addCommandAlias("packageJobs", "; hadoop/assembly; sparkAnalytics/assembly")
 addCommandAlias("dockerLocal", "; services/Docker/publishLocal")

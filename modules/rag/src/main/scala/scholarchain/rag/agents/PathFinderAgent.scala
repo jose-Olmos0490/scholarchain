@@ -33,6 +33,8 @@ final case class FoundPath(researcherIds: Vector[String], hops: Vector[PathHopRe
   *
   * @param droppedPaths
   *   paths the store returned that were discarded because a hop had no supporting work
+  * @param depthCapped
+  *   the requested depth was above the configured depth and was lowered to it
   */
 final case class PathReport(
     source: String,
@@ -43,7 +45,8 @@ final case class PathReport(
     resultLimit: Int,
     timeoutMillis: Long,
     paths: Vector[FoundPath],
-    droppedPaths: Int
+    droppedPaths: Int,
+    depthCapped: Boolean = false
 )
 
 /** Bounded paths with supporting works.
@@ -89,7 +92,8 @@ final class PathFinderAgent(
             retrieval.pathResultLimit,
             retrieval.pathTimeoutMillis.toLong,
             kept,
-            converted.size - kept.size
+            converted.size - kept.size,
+            requestedDepth.exists(_ > depth)
           )
         }
 

@@ -30,6 +30,14 @@ object StageFailure:
   final case class Rejected(code: String, detail: String) extends StageFailure:
     val retryable = false
 
+  /** The query ID already has an audit record that describes a different answer. A replay must
+    * not return an answer that the audit record does not describe; a service maps this to a
+    * conflict (HTTP 409).
+    */
+  final case class IdempotencyConflict(detail: String) extends StageFailure:
+    val code = "IDEMPOTENCY_CONFLICT"
+    val retryable = false
+
   final case class NotFound(detail: String) extends StageFailure:
     val code = "NOT_FOUND"
     val retryable = false

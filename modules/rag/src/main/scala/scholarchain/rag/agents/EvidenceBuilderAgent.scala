@@ -315,7 +315,10 @@ final class EvidenceBuilderAgent(retrieval: RetrievalConfig, snapshot: String):
             p.hops.map(_.edgeId),
             s"store:graph/path/${r.source}/${r.target}/w#${win(r.windowStartYear, r.windowEndYear)}",
             s"path of length ${p.length} from ${r.source} to ${r.target} window " +
-              s"${win(r.windowStartYear, r.windowEndYear)}: ${hops.mkString("; ")}",
+              s"${win(r.windowStartYear, r.windowEndYear)}: ${hops.mkString("; ")} " +
+              s"| query depthLimit=${r.depthLimit} resultLimit=${r.resultLimit} " +
+              s"pathsReturned=${r.paths.size} droppedPaths=${r.droppedPaths} " +
+              s"depthCapped=${r.depthCapped}",
             Some(prov),
             graphPath = Some(p.researcherIds)
           )

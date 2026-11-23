@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "scholarchain:answer-synthesis-v2",
+  "title": "A synthesized answer: the assertions to present, in order, and optional interpretation templates. The model writes no text.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "claims"
+  ],
+  "properties": {
+    "claims": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "evidenceIds",
+          "assertions",
+          "interpretation"
+        ],
+        "properties": {
+          "evidenceIds": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 20,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          "assertions": {
+            "type": "array",
+            "maxItems": 10,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "subjectId",
+                "objectId",
+                "field",
+                "value",
+                "window"
+              ],
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "METRIC",
+                    "COAUTHOR_EDGE",
+                    "PATH_HOP",
+                    "COMMUNITY",
+                    "BRIDGE",
+                    "IDENTITY",
+                    "PUBLICATION",
+                    "WINDOW"
+                  ]
+                },
+                "subjectId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "objectId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 200
+                },
+                "field": {
+                  "type": "string",
+                  "enum": [
+                    "ANALYSIS_WINDOW",
+                    "APPROX_BETWEENNESS",
+                    "AVERAGE_COAUTHORS_PER_PAPER",
+                    "COAUTHOR",
+                    "COMMUNITIES_CONNECTED",
+                    "COMMUNITY_ID",
+                    "COMMUNITY_SIZE",
+                    "COMPONENT_ID",
+                    "COMPONENT_SIZE",
+                    "CONFIDENCE",
+                    "CORENESS",
+                    "CROSS_COMMUNITY_DEGREE",
+                    "CROSS_COMMUNITY_EDGE_COUNT",
+                    "DESCRIBED_IN_CONTEXT",
+                    "DISTINCT_COAUTHOR_COUNT",
+                    "FIRST_COLLABORATION_YEAR",
+                    "HOP",
+                    "HOP_JOINT_PUBLICATION_COUNT",
+                    "JOINT_PUBLICATION_COUNT",
+                    "LAST_COLLABORATION_YEAR",
+                    "MAXIMUM_COAUTHORS_ON_ONE_PAPER",
+                    "MAXIMUM_TEAM_WORK",
+                    "NAME",
+                    "PARTICIPATION_COEFFICIENT",
+                    "PATH_LENGTH",
+                    "PATH_WITHIN_HOPS",
+                    "PUBLICATION_COUNT",
+                    "RANK_BY_APPROX_BETWEENNESS",
+                    "RANK_BY_AVERAGE_COAUTHORS_PER_PAPER",
+                    "RANK_BY_COMMUNITIES_CONNECTED",
+                    "RANK_BY_COMMUNITY_SIZE",
+                    "RANK_BY_COMPONENT_SIZE",
+                    "RANK_BY_CORENESS",
+                    "RANK_BY_CROSS_COMMUNITY_DEGREE",
+                    "RANK_BY_DISTINCT_COAUTHOR_COUNT",
+                    "RANK_BY_MAXIMUM_COAUTHORS_ON_ONE_PAPER",
+                    "RANK_BY_PARTICIPATION_COEFFICIENT",
+                    "RANK_BY_PUBLICATION_COUNT",
+                    "RANK_BY_SHORTEST_PATH_LENGTH",
+                    "RANK_BY_TOTAL_COAUTHOR_OCCURRENCES",
+                    "RANK_BY_WEIGHTED_DEGREE",
+                    "SOURCE_ID",
+                    "SUPPORTING_WORK",
+                    "TOPIC_RANK_BY_APPROX_BETWEENNESS",
+                    "TOPIC_RANK_BY_AVERAGE_COAUTHORS_PER_PAPER",
+                    "TOPIC_RANK_BY_COMMUNITIES_CONNECTED",
+                    "TOPIC_RANK_BY_COMMUNITY_SIZE",
+                    "TOPIC_RANK_BY_COMPONENT_SIZE",
+                    "TOPIC_RANK_BY_CORENESS",
+                    "TOPIC_RANK_BY_CROSS_COMMUNITY_DEGREE",
+                    "TOPIC_RANK_BY_DISTINCT_COAUTHOR_COUNT",
+                    "TOPIC_RANK_BY_MAXIMUM_COAUTHORS_ON_ONE_PAPER",
+                    "TOPIC_RANK_BY_PARTICIPATION_COEFFICIENT",
+                    "TOPIC_RANK_BY_PUBLICATION_COUNT",
+                    "TOPIC_RANK_BY_SHORTEST_PATH_LENGTH",
+                    "TOPIC_RANK_BY_TOTAL_COAUTHOR_OCCURRENCES",
+                    "TOPIC_RANK_BY_WEIGHTED_DEGREE",
+                    "TOTAL_COAUTHOR_OCCURRENCES",
+                    "WEIGHTED_DEGREE"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "number",
+                    "null"
+                  ],
+                  "maxLength": 200
+                },
+                "window": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "additionalProperties": false,
+                  "required": [
+                    "start",
+                    "end"
+                  ],
+                  "properties": {
+                    "start": {
+                      "type": [
+                        "integer"
+                      ],
+                      "minimum": 1900,
+                      "maximum": 2100
+                    },
+                    "end": {
+                      "type": [
+                        "integer"
+                      ],
+                      "minimum": 1900,
+                      "maximum": 2100
+                    }
+                  }
+                }
+              }
+            },
+            "minItems": 1
+          },
+          "interpretation": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "BREADTH_IS_NOT_INTENSITY",
+              "BRIDGE_MEASURE_IS_NARROW",
+              "CONNECTIVITY_IS_STRUCTURAL",
+              "EDGE_COUNT_IS_PAIR_STRENGTH",
+              "IDENTITY_CONFIDENCE_IS_NOT_CERTAINTY",
+              "INTENSITY_IS_NOT_BREADTH",
+              "TEAM_SIZE_IS_NOT_BREADTH",
+              null
+            ]
+          }
+        }
+      }
+    }
+  }
+}

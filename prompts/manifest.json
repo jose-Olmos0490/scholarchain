@@ -5,6 +5,21 @@
       "version": "query-planner-prompt-v1",
       "file": "query-planner-prompt-v1.prompt.txt",
       "sha256": "a3a166f21cfc82668a0f36e9fc84aa05f03e99c83b365706adbbb6405c564160"
+    },
+    {
+      "version": "answer-synthesis-prompt-v3",
+      "file": "answer-synthesis-prompt-v3.prompt.txt",
+      "sha256": "fbb599a67318385933e0e54941784b305e2e9452e3836ebfe935e46fec704d9a"
+    },
+    {
+      "version": "answer-synthesis-prompt-v2",
+      "file": "answer-synthesis-prompt-v2.prompt.txt",
+      "sha256": "65a9e1258dbecac2e865b8625ef898bb9ae6db234231b11dea54b99066f8088c"
+    },
+    {
+      "version": "answer-synthesis-prompt-v1",
+      "file": "answer-synthesis-prompt-v1.prompt.txt",
+      "sha256": "14927e09101f2e780dd6a381366c2abee09a0081250869f0d9f05a3898c38526"
     }
   ],
   "schemas": [
@@ -12,6 +27,16 @@
       "version": "query-plan-v1",
       "file": "schemas/query-plan-v1.schema.json",
       "sha256": "82f7e493272b470e6e36818ab9f8c9ac2b07ed7dc83d91ae0f584c3795cd33f6"
+    },
+    {
+      "version": "answer-synthesis-v1",
+      "file": "schemas/answer-synthesis-v1.schema.json",
+      "sha256": "3c27c926d26983cad29869a0280c1fb36dea7f9e9beb8e8532c09f7563bd7d54"
+    },
+    {
+      "version": "answer-synthesis-v2",
+      "file": "schemas/answer-synthesis-v2.schema.json",
+      "sha256": "a88fd80b5ef9fa3cf5254bd79cf8342c9da1c52e3c063c056d4b939da7fb7f41"
     }
   ]
 }

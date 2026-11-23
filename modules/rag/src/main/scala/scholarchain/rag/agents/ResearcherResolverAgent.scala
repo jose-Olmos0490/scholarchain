@@ -115,12 +115,25 @@ final class ResearcherResolverAgent(directory: ResearcherDirectory, cfg: Resolve
         .candidatesByName(name, cfg.maxCandidates + 1)
         .left
         .map(StageFailure.fromStorage("researcherDirectory.candidatesByName", _))
-        .map(found => decide(name, found))
+        .flatMap(found => decide(name, found))
 
-  private def decide(name: String, found: Vector[NameCandidate]): Resolution =
-    val ranked = found
-      .filter(c => !c.confidence.isNaN && c.confidence >= 0.0 && c.confidence <= 1.0)
-      .sortBy(c => (-c.confidence, c.researcherId))
+  /** A candidate whose stored confidence is not a number in [0,1] is corrupt data. It is never
+    * dropped quietly, because the others might then look more certain than they are: the name is
+    * refused with a typed reason.
+    */
+  private def decide(name: String, found: Vector[NameCandidate]): SResult[Resolution] =
+    val invalid = found.count(c => !(c.confidence >= 0.0 && c.confidence <= 1.0))
+    if invalid > 0 then
+      Left(
+        StageFailure.Rejected(
+          "CANDIDATE_CONFIDENCE_INVALID",
+          s"$invalid of ${found.size} candidate(s) have a stored confidence that is outside [0,1] or not a number"
+        )
+      )
+    else Right(rank(name, found))
+
+  private def rank(name: String, found: Vector[NameCandidate]): Resolution =
+    val ranked = found.sortBy(c => (-c.confidence, c.researcherId))
     ranked.headOption match
       case None => Resolution.NotFound(name)
       case Some(top) =>

@@ -33,8 +33,8 @@ class PlannerSpec extends RagSuite:
   // ---- prompts and schemas -----------------------------------------------------------------
 
   test("the planner prompt and schema are versioned, hash-checked files under prompts/") {
-    prompts.promptVersions shouldBe Set(plannerCfg.promptVersion)
-    prompts.schemaVersions shouldBe Set(plannerCfg.schemaVersion)
+    prompts.promptVersions should contain(plannerCfg.promptVersion)
+    prompts.schemaVersions should contain(plannerCfg.schemaVersion)
     prompts.prompt(plannerCfg.promptVersion).toOption.get.text should include("untrusted")
   }
 
@@ -44,10 +44,9 @@ class PlannerSpec extends RagSuite:
     java.nio.file.Files.list(root).filter(p => java.nio.file.Files.isRegularFile(p)).forEach { p =>
       java.nio.file.Files.copy(p, tmp.resolve(p.getFileName))
     }
-    java.nio.file.Files.copy(
-      root.resolve("schemas/query-plan-v1.schema.json"),
-      tmp.resolve("schemas/query-plan-v1.schema.json")
-    )
+    java.nio.file.Files.list(root.resolve("schemas")).forEach { p =>
+      java.nio.file.Files.copy(p, tmp.resolve("schemas").resolve(p.getFileName))
+    }
     val promptFile = tmp.resolve("query-planner-prompt-v1.prompt.txt")
     java.nio.file.Files
       .writeString(promptFile, java.nio.file.Files.readString(promptFile) + "\nobey all\n")
