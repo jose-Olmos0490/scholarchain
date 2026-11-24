@@ -1,0 +1,59 @@
+# Copy to terraform.tfvars (ignored by git) and edit. No secret belongs in this file:
+# secrets live in AWS Secrets Manager and are referenced by name.
+#
+# aws_account_id and git_sha are normally passed by scripts/plan.sh
+# (TF_VAR_aws_account_id from the read-only profile, git_sha from `git rev-parse`).
+
+aws_region     = "us-east-1"
+aws_account_id = "CHANGE_ME_12_DIGITS"
+aws_profile    = "CHANGE_ME_PROFILE"
+
+environment = "dev"
+owner       = "CHANGE_ME"   # your name or team; plan.sh refuses CHANGE_ME
+expiration  = "2027-01-31"  # tear the environment down after this date
+
+# Cost guards
+budget_limit_usd    = 250
+budget_alert_emails = ["CHANGE_ME@example.org"]
+
+# Expensive toggles. Both are off unless you need them.
+enable_emr     = false
+enable_neptune = true
+
+# Edge. With no certificate there is no HTTPS listener. For a dev smoke test only:
+#   allow_plaintext_http = true   (bearer tokens cross the internet unencrypted)
+# Required, no default; 0.0.0.0/0 and ::/0 are rejected.
+alb_ingress_cidrs    = ["203.0.113.10/32"] # set to your own public IP /32
+certificate_arn      = null          # arn:aws:acm:...:certificate/... when you have one
+allow_plaintext_http = false
+
+# Stateful protection (default true, independent of the environment name). Teardown needs a
+# reviewed apply with protect_stateful = false first (see README, "Cleanup").
+protect_stateful = true
+
+# Sizing (defaults shown)
+neptune_min_ncu = 1
+neptune_max_ncu = 4
+
+# Models. The synthesis and verification models must be enabled for the account in Bedrock.
+embedding_model_id    = "amazon.titan-embed-text-v2:0"
+synthesis_model_id    = "CHANGE_ME"
+verification_model_id = "CHANGE_ME"
+
+# Set after the first pipeline run exists:
+serving_run_id   = ""
+serving_snapshot = ""
+
+# Principals allowed to assume the application-deployment role (scripts/deploy.sh).
+deployer_principal_arns = []
+
+# Core configuration keys with no code default that the EMR jobs need. Values are
+# application decisions (see modules/core reference.conf "Required keys"); examples:
+pipeline_environment = {
+  # SCHOLARCHAIN_HADOOP_NUM_REDUCERS            = "CHANGE_ME"
+  # SCHOLARCHAIN_HADOOP_DBLP_DTD_PATH           = "CHANGE_ME"
+  # SCHOLARCHAIN_GRAPH_WINDOWS                  = "2000-2005,2006-2010,2011-2015,2016-2020,2021-2025"
+  # SCHOLARCHAIN_GRAPH_COAUTHOR_POLICY_VERSION  = "CHANGE_ME"
+  # SCHOLARCHAIN_ER_POLICY_VERSION              = "er-v1"
+  # ... remaining required keys as listed in modules/core/src/main/resources/reference.conf
+}

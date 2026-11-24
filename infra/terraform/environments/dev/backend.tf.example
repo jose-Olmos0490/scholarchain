@@ -1,0 +1,29 @@
+# Remote state for a persistent environment. NOT active in dev.
+#
+# The dev environment uses LOCAL state for the course. That is a documented
+# limitation: local state has no locking across machines, no versioned history and
+# no encryption beyond the disk, and a lost laptop is a lost state. Anyone who
+# applies dev must be the only applier, and must keep the local state file outside
+# the repository (it is ignored by .gitignore and must never be committed).
+#
+# To move to remote state:
+#   1. Create the state bucket and nothing else in it, out of band, once:
+#        versioning on, SSE-KMS, public access blocked, TLS-only bucket policy,
+#        access limited to the architect role. Do NOT manage the bucket in this
+#        configuration (a configuration cannot safely own its own state bucket).
+#   2. Copy this file to backend.tf and replace the placeholders.
+#   3. Run: terraform init -migrate-state -input=false   (human only)
+#
+# use_lockfile enables S3-native locking (Terraform >= 1.10): a <key>.tflock object
+# is written next to the state object, so no DynamoDB lock table is needed.
+
+terraform {
+  backend "s3" {
+    bucket       = "CHANGE_ME-state-bucket"
+    key          = "scholarchain/dev/terraform.tfstate"
+    region       = "us-east-1"
+    encrypt      = true
+    kms_key_id   = "alias/CHANGE_ME-state-key"
+    use_lockfile = true
+  }
+}

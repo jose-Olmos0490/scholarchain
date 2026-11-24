@@ -30,6 +30,10 @@ credentials*
 .terraform/
 *.tfstate*
 .terraform.tfstate.lock.info
+*.tfplan
+terraform.tfvars
+*.auto.tfvars
+!*.tfvars.example
 
 # Datasets: raw downloads stay local
 datasets/raw/

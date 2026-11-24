@@ -1,0 +1,8 @@
+# Checkov configuration for infra/terraform. There are deliberately NO global skip-check
+# entries: every accepted finding is skipped inline, next to its resource, with a reason
+# (grep for "checkov:skip"). See README.md, "Security scan".
+framework:
+  - terraform
+quiet: true
+compact: true
+skip-download: true
