@@ -26,7 +26,7 @@ locals {
         suffix = "query-session"
         pitr   = true
         ttl    = true
-        note   = "sessions, idempotency markers, jobs and audit items"
+        note   = "sessions and idempotency markers and jobs and audit items"
       }
       evidence_bundle = {
         suffix = "evidence-bundle"
@@ -44,7 +44,7 @@ locals {
         suffix = "graph-read-model"
         pitr   = false
         ttl    = false
-        note   = "key-addressed graph read model, reloadable from Spark outputs"
+        note   = "key-addressed graph read model: reloadable from Spark outputs"
       }
     },
     var.enable_researcher_metric_cache ? {
@@ -98,4 +98,12 @@ resource "aws_dynamodb_table" "this" {
   }
 
   tags = { Purpose = each.value.note }
+
+  lifecycle {
+    # DynamoDB tag values allow only letters, digits, spaces and _ . : / = + - @
+    precondition {
+      condition     = can(regex("^[A-Za-z0-9 _.:/=+@-]*$", each.value.note))
+      error_message = "Table note for ${each.key} becomes a DynamoDB tag value and may contain only letters, digits, spaces and _ . : / = + - @."
+    }
+  }
 }

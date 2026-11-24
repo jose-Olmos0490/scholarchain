@@ -59,9 +59,15 @@ variable "parameter_group_family" {
   default     = "neptune1.4"
 }
 
-variable "backup_retention_days" {
-  type    = number
-  default = 7
+variable "backup_retention_period" {
+  description = "Neptune automated backup retention in days. Default 1: accounts on the AWS free tier reject longer periods."
+  type        = number
+  default     = 1
+
+  validation {
+    condition     = var.backup_retention_period >= 1 && var.backup_retention_period <= 35
+    error_message = "backup_retention_period must be between 1 and 35 days."
+  }
 }
 
 variable "deletion_protection" {

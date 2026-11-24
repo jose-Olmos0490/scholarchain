@@ -99,7 +99,7 @@ resource "aws_neptune_cluster" "this" {
   kms_key_arn                          = var.kms_key_arn
   iam_database_authentication_enabled  = true
   iam_roles                            = [aws_iam_role.loader[0].arn]
-  backup_retention_period              = var.backup_retention_days
+  backup_retention_period              = var.backup_retention_period
   copy_tags_to_snapshot                = true
   deletion_protection                  = var.deletion_protection
   skip_final_snapshot                  = !var.deletion_protection
