@@ -39,6 +39,17 @@ final class InMemoryItemStore extends ItemStore:
             Right(())
   }
 
+  def replaceIfHash(table: String, item: ujson.Obj, expectedHash: String): Result[Boolean] =
+    synchronized {
+      val part = partition(table, item("pk").str)
+      val sk = item("sk").str
+      part.get(sk) match
+        case Some(existing) if existing.value.get("contentHash").exists(_.str == expectedHash) =>
+          part(sk) = copy(item)
+          Right(true)
+        case _ => Right(false)
+    }
+
   def get(table: String, pk: String, sk: String): Result[Option[ujson.Obj]] = synchronized {
     Right(data.get((table, pk)).flatMap(_.get(sk)).map(copy))
   }
@@ -57,6 +68,16 @@ final class InMemoryItemStore extends ItemStore:
     val ordered = if ascending then rows else rows.reverse
     Right(limit.fold(ordered)(ordered.take).map(copy))
   }
+
+  override def count(table: String, pk: String, skPrefix: Option[String]): Result[Long] =
+    synchronized {
+      Right(
+        data
+          .get((table, pk))
+          .map(_.keysIterator.count(sk => skPrefix.forall(sk.startsWith)).toLong)
+          .getOrElse(0L)
+      )
+    }
 
   /** Test inspection: every item of a table, sorted by key. */
   def items(table: String): Vector[ujson.Obj] = synchronized {

@@ -19,15 +19,20 @@ class AuthSpec extends ApiSuite:
     "every protected route refuses a request with no token, a wrong token and a malformed header"
   ) {
     withHarness { h =>
-      protectedCalls.foreach { (m, p) =>
+      // each route is probed from its own source, so the failed-attempt limit does not interfere
+      protectedCalls.zipWithIndex.foreach { case ((m, p), i) =>
+        val src = Some(s"10.0.0.${i + 1}")
         withClue(s"$m $p") {
-          val none = h.call(m, p, token = None, body = Option.when(m == "POST")("{}"))
+          val none =
+            h.call(m, p, token = None, body = Option.when(m == "POST")("{}"), remote = src)
           none.status shouldBe 401
           none.err("code").str shouldBe "UNAUTHENTICATED"
           none.err("reason").str shouldBe "MISSING_TOKEN"
           none.headers("www-authenticate") shouldBe "Bearer"
-          h.call(m, p, token = Some("not-a-real-token")).err("reason").str shouldBe "INVALID_TOKEN"
-          h.call(m, p, token = None, headers = Map("authorization" -> "Token abc"))
+          h.call(m, p, token = Some("not-a-real-token"), remote = src)
+            .err("reason")
+            .str shouldBe "INVALID_TOKEN"
+          h.call(m, p, token = None, headers = Map("authorization" -> "Token abc"), remote = src)
             .err("reason")
             .str shouldBe "MALFORMED_TOKEN"
         }

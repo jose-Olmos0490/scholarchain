@@ -1,0 +1,8 @@
+modules/entity-resolution/src/main/scala/scholarchain/er/run/ResolveSample.scala:195:  def main(argv: Array[String]): Unit =
+modules/entity-resolution/src/main/scala/scholarchain/er/evaluation/EvaluateGoldSet.scala:99:  def main(argv: Array[String]): Unit =
+modules/hadoop/src/main/scala/scholarchain/hadoop/driver/PipelineDriver.scala:82:  def main(args: Array[String]): Unit =
+modules/rag/src/main/scala/scholarchain/rag/ingest/IngestMain.scala:24:  def main(args: Array[String]): Unit =
+modules/services/src/main/scala/scholarchain/services/entrypoint/GraphEvidenceApiMain.scala:42:  def main(args: Array[String]): Unit =
+modules/services/src/main/scala/scholarchain/services/entrypoint/EmbeddingWorkerMain.scala:200:  def main(args: Array[String]): Unit =
+modules/services/src/main/scala/scholarchain/services/entrypoint/QueryApiMain.scala:104:  def main(args: Array[String]): Unit =
+modules/spark/src/main/scala/scholarchain/spark/run/GraphPipeline.scala:82:  def main(argv: Array[String]): Unit =

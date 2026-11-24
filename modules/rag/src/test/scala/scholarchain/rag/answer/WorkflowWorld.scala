@@ -2,6 +2,7 @@ package scholarchain.rag.answer
 
 import java.nio.file.Paths
 import scala.collection.mutable
+import scholarchain.core.config.RagConfig
 import scholarchain.core.ids.StableIds
 import scholarchain.core.model.*
 import scholarchain.rag.RagFixtures.*
@@ -105,37 +106,37 @@ trait WorkflowWorld extends SemanticWorld:
     private val dir = spy.directory(extraNames(directory()))
     private val ana = spy.analytics(analytics())
     val structured = new StructuredLlmCall(llm, llmCfg)
-    val agents: WorkflowAgents = WorkflowAgents(
-      new QueryPlannerAgent(plannerCfg, retrieval, structured, promptRepo, 500),
-      new ResearcherResolverAgent(dir, resolverCfg),
-      new CollaborationMetricsAgent(
-        wrapMetrics(new FakeMetrics(metricRows, metricCalls)),
-        Some(cache),
-        retrieval
-      ),
-      new DirectCoauthorsAgent(graph, support(), retrieval, snapshot),
-      new PathFinderAgent(new SupportedPathReader(graph, support()), retrieval, snapshot),
-      new CommunityAnalystAgent(ana, Some(cache), retrieval),
-      new SemanticContextAgent(
-        spy.vectors(rig.index),
-        rig.objects,
-        rig.layout,
-        embedder,
-        allIndexes,
-        retrieval,
-        200,
-        300
-      ),
-      new EvidenceBuilderAgent(retrieval, snapshot),
-      new AnswerSynthesisAgent(synthCfg, structured, promptRepo),
-      new ClaimVerificationAgent
+    private val deps = WorkflowDependencies(
+      llm = llm,
+      prompts = promptRepo,
+      embedder = embedder,
+      audit = AuditPorts(dynamo.querySessions, dynamo.evidence, dynamo.queryAudit),
+      directory = dir,
+      metrics = wrapMetrics(new FakeMetrics(metricRows, metricCalls)),
+      metricCache = Some(cache),
+      graph = graph,
+      edgeSupport = support(),
+      pathReader = new SupportedPathReader(graph, support()),
+      analytics = ana,
+      vectors = spy.vectors(rig.index),
+      objects = rig.objects,
+      layout = rig.layout,
+      indexNames = allIndexes
     )
-    val workflow = new AnswerWorkflow(
-      agents,
-      AuditPorts(dynamo.querySessions, dynamo.evidence, dynamo.queryAudit),
-      WorkflowSettings(timeoutMillis, defaultWindow, synthCfg),
-      clock
+    private val tuning = WorkflowTuning(
+      rag = RagConfig(resolverCfg, llmCfg, plannerCfg),
+      retrieval = retrieval,
+      synthesis = synthCfg,
+      snapshot = snapshot,
+      stageTimeoutMillis = timeoutMillis,
+      defaultWindow = defaultWindow,
+      plannerMaxQueryCodePoints = 500,
+      maxExcerptCodePoints = 200,
+      maxSemanticQueryCodePoints = 300
     )
+    // built through the production composition entry
+    val agents: WorkflowAgents = WorkflowComposition.agents(deps, tuning)
+    val workflow: AnswerWorkflow = WorkflowComposition.workflow(deps, tuning, clock)
 
   /** The evidence the stores give for a request (no model is called). */
   def gather(r: AnswerRequest): Gathered =

@@ -172,6 +172,8 @@ class DynamoDesignSpec extends StorageSuite:
       def putAllIfAbsent(table: String, items: Vector[ujson.Obj]) =
         inner.putAllIfAbsent(table, items)
       def get(table: String, pk: String, sk: String) = inner.get(table, pk, sk)
+      def replaceIfHash(table: String, item: ujson.Obj, h: String) =
+        inner.replaceIfHash(table, item, h)
       def query(table: String, pk: String, p: Option[String], asc: Boolean, l: Option[Int]) =
         inner.query(table, pk, p, asc, l)
     val reg = new DynamoArtifactRegistry(racing, "artifacts")
@@ -316,6 +318,19 @@ class DynamoItemStoreAdapterSpec extends StorageSuite:
 
   private def details(code: String) =
     AwsErrorDetails.builder().errorCode(code).errorMessage(code).build()
+
+  test(
+    "a conditional replace is a PutItem conditioned on the content hash; a failed condition is false"
+  ) {
+    val stub = new Stub()
+    ok(store(stub).replaceIfHash("tbl", item, "sha256:abc")) shouldBe true
+    val r = stub.puts.head
+    r.conditionExpression shouldBe "contentHash = :h"
+    r.expressionAttributeValues.asScala(":h").s shouldBe "sha256:abc"
+    val lost =
+      new Stub(put = _ => throw ConditionalCheckFailedException.builder().message("c").build())
+    ok(store(lost).replaceIfHash("tbl", item, "sha256:abc")) shouldBe false
+  }
 
   test(
     "a create is a PutItem with attribute_not_exists(pk), and every JSON type maps to an attribute"

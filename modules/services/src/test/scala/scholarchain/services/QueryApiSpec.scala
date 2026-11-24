@@ -279,6 +279,25 @@ class QueryApiSpec extends ApiSuite:
     }
   }
 
+  test("typed Timeout and Overloaded failures reach the caller as 504 and 503, both retryable") {
+    withHarness { h =>
+      def run(f: StageFailure) =
+        h.engine.behavior = h.engine.failure("synthesis", f)
+        h.post(Bodies.coauthors())
+      val timeout = run(StageFailure.Timeout("synthesis", "the model call hit its deadline"))
+      timeout.status shouldBe 504
+      timeout.err("reason").str shouldBe "STAGE_TIMEOUT"
+      timeout.err("retryable").bool shouldBe true
+      timeout.err("details")("stage").str shouldBe "synthesis"
+      val busy = run(StageFailure.Overloaded("synthesis", "the model service throttled"))
+      busy.status shouldBe 503
+      busy.err("reason").str shouldBe "OVERLOADED"
+      busy.err("retryable").bool shouldBe true
+      timeout.raw should not include "deadline"
+      busy.raw should not include "throttled"
+    }
+  }
+
   test("a retryable failure is retried a bounded number of times, then succeeds") {
     withHarness { h =>
       val inner = h.engine.success

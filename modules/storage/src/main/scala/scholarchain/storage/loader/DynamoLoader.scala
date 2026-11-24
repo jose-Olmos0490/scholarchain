@@ -18,10 +18,12 @@ final case class DynamoLoadReport(
 
 /** Loads the DynamoDB-target Parquet tables.
   *
-  * Only `researcher_collaboration` (ResearcherMetrics) has a DynamoDB home: the
-  * `researcherMetricCache` table serves "metrics by researcherId and window". Every other table
-  * in the DynamoDB manifest has no table and no access pattern defined, so it is reported as
-  * skipped with that reason, never dropped silently.
+  * Only `researcher_collaboration` (ResearcherMetrics) is loaded here: the
+  * `researcherMetricCache` table serves "metrics by researcherId and window". The tables of the
+  * graph read model (`researcher`, `coauthored_with_support`, `components`, `community_membership`,
+  * `cross_community_edge`) belong to `GraphReadModelLoader`. Every other table in the DynamoDB
+  * manifest has no table and no access pattern defined. All of them are reported as skipped with
+  * their reason, never dropped silently.
   *
   * Items are written with conditional puts, one item per request. `BatchWriteItem` cannot carry a
   * condition expression on a put (DynamoDB API reference), so it would break "writes are
@@ -87,12 +89,21 @@ final class DynamoLoader(
     failure match
       case Some(e) => Left(e)
       case None =>
+        val readModel = Set(
+          "researcher",
+          "coauthored_with_support",
+          "components",
+          "community_membership",
+          "cross_community_edge"
+        )
         val skipped = verified.manifest.tables
           .filterNot(_.tableName == MetricsTable)
           .map(t =>
             SkippedTable(
               t.tableName,
-              "no DynamoDB table or access pattern is defined for this table"
+              if readModel.contains(t.tableName) then
+                "loaded into the graph read model table by GraphReadModelLoader"
+              else "no DynamoDB table or access pattern is defined for this table"
             )
           )
         Right(DynamoLoadReport(runId, created, unchanged, rejected, chunks, skipped))

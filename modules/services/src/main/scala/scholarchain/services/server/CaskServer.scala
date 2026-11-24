@@ -26,10 +26,21 @@ final class CaskServer(api: ApiService, maxBodyBytes: Int, bindHost: String, bin
         n.toString.toLowerCase -> ex.getRequestHeaders.getFirst(n)
       }.toMap
       val body = ex.getInputStream.readNBytes(maxBodyBytes + 1)
+      // the TCP peer, never a header: see SourceIdentity
+      val peer = Option(ex.getSourceAddress)
+        .flatMap(a => Option(a.getAddress))
+        .map(_.getHostAddress.takeWhile(_ != '%'))
       val response = QueryString.parse(ex.getQueryString) match
         case Some(q) =>
           api.handle(
-            HttpRequest.of(ex.getRequestMethod.toString, ex.getRequestPath, q, headers, body)
+            HttpRequest.of(
+              ex.getRequestMethod.toString,
+              ex.getRequestPath,
+              q,
+              headers,
+              body,
+              peer
+            )
           )
         case None =>
           // a malformed query string is a caller error; the service answers it like any other
@@ -39,7 +50,8 @@ final class CaskServer(api: ApiService, maxBodyBytes: Int, bindHost: String, bin
               "/invalid-query-string",
               Map.empty,
               headers,
-              body
+              body,
+              peer
             )
           )
       cask.Response(response.body, response.status, response.headers.toSeq)

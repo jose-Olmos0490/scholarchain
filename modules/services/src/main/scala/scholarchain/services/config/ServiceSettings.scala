@@ -19,7 +19,39 @@ final case class ExecutionSettings(workerThreads: Int, queueCapacity: Int)
 final case class EvidenceSettings(contentMaxChars: Int)
 final case class GraphApiSettings(neighborMaxDepth: Int, edgeTypes: Vector[String])
 final case class OpsSettings(metricsEnabled: Boolean, readinessTimeoutMillis: Long)
-final case class AuthSettings(keySecretName: Option[String])
+
+/** Limits on failed authentication attempts per source.
+  *
+  * @param maxFailures
+  *   failures one source may make within a window before it is answered 429
+  * @param windowSeconds
+  *   length of the fixed window, and the `Retry-After` ceiling
+  * @param maxTrackedSources
+  *   bound on the sources remembered at once (memory is O(this))
+  * @param trustedProxyHops
+  *   how many reverse proxies in front of the service append to `X-Forwarded-For`. 0 means the
+  *   header is ignored and the TCP peer is the source. N means the source is the N-th entry from
+  *   the right; entries to its left are client-supplied and never used.
+  */
+final case class AuthFailureSettings(
+    maxFailures: Int,
+    windowSeconds: Int,
+    maxTrackedSources: Int,
+    trustedProxyHops: Int
+)
+
+/** @param keyRefreshSeconds
+  *   how often the API-key digests are re-read from Secrets Manager (rotation); the previous
+  *   keys stay in force when a refresh fails
+  * @param maxTokenChars
+  *   the longest bearer token that is looked at; a longer one is malformed
+  */
+final case class AuthSettings(
+    keySecretName: Option[String],
+    failures: AuthFailureSettings,
+    keyRefreshSeconds: Int,
+    maxTokenChars: Int
+)
 
 /** Settings that only the services own. Limits shared with the runtime come from the core
   * configuration ([[RuntimeLimits]]); nothing here is hardcoded in code.
@@ -81,15 +113,19 @@ object ServiceSettings:
   val Root = "scholarchain.services"
 
   /** Loads the shipped `scholarchain-services.conf` (with its environment overrides) under
-    * `extra`.
+    * `extra`. `requireServing = false` is for entrypoints that never answer a query (the graph
+    * API and the embedding worker): they need no run ID or snapshot, and `serving` is then empty.
     */
-  def load(extra: Config = ConfigFactory.empty()): Either[Vector[String], ServiceSettings] =
+  def load(
+      extra: Config = ConfigFactory.empty(),
+      requireServing: Boolean = true
+  ): Either[Vector[String], ServiceSettings] =
     val cfg = extra
       .withFallback(ConfigFactory.parseResources("scholarchain-services.conf"))
       .resolve()
-    read(cfg)
+    read(cfg, requireServing)
 
-  def read(cfg: Config): Either[Vector[String], ServiceSettings] =
+  def read(cfg: Config, requireServing: Boolean = true): Either[Vector[String], ServiceSettings] =
     val problems = Vector.newBuilder[String]
     def at(path: String): String = s"$Root.$path"
     def int(path: String, min: Int): Int =
@@ -141,12 +177,23 @@ object ServiceSettings:
         int("retry.backoffMillis", 0).toLong,
         int("retry.readTimeoutMillis", 1).toLong
       ),
-      ServingSettings(str("serving.runId"), str("serving.snapshot")),
+      if requireServing then ServingSettings(str("serving.runId"), str("serving.snapshot"))
+      else ServingSettings("", ""),
       ExecutionSettings(int("execution.workerThreads", 1), int("execution.queueCapacity", 1)),
       EvidenceSettings(int("evidence.contentMaxChars", 2)),
       GraphApiSettings(int("graph.neighborMaxDepth", 1), strs("graph.edgeTypes")),
       OpsSettings(bool("ops.metricsEnabled"), int("ops.readinessTimeoutMillis", 1).toLong),
-      AuthSettings(opt("auth.keySecretName"))
+      AuthSettings(
+        opt("auth.keySecretName"),
+        AuthFailureSettings(
+          int("auth.failures.maxFailures", 1),
+          int("auth.failures.windowSeconds", 1),
+          int("auth.failures.maxTrackedSources", 1),
+          int("auth.failures.trustedProxyHops", 0)
+        ),
+        int("auth.keyRefreshSeconds", 1),
+        int("auth.maxTokenChars", 16)
+      )
     )
     val built = problems.result()
     if built.isEmpty then Right(s) else Left(built)

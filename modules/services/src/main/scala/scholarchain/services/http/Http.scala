@@ -5,13 +5,16 @@ import java.nio.charset.StandardCharsets
 import java.time.Instant
 import java.util.UUID
 
-/** A transport-neutral HTTP request. Header names are lower-cased by [[HttpRequest.of]]. */
+/** A transport-neutral HTTP request. `remoteAddress` is the TCP peer as the transport saw it (never
+  * a header). Header names are lower-cased by [[HttpRequest.of]].
+  */
 final case class HttpRequest(
     method: String,
     path: String,
     query: Map[String, Vector[String]],
     headers: Map[String, String],
-    body: Array[Byte]
+    body: Array[Byte],
+    remoteAddress: Option[String] = None
 ):
   def header(name: String): Option[String] = headers.get(name.toLowerCase)
 
@@ -21,9 +24,17 @@ object HttpRequest:
       path: String,
       query: Map[String, Vector[String]] = Map.empty,
       headers: Map[String, String] = Map.empty,
-      body: Array[Byte] = Array.emptyByteArray
+      body: Array[Byte] = Array.emptyByteArray,
+      remoteAddress: Option[String] = None
   ): HttpRequest =
-    HttpRequest(method.toUpperCase, path, query, headers.map((k, v) => k.toLowerCase -> v), body)
+    HttpRequest(
+      method.toUpperCase,
+      path,
+      query,
+      headers.map((k, v) => k.toLowerCase -> v),
+      body,
+      remoteAddress
+    )
 
 /** A transport-neutral HTTP response. */
 final case class HttpResponse(status: Int, headers: Map[String, String], body: String)

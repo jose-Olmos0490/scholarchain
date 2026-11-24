@@ -4,6 +4,13 @@ import java.nio.file.Files
 import org.scalatest.Tag
 import org.scalatest.exceptions.TestCanceledException
 import scholarchain.core.config.LoaderParallelism
+import scholarchain.core.model.{
+  CoauthorEdgeSupport,
+  CommunityMembership,
+  ComponentMembership,
+  CrossCommunityEdge
+}
+import scholarchain.storage.directory.*
 import scholarchain.storage.aws.*
 import scholarchain.storage.common.*
 import scholarchain.storage.dynamo.*
@@ -78,6 +85,15 @@ object AwsIt:
       s.runtime.querySession.ttlSeconds
     )
 
+/** The graph read model table of the integration environment. The suites share the table and
+  * isolate themselves by run ID and by IDs drawn from one counter.
+  */
+object AwsReadModel:
+  def table: String =
+    AwsIt.settings.toOption.get.requireGraphReadModelTable
+      .fold(e => throw new TestCanceledException(e.message, 0), identity)
+  lazy val items: ItemStore = new DynamoItemStore(AwsIt.clients.dynamo, AwsIt.retrier)
+
 trait AwsGate extends PortGate:
   override protected def contractTags: Seq[Tag] = Seq(AwsIntegration)
   override protected def preconditions(): Unit = AwsIt.requirement()
@@ -99,6 +115,14 @@ class QuerySessionsIT extends QuerySessionsContract with AwsGate:
 class QueryAuditLogIT extends QueryAuditLogContract with AwsGate:
   protected lazy val audit: QueryAuditLog = AwsIt.dynamo.queryAudit
 
+class JobDocumentStoreIT extends JobDocumentStoreContract with AwsGate:
+  protected lazy val jobs: JobDocumentStore =
+    new DynamoJobDocumentStore(
+      new DynamoItemStore(AwsIt.clients.dynamo, AwsIt.retrier),
+      AwsIt.settings.toOption.get.runtime.dynamoTables.querySession,
+      Some(AwsIt.settings.toOption.get.runtime.querySession.ttlSeconds)
+    )
+
 class EvidenceStoreIT extends EvidenceStoreContract with AwsGate:
   protected lazy val evidence: EvidenceStore = AwsIt.dynamo.evidence
 
@@ -107,6 +131,38 @@ class ArtifactRegistryIT extends ArtifactRegistryContract with AwsGate:
 
 class MetricCacheIT extends MetricCacheContract with AwsGate:
   protected lazy val metricCache: ResearcherMetricCache = AwsIt.dynamo.metricCache.get
+
+class ResearcherDirectoryIT extends ResearcherDirectoryContract with AwsGate:
+  protected lazy val runId: String = Fresh.runId()
+  protected lazy val directory: ResearcherDirectory =
+    new DynamoResearcherDirectory(AwsReadModel.items, AwsReadModel.table, runId, maxLimit)
+  protected def seed(name: String, c: NameCandidate): Unit =
+    ReadModelSeed.directory(AwsReadModel.items, AwsReadModel.table, runId, name, c)
+
+class EdgeSupportReaderIT extends EdgeSupportReaderContract with AwsGate:
+  protected lazy val runId: String = Fresh.runId()
+  protected lazy val reader: EdgeSupportReader =
+    new DynamoEdgeSupportReader(AwsReadModel.items, AwsReadModel.table, maxRowsPerEdge = 25)
+  protected def seed(row: CoauthorEdgeSupport): Unit =
+    ReadModelSeed.support(AwsReadModel.items, AwsReadModel.table, runId, row)
+
+class AnalyticsReaderIT extends AnalyticsReaderContract with AwsGate:
+  protected lazy val runId: String = Fresh.runId()
+  protected lazy val reader: AnalyticsReader =
+    new DynamoAnalyticsReader(
+      AwsReadModel.items,
+      AwsReadModel.table,
+      runId,
+      GraphReaderLimits(maxLimit, 4, 3000L)
+    )
+  protected def seedComponent(m: ComponentMembership): Unit =
+    ReadModelSeed.component(AwsReadModel.items, AwsReadModel.table, runId, m)
+  protected def seedCommunity(m: CommunityMembership): Unit =
+    ReadModelSeed.community(AwsReadModel.items, AwsReadModel.table, runId, m)
+  protected def seedCross(e: CrossCommunityEdge): Unit =
+    ReadModelSeed.cross(AwsReadModel.items, AwsReadModel.table, runId, e)
+  protected def commitConnectivity(c: String, ws: Int, we: Int): Unit =
+    ReadModelSeed.marker(AwsReadModel.items, AwsReadModel.table, runId, c, ws, we)
 
 class S3VectorsIT extends VectorIndexContract with AwsGate:
   protected lazy val definition: IndexDefinition =
@@ -168,9 +224,13 @@ class AwsIntegrationGateSpec extends StorageSuite:
     classOf[RunLedgerIT],
     classOf[EntityLinkCacheIT],
     classOf[QuerySessionsIT],
+    classOf[JobDocumentStoreIT],
     classOf[EvidenceStoreIT],
     classOf[ArtifactRegistryIT],
     classOf[MetricCacheIT],
+    classOf[ResearcherDirectoryIT],
+    classOf[EdgeSupportReaderIT],
+    classOf[AnalyticsReaderIT],
     classOf[S3VectorsIT],
     classOf[NeptuneGraphIT]
   )

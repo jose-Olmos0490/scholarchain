@@ -15,10 +15,30 @@ final class RagQueryEngine(workflow: AnswerWorkflow) extends QueryEngine:
   def answer(request: AnswerRequest): Either[WorkflowFailure, WorkflowResult] =
     workflow.answer(request)
 
-/** Maps a workflow failure to the typed error model. Messages are fixed text. */
+/** Maps a workflow failure to the typed error model. Messages are fixed text.
+  *
+  * Time-outs and saturation are read from the failure's type: [[StageFailure.Timeout]] is 504 and
+  * [[StageFailure.Overloaded]] is 503, both retryable. No text of a failure decides the status.
+  * One legacy path remains: the stage runner and storage time-outs still report a plain
+  * [[StageFailure.Retryable]] whose `detail` says what happened. Until the rag module types them,
+  * [[LegacyRetryable]] reads two fixed markers of that detail; a plain `Retryable` without a
+  * marker is a store that was unavailable (502).
+  */
 object FailureMapper:
-  private val TimeoutMarker = "did not finish within"
-  private val BusyMarker = "too many stages"
+  /** The only place that reads a failure's text. Remove it when the rag stage runner emits
+    * [[StageFailure.Timeout]] and [[StageFailure.Overloaded]] itself.
+    */
+  private object LegacyRetryable:
+    private val TimeoutMarker = "did not finish within"
+    private val BusyMarker = "too many stages"
+
+    def timeout(r: StageFailure.Retryable): Boolean = r.detail.contains(TimeoutMarker)
+    def busy(r: StageFailure.Retryable): Boolean = r.detail.contains(BusyMarker)
+
+  private val timedOut: ApiError =
+    ApiError.of(ErrorCode.GatewayTimeout, "STAGE_TIMEOUT", "a workflow stage timed out")
+  private val overloaded: ApiError =
+    ApiError.of(ErrorCode.Unavailable, "OVERLOADED", "the workflow is busy; try again")
 
   def toApi(f: WorkflowFailure): ApiError =
     val stage = Map("stage" -> ujson.Str(f.stage))
@@ -48,10 +68,10 @@ object FailureMapper:
         )
       case _: StageFailure.NotFound =>
         ApiError.unprocessable("REFERENCED_RECORD_NOT_FOUND", "a referenced record was not found")
-      case r: StageFailure.Retryable if r.detail.contains(TimeoutMarker) =>
-        ApiError.of(ErrorCode.GatewayTimeout, "STAGE_TIMEOUT", "a workflow stage timed out")
-      case r: StageFailure.Retryable if r.detail.contains(BusyMarker) =>
-        ApiError.of(ErrorCode.Unavailable, "OVERLOADED", "the workflow is busy; try again")
+      case _: StageFailure.Timeout => timedOut
+      case _: StageFailure.Overloaded => overloaded
+      case r: StageFailure.Retryable if LegacyRetryable.timeout(r) => timedOut
+      case r: StageFailure.Retryable if LegacyRetryable.busy(r) => overloaded
       case _: StageFailure.Retryable =>
         ApiError.of(ErrorCode.BadGateway, "DOWNSTREAM_UNAVAILABLE", "a store was unavailable")
       case _: StageFailure.Failed =>

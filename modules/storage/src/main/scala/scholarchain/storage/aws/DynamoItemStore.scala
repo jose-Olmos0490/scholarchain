@@ -95,6 +95,22 @@ final class DynamoItemStore(client: DynamoDbClient, retrier: Retrier) extends It
               case None => throw e // other reasons (conflict, throttling) are classified as usual
       }
 
+  def replaceIfHash(table: String, item: ujson.Obj, expectedHash: String): Result[Boolean] =
+    retrier.run(s"DynamoDB conditional replace $table") {
+      try
+        client.putItem(
+          PutItemRequest
+            .builder()
+            .tableName(table)
+            .item(attrs(item))
+            .conditionExpression("contentHash = :h")
+            .expressionAttributeValues(java.util.Map.of(":h", AttributeValue.fromS(expectedHash)))
+            .build()
+        )
+        true
+      catch case _: ConditionalCheckFailedException => false
+    }
+
   def get(table: String, pk: String, sk: String): Result[Option[ujson.Obj]] =
     retrier.run(s"DynamoDB get $table") {
       val r = client.getItem(
@@ -143,4 +159,33 @@ final class DynamoItemStore(client: DynamoDbClient, retrier: Retrier) extends It
         else null
         more = start != null && limit.forall(count < _)
       out.result()
+    }
+
+  /** `Query` with `Select = COUNT`: the server counts and returns no items. Paginated; the count of
+    * each page is added (a page is at most 1 MB of scanned data).
+    */
+  override def count(table: String, pk: String, skPrefix: Option[String]): Result[Long] =
+    retrier.run(s"DynamoDB count $table") {
+      val values = new java.util.HashMap[String, AttributeValue]()
+      values.put(":pk", AttributeValue.fromS(pk))
+      skPrefix.foreach(p => values.put(":p", AttributeValue.fromS(p)))
+      val condition = "pk = :pk" + skPrefix.fold("")(_ => " AND begins_with(sk, :p)")
+      var total = 0L
+      var start: java.util.Map[String, AttributeValue] = null
+      var more = true
+      while more do
+        val b = QueryRequest
+          .builder()
+          .tableName(table)
+          .consistentRead(true)
+          .select(Select.COUNT)
+          .keyConditionExpression(condition)
+          .expressionAttributeValues(values)
+        if start != null then b.exclusiveStartKey(start)
+        val r = client.query(b.build())
+        total += r.count().toLong
+        start = if r.hasLastEvaluatedKey && !r.lastEvaluatedKey().isEmpty then r.lastEvaluatedKey()
+        else null
+        more = start != null
+      total
     }

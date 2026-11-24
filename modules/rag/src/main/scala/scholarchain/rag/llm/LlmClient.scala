@@ -25,6 +25,16 @@ enum LlmFailure:
   /** Throttling, a time-out or another failure worth repeating. */
   case Transient(detail: String)
 
+  /** The model service throttled or was saturated, also after the adapter's own retries. Retried
+    * by [[StructuredLlmCall]]; when no attempt succeeds the stage fails as overloaded.
+    */
+  case Overloaded(detail: String)
+
+  /** The model call hit its deadline, also after the adapter's own retries. Retried by
+    * [[StructuredLlmCall]]; when no attempt succeeds the stage fails as a timeout.
+    */
+  case TimedOut(detail: String)
+
   /** A refusal or a configuration problem that repeating cannot fix. */
   case Permanent(detail: String)
 

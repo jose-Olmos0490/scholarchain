@@ -81,8 +81,33 @@ Every error body is
 | 404 | NOT_FOUND | false | unknown route, job, evidence item, node or query |
 | 409 | CONFLICT | false (true while a job runs) | Idempotency-Key reused with another request; result of an unfinished job |
 | 422 | UNPROCESSABLE | false | well-formed but unsupported: operation, metric, window, limit or depth above a bound |
-| 429 | RATE_LIMITED | true | per-key rate limit |
+| 429 | RATE_LIMITED | true | per-key rate limit (`RATE_LIMIT`), or too many failed authentication attempts from one source (`AUTH_FAILURE_LIMIT`) |
 | 500 | INTERNAL_ERROR | false | unexpected fault; the cause is never returned |
 | 502 | DOWNSTREAM_FAILURE | per cause | a store or workflow stage failed |
-| 503 | UNAVAILABLE | true | open circuit, full executor, not ready |
-| 504 | DOWNSTREAM_TIMEOUT | true | a deadline passed |
+| 503 | UNAVAILABLE | true | open circuit, full executor, not ready, job store unavailable (`JOB_STORE_UNAVAILABLE`), a typed workflow `Overloaded` failure (`OVERLOADED`) |
+| 504 | DOWNSTREAM_TIMEOUT | true | a deadline passed, including a typed workflow `Timeout` failure (`STAGE_TIMEOUT`) |
+
+## Failed authentication attempts
+
+Failed attempts (missing, malformed or unknown token) are counted per source in a fixed window.
+A source over the limit gets 429 `AUTH_FAILURE_LIMIT` with `Retry-After` (the seconds left in
+the window) before its token is looked at, so a limit cannot be used to test guesses; a success
+does not reset the count. The source is the TCP peer address. `X-Forwarded-For` is read only when
+`auth.failures.trustedProxyHops` says how many trusted proxies append to it (1 behind the ALB):
+the source is then the entry that many positions from the right, and entries to its left, which
+the client typed, are ignored. The limit, window, number of sources remembered and hop count come
+from configuration.
+
+## Entrypoints
+
+The routes above are served by three independently deployed processes. Each mounts only its own
+routes (any other path is 404 for a valid key), has `/healthz` and `/readyz`, binds the host and
+port in its own configuration section, and checks only its own dependencies in `/readyz`.
+
+- query API (`scholarchain.services.entrypoint.QueryApiMain`): `POST /v1/query`, `GET /v1/jobs/...`,
+  `GET /v1/explain/...`
+- graph and evidence API (`scholarchain.services.entrypoint.GraphEvidenceApiMain`):
+  `GET /v1/graph/...`, `GET /v1/evidence/...`
+- embedding worker (`scholarchain.services.entrypoint.EmbeddingWorkerMain`): no API route; only
+  `/healthz` and `/readyz` on its own port. Not ready while draining, after repeated queue
+  failures, or when the loop makes no progress within its staleness bound.

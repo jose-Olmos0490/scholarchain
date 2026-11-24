@@ -57,7 +57,7 @@ object Fx:
     EvidenceSettings(40),
     GraphApiSettings(1, Vector("COAUTHORED_WITH")),
     OpsSettings(metricsEnabled = true, readinessTimeoutMillis = 200),
-    AuthSettings(None)
+    AuthSettings(None, AuthFailureSettings(3, 60, 4, 0), 300, 256)
   )
 
   val limits: RuntimeLimits = RuntimeLimits(
@@ -426,7 +426,8 @@ final class Harness(
       body: Option[String] = None,
       query: Map[String, String] = Map.empty,
       headers: Map[String, String] = Map.empty,
-      json: Boolean = true
+      json: Boolean = true,
+      remote: Option[String] = None
   ): Resp =
     val h = token.map(t => Map("authorization" -> s"Bearer $t")).getOrElse(Map.empty) ++
       (if body.isDefined && json then Map("content-type" -> "application/json") else Map.empty) ++
@@ -437,7 +438,8 @@ final class Harness(
         path,
         query.map((k, v) => k -> Vector(v)),
         h,
-        body.map(_.getBytes("UTF-8")).getOrElse(Array.emptyByteArray)
+        body.map(_.getBytes("UTF-8")).getOrElse(Array.emptyByteArray),
+        remote
       )
     )
     Resp(r.status, r.headers, r.body)

@@ -192,6 +192,12 @@ trait ItemStore:
 
   def get(table: String, pk: String, sk: String): Result[Option[ujson.Obj]]
 
+  /** Optimistic replace: writes `item` only if an item with the same key exists and its
+    * `contentHash` attribute equals `expectedHash` (`contentHash = :h`). `Right(false)` means the
+    * condition failed (the item changed or vanished); nothing was written.
+    */
+  def replaceIfHash(table: String, item: ujson.Obj, expectedHash: String): Result[Boolean]
+
   /** Items of one partition, ordered by `sk`. */
   def query(
       table: String,
@@ -200,3 +206,10 @@ trait ItemStore:
       ascending: Boolean,
       limit: Option[Int]
   ): Result[Vector[ujson.Obj]]
+
+  /** The exact number of items of one partition (optionally those whose `sk` starts with
+    * `skPrefix`), without reading the items back when the store can count server side
+    * (`Select = COUNT`). The default reads the partition and is only a fallback.
+    */
+  def count(table: String, pk: String, skPrefix: Option[String]): Result[Long] =
+    query(table, pk, skPrefix, ascending = true, None).map(_.size.toLong)

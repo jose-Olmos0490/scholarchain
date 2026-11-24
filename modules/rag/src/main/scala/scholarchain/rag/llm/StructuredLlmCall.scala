@@ -31,6 +31,8 @@ final class StructuredLlmCall(client: LlmClient, cfg: RagLlmConfig):
     var usage = LlmUsage.Zero
     var last = "no attempt was made"
     var n = 0
+    // the failure the last attempt ended with, when it was a transport failure
+    var lastTransport: Option[LlmFailure] = None
     var result: Option[SResult[ujson.Obj]] = None
     while result.isEmpty && n < attempts do
       n += 1
@@ -40,10 +42,14 @@ final class StructuredLlmCall(client: LlmClient, cfg: RagLlmConfig):
       call match
         case Left(LlmFailure.Permanent(d)) =>
           result = Some(Left(StageFailure.Failed("llm", s"the model call was refused: $d")))
-        case Left(LlmFailure.Transient(d)) =>
+        case Left(
+              f @ (LlmFailure.Transient(_) | LlmFailure.Overloaded(_) | LlmFailure.TimedOut(_))
+            ) =>
           usage = usage + LlmUsage(1, 0L, 0L, Vector.empty)
-          last = s"transient model failure: $d"
+          lastTransport = Some(f)
+          last = s"transient model failure: ${f.detail}"
         case Right(r) =>
+          lastTransport = None
           usage = usage + LlmUsage(1, r.inputTokens, r.outputTokens, Vector(r.modelVersion))
           if r.outputTokens > cfg.maxOutputTokens then
             last =
@@ -55,17 +61,25 @@ final class StructuredLlmCall(client: LlmClient, cfg: RagLlmConfig):
                 val violations = schema.validate(obj)
                 if violations.isEmpty then result = Some(Right(obj))
                 else last = s"schema ${schema.version}: ${violations.take(5).mkString("; ")}"
-    StructuredResult(
-      result.getOrElse(
-        Left(
-          StageFailure.Rejected(
-            "MODEL_OUTPUT_INVALID",
-            s"no valid output after $attempts attempt(s); last problem: $last"
-          )
+    StructuredResult(result.getOrElse(Left(exhausted(lastTransport, attempts, last))), usage)
+
+  /** No attempt produced a valid output. When the last attempt failed in transport the cause is
+    * the model service (overloaded or too slow), not the output, and is typed as such.
+    */
+  private def exhausted(transport: Option[LlmFailure], attempts: Int, last: String): StageFailure =
+    transport match
+      case Some(LlmFailure.Overloaded(d)) =>
+        StageFailure.Overloaded(
+          "llm",
+          s"the model service stayed overloaded for $attempts attempt(s): $d"
         )
-      ),
-      usage
-    )
+      case Some(LlmFailure.TimedOut(d)) =>
+        StageFailure.Timeout("llm", s"the model call timed out on $attempts attempt(s): $d")
+      case _ =>
+        StageFailure.Rejected(
+          "MODEL_OUTPUT_INVALID",
+          s"no valid output after $attempts attempt(s); last problem: $last"
+        )
 
   private def parse(text: String): Either[String, ujson.Obj] =
     if text == null then Left("the response is empty")

@@ -26,6 +26,20 @@ object StageFailure:
     val code = "RETRYABLE"
     val retryable = true
 
+  /** A deadline passed (a model call or other dependency). The same request may succeed if
+    * repeated. Distinct from [[Retryable]] so a service can answer 504 without parsing `detail`.
+    */
+  final case class Timeout(operation: String, detail: String) extends StageFailure:
+    val code = "TIMEOUT"
+    val retryable = true
+
+  /** A dependency refused work because it is throttled or saturated (after bounded retries). The
+    * same request may succeed later; a service answers 503.
+    */
+  final case class Overloaded(operation: String, detail: String) extends StageFailure:
+    val code = "OVERLOADED"
+    val retryable = true
+
   /** The request, a plan field, a model output or a retrieved item was refused. */
   final case class Rejected(code: String, detail: String) extends StageFailure:
     val retryable = false

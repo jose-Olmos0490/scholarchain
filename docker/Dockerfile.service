@@ -1,0 +1,31 @@
+# One image per ScholarChain service entrypoint. Owner: build-engineer.
+# Build through `sbt dockerLocal`, which stages `payload/` (jars, plus prompts for
+# query-api only) and passes every build arg. No secrets or environment values are
+# baked in: configuration arrives as SCHOLARCHAIN_* environment variables at run time.
+# BASE_IMAGE is pinned tag@digest from project/Dependencies.scala; it has no default
+# on purpose, so a hand-run build cannot silently use an unpinned image.
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+ARG SERVICE_MAIN_CLASS
+ARG HEALTH_PORT
+RUN test -n "${SERVICE_MAIN_CLASS}" && test -n "${HEALTH_PORT}" \
+ && groupadd --system --gid 10001 scholarchain \
+ && useradd --system --uid 10001 --gid 10001 --no-create-home \
+      --home-dir /nonexistent --shell /usr/sbin/nologin scholarchain
+
+# Root-owned, world-readable, not writable by the service user.
+COPY --chown=root:root payload/ /app/
+COPY --chown=root:root docker/launch.sh docker/healthcheck.sh /app/bin/
+RUN chmod 0555 /app/bin/launch.sh /app/bin/healthcheck.sh
+
+ENV SERVICE_MAIN_CLASS=${SERVICE_MAIN_CLASS} \
+    HEALTH_PORT=${HEALTH_PORT}
+WORKDIR /app
+USER 10001:10001
+EXPOSE ${HEALTH_PORT}
+# Run with a read-only root filesystem and a tmpfs on /tmp.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD ["/app/bin/healthcheck.sh"]
+# Exec form: launch.sh ends in `exec java`, so the JVM is PID 1 and receives SIGTERM.
+ENTRYPOINT ["/app/bin/launch.sh"]

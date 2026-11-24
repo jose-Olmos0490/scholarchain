@@ -177,26 +177,79 @@ lazy val rag = (project in file("modules/rag"))
     libraryDependencies ++= Dependencies.rag
   )
 
+// Container images: one per service entrypoint, so each deploys and scales
+// independently. They share docker/Dockerfile.service and differ only in build
+// args. `dockerStageContexts` needs no Docker daemon; `dockerBuildLocal` does and
+// never pushes. Both read nothing from the environment.
+lazy val dockerStageContexts =
+  taskKey[Seq[File]]("Stage one Docker build context per service entrypoint (no daemon needed)")
+lazy val dockerBuildLocal =
+  taskKey[Unit]("Build the three service images into the local Docker daemon (no push)")
+
+lazy val serviceImages = Seq(
+  new ServiceImage("query-api", "scholarchain.services.entrypoint.QueryApiMain", 8080, true),
+  new ServiceImage(
+    "graph-evidence-api",
+    "scholarchain.services.entrypoint.GraphEvidenceApiMain",
+    8081,
+    false
+  ),
+  new ServiceImage(
+    "embedding-worker",
+    "scholarchain.services.entrypoint.EmbeddingWorkerMain",
+    8082,
+    false
+  )
+)
+
 lazy val services = (project in file("modules/services"))
   .dependsOn(core, rag, storage)
-  .enablePlugins(JavaAppPackaging, DockerPlugin)
+  .enablePlugins(JavaAppPackaging)
   .settings(commonSettings)
   .settings(
     name := "services",
     libraryDependencies ++= Dependencies.services,
-    // Container image: pinned Temurin 17 JRE, non-root user, percentage-based heap.
-    Docker / packageName := "scholarchain-services",
-    dockerBaseImage := s"eclipse-temurin:${Versions.temurinJreTag}",
-    dockerUpdateLatest := false,
-    Docker / daemonUser := "scholarchain",
-    Docker / daemonUserUid := Some("10001"),
-    Docker / daemonGroup := "scholarchain",
-    Docker / daemonGroupGid := Some("10001"),
-    Universal / javaOptions ++= Seq(
-      "-J-XX:InitialRAMPercentage=50.0",
-      "-J-XX:MaxRAMPercentage=75.0",
-      "-J-XX:+ExitOnOutOfMemoryError"
-    )
+    dockerStageContexts := {
+      val log = streams.value.log
+      val staged = (Universal / stage).value
+      val root = (ThisBuild / baseDirectory).value
+      val out = target.value / "docker"
+      serviceImages.map { svc =>
+        val ctx = out / svc.image
+        IO.delete(ctx)
+        IO.copyDirectory(staged / "lib", ctx / "payload" / "lib")
+        if (svc.withPrompts) IO.copyDirectory(root / "prompts", ctx / "payload" / "prompts")
+        IO.copyDirectory(root / "docker", ctx / "docker")
+        log.info(s"dockerStageContexts: staged ${ctx}")
+        ctx
+      }
+    },
+    dockerBuildLocal := {
+      val log = streams.value.log
+      val contexts = dockerStageContexts.value
+      val base = s"eclipse-temurin:${Versions.temurinJreTag}@${Dependencies.temurinJreDigest}"
+      serviceImages.zip(contexts).foreach { case (svc, ctx) =>
+        val tag = s"scholarchain-${svc.image}:${version.value}"
+        val cmd = Seq(
+          "docker",
+          "build",
+          "--file",
+          (ctx / "docker" / "Dockerfile.service").getPath,
+          "--build-arg",
+          s"BASE_IMAGE=$base",
+          "--build-arg",
+          s"SERVICE_MAIN_CLASS=${svc.mainClass}",
+          "--build-arg",
+          s"HEALTH_PORT=${svc.healthPort}",
+          "--tag",
+          tag,
+          ctx.getPath
+        )
+        log.info(s"dockerBuildLocal: ${cmd.mkString(" ")}")
+        val code = scala.sys.process.Process(cmd).!
+        if (code != 0) sys.error(s"docker build failed for $tag (exit $code)")
+      }
+    }
   )
 
 // ---------------------------------------------------------------------------
@@ -264,4 +317,5 @@ addCommandAlias(
   "; scalafmtCheckAll; scalafmtSbtCheck; Test/compile; markTestRun"
 )
 addCommandAlias("packageJobs", "; hadoop/assembly; sparkAnalytics/assembly")
-addCommandAlias("dockerLocal", "; services/Docker/publishLocal")
+addCommandAlias("dockerLocal", "; services/dockerBuildLocal")
+addCommandAlias("dockerStage", "; services/dockerStageContexts")

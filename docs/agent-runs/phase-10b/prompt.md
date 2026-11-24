@@ -1,4 +1,4 @@
-Phase 10b: runtime wiring follow-ups from docs/agent-runs/phase-10/agent-report.md (BLOCKED-ON OWNER section). Delegate each part as a separate work order, in this order. Pass earlier agents' final reports to later agents where noted. No agent edits another agent's files.
+Phase 10b: runtime wiring follow-ups from docs/agent-runs/phase-10/agent-report.md (BLOCKED-ON OWNER section). The human architect has authorized this labeled follow-up phase. Delegate each part as a separate work order, in this order. Pass earlier agents' final reports to later agents where noted. No agent edits another agent's files.
 
 1. rag-engineer
 - Add typed Timeout and Overloaded variants to StageFailure; keep existing callers compiling.
@@ -22,4 +22,4 @@ Phase 10b: runtime wiring follow-ups from docs/agent-runs/phase-10/agent-report.
 4. build-engineer (give it report 3)
 - One container image per entrypoint (or one image with a per-service main class), pinned Java runtime, non-root user, percentage-based memory limits.
 
-Each agent iterates with module-scoped tests, then runs sbt check once before reporting. Save each final report verbatim to docs/agent-runs/phase-10b/<agent-name>-report.md. Stop for human review.
+Each agent iterates with module-scoped tests, then runs sbt check once before reporting. The orchestrator saves each final report verbatim to docs/agent-runs/phase-10b/<agent-name>-report.md..

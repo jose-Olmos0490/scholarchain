@@ -274,7 +274,9 @@ final class AnswerWorkflow(
   final private case class Part(inputs: EvidenceInputs, gaps: Vector[String])
 
   private def recoverable(f: StageFailure): Boolean = f match
-    case _: StageFailure.Retryable | _: StageFailure.Failed => false
+    case _: StageFailure.Retryable | _: StageFailure.Timeout | _: StageFailure.Overloaded |
+        _: StageFailure.Failed =>
+      false
     case _ => true
 
   private def gapText(what: String, f: StageFailure): String =

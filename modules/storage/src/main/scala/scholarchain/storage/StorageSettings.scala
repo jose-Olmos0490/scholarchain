@@ -15,7 +15,12 @@ final case class StorageSettings(
     graphLimit: Int,
     maxPathDepth: Int,
     pathTimeoutMillis: Int,
-    embeddingModelId: String
+    embeddingModelId: String,
+    /** Name of the graph read model DynamoDB table (`dynamodb.tables.graphReadModel`, default
+      * `<tablePrefix>-<environment>-graph-read-model`). `None` when the settings were built from a
+      * `ScholarChainConfig`, whose table list does not name it.
+      */
+    graphReadModelTable: Option[String] = None
 )
 
 object StorageSettings:
@@ -44,6 +49,15 @@ object StorageSettings:
         val region = c.string("application.awsRegion", "AWS_REGION")
         if region.nonEmpty && !Region.matches(region) then
           c.fail("application.awsRegion", s"'$region' is not an AWS Region code")
+        val prefix = c.string("dynamodb.tablePrefix", "SCHOLARCHAIN_DDB_TABLE_PREFIX")
+        val readModel = c
+          .optionalString("dynamodb.tables.graphReadModel")
+          .getOrElse(s"$prefix-$environment-graph-read-model")
+        if !"[A-Za-z0-9_.-]{3,255}".r.matches(readModel) then
+          c.fail(
+            "dynamodb.tables.graphReadModel",
+            s"'$readModel' is not a valid DynamoDB table name"
+          )
         StorageSettings(
           environment = environment,
           awsRegion = region,
@@ -59,7 +73,8 @@ object StorageSettings:
             "SCHOLARCHAIN_RETRIEVAL_PATH_TIMEOUT_MILLIS",
             min = 1
           ),
-          embeddingModelId = c.string("models.embeddingModelId", "EMBEDDING_MODEL_ID")
+          embeddingModelId = c.string("models.embeddingModelId", "EMBEDDING_MODEL_ID"),
+          graphReadModelTable = Some(readModel)
         )
 
   /** Loads the storage settings from an explicit environment map (never the process
@@ -70,6 +85,13 @@ object StorageSettings:
     ConfigLoader.loadSection(section(name), env)
 
 extension (s: StorageSettings)
+  /** The graph read model table name, or a configuration error when it is not known. */
+  def requireGraphReadModelTable: scholarchain.storage.common.Result[String] =
+    s.graphReadModelTable.toRight(
+      scholarchain.storage.common.StorageError
+        .Misconfigured("dynamodb.tables.graphReadModel is not configured")
+    )
+
   /** The read-port bounds: graph limit, path depth and the path time-limit ceiling. */
   def graphReaderLimits: scholarchain.storage.graph.GraphReaderLimits =
     scholarchain.storage.graph

@@ -79,8 +79,9 @@ final class SupportedPathReader(graph: GraphReader, support: EdgeSupportReader) 
     }
     failure.toLeft(SupportedPath(p.researcherIds, hops.result()))
 
-/** In-memory [[EdgeSupportReader]]. No real adapter exists: the support rows are Parquet files in
-  * ordinary S3 (`coauthored_with_support`), and no store indexes them by edge.
+/** In-memory [[EdgeSupportReader]], the local fake of the contract. The real adapter is
+  * `scholarchain.storage.dynamo.DynamoEdgeSupportReader`, fed by `GraphReadModelLoader` from the
+  * `coauthored_with_support` Parquet table; both pass `EdgeSupportReaderContract`.
   */
 final class FakeEdgeSupportReader extends EdgeSupportReader:
   private val rows = mutable.LinkedHashMap.empty[(String, String), Set[String]]
@@ -90,13 +91,12 @@ final class FakeEdgeSupportReader extends EdgeSupportReader:
     rows((pointer, runId)) = workIds
   }
 
-  private val Prefix = "coauthor-edge-support-v1:"
-
   def supportingWorkIds(edge: CoauthorEdgeView): Result[Vector[String]] =
-    if !edge.evidencePointer.startsWith(Prefix) then
+    if edge.evidencePointer != scholarchain.core.model.CoauthorEdgeSupport.supportRef(edge.edgeId)
+    then
       Left(
         StorageError.InvalidRecord(
-          s"evidence pointer '${edge.evidencePointer}' is not a support reference"
+          s"evidence pointer '${edge.evidencePointer}' is not the support reference of edge ${edge.edgeId}"
         )
       )
     else

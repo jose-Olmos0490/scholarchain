@@ -22,7 +22,7 @@ import sbt._
   *   sbt-native-packager  1.13.0   project/plugins.sbt
   *   sbt-scalafmt         2.6.2    project/plugins.sbt
   *   scalafmt (core)      3.11.5   .scalafmt.conf `version`
-  *   Docker base image    eclipse-temurin:17.0.21_9-jre-noble (Versions.temurinJreTag)
+  *   Docker base image    eclipse-temurin:17.0.21_9-jre-noble (Versions.temurinJreTag, pinned by Dependencies.temurinJreDigest)
   */
 object Dependencies {
 
@@ -61,9 +61,13 @@ object Dependencies {
     // AWS SDK for Java v2. Every awssdk artifact uses the BOM release version.
     val awsSdkBom = "2.59.4"
 
-    // Container runtime for services (sbt-native-packager dockerBaseImage).
+    // Container runtime for services (docker/Dockerfile.service BASE_IMAGE).
     val temurinJreTag = "17.0.21_9-jre-noble"
   }
+
+  // Multi-arch index digest of the tag above, read from the registry when pinned.
+  // Image reference is tag@digest. Refresh together with `temurinJreTag`.
+  val temurinJreDigest = "sha256:ae8ca912a35034f0edf84bf2f9d15b087829127778aa262cd20dffb281bb9285"
 
   // JSON (the one project-wide JSON library).
   val upickle = "com.lihaoyi" %% "upickle" % Versions.upickle

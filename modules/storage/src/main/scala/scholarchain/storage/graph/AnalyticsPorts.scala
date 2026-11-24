@@ -63,9 +63,11 @@ trait AnalyticsReader:
       windowEndYear: Int
   ): Result[Long]
 
-/** In-memory [[AnalyticsReader]]. No real adapter exists yet because no store loads these
-  * records: the Neptune export skips `components`, `community_membership` and
-  * `cross_community_edge`, and the DynamoDB load only takes `researcher_collaboration`.
+/** In-memory [[AnalyticsReader]], the local fake of the contract. The real adapter is
+  * `scholarchain.storage.dynamo.DynamoAnalyticsReader`, fed by `GraphReadModelLoader` from the
+  * `components`, `community_membership` and `cross_community_edge` Parquet tables (the Neptune
+  * export skips them and `DynamoLoader` only takes `researcher_collaboration`); both pass
+  * `AnalyticsReaderContract`.
   */
 final class FakeAnalyticsReader(limits: GraphReaderLimits) extends AnalyticsReader:
   private val templates = new CypherTemplates(limits)

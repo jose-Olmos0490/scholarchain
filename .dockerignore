@@ -1,0 +1,8 @@
+# Build contexts are staged by `sbt dockerLocal` under modules/services/target/docker/<service>;
+# keep anything else out of any context built from the repository root.
+**
+!docker/
+!modules/services/target/docker/
+**/.env*
+**/*.pem
+**/*.key

@@ -2,6 +2,7 @@ package scholarchain.storage.directory
 
 import scala.collection.mutable
 import scholarchain.storage.common.*
+import upickle.default.ReadWriter
 
 /** One canonical researcher that a normalized name may denote.
   *
@@ -21,7 +22,7 @@ final case class NameCandidate(
     matchDecisionIds: Vector[String],
     policyVersion: String,
     runId: String
-)
+) derives ReadWriter
 
 /** Lookup of canonical researchers by normalized name, from the entity-resolution outputs.
   *
@@ -32,9 +33,8 @@ final case class NameCandidate(
 trait ResearcherDirectory:
   def candidatesByName(normalizedName: String, limit: Int): Result[Vector[NameCandidate]]
 
-/** In-memory [[ResearcherDirectory]]. There is no real adapter: no loaded store holds a
-  * normalized name or the stored match confidence, and the Neptune Researcher node carries a
-  * cluster confidence but no normalized name, affiliations or decision IDs.
+/** In-memory [[ResearcherDirectory]], the local fake of the contract. The real adapter is
+  * `scholarchain.storage.dynamo.DynamoResearcherDirectory`; both pass `ResearcherDirectoryContract`.
   */
 final class FakeResearcherDirectory(maxLimit: Int) extends ResearcherDirectory:
   private val byName = mutable.LinkedHashMap.empty[String, Vector[NameCandidate]]

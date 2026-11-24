@@ -195,6 +195,21 @@ class FailureMapperSpec extends AnyFunSuite with Matchers:
     map(StageFailure.Retryable("s", "x")).retryable shouldBe true
   }
 
+  test("typed Timeout is 504 and typed Overloaded is 503, whatever the detail says") {
+    val timeout = map(StageFailure.Timeout("model", "no marker words here"))
+    timeout.code shouldBe ErrorCode.GatewayTimeout
+    timeout.reason shouldBe Some("STAGE_TIMEOUT")
+    timeout.retryable shouldBe true
+    val busy = map(StageFailure.Overloaded("model", "no marker words here"))
+    busy.code shouldBe ErrorCode.Unavailable
+    busy.reason shouldBe Some("OVERLOADED")
+    busy.retryable shouldBe true
+    // the status comes from the type: marker text in a Failed does not change it
+    map(StageFailure.Failed("s", "did not finish within 5 ms")).code shouldBe ErrorCode.BadGateway
+    // the typed answer never repeats the detail
+    map(StageFailure.Timeout("model", "secret-detail")).message should not include "secret-detail"
+  }
+
   test("a detail or code from a stage is never echoed unless it is a plain reason token") {
     val e = map(StageFailure.Rejected("bad code with <html> and secrets", "password=hunter2"))
     e.reason shouldBe Some("REFUSED")
