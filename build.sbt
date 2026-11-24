@@ -259,7 +259,7 @@ lazy val services = (project in file("modules/services"))
 // It has no main sources, publishes nothing, and builds no assembly.
 // ---------------------------------------------------------------------------
 lazy val adversarialTests = (project in file("tests"))
-  .dependsOn(core, hadoop, entityResolution, sparkAnalytics)
+  .dependsOn(core, hadoop, entityResolution, sparkAnalytics, storage, rag, services)
   .disablePlugins(AssemblyPlugin)
   .settings(commonSettings, clusterTestSettings)
   .settings(
