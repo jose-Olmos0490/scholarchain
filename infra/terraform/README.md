@@ -123,7 +123,7 @@ expected to fire once.
     constitution forbids any apply wrapper, so `deploy.sh` only rolls the application and uses the
     plan checksum as evidence that a reviewed plan exists for this commit, account and environment.
     `cleanup.sh` (human-only) is the single script that can execute a destroy plan, and only after
-    the exact `CONFIRM_CLEANUP` string.
+    the exact `CONFIRM_CLEANUP=<env>-<account-id>` string.
 
 ## Unverified items (no read-only AWS profile was available)
 
@@ -163,7 +163,21 @@ Without any skips the scan reports 559 passed and 59 failed; with the inline ski
 ## Cleanup
 
 `scripts/cleanup.sh --env dev` is a human-only dry run that writes a destroy plan and lists every
-target. Running it with `CONFIRM_CLEANUP=<env>-<account-id>` executes that plan. Before it:
+target. Running it with `CONFIRM_CLEANUP=<env>-<account-id>` (environment name, hyphen, the 12-digit
+account) executes that plan. The script compares your value with the account it resolves from
+STS but never prints the resolved value (it would put the account ID into logs): read the account
+yourself with `aws sts get-caller-identity`. Cleanup
+policy: state is preserved (the script never deletes or edits it and saves a copy to
+`build/cleanup/<env>-<sha>/state-before.json` first); log groups are deleted only when the human
+sets `CLEANUP_LOGS_PRESERVED=yes` after exporting them; inventories and the target list go to
+`build/cleanup/<env>-<sha>/` (a failed before-inventory stops the script; a failed after-inventory
+is written as an explicit `UNAVAILABLE` marker). Evidence gate: a confirmed run requires a clean
+tree and an evidence archive from the archiving script (`scripts/archive-evidence.sh`) that it
+checks as follows: `SHA256SUMS` exists and verifies the archived files, `MISSING.txt` exists and
+has no `tests:` entry (no test reports at all), and `release/evidence-location.txt` is an `s3://`
+location whose `SHA256SUMS` object exists, or `local-only` together with the explicit
+`CLEANUP_LOCAL_EVIDENCE_ACK=yes`. The script verifies integrity and location only; whether the
+evidence is sufficient is the human's judgment. Before it:
 
 - Empty the buckets you intend to lose, deliberately (buckets are `force_destroy = false`).
 - The vector indexes, DynamoDB tables and secret hold data; the secret has a 7-day recovery window.
@@ -173,5 +187,7 @@ target. Running it with `CONFIRM_CLEANUP=<env>-<account-id>` executes that plan.
 - `cleanup.sh` refuses to run unless stdin and stdout are TTYs. The dry run saves the destroy plan
   and prints its sha256; the confirmed run needs `CONFIRM_CLEANUP=<env>-<account-id>` and
   `APPROVED_DESTROY_SHA256=<sha256>` and executes only that saved plan, with no re-plan.
+- Region for every live script: `--region`, else `AWS_REGION`, `AWS_DEFAULT_REGION`, or the Region
+  configured for the profile. There is no built-in default; the script fails if none resolves.
 - After cleanup list the account for leftovers: ECR images, CloudWatch log groups, the KMS key
   (30-day deletion window), Neptune snapshots, S3 object versions.

@@ -1,0 +1,296 @@
+== deploy
+deploy.sh - application rollout only: build, push (tagged by Git SHA) and roll the ECS services.
+
+  APPROVED_PLAN_SHA256=<sha256 of the approved plan file> \
+  scripts/deploy.sh --env dev [--git-sha <sha>] [--profile <name>] [--region <region>]
+
+What it does NOT do: it never runs Terraform apply and never changes infrastructure. The
+infrastructure (cluster, services, roles, queues, tables) must already exist, created by the
+human from the approved plan. Here the plan is only evidence: the script refuses to continue
+unless the plan file for this commit exists, its sha256 equals APPROVED_PLAN_SHA256, and the
+plan was made for this account, this commit and this environment.
+
+Rollout: the task definition family that Terraform manages is cloned with the new image tag
+(<ecr repo>:<git sha>) and the service is moved to it; Terraform ignores the service's task
+definition so the two do not fight. The previous task definitions are recorded so that
+scripts/rollback.sh can return to them.
+
+CONSTITUTIONAL RECONCILIATION (flagged for the human): the work order for this script asked
+it to "apply only that exact saved plan file". docs/agents.md forbids deploy.sh from running
+Terraform apply, and the guard blocks apply wrappers. So the plan file is only verified here
+(sha256, account, commit, environment, not dirty, not offline). Applying the saved plan is a
+separate, human-only step: scripts/plan.sh prints the exact command at the end of its output.
+
+LIMIT (what is and is not verified): deploy.sh does NOT verify that the human actually applied
+the approved plan. Beyond the plan file's own checks above, the only evidence of an apply is
+that the ECS cluster scholarchain-<env> is ACTIVE; resources the plan would have changed (roles,
+queues, tables, task-definition families) are not compared with the live account. The human
+confirms the apply happened (and that it was THIS plan) before running /deploy.
+Plan integrity: SC_PLAN_DIR must be owned by the invoking user with mode 700 (otherwise the
+script refuses). The plan is copied once into a private mode-700 temp directory; the checksum
+and every terraform show run on that copy, which removes the check-then-use window.
+
+Required environment variables: APPROVED_PLAN_SHA256 (sha256 of the approved plan file),
+  SCHOLARCHAIN_APPROVED_ENVS (set by the human before the session; must list --env).
+  AWS credentials come from the standard chain or --profile (AWS_PROFILE).
+Optional: SC_STABLE_TIMEOUT (seconds to wait per service, default 900), SC_PLAN_DIR.
+Region: --region, else AWS_REGION, AWS_DEFAULT_REGION or the profile's Region; no default.
+Exit codes: 0 rolled out and stable, 1 refused or failed, 2 usage error.
+Human approval points: the plan review and its checksum (APPROVED_PLAN_SHA256), the approved
+  environment list, and the /deploy work order.
+Evidence: $SC_PLAN_DIR/deploy-<env>-<sha>.json and build/deploy-record-<env>-<sha>.json with
+  registry image digests and task definition ARNs and revisions (new and previous).
+Rollback behavior: a failed stability wait stops the script with exit 1 and names
+  scripts/rollback.sh --env <env> --to-sha <previous sha>; the previous task definitions are
+  written to $SC_PLAN_DIR/previous-<env>-<sha>.txt. Nothing is rolled back automatically.
+exit=0
+== rollback
+rollback.sh - move the three ECS services back to the task definition that runs an earlier,
+already-pushed image tag (a Git SHA). Application rollout only: no Terraform, no data change.
+
+  scripts/rollback.sh --env dev --to-sha <git sha previously deployed> [--profile <name>] [--region <region>]
+
+The target revision is found, never guessed: for each service the ACTIVE task definition
+revisions of its family are searched (newest first, at most 25) for one whose container image
+ends in ":<sha>". If any service has no such revision nothing is changed.
+
+Required environment variables: SCHOLARCHAIN_APPROVED_ENVS (set by the human; must list --env).
+  AWS credentials come from the standard chain or --profile (AWS_PROFILE).
+Optional: SC_STABLE_TIMEOUT (seconds to wait per service, default 900).
+Region: --region, else AWS_REGION, AWS_DEFAULT_REGION or the profile's Region; no default.
+Partial failure: if an update-service call fails after earlier services were moved, the script
+  names the services already moved and prints the exact idempotent re-run command.
+Exit codes: 0 rolled back and stable, 1 refused or failed, 2 usage error.
+Human approval point: the approved environment list and the /rollback or /deploy work order.
+Evidence: the step markers and the "image tag" lines on stdout (capture them in the report).
+exit=0
+== smoke-test
+smoke-test.sh - bounded end-to-end check of a deployed environment through the ALB.
+
+  SCHOLARCHAIN_API_TOKEN=<bearer token>  SMOKE_RESEARCHER_ID=<researcher:... of the served run> \
+  scripts/smoke-test.sh --env dev [--base-url https://host] [--window 2010-2013]
+                        [--profile <name>] [--region <region>]
+
+Checks, in order: /healthz, /readyz, one bounded query (DIRECT_COAUTHORS for one researcher,
+graphLimit 5), one evidence fetch for an ID returned by that query, idempotency (the same
+Idempotency-Key and body replays the same queryId with Idempotent-Replayed: true), and two
+expected errors (no token -> 401, unsupported operation -> 422). Every call has a connect and
+a total timeout. The token is read from the environment, never printed and never placed on a
+command line: it is written to a mode-600 file in a mode-700 temp directory and passed to curl
+with --header @file (curl 7.55 or newer is required; the script fails clearly otherwise).
+
+/healthz and /readyz are routed by the ALB to the query API only. The graph API's own
+health is checked by the ALB target group; its routes are exercised through the evidence
+fetch above (evidence is served by the graph-evidence API).
+
+Required environment variables: SCHOLARCHAIN_API_TOKEN (bearer token, never printed),
+  SMOKE_RESEARCHER_ID (a researcher ID present in the served run),
+  SCHOLARCHAIN_APPROVED_ENVS (set by the human; must list --env).
+Region: --region, else AWS_REGION, AWS_DEFAULT_REGION or the profile's Region (only needed when
+  the ALB is looked up through AWS; not needed with --base-url). No built-in default.
+Optional: --base-url overrides the ALB lookup (which needs AWS read access for
+  elasticloadbalancing:DescribeLoadBalancers).
+Exit codes: 0 every check passed, 1 at least one check failed, 2 usage error.
+Evidence: PASS/FAIL lines on stdout; the final line "SMOKE RESULT: PASS" or
+  "SMOKE RESULT: FAIL (n check(s) failed)" is also written to build/smoke-test-<env>.txt.
+Rollback behavior: none here. On FAIL the deploy-engineer runs the rollback script with
+  --env <env> --to-sha <previous sha> (the previous SHA is in the deploy record).
+Only the POST /v1/query calls write anything (a query-session record keyed by the idempotency
+key); the evidence fetch and the probes are reads. Each call is bounded by curl timeouts.
+exit=0
+== run-bounded-pipeline
+run-bounded-pipeline.sh - run the Hadoop (and optionally Spark) pipeline, locally or on EMR.
+
+  scripts/run-bounded-pipeline.sh --local [--name <run name>] [--stages hadoop[,spark]]
+  scripts/run-bounded-pipeline.sh --env dev [--git-sha <sha>] [--wait-timeout <seconds>]
+                                  [--profile <name>] [--region <region>]
+
+--local: no AWS. Runs the packaged-source drivers through sbt on the committed samples
+         (datasets/samples), writing under target/pipeline-local/<name>/ (git-ignored).
+         The spark stage uses modules/spark/config/local-run.properties exactly as the Spark
+         module documents (its input root and run ID must exist from an earlier hadoop run).
+--env:   cloud run through the Step Functions state machine created by Terraform when
+         enable_emr=true. The jars are built from the clean HEAD (sbt packageJobs), uploaded to
+         the artifacts bucket under jobs/<git sha>/, and the execution is bounded by the state
+         machine's per-step timeouts and by this script's --wait-timeout. The input volume is
+         bounded by the configured DBLP_SUBSET_MAX_WORKS and the raw prefixes, never here.
+
+The cluster itself is never created or resized here: it must already exist (enable_emr).
+
+Required environment variables: none for --local. For --env: SCHOLARCHAIN_APPROVED_ENVS (set
+  by the human; must list --env). AWS credentials come from the standard chain or --profile
+  (AWS_PROFILE). Bucket names are derived from the Terraform naming convention
+  scholarchain-<env>-<area>-<account>-<region>; SC_ARTIFACTS_BUCKET, SC_RAW_BUCKET and
+  SC_CURATED_BUCKET override them.
+Region: --region, else AWS_REGION, AWS_DEFAULT_REGION, or the profile's configured Region
+  (cloud only); there is no built-in default.
+Exit codes: 0 pipeline succeeded, 1 refused or failed (the execution is stopped at the wait
+  timeout), 2 usage error, 130/143 interrupted by INT/TERM (the cloud path still stops the Step
+  Functions execution and writes the run record before exiting).
+Human approval points (cloud): the EMR cost and bounds (cluster size, managed-scaling limits,
+  per-step timeouts, --wait-timeout) and the approved environment list, before /run-pipeline.
+Evidence: build/pipeline-run-<name>.json with the dataset snapshots (from
+  datasets/dataset-manifest.yaml), the commit SHA, the run IDs (execution ARN and name), the
+  configuration (stages, step arguments, timeouts) and the output S3 prefixes or local
+  directories, plus start and end UTC times and final status.
+Rollback behavior: none for data. A run writes under a prefix keyed by the commit SHA and
+  never overwrites an earlier run's prefix; a run that exceeds --wait-timeout is stopped.
+Signals and failures (cloud): an EXIT/TERM/INT trap stops the Step Functions execution if it is
+  still RUNNING (idempotent, 30 s timeout per call) and writes the run record with the status
+  (SUCCEEDED, STOPPED_AT_WAIT_TIMEOUT, STOPPED_ON_ERROR_OR_SIGNAL, STOP_FAILED_STILL_RUNNING,
+  UNKNOWN or the Step Functions status). If the stop call itself fails the record says so and
+  the human must stop the execution (its ARN is in the record and on the EXECUTION_ARN line).
+Needs python3 with PyYAML (preflight-checked) to write the run record.
+exit=0
+== run-experiment
+run-experiment.sh - run one controlled experiment from a committed manifest and record it.
+
+  scripts/run-experiment.sh --env dev --manifest experiments/<dir>/<name>.yaml
+                            [--profile <name>] [--region <region>]
+
+The manifest path must resolve (symlinks and ".." followed) to a regular file under the
+repository's experiments/ directory and must be tracked by Git; anything else is refused.
+The tree must be clean and the environment approved.
+
+Manifest (YAML or JSON), required keys:
+  name:      letters, digits, . _ -
+  runner:    "pipeline"   runs scripts/run-bounded-pipeline.sh --env <env> (cloud, bounded)
+             "load-test"  runs one executable file under load-tests/ (path relative to
+                          load-tests/, no ".." and no symlink out of it)
+  limits:    resource limits, recorded verbatim in the run record. Required integer keys:
+               max_duration_seconds (hard timeout of the run, 1..86400)
+             Optional integer keys (recorded; the Terraform-set bounds still apply):
+               emr_max_nodes, ecs_max_tasks, sqs_max_workers
+  args:      optional list of strings passed to the load-test file (never to a shell)
+  metrics:   optional list of {namespace, metric, dimensions} CloudWatch locations, and/or
+             {s3_prefix} output locations; recorded verbatim for scripts/archive-evidence.sh
+
+The runner receives SC_EXPERIMENT_OUT, a directory under build/experiments/ for its raw
+results; raw results are never edited by this script.
+
+Required environment variables: SCHOLARCHAIN_APPROVED_ENVS (set by the human; must list
+  --env). AWS credentials come from the standard chain or --profile (AWS_PROFILE) when the
+  runner uses AWS. A load-test runner may need its own variables (for example a base URL and
+  SCHOLARCHAIN_API_TOKEN); they are passed through the environment, never printed.
+Timeouts: the runner is bounded by max_duration_seconds (TERM, then KILL 60 s later; the whole
+  process group is signalled). The pipeline runner gets an inner wait timeout shorter by a margin
+  (duration/10, 30..300 s) so it stops its Step Functions execution and records the run first.
+Region: --region, else AWS_REGION, AWS_DEFAULT_REGION or the profile's Region; no default.
+Exit codes: 0 experiment ran and the runner exited 0, 1 refused or runner failed (including
+  the max_duration_seconds timeout: runner exit 124 or 137 is recorded as timedOut), 2 usage error.
+Human approval points: the approved environment list and the approved manifest (large
+  manifests and EMR or OpenSearch scale changes need human sign-off before /experiment).
+Evidence: build/experiment-<name>-<commit>-<start>.json with commit SHA, resource limits, start
+  and end UTC times, Region, runner exit code, raw result directory and metric locations.
+Rollback behavior: none. The script changes no infrastructure; stopping a runaway run is the
+  timeout. Data written by the runner is never deleted here.
+exit=0
+== archive-evidence
+archive-evidence.sh - gather the evidence of one commit into evidence/<commit-sha>/, or into an
+S3 prefix when EVIDENCE_S3_PREFIX is set.
+
+  scripts/archive-evidence.sh --env dev [--git-sha <short sha>] [--hours 24]
+                              [--metric <namespace>:<metric>:<Dim>=<value>[,<Dim>=<value>]]...
+                              [--profile <name>] [--region <region>]
+
+Collected (each item is copied only when it exists and belongs to the commit; missing items
+are listed in MISSING.txt, never invented):
+  tests/               docs/agent-runs/*/test-report.md and review-report.md that exist in the
+                       commit's tree and are unmodified in the working tree, and the JUnit XML
+                       reports under **/target/test-reports/ that were modified since the
+                       commit's PARENT commit (reports of older runs are skipped). The
+                       system-out and system-err bodies of the XML are stripped (they can hold
+                       logs, tokens or personal data). Per-file and total size caps apply
+                       (SC_EVIDENCE_MAX_FILE_BYTES, SC_EVIDENCE_MAX_TOTAL_BYTES); anything
+                       skipped is listed in MISSING.txt, never invented.
+  plan/                build/plan-summary.json (the plan checksum, counts, IAM and stateful
+                       actions) and the plan checksum files. The plan file itself is NOT copied.
+  images/              build/package-manifest.json (only a COMPLETE one: "complete": true, jars and
+                       images both built; a partial or pre-marker manifest is listed in
+                       MISSING.txt, not archived) and build/deploy-record-*-<sha>.json (image
+                       digests, task definition revisions)
+  runs/                build/pipeline-run-*.json for this commit
+  experiments/         build/experiment-*-<sha>-*.json and their raw result directories
+  metrics/             CloudWatch exports: every --metric given, plus every metric location
+                       listed in this commit's experiment records
+  release/             release-metadata.json (commit, subject, tool versions, tree state) and
+                       evidence-location.txt (the s3:// location, or "local-only"; scripts/cleanup.sh
+                       reads it)
+  SHA256SUMS           checksums of every file above
+
+An archive is immutable: the script refuses to write into an existing non-empty
+evidence/<sha>/ or into an S3 prefix that already holds objects for this commit. It deletes
+nothing and overwrites nothing.
+
+Required environment variables: SCHOLARCHAIN_APPROVED_ENVS (set by the human; must list --env
+  when CloudWatch or S3 is used). AWS read credentials (CloudWatch GetMetricStatistics) and,
+  with EVIDENCE_S3_PREFIX, write access to that prefix, from the standard chain or --profile.
+Optional: EVIDENCE_S3_PREFIX (s3://<bucket>/<prefix>; the bundle is stored under
+  <prefix>/<commit-sha>/), SC_BUILD_DIR, SC_EVIDENCE_MAX_FILE_BYTES (per test-report file,
+  default 5242880), SC_EVIDENCE_MAX_TOTAL_BYTES (all test reports, default 52428800),
+  SC_EVIDENCE_MAX_ARCHIVE_BYTES (whole archive, default 524288000; larger is refused).
+Region: --region, else AWS_REGION, AWS_DEFAULT_REGION or the profile's Region; no default.
+Exit codes: 0 archived, 1 refused or failed, 2 usage error.
+Human approval point: the choice of EVIDENCE_S3_PREFIX bucket (a data-store write).
+Rollback behavior: none; nothing existing is changed. A failed run leaves a partial local
+  directory that the human may delete.
+exit=0
+== cleanup
+cleanup.sh - HUMAN-ONLY teardown of one environment. Agents never run this script.
+
+  scripts/cleanup.sh --env dev [--profile <name>] [--region <region>]            (dry run)
+  CONFIRM_CLEANUP=<env>-<account-id> APPROVED_DESTROY_SHA256=<sha256 of the saved destroy plan> \
+  CLEANUP_LOGS_PRESERVED=yes [CLEANUP_LOCAL_EVIDENCE_ACK=yes] \
+  scripts/cleanup.sh --env dev [--profile <name>] [--region <region>]
+                                                                                  (execute)
+
+The script refuses to run unless stdin and stdout are both terminals (a human at a shell).
+It never prompts: confirmation is the environment variables below, set deliberately.
+
+Required environment variables:
+  SCHOLARCHAIN_APPROVED_ENVS   set by the human; must list --env
+  CONFIRM_CLEANUP              execute only: must equal <env>-<account-id> (environment name, a
+                               hyphen, the 12-digit account from `aws sts get-caller-identity`);
+                               anything else keeps the run a dry run. The dry run does NOT print the
+                               resolved value (it would put the account ID into logs): read the
+                               account yourself with `aws sts get-caller-identity`.
+  APPROVED_DESTROY_SHA256      execute only: sha256 of the saved destroy plan the dry run printed
+  CLEANUP_LOGS_PRESERVED=yes   execute only, and only when the destroy plan deletes CloudWatch log
+                               groups: the human states the logs were exported first
+  CLEANUP_LOCAL_EVIDENCE_ACK=yes  execute only, and only when the evidence archive is local-only
+                               (no EVIDENCE_S3_PREFIX was used): the human acknowledges that the
+                               evidence lives only on this machine and was copied elsewhere
+Region: --region, else AWS_REGION, AWS_DEFAULT_REGION or the profile's Region; no default.
+Exit codes: 0 cleanup finished, 1 refused or failed, 2 usage error, 3 dry run (nothing changed).
+
+Cleanup policy (documented in infra/terraform/README.md):
+  - The targeted resources are LISTED first (dry run), always.
+  - Terraform state is preserved: the script never deletes, moves or edits state, and before an
+    execute it saves a copy (terraform state pull) to build/cleanup/<env>-<sha>/state-before.json
+    (mode 600, untracked). The state backend itself is not part of the environment's plan.
+  - Logs: the logs bucket is force_destroy=false, so it survives while it holds objects; log
+    groups are only deleted when the human sets CLEANUP_LOGS_PRESERVED=yes.
+  - Final reports: an execute needs a clean tree (reports and docs are committed) and a finished
+    evidence archive at evidence/<sha>/ (scripts/archive-evidence.sh) that passes these checks:
+    SHA256SUMS exists and verifies every archived file; MISSING.txt exists and does not list the
+    test reports ("tests:" entries); release/evidence-location.txt names an S3 location (whose
+    SHA256SUMS object must exist) or, for a local-only archive, CLEANUP_LOCAL_EVIDENCE_ACK=yes is
+    set. The script checks the archive's integrity and location; it cannot judge whether the
+    evidence is sufficient, which stays a human decision.
+  - The inventory before, the destroy plan listing and the inventory after are written to
+    build/cleanup/<env>-<sha>/.
+
+Dry run (no CONFIRM_CLEANUP): writes a destroy plan, saves it together with its sha256, LISTS
+every resource it would remove (and which buckets still hold objects) and exits with status 3.
+Confirmed run: requires CONFIRM_CLEANUP exactly equal to <env>-<account-id> AND
+APPROVED_DESTROY_SHA256 equal to the sha256 of the saved destroy plan. It executes only that
+saved plan: it never re-plans, so what was reviewed is what is destroyed.
+
+It never empties a bucket, never disables deletion protection and never changes retention:
+  - buckets are force_destroy=false, so a bucket that still holds objects makes the destroy fail
+    (deleting data is a human decision made deliberately, outside this script);
+  - Neptune, DynamoDB tables and the ALB carry deletion protection while protect_stateful=true
+    (the default, in every environment). Cleanup requires a reviewed Terraform change with
+    protect_stateful=false, applied by the human, FIRST; until then the destroy is refused.
+Resource inventory is printed before and after.
+exit=0

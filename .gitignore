@@ -33,7 +33,13 @@ credentials*
 *.tfplan
 terraform.tfvars
 *.auto.tfvars
+*.tfvars
 !*.tfvars.example
+
+# Generated script outputs at the repo root: plan/package/deploy/pipeline
+# records and archived evidence
+/build/
+/evidence/
 
 # Datasets: raw downloads stay local
 datasets/raw/

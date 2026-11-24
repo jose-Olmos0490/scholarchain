@@ -2,7 +2,7 @@
 # plan.sh - produce a reviewable, non-destructive Terraform plan for one environment.
 #
 #   scripts/plan.sh --env dev [--git-sha <sha>] [--account-id <12 digits>] [--profile <name>]
-#                   [--region us-east-1] [--enable-emr true|false] [--enable-neptune true|false]
+#                   [--region <region>] [--enable-emr true|false] [--enable-neptune true|false]
 #                   [--alb-ingress-cidr <cidr>]... [--offline] [--allow-dirty]
 #
 # Writes /tmp/scholarchain-plans/<env>-<gitsha>.tfplan (never into the repository), prints the
@@ -15,6 +15,22 @@
 # the summary says dirty=true; deploy.sh refuses it. A dirty plan never overwrites a clean one.
 # alb_ingress_cidrs has no default: set it in terraform.tfvars or pass --alb-ingress-cidr
 # (repeatable; 0.0.0.0/0 and ::/0 are rejected by Terraform).
+#
+# Also writes build/plan-summary.json (untracked): environment, plan file, plan SHA-256, commit
+# SHA, target account (aws sts get-caller-identity) and Region, add/change/destroy counts, every
+# IAM and policy change, and every action on a stateful resource, all taken from
+# "terraform show -json". The same data is printed in text form.
+#
+# Required environment variables: none. AWS read credentials are needed unless --offline: set
+#   AWS_PROFILE or pass --profile (the profile must be able to call sts:GetCallerIdentity and
+#   the read calls the AWS provider makes while planning).
+# Region: --region, else AWS_REGION, AWS_DEFAULT_REGION or the profile's Region; there is no
+#   built-in default, and even --offline needs one (it is a Terraform input).
+# Optional: TF_VAR_aws_account_id (expected account; a mismatch with the credentials is refused),
+#   SC_PLAN_DIR (default /tmp/scholarchain-plans), SC_BUILD_DIR (default <repo>/build).
+# Exit codes: 0 plan written, 1 failed (dirty tree, account mismatch, terraform error), 2 usage.
+# Human approval point: the human reviews the plan, then applies THAT SAVED FILE by hand; the
+# exact command is printed at the end of this script's output. No script and no agent runs it.
 
 set -euo pipefail
 IFS=$'\n\t'
@@ -26,17 +42,12 @@ ENV_NAME=""
 GIT_SHA=""
 ACCOUNT_ID=""
 SC_PROFILE=""
-SC_REGION="us-east-1"
+SC_REGION=""
 ENABLE_EMR=""
 ENABLE_NEPTUNE=""
 OFFLINE=false
 ALLOW_DIRTY=false
 declare -a ALB_CIDRS=()
-
-usage() {
-  sed -n '2,20p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
-  exit 2
-}
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -50,13 +61,14 @@ while [[ $# -gt 0 ]]; do
     --alb-ingress-cidr) ALB_CIDRS+=("${2:?--alb-ingress-cidr needs a value}"); shift 2 ;;
     --offline) OFFLINE=true; shift ;;
     --allow-dirty) ALLOW_DIRTY=true; shift ;;
-    -h | --help) usage ;;
-    *) die "unknown argument: $1" ;;
+    -h | --help) print_help ;;
+    *) usage_error "unknown argument: $1" ;;
   esac
 done
 
-[[ -n "$ENV_NAME" ]] || usage
+[[ -n "$ENV_NAME" ]] || usage_error "--env is required"
 validate_env_name "$ENV_NAME"
+resolve_region
 require_cmd terraform git python3 sha256sum tee timeout
 ENV_DIR="$(env_dir "$ENV_NAME")"
 
@@ -88,6 +100,7 @@ info "account: $ACCOUNT_ID  region: $SC_REGION"
 
 mkdir -p "$SC_PLAN_DIR"
 chmod 700 "$SC_PLAN_DIR"
+assert_private_dir "$SC_PLAN_DIR"
 PLAN_FILE="$(plan_path "$ENV_NAME" "$GIT_SHA")"
 if [[ "$ALLOW_DIRTY" == true ]]; then
   PLAN_FILE="${PLAN_FILE%.tfplan}.DIRTY.tfplan"
@@ -199,6 +212,56 @@ PY
 
 cat "$SUMMARY_FILE"
 
+step "write build/plan-summary.json"
+mkdir -p "$SC_BUILD_DIR"
+python3 -I - "${PLAN_FILE%.tfplan}.plan.json" "$SC_BUILD_DIR/plan-summary.json" "$ENV_NAME" "$GIT_SHA" \
+  "$PLAN_SHA256" "$PLAN_FILE" "$ACCOUNT_ID" "$SC_REGION" "$OFFLINE" "$ALLOW_DIRTY" "$(utc_now)" <<'PY'
+import json
+import sys
+
+plan_json, out, env, sha, digest, plan_file, account, region, offline, dirty, now = sys.argv[1:12]
+data = json.load(open(plan_json))
+STATEFUL = {
+    "aws_s3_bucket", "aws_dynamodb_table", "aws_neptune_cluster", "aws_neptune_cluster_instance",
+    "aws_sqs_queue", "aws_kms_key", "aws_s3vectors_vector_bucket", "aws_s3vectors_index",
+    "aws_secretsmanager_secret", "aws_ecr_repository", "aws_emr_cluster", "aws_cloudwatch_log_group",
+    "aws_efs_file_system", "aws_sns_topic",
+}
+POLICY = {"aws_kms_key", "aws_kms_alias", "aws_s3_bucket_policy", "aws_sqs_queue_policy", "aws_sns_topic_policy"}
+add = change = destroy = 0
+iam, stateful = [], []
+for rc in data.get("resource_changes", []):
+    actions = sorted(rc["change"]["actions"])
+    if actions in (["no-op"], ["read"]):
+        continue
+    if actions == ["create"]:
+        add += 1
+    elif actions == ["update"]:
+        change += 1
+    elif actions == ["delete"]:
+        destroy += 1
+    elif actions == ["create", "delete"]:
+        add += 1
+        destroy += 1
+    entry = {"address": rc["address"], "type": rc["type"], "actions": rc["change"]["actions"]}
+    if rc["type"].startswith("aws_iam_") or rc["type"] in POLICY:
+        iam.append(entry)
+    if rc["type"] in STATEFUL:
+        stateful.append(entry)
+doc = {
+    "environment": env, "commitSha": sha, "dirty": dirty == "true", "offline": offline == "true",
+    "generatedAtUtc": now, "account": account, "region": region,
+    "planFile": plan_file, "planSha256": digest,
+    "counts": {"add": add, "change": change, "destroy": destroy},
+    "iamChanges": sorted(iam, key=lambda e: e["address"]),
+    "statefulResourceActions": sorted(stateful, key=lambda e: e["address"]),
+}
+with open(out, "w") as fh:
+    json.dump(doc, fh, indent=2)
+    fh.write("\n")
+PY
+info "PLAN_SUMMARY_JSON=$SC_BUILD_DIR/plan-summary.json"
+
 step "reject placeholder tags"
 OWNER_TAG="$(python3 -I - "${PLAN_FILE%.tfplan}.plan.json" <<'PY'
 import json
@@ -226,4 +289,6 @@ if [[ "$ALLOW_DIRTY" == true ]]; then
   warn "dirty=true: this plan cannot be approved or deployed (deploy.sh refuses *.DIRTY.tfplan)"
   exit 0
 fi
-info "Approve by exporting APPROVED_PLAN_SHA256=$PLAN_SHA256 for scripts/deploy.sh after the human has applied this exact plan."
+info "Human-only next step, after review of account, Region and cost: apply exactly this saved file by hand:"
+info "  terraform -chdir=$ENV_DIR apply $PLAN_FILE"
+info "Then approve the application rollout by exporting APPROVED_PLAN_SHA256=$PLAN_SHA256 for scripts/deploy.sh."
