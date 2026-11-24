@@ -79,6 +79,13 @@ object LoadManifests:
       "sha256:" + md.digest().map(b => f"${b & 0xff}%02x").mkString
     finally in.close()
 
+  /** Absolute, scheme-qualified path through the same FileSystem that qualifies file paths
+    * (`file:/abs/...` locally, `s3://...` on EMR). Idempotent for already-qualified paths.
+    */
+  def qualify(path: String, conf: Configuration): String =
+    val p = new Path(path)
+    p.getFileSystem(conf).makeQualified(p).toString
+
   /** The Parquet files of this run of one table, sorted by path. */
   def files(t: WrittenTable, runHex: String, conf: Configuration): Vector[LoadFile] =
     val root = new Path(t.path)
@@ -112,7 +119,7 @@ object LoadManifests:
             tableName = t.name,
             recordType = t.recordType,
             recordSchemaVersion = t.schemaVersion,
-            location = t.path,
+            location = qualify(t.path, conf),
             format = "parquet",
             partitionColumns = t.partitionColumns,
             rowCount = t.rowCount,
