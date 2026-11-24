@@ -51,6 +51,12 @@ resource "aws_service_discovery_service" "this" {
   }
 
   health_check_custom_config {}
+
+  # AWS stores a computed failure_threshold for this block; ignoring it avoids a
+  # forced replacement (ResourceInUse while instances are registered).
+  lifecycle {
+    ignore_changes = [health_check_custom_config]
+  }
 }
 
 # ---- task definitions -----------------------------------------------------

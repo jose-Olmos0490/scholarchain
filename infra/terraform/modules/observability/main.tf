@@ -19,12 +19,12 @@ locals {
     for k, t in var.target_group_arn_suffixes :
     ["AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "LoadBalancer", var.alb_arn_suffix, "TargetGroup", t, { stat = "Sum", label = "${k} 5xx" }]
   ]
-  ddb_throttle_metrics = flatten([
+  ddb_throttle_metrics = concat([
     for k, n in var.table_names : [
       ["AWS/DynamoDB", "ReadThrottleEvents", "TableName", n, { stat = "Sum", label = "${k} read" }],
       ["AWS/DynamoDB", "WriteThrottleEvents", "TableName", n, { stat = "Sum", label = "${k} write" }],
     ]
-  ])
+  ]...)
 
   base_widgets = [
     {
