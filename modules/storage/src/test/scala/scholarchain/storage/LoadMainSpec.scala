@@ -60,7 +60,7 @@ class LoadMainSpec extends StorageSuite:
     bad(Seq("--spark-output", "/x", "--run-id", "run:abc", "--snapshot", "s")) should include(
       "run ID"
     )
-    bad(args(Path.of("/x"), "--targets", "dynamo,neptune")) should include("unknown target")
+    bad(args(Path.of("/x"), "--targets", "dynamo,neptunes")) should include("unknown target")
     bad(args(Path.of("/x"), "--targets", "dynamo,")) should include("empty")
     bad(args(Path.of("/x"), "--bogus")) should include("unknown argument")
     bad(args(Path.of("/x"), "--dry-run", "--dry-run")) should include("twice")

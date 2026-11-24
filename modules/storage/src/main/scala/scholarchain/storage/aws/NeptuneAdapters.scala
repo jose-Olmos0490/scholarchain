@@ -13,6 +13,81 @@ import software.amazon.awssdk.core.exception.{
 import software.amazon.awssdk.services.neptunedata.NeptunedataClient
 import software.amazon.awssdk.services.neptunedata.model.*
 
+/** The exact parameters of one `StartLoaderJob` call, as plain values. Built without a client, so a
+  * dry run can print what a live run would send.
+  */
+final case class BulkLoadPlan(
+    source: String,
+    format: String,
+    roleArn: String,
+    region: String,
+    mode: String,
+    failOnError: Boolean,
+    parallelism: String,
+    userProvidedEdgeIds: Boolean,
+    queueRequest: Boolean
+):
+  def lines: Vector[String] = Vector(
+    s"source=$source",
+    s"format=$format",
+    s"iamRoleArn=$roleArn",
+    s"s3BucketRegion=$region",
+    s"mode=$mode",
+    s"failOnError=$failOnError",
+    s"parallelism=$parallelism",
+    s"userProvidedEdgeIds=$userProvidedEdgeIds",
+    s"queueRequest=$queueRequest"
+  )
+
+object NeptuneBulkLoader:
+  def plan(
+      layout: ObjectLayout,
+      roleArn: String,
+      region: String,
+      parallelism: LoaderParallelism,
+      request: GraphLoadRequest
+  ): BulkLoadPlan = BulkLoadPlan(
+    source = layout.s3Uri(request.csvPrefix),
+    format = "opencypher",
+    roleArn = roleArn,
+    region = region,
+    mode = "NEW",
+    failOnError = true,
+    parallelism = parallelism.wire,
+    userProvidedEdgeIds = true,
+    queueRequest = true
+  )
+
+  /** At most this many error log entries are fetched for a failed load. */
+  val ErrorsPerPage = 10
+
+  /** A one-line summary of the per-feed failures and error log entries in a loader status payload
+    * requested with `details=true` and `errors=true`. Empty when the payload names none.
+    */
+  def describeFailure(payload: ujson.Value): String =
+    def str(o: ujson.Value, k: String): String = o match
+      case x: ujson.Obj =>
+        x.value.get(k).map { case ujson.Str(v) => v; case other => other.render() }.getOrElse("")
+      case _ => ""
+    def arr(o: ujson.Value, k: String): Vector[ujson.Value] = o match
+      case x: ujson.Obj =>
+        x.value.get(k).collect { case ujson.Arr(v) => v.toVector }.getOrElse(Vector.empty)
+      case _ => Vector.empty
+    val feeds =
+      arr(payload, "failedFeeds").map(f => s"${str(f, "fullUri")} ${str(f, "status")}".trim)
+    val errors = payload match
+      case x: ujson.Obj =>
+        x.value.get("errors").map(e => arr(e, "errorLogs")).getOrElse(Vector.empty).map { e =>
+          s"${str(e, "fileName")} record ${str(e, "recordNum")}: ${str(e, "errorCode")} ${str(e, "errorMessage")}".trim
+        }
+      case _ => Vector.empty
+    Vector(
+      if feeds.nonEmpty then Some(s"failed feeds: ${feeds.take(ErrorsPerPage).mkString("; ")}")
+      else None,
+      if errors.nonEmpty then Some(s"errors: ${errors.take(ErrorsPerPage).mkString("; ")}")
+      else None
+    ).flatten.mkString(" | ")
+
 /** Starts and polls Neptune bulk-load jobs (`format=opencypher`) through the neptunedata API.
   *
   * Parameters follow the Neptune Loader reference
@@ -33,20 +108,24 @@ final class NeptuneBulkLoader(
     retrier: Retrier
 ) extends GraphLoader:
 
+  def plan(request: GraphLoadRequest): BulkLoadPlan =
+    NeptuneBulkLoader.plan(layout, roleArn, region, parallelism, request)
+
   def startLoad(request: GraphLoadRequest): Result[GraphLoadJob] =
+    val p = plan(request)
     retrier.run("Neptune StartLoaderJob") {
       val r = client.startLoaderJob(
         StartLoaderJobRequest
           .builder()
-          .source(layout.s3Uri(request.csvPrefix))
-          .format("opencypher")
-          .iamRoleArn(roleArn)
-          .s3BucketRegion(region)
-          .mode("NEW")
-          .failOnError(true)
-          .parallelism(parallelism.wire)
-          .userProvidedEdgeIds(true)
-          .queueRequest(true)
+          .source(p.source)
+          .format(p.format)
+          .iamRoleArn(p.roleArn)
+          .s3BucketRegion(p.region)
+          .mode(p.mode)
+          .failOnError(p.failOnError)
+          .parallelism(p.parallelism)
+          .userProvidedEdgeIds(p.userProvidedEdgeIds)
+          .queueRequest(p.queueRequest)
           .build()
       )
       val id = Option(r.payload())
@@ -74,9 +153,30 @@ final class NeptuneBulkLoader(
         case Some("LOAD_COMPLETED") => GraphLoadState.Completed
         case Some("LOAD_NOT_STARTED") | Some("LOAD_IN_QUEUE") => GraphLoadState.Queued
         case Some("LOAD_IN_PROGRESS") => GraphLoadState.InProgress
-        case Some(other) => GraphLoadState.Failed(other)
+        case Some(other) => GraphLoadState.Failed(failureReason(job, other))
         case None => GraphLoadState.Failed("no overallStatus in the loader response")
     }
+
+  /** The status plus, when the service names them, the failed feeds and first error log entries. A
+    * failure of this extra call never hides the status: the bare status is returned.
+    */
+  private def failureReason(job: GraphLoadJob, status: String): String =
+    val detail = retrier
+      .run("Neptune GetLoaderJobStatus errors") {
+        val r = client.getLoaderJobStatus(
+          GetLoaderJobStatusRequest
+            .builder()
+            .loadId(job.jobId)
+            .details(true)
+            .errors(true)
+            .page(1)
+            .errorsPerPage(NeptuneBulkLoader.ErrorsPerPage)
+            .build()
+        )
+        NeptuneBulkLoader.describeFailure(Docs.toJson(r.payload()))
+      }
+      .getOrElse("")
+    if detail.isEmpty then status else s"$status ($detail)"
 
 /** Runs [[GraphQuery]] values through the neptunedata `ExecuteOpenCypherQuery` API and maps the
   * rows. Caller values are sent only in the `parameters` JSON document. A query that runs out of

@@ -211,6 +211,10 @@ final class LoadRunner(
       case LoadStep.Dynamo => LoadTarget.DYNAMODB
       case LoadStep.S3 => LoadTarget.S3
       case LoadStep.NeptuneCsv => LoadTarget.NEPTUNE
+      case LoadStep.NeptuneLoad =>
+        return Left(
+          StorageError.Unsupported("the neptune bulk-load step is not run by LoadRunner")
+        )
     val rejectsBefore = rejects.all.size
     val result = manifest(args, hex, target, required = true).flatMap { m0 =>
       val m = m0.get
@@ -219,6 +223,7 @@ final class LoadRunner(
         case LoadStep.Dynamo => dynamo(args, hex, m, stager)
         case LoadStep.S3 => s3(m, stager)
         case LoadStep.NeptuneCsv => neptuneCsv(m, hex, stager)
+        case LoadStep.NeptuneLoad => Left(StorageError.Unsupported("neptune bulk load"))
       body.map(_ => m)
     }
     result match

@@ -14,9 +14,20 @@ enum LoadStep(val wire: String):
   /** Neptune openCypher bulk-load CSV written to S3. The Neptune endpoint is never called. */
   case NeptuneCsv extends LoadStep("neptune-csv")
 
+  /** Starts the Neptune bulk load of the CSV that `neptune-csv` staged and waits for it to finish.
+    * It is the only step that calls the Neptune endpoint, so it is never part of the default
+    * targets: it must be named. It needs neither `--spark-output` nor `--snapshot` when it is the
+    * only target.
+    */
+  case NeptuneLoad extends LoadStep("neptune")
+
 object LoadStep:
-  val all: Vector[LoadStep] = values.toVector
-  def parse(s: String): Option[LoadStep] = all.find(_.wire == s)
+  /** The staging steps, run by `LoadRunner`; these are the default targets. */
+  val all: Vector[LoadStep] = values.toVector.filterNot(_ == NeptuneLoad)
+
+  /** Every step a user may name. */
+  val named: Vector[LoadStep] = all :+ NeptuneLoad
+  def parse(s: String): Option[LoadStep] = named.find(_.wire == s)
 
 /** Parsed command line of `LoadMain`.
   *
@@ -31,16 +42,28 @@ final case class LoadArgs(
     snapshot: String,
     dryRun: Boolean,
     targets: Vector[LoadStep],
-    workDir: Option[Path]
+    workDir: Option[Path],
+    neptuneTimeoutSeconds: Option[Int] = None,
+    neptunePollSeconds: Option[Int] = None
 )
 
 object LoadArgs:
   val Usage: String =
     "usage: LoadMain --spark-output <dir> --run-id <run:<64 hex>> --snapshot <label> " +
-      "[--dry-run] [--targets dynamo,s3,neptune-csv] [--work-dir <dir>]"
+      "[--dry-run] [--targets dynamo,s3,neptune-csv,neptune] [--work-dir <dir>] " +
+      "[--neptune-timeout-seconds <n>] [--neptune-poll-seconds <n>]  " +
+      "(`--targets neptune` alone needs only --run-id)"
 
   private val ValueFlags =
-    Set("--spark-output", "--run-id", "--snapshot", "--targets", "--work-dir")
+    Set(
+      "--spark-output",
+      "--run-id",
+      "--snapshot",
+      "--targets",
+      "--work-dir",
+      "--neptune-timeout-seconds",
+      "--neptune-poll-seconds"
+    )
 
   def parse(args: Seq[String]): Either[String, LoadArgs] =
     // split "--flag=value" into "--flag", "value"
@@ -71,23 +94,34 @@ object LoadArgs:
       case Some(e) => Left(e)
       case None =>
         for
-          out <- values
-            .get("--spark-output")
-            .filter(_.trim.nonEmpty)
-            .toRight("--spark-output is required")
           run <- values.get("--run-id").toRight("--run-id is required")
           _ <- ObjectKeys.runHex(run).left.map(_.message)
-          snap <- values
-            .get("--snapshot")
-            .map(_.trim)
-            .filter(_.nonEmpty)
-            .toRight("--snapshot is required")
           targets <- parseTargets(values.get("--targets"))
-          sparkOut <- path("--spark-output", out)
+          neptuneOnly = targets == Vector(LoadStep.NeptuneLoad)
+          out <- values.get("--spark-output").filter(_.trim.nonEmpty) match
+            case Some(o) => Right(o)
+            case None if neptuneOnly => Right("")
+            case None => Left("--spark-output is required")
+          snap <- values.get("--snapshot").map(_.trim).filter(_.nonEmpty) match
+            case Some(sn) => Right(sn)
+            case None if neptuneOnly => Right("")
+            case None => Left("--snapshot is required")
+          sparkOut <- if out.isEmpty then Right(Paths.get("")) else path("--spark-output", out)
           work <- values.get("--work-dir") match
             case None => Right(None)
             case Some(w) => path("--work-dir", w).map(Some(_))
-        yield LoadArgs(sparkOut, run, snap, dryRun, targets, work)
+          timeout <- positive("--neptune-timeout-seconds", values)
+          poll <- positive("--neptune-poll-seconds", values)
+        yield LoadArgs(sparkOut, run, snap, dryRun, targets, work, timeout, poll)
+
+  private def positive(flag: String, values: Map[String, String]): Either[String, Option[Int]] =
+    values.get(flag) match
+      case None => Right(None)
+      case Some(v) =>
+        v.trim.toIntOption
+          .filter(_ >= 1)
+          .map(Some(_))
+          .toRight(s"$flag must be an integer >= 1, got '$v'")
 
   private def path(flag: String, raw: String): Either[String, Path] =
     try Right(Paths.get(raw))
@@ -104,5 +138,5 @@ object LoadArgs:
         val parsed = names.map(n => LoadStep.parse(n).toRight(n))
         parsed.collectFirst { case Left(bad) => bad } match
           case Some(bad) =>
-            Left(s"unknown target '$bad'; allowed: ${LoadStep.all.map(_.wire).mkString(", ")}")
+            Left(s"unknown target '$bad'; allowed: ${LoadStep.named.map(_.wire).mkString(", ")}")
           case None => Right(parsed.collect { case Right(t) => t }.distinct)

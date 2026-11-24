@@ -8,6 +8,7 @@ import scholarchain.storage.{StorageSettings, requireGraphReadModelTable}
 import scholarchain.storage.aws.*
 import scholarchain.storage.common.*
 import scholarchain.storage.dynamo.*
+import scholarchain.storage.graph.GraphLoader
 import scholarchain.storage.objects.*
 
 /** Entry point that loads one Spark run into the stores.
@@ -15,8 +16,13 @@ import scholarchain.storage.objects.*
   * {{{
   *   sbt "storage/runMain scholarchain.storage.loader.LoadMain \
   *     --spark-output <dir> --run-id run:<64 hex> --snapshot <label> \
-  *     [--dry-run] [--targets dynamo,s3,neptune-csv] [--work-dir <dir>]"
+  *     [--dry-run] [--targets dynamo,s3,neptune-csv,neptune] [--work-dir <dir>]"
   * }}}
+  *
+  * The `neptune` target is the only one that calls the Neptune endpoint (it is never a default). It
+  * starts the bulk load of `neptune-export/run_id=<hex>/csv/` and polls it to a terminal state; see
+  * [[NeptuneLoadStep]]. With `--dry-run` it prints the planned request and makes no call. It runs
+  * after the staging steps of the same invocation, and only when they all succeeded.
   *
   * `--dry-run` reads only local files, builds no AWS client and needs no configuration; it runs the
   * real loaders against in-memory fakes and prints counts, keys and sample items.
@@ -32,6 +38,28 @@ object LoadMain:
   val LedgerSequenceVar = "SCHOLARCHAIN_STORAGE_LOAD_LEDGER_SEQUENCE"
   private val SampleSize = 5
 
+  /** The loader a live `neptune` step uses, and what to close afterwards. */
+  type NeptuneLoaderFactory = (StorageSettings, String) => (GraphLoader, AutoCloseable)
+
+  /** Production factory: the default credential chain and the configured Neptune endpoint. */
+  val awsNeptuneLoader: NeptuneLoaderFactory = (settings, roleArn) =>
+    val clients = AwsClients.forRuntime(settings)
+    val layout = ObjectLayout
+      .fromConfig(settings.buckets, settings.runtime.s3Prefixes, ObjectArea.Rag)
+      .fold(e => throw new StorageException(e), identity)
+    val retrier = new Retrier(settings.runtime.retry, AwsErrors.isTransient)
+    (
+      new NeptuneBulkLoader(
+        clients.neptune,
+        layout,
+        roleArn,
+        settings.awsRegion,
+        settings.runtime.batch.neptuneLoaderParallelism,
+        retrier
+      ),
+      clients
+    )
+
   def main(args: Array[String]): Unit =
     sys.exit(execute(args.toVector, sys.env, println))
 
@@ -42,17 +70,92 @@ object LoadMain:
       args: Vector[String],
       env: Map[String, String],
       out: String => Unit,
-      dryItems: () => ItemStore = () => new InMemoryItemStore
+      dryItems: () => ItemStore = () => new InMemoryItemStore,
+      neptuneLoader: NeptuneLoaderFactory = awsNeptuneLoader,
+      sleeper: Sleeper = Sleeper.Real,
+      nowMillis: () => Long = () => System.currentTimeMillis()
   ): Int =
     LoadArgs.parse(args) match
       case Left(e) =>
         out(s"error: $e")
         out(LoadArgs.Usage)
         2
-      case Right(a) if !Files.isDirectory(a.sparkOutput) =>
+      case Right(a) if a.targets.contains(LoadStep.NeptuneLoad) =>
+        // validate the Neptune step's configuration first: nothing is staged if it cannot run
+        NeptuneLoadConfig.resolve(a, env) match
+          case Left(e) =>
+            out(s"error: neptune step: $e")
+            2
+          case Right(plan) =>
+            val staging = a.targets.filterNot(_ == LoadStep.NeptuneLoad)
+            val code =
+              if staging.isEmpty then 0
+              else stage(a.copy(targets = staging), env, out, dryItems)
+            if code != 0 then
+              out(s"neptune bulk load NOT started: the staging steps ended with status $code")
+              code
+            else neptune(a, plan, env, out, neptuneLoader, sleeper, nowMillis)
+      case Right(a) => stage(a, env, out, dryItems)
+
+  private def neptune(
+      a: LoadArgs,
+      plan: NeptuneLoadPlan,
+      env: Map[String, String],
+      out: String => Unit,
+      factory: NeptuneLoaderFactory,
+      sleeper: Sleeper,
+      nowMillis: () => Long
+  ): Int =
+    out(s"== step ${LoadStep.NeptuneLoad.wire}")
+    out(s"   POST StartLoaderJob (run ${plan.runId}); parameters:")
+    plan.bulk.lines.foreach(l => out(s"     $l"))
+    out(
+      s"   wait at most ${plan.timeoutMillis / 1000}s, poll every ${plan.pollMillis / 1000}s; " +
+        "mode=NEW re-submits the same IDs: see the idempotency note in the module report"
+    )
+    if a.dryRun then
+      out("-- dry-run: no AWS client was built and no Neptune call was made")
+      0
+    else
+      val built = for
+        settings <- StorageSettings.load(env).left.map(_.message)
+        pair <- Try(factory(settings, plan.bulk.roleArn)).toEither.left.map(e =>
+          s"cannot build the Neptune loader: ${e.getMessage}"
+        )
+      yield pair
+      built match
+        case Left(e) =>
+          out(s"error: $e")
+          2
+        case Right((loader, closer)) =>
+          try
+            new NeptuneLoadStep(loader, sleeper, nowMillis, out).run(plan) match
+              case Right(r) =>
+                out(
+                  s"   NEPTUNE LOAD COMPLETED: loadId=${r.loadId} polls=${r.polls} " +
+                    s"elapsed=${r.elapsedMillis / 1000}s"
+                )
+                0
+              case Left(e) =>
+                out(s"NEPTUNE LOAD FAILED: ${e.message}")
+                1
+          catch
+            case NonFatal(e) =>
+              out(s"NEPTUNE LOAD FAILED: unexpected ${e.getClass.getSimpleName}: ${e.getMessage}")
+              1
+          finally Try(closer.close())
+
+  private def stage(
+      a: LoadArgs,
+      env: Map[String, String],
+      out: String => Unit,
+      dryItems: () => ItemStore
+  ): Int =
+    a match
+      case a if !Files.isDirectory(a.sparkOutput) =>
         out(s"error: --spark-output ${a.sparkOutput} is not a directory")
         2
-      case Right(a) =>
+      case a =>
         Try {
           val work = a.workDir.getOrElse(Files.createTempDirectory("scholarchain-load-"))
           Files.createDirectories(work)
