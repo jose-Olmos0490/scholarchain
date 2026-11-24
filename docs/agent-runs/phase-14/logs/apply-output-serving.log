@@ -1,0 +1,24 @@
+[0m[1mmodule.compute.aws_service_discovery_service.this["query-api"]: Destroying... [id=srv-tnmkowxzbwf46mmd][0m[0m
+[0m[1mmodule.compute.aws_service_discovery_service.this["graph-evidence-api"]: Destroying... [id=srv-6zz5fptuzhazc6xe][0m[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["query-api"]: Destroying... [id=scholarchain-dev-query-api][0m[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["embedding-worker"]: Destroying... [id=scholarchain-dev-embedding-worker][0m[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["graph-evidence-api"]: Destroying... [id=scholarchain-dev-graph-evidence-api][0m[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["query-api"]: Destruction complete after 0s[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["embedding-worker"]: Destruction complete after 0s[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["graph-evidence-api"]: Destruction complete after 0s[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["query-api"]: Creating...[0m[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["graph-evidence-api"]: Creating...[0m[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["embedding-worker"]: Creating...[0m[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["embedding-worker"]: Creation complete after 0s [id=scholarchain-dev-embedding-worker][0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["query-api"]: Creation complete after 0s [id=scholarchain-dev-query-api][0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["graph-evidence-api"]: Creation complete after 0s [id=scholarchain-dev-graph-evidence-api][0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mdeleting Service Discovery Service (srv-tnmkowxzbwf46mmd): operation error ServiceDiscovery: DeleteService, https response error StatusCode: 400, RequestID: 70ccb86e-416e-4a3c-8e83-d28b23f837fc, ResourceInUse: Service contains registered instances; delete the instances before deleting the service[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mdeleting Service Discovery Service (srv-6zz5fptuzhazc6xe): operation error ServiceDiscovery: DeleteService, https response error StatusCode: 400, RequestID: 816acad1-cd08-42df-a02e-639c6f17e449, ResourceInUse: Service contains registered instances; delete the instances before deleting the service[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m
+[31m╵[0m[0m

@@ -1,0 +1,18 @@
+==> [smoke-test.sh] STEP: locate the load balancer
+INFO: base url: http://<DEV_ALB_DNS>
+==> [smoke-test.sh] STEP: liveness: GET /healthz
+PASS healthz                GET /healthz -> 200
+==> [smoke-test.sh] STEP: readiness: GET /readyz
+PASS readyz                 GET /readyz -> 200
+==> [smoke-test.sh] STEP: one bounded query: POST /v1/query
+PASS query                  POST /v1/query -> 200
+==> [smoke-test.sh] STEP: one evidence fetch: GET /v1/evidence/{id}
+FAIL evidence            the query returned no evidence ID to fetch
+==> [smoke-test.sh] STEP: idempotency: same key and body replays the same query
+PASS replay                 POST /v1/query -> 200
+PASS idempotent-replay    same queryId and Idempotent-Replayed: true
+==> [smoke-test.sh] STEP: expected errors: no token -> 401, unsupported operation -> 422
+PASS no-token               POST /v1/query -> 401
+PASS bad-operation          POST /v1/query -> 422
+==> [smoke-test.sh] STEP: summary
+SMOKE RESULT: FAIL (1 check(s) failed)

@@ -1,0 +1,81 @@
+[info] welcome to sbt 1.13.1 (Ubuntu Java 17.0.21.1)
+[info] loading settings for project scholarchain-build from plugins.sbt...
+[info] loading project definition from /home/olmos/scholarchain/project
+[info] loading settings for project root from build.sbt...
+[info] set current project to scholarchain (in build file:/home/olmos/scholarchain/)
+[info] running scholarchain.storage.loader.LoadMain --spark-output target/pipeline-local/phase14/spark/graph --run-id run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60 --snapshot 2026-11-01 --targets dynamo,s3,neptune-csv --work-dir /tmp/phase14b/work-live
+run=run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60 snapshot=2026-11-01 mode=LIVE
+work dir: /tmp/phase14b/work-live; rejects: /tmp/phase14b/work-live/rejected-load.jsonl
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+buckets: graph=scholarchain-dev-graph-<ACCOUNT_ID>-us-east-2 aux=scholarchain-dev-rag-<ACCOUNT_ID>-us-east-2; read model table=scholarchain-dev-graph-read-model; run ledger table=scholarchain-dev-run-ledger
+== step dynamo
+   researcher                   rows=      89 files=8
+   coauthored_with              rows=     334 files=45
+   coauthored_with_support      rows=     334 files=43
+   researcher_collaboration     rows=     178 files=39
+   components                   rows=     178 files=30
+   community_membership         rows=     178 files=30
+   bridge_measures              rows=     178 files=39
+   coreness                     rows=     178 files=39
+   path_evidence                rows=      28 files=17
+   window_summary               rows=       6 files=11
+   researcher_window_change     rows=     123 files=31
+   read model from DYNAMODB manifest: chunks=34
+   researcher rows=89 created=105 unchanged=0 rejected=0
+   coauthored_with_support rows=334 created=334 unchanged=0 rejected=0
+   components rows=178 created=178 unchanged=0 rejected=0
+   community_membership rows=178 created=178 unchanged=0 rejected=0
+   skipped coauthored_with: not a graph read model table; another loader owns it
+   skipped researcher_collaboration: not a graph read model table; another loader owns it
+   skipped bridge_measures: not a graph read model table; another loader owns it
+   skipped coreness: not a graph read model table; another loader owns it
+   skipped path_evidence: not a graph read model table; another loader owns it
+   skipped window_summary: not a graph read model table; another loader owns it
+   skipped researcher_window_change: not a graph read model table; another loader owns it
+   connectivity: the DYNAMODB manifest lists no cross_community_edge table; cross-community counts stay NotFound
+   connectivityStored=false
+   read model from NEPTUNE manifest: chunks=20
+   researcher rows=89 created=0 unchanged=105 rejected=0
+   components rows=178 created=0 unchanged=178 rejected=0
+   cross_community_edge rows=0 created=0 unchanged=0 rejected=0
+   community_membership rows=178 created=48 unchanged=308 rejected=0
+   skipped work: not a graph read model table; another loader owns it
+   skipped venue: not a graph read model table; another loader owns it
+   skipped topic: not a graph read model table; another loader owns it
+   skipped institution: not a graph read model table; another loader owns it
+   skipped authored: not a graph read model table; another loader owns it
+   skipped has_topic: not a graph read model table; another loader owns it
+   skipped coauthored_with: not a graph read model table; another loader owns it
+   skipped researcher_collaboration: not a graph read model table; another loader owns it
+   skipped bridge_measures: not a graph read model table; another loader owns it
+   skipped coreness: not a graph read model table; another loader owns it
+   connectivityStored=true
+   researcher_collaboration: created=178 unchanged=0 rejected=0
+   ledger: recorded load-dynamo attempt 1 SUCCEEDED
+== step s3
+   researcher                   rows=      89 files=8
+   work                         rows=      24 files=7
+   venue                        rows=      13 files=2
+   topic                        rows=      63 files=2
+   institution                  rows=      32 files=2
+   authored                     rows=      89 files=8
+   has_topic                    rows=      12 files=7
+   coauthored_with              rows=     334 files=45
+   coauthored_with_support      rows=     334 files=43
+   researcher_collaboration     rows=     178 files=39
+   components                   rows=     178 files=30
+   community_membership         rows=     178 files=30
+   cross_community_edge         rows=       0 files=6
+   bridge_measures              rows=     178 files=39
+   coreness                     rows=     178 files=39
+   path_evidence                rows=      28 files=17
+   semantic_fact                rows=     278 files=94
+   researcher_window_change     rows=     123 files=31
+   identity_conflict            rows=       0 files=1
+   integrity_reject             rows=       0 files=1
+   window_summary               rows=       6 files=11
+   ledger: recorded load-s3 attempt 1 FAILED
+step s3 FAILED: invalid load manifest: table researcher: file file:/home/olmos/scholarchain/target/pipeline-local/phase14/spark/graph/nodes/type=researcher/run_id=f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60/part-00000-511a1ffe-4fa7-476a-a219-e806b40c0db0-c000.snappy.parquet is not under its location target/pipeline-local/phase14/spark/graph/nodes/type=researcher
+LOAD FAILED: invalid load manifest: table researcher: file file:/home/olmos/scholarchain/target/pipeline-local/phase14/spark/graph/nodes/type=researcher/run_id=f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60/part-00000-511a1ffe-4fa7-476a-a219-e806b40c0db0-c000.snappy.parquet is not under its location target/pipeline-local/phase14/spark/graph/nodes/type=researcher

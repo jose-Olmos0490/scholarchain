@@ -27,3 +27,12 @@ Decision: ACCEPTED AS PARTIAL. Infrastructure applied; application rollout incom
 - Phase 14 gate items "smoke query returns evidence-backed response" and "no critical alarm" are NOT yet met; the follow-up phase must close them.
 
 Accepted commit hash: see commit.txt
+
+## Update — completion (Nov 24, ~11:40 CST)
+- Serving run run:f6023de3… (snapshot 2026-11-01) loaded into the DynamoDB graph read model (843 items) with LoadMain (phase-14b). The S3 copy step failed on a loader path bug, deferred to storage-engineer.
+- repair-02 (infra-engineer): service-discovery replacement drift and dashboard metrics format. code-reviewer NOT run (disclosed).
+- repair-03 (infra-engineer): ALB listener rules split to at most 5 path patterns per rule. code-reviewer report attached.
+- deploy-engineer deployed commit 2365bf5: query-api and graph-evidence-api on task def rev 5 (agent-report-attempt3.md). Its smoke test failed only on ALB connectivity.
+- Human fix: tfvars alb_ingress_cidrs set to the architect's IP /32 and allow_plaintext_http = true (dev only; the bearer token crosses HTTP from one allowed IP; the token is rotated at cleanup). Reviewed plans applied.
+- Human ran scripts/smoke-test.sh with --base-url http://<alb>: 9/10 PASS (healthz, readyz, query, replay, idempotent-replay, no-token 401, bad-operation 422). FAIL: evidence fetch, because the query returned no evidence ID. Neptune and S3 Vectors are not loaded and the S3 copy step failed, so no evidence is available yet. Smoke log: smoke-test-final.log.
+- Decision: ACCEPTED with the documented evidence gap. Gate item "evidence-backed response" remains open.

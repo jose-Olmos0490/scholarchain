@@ -1,0 +1,555 @@
+==> [plan.sh] STEP: check the working tree
+INFO: git sha: 08fc89b
+==> [plan.sh] STEP: resolve the AWS account
+INFO: account: <ACCOUNT_ID>  region: us-east-2
+==> [plan.sh] STEP: terraform fmt -check -recursive
+==> [plan.sh] STEP: terraform init (providers pinned in versions.tf)
+Initializing the backend...
+
+Initializing modules...
+
+Initializing provider plugins...
+- Reusing version 6.74.0 of hashicorp/aws from the dependency lock file
+- Using previously-installed hashicorp/aws v6.74.0
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+==> [plan.sh] STEP: terraform validate
+Success! The configuration is valid.
+
+==> [plan.sh] STEP: terraform plan (full output below, also saved to /tmp/scholarchain-plans/dev-08fc89b.plan.log)
+module.neptune.data.aws_iam_policy_document.loader_trust: Reading...
+module.neptune.aws_neptune_parameter_group.this[0]: Refreshing state... [id=scholarchain-dev-neptune-instance]
+module.network.data.aws_iam_policy_document.flow_trust: Reading...
+module.security.data.aws_iam_policy_document.key: Reading...
+module.datalake.data.aws_elb_service_account.main: Reading...
+module.iam.data.aws_iam_policy_document.sfn_trust: Reading...
+module.datalake.aws_s3_bucket.this["raw"]: Refreshing state... [id=scholarchain-dev-raw-<ACCOUNT_ID>-us-east-2]
+module.iam.data.aws_iam_policy_document.sfn_trust: Read complete after 0s [id=1860916977]
+module.datalake.aws_s3_bucket.this["rag"]: Refreshing state... [id=scholarchain-dev-rag-<ACCOUNT_ID>-us-east-2]
+module.network.data.aws_iam_policy_document.flow_trust: Read complete after 0s [id=2717921857]
+module.datalake.aws_s3_bucket.this["logs"]: Refreshing state... [id=scholarchain-dev-logs-<ACCOUNT_ID>-us-east-2]
+module.neptune.data.aws_iam_policy_document.loader_trust: Read complete after 0s [id=2562693050]
+module.datalake.data.aws_elb_service_account.main: Read complete after 0s [id=033677994240]
+module.iam.data.aws_iam_policy_document.ec2_trust: Reading...
+module.compute.aws_ecs_cluster.this: Refreshing state... [id=arn:aws:ecs:us-east-2:<ACCOUNT_ID>:cluster/scholarchain-dev]
+module.datalake.aws_s3_bucket.this["curated"]: Refreshing state... [id=scholarchain-dev-curated-<ACCOUNT_ID>-us-east-2]
+module.iam.data.aws_iam_policy_document.ec2_trust: Read complete after 0s [id=2851119427]
+module.datalake.aws_s3_bucket.this["artifacts"]: Refreshing state... [id=scholarchain-dev-artifacts-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket.this["graph"]: Refreshing state... [id=scholarchain-dev-graph-<ACCOUNT_ID>-us-east-2]
+module.security.data.aws_iam_policy_document.key: Read complete after 1s [id=193692622]
+module.network.aws_vpc.main: Refreshing state... [id=vpc-0451d58a4404691f8]
+module.vectors.aws_s3vectors_vector_bucket.this: Refreshing state...
+module.iam.data.aws_iam_policy_document.emr_service_trust: Reading...
+module.iam.data.aws_iam_policy_document.emr_service_trust: Read complete after 0s [id=4216533281]
+module.neptune.aws_neptune_cluster_parameter_group.this[0]: Refreshing state... [id=scholarchain-dev-neptune-cluster]
+module.network.aws_eip.nat: Refreshing state... [id=eipalloc-077e94fd1677ecff8]
+module.iam.data.aws_iam_policy_document.ecs_trust: Reading...
+module.iam.data.aws_iam_policy_document.ecs_trust: Read complete after 0s [id=3998030327]
+module.network.aws_iam_role.flow: Refreshing state... [id=scholarchain-dev-vpc-flow-logs]
+module.neptune.aws_iam_role.loader[0]: Refreshing state... [id=scholarchain-dev-neptune-bulk-loader]
+module.iam.aws_iam_role.emr_instance: Refreshing state... [id=scholarchain-dev-emr-instance]
+module.security.aws_kms_key.main: Refreshing state... [id=273bf872-218e-4e72-a848-6f2b5bade30e]
+module.compute.aws_ecs_cluster_capacity_providers.this: Refreshing state... [id=scholarchain-dev]
+module.iam.aws_iam_role.emr_service: Refreshing state... [id=scholarchain-dev-emr-service]
+module.vectors.aws_s3vectors_index.this["paths"]: Refreshing state...
+module.vectors.aws_s3vectors_index.this["researchers"]: Refreshing state...
+module.vectors.aws_s3vectors_index.this["communities"]: Refreshing state...
+module.vectors.aws_s3vectors_index.this["topicInstitutions"]: Refreshing state...
+module.vectors.aws_s3vectors_index.this["abstracts"]: Refreshing state...
+module.iam.aws_iam_role.loader: Refreshing state... [id=scholarchain-dev-loader]
+module.iam.aws_iam_role.execution: Refreshing state... [id=scholarchain-dev-ecs-execution]
+module.iam.aws_iam_role.task["graph-evidence-api"]: Refreshing state... [id=scholarchain-dev-task-graph-evidence-api]
+module.iam.aws_iam_role.task["query-api"]: Refreshing state... [id=scholarchain-dev-task-query-api]
+module.iam.aws_iam_role.task["embedding-worker"]: Refreshing state... [id=scholarchain-dev-task-embedding-worker]
+module.datalake.data.aws_iam_policy_document.bucket["artifacts"]: Reading...
+module.datalake.data.aws_iam_policy_document.bucket["logs"]: Reading...
+module.datalake.data.aws_iam_policy_document.bucket["artifacts"]: Read complete after 0s [id=948640175]
+module.datalake.data.aws_iam_policy_document.bucket["logs"]: Read complete after 0s [id=1259261993]
+module.datalake.data.aws_iam_policy_document.bucket["rag"]: Reading...
+module.datalake.data.aws_iam_policy_document.bucket["rag"]: Read complete after 0s [id=2479899163]
+module.datalake.aws_s3_bucket_versioning.this["graph"]: Refreshing state... [id=scholarchain-dev-graph-<ACCOUNT_ID>-us-east-2]
+module.datalake.data.aws_iam_policy_document.bucket["raw"]: Reading...
+module.datalake.data.aws_iam_policy_document.bucket["raw"]: Read complete after 0s [id=2422741688]
+module.datalake.aws_s3_bucket_versioning.this["rag"]: Refreshing state... [id=scholarchain-dev-rag-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_versioning.this["logs"]: Refreshing state... [id=scholarchain-dev-logs-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_versioning.this["raw"]: Refreshing state... [id=scholarchain-dev-raw-<ACCOUNT_ID>-us-east-2]
+module.datalake.data.aws_iam_policy_document.bucket["curated"]: Reading...
+module.datalake.data.aws_iam_policy_document.bucket["curated"]: Read complete after 0s [id=129094647]
+module.datalake.aws_s3_bucket_versioning.this["artifacts"]: Refreshing state... [id=scholarchain-dev-artifacts-<ACCOUNT_ID>-us-east-2]
+module.datalake.data.aws_iam_policy_document.bucket["graph"]: Reading...
+module.datalake.data.aws_iam_policy_document.bucket["graph"]: Read complete after 0s [id=1830051939]
+module.datalake.aws_s3_bucket_versioning.this["curated"]: Refreshing state... [id=scholarchain-dev-curated-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_ownership_controls.this["curated"]: Refreshing state... [id=scholarchain-dev-curated-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_ownership_controls.this["graph"]: Refreshing state... [id=scholarchain-dev-graph-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_ownership_controls.this["logs"]: Refreshing state... [id=scholarchain-dev-logs-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_ownership_controls.this["rag"]: Refreshing state... [id=scholarchain-dev-rag-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_ownership_controls.this["raw"]: Refreshing state... [id=scholarchain-dev-raw-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_ownership_controls.this["artifacts"]: Refreshing state... [id=scholarchain-dev-artifacts-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_public_access_block.this["artifacts"]: Refreshing state... [id=scholarchain-dev-artifacts-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_public_access_block.this["curated"]: Refreshing state... [id=scholarchain-dev-curated-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_public_access_block.this["logs"]: Refreshing state... [id=scholarchain-dev-logs-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_public_access_block.this["rag"]: Refreshing state... [id=scholarchain-dev-rag-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_public_access_block.this["graph"]: Refreshing state... [id=scholarchain-dev-graph-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_public_access_block.this["raw"]: Refreshing state... [id=scholarchain-dev-raw-<ACCOUNT_ID>-us-east-2]
+module.iam.aws_iam_instance_profile.emr: Refreshing state... [id=scholarchain-dev-emr-instance]
+module.network.aws_security_group.loader: Refreshing state... [id=sg-0c2401dd05adcb657]
+module.network.aws_security_group.neptune: Refreshing state... [id=sg-0fce6179928f64472]
+module.network.aws_route_table.data: Refreshing state... [id=rtb-09cf690ab493ff54b]
+module.network.aws_security_group.alb: Refreshing state... [id=sg-064c1dcc636ff4ee1]
+module.network.aws_security_group.services: Refreshing state... [id=sg-06e9de81124f4e1f2]
+module.network.aws_default_security_group.default: Refreshing state... [id=sg-0818ce8653befeccc]
+module.network.aws_subnet.data[1]: Refreshing state... [id=subnet-0b899b0a409498f47]
+module.network.aws_subnet.data[0]: Refreshing state... [id=subnet-0e2eb57ac5b60289c]
+module.network.aws_subnet.public[1]: Refreshing state... [id=subnet-08c53844beee52a16]
+module.network.aws_subnet.public[0]: Refreshing state... [id=subnet-0ebac003786f40e82]
+module.network.aws_security_group.emr_master: Refreshing state... [id=sg-0abf41d536eeb9153]
+module.network.aws_security_group.emr_core: Refreshing state... [id=sg-059db5a2766e13dc0]
+module.network.aws_subnet.app[1]: Refreshing state... [id=subnet-008c8c5c277a3852d]
+module.network.aws_security_group.emr_service: Refreshing state... [id=sg-046a8d0895e4d3f64]
+module.network.aws_internet_gateway.main: Refreshing state... [id=igw-07d8adc8b6d7b7662]
+module.network.aws_subnet.app[0]: Refreshing state... [id=subnet-08a977c2e2af09acc]
+module.security.aws_kms_alias.main: Refreshing state... [id=alias/scholarchain-dev]
+module.security.aws_secretsmanager_secret.api_keys: Refreshing state... [id=arn:aws:secretsmanager:us-east-2:<ACCOUNT_ID>:secret:scholarchain/dev/api-keys-5NfOnn]
+module.iam.aws_iam_role_policy_attachment.emr_service_managed: Refreshing state... [id=scholarchain-dev-emr-service/arn:aws:iam::aws:policy/service-role/AmazonEMRServicePolicy_v2]
+module.datalake.aws_s3_bucket_policy.this["artifacts"]: Refreshing state... [id=scholarchain-dev-artifacts-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_policy.this["logs"]: Refreshing state... [id=scholarchain-dev-logs-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_policy.this["curated"]: Refreshing state... [id=scholarchain-dev-curated-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_policy.this["graph"]: Refreshing state... [id=scholarchain-dev-graph-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_policy.this["rag"]: Refreshing state... [id=scholarchain-dev-rag-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_policy.this["raw"]: Refreshing state... [id=scholarchain-dev-raw-<ACCOUNT_ID>-us-east-2]
+module.network.aws_vpc_security_group_egress_rule.loader_https: Refreshing state... [id=sgr-016810e8e9e4cfa01]
+module.network.aws_vpc_security_group_egress_rule.loader_to_neptune: Refreshing state... [id=sgr-00fa8d3df046bca88]
+module.network.aws_vpc_security_group_ingress_rule.neptune_from_loader: Refreshing state... [id=sgr-05a8dc97fd84e5dfd]
+module.network.aws_vpc_security_group_ingress_rule.alb_https["<OPERATOR_IP>/32"]: Refreshing state... [id=sgr-0ba927cbd6811acb7]
+module.network.aws_vpc_security_group_ingress_rule.alb_http["<OPERATOR_IP>/32"]: Refreshing state... [id=sgr-0c76ac3ce2e79bc91]
+module.network.aws_route_table_association.data[0]: Refreshing state... [id=rtbassoc-04ed4ec25c2011b8a]
+module.network.aws_route_table_association.data[1]: Refreshing state... [id=rtbassoc-04382f7338957312f]
+module.network.aws_vpc_security_group_ingress_rule.neptune_from_services: Refreshing state... [id=sgr-0fde690aa286e257a]
+module.network.aws_vpc_security_group_egress_rule.services_https: Refreshing state... [id=sgr-0bc7865b93163673d]
+module.network.aws_vpc_security_group_egress_rule.services_to_neptune: Refreshing state... [id=sgr-0be8aea7f96f09871]
+module.network.aws_vpc_security_group_ingress_rule.services_self["8081"]: Refreshing state... [id=sgr-0dfc9b410bc230fa3]
+module.network.aws_vpc_security_group_ingress_rule.services_self["8080"]: Refreshing state... [id=sgr-0f7264a93d84084a8]
+module.network.aws_vpc_security_group_egress_rule.alb_to_services["8081"]: Refreshing state... [id=sgr-08879fdff2e9337ea]
+module.network.aws_vpc_security_group_egress_rule.alb_to_services["8080"]: Refreshing state... [id=sgr-012f39bac0ef64ba7]
+module.network.aws_vpc_security_group_ingress_rule.services_from_alb["8081"]: Refreshing state... [id=sgr-04787679f3c58dcf5]
+module.network.aws_vpc_security_group_ingress_rule.services_from_alb["8080"]: Refreshing state... [id=sgr-0b436a3581b389889]
+module.network.aws_vpc_security_group_egress_rule.services_self["8081"]: Refreshing state... [id=sgr-00b749a47f7319c55]
+module.network.aws_vpc_security_group_egress_rule.services_self["8080"]: Refreshing state... [id=sgr-08aa6759ee6061608]
+module.network.aws_route_table.public: Refreshing state... [id=rtb-0951b21b979ae8dce]
+module.network.aws_nat_gateway.main: Refreshing state... [id=nat-03d4dc99df3db9f5c]
+module.network.aws_vpc_security_group_ingress_rule.emr_master_from_service: Refreshing state... [id=sgr-0c2bfc6a26f27ebd9]
+module.network.aws_vpc_security_group_ingress_rule.emr_service_from_master: Refreshing state... [id=sgr-00835c98ef71b09d8]
+module.compute.aws_service_discovery_private_dns_namespace.this: Refreshing state... [id=ns-jqgssg7gm4vvcnih]
+module.datalake.aws_s3_bucket_logging.this["artifacts"]: Refreshing state... [id=scholarchain-dev-artifacts-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_logging.this["graph"]: Refreshing state... [id=scholarchain-dev-graph-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_logging.this["curated"]: Refreshing state... [id=scholarchain-dev-curated-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_logging.this["raw"]: Refreshing state... [id=scholarchain-dev-raw-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_logging.this["rag"]: Refreshing state... [id=scholarchain-dev-rag-<ACCOUNT_ID>-us-east-2]
+module.network.aws_vpc_security_group_egress_rule.emr_nodes_https["master"]: Refreshing state... [id=sgr-01774b0474a5a5e35]
+module.network.aws_vpc_security_group_egress_rule.emr_nodes_https["core"]: Refreshing state... [id=sgr-00e72c304730072ae]
+module.network.aws_vpc_security_group_egress_rule.emr_service_to_nodes["master"]: Refreshing state... [id=sgr-03eba40c49330c709]
+module.network.aws_vpc_security_group_egress_rule.emr_nodes_internal["master-to-core"]: Refreshing state... [id=sgr-0a3d8180213534c5f]
+module.network.aws_vpc_security_group_egress_rule.emr_nodes_internal["master-to-master"]: Refreshing state... [id=sgr-0825ffd5e007edd82]
+module.network.aws_vpc_security_group_egress_rule.emr_nodes_internal["core-to-master"]: Refreshing state... [id=sgr-07a90762b711a80c2]
+module.network.aws_vpc_security_group_egress_rule.emr_nodes_internal["core-to-core"]: Refreshing state... [id=sgr-0eadd2866e68728df]
+module.network.aws_vpc_security_group_egress_rule.emr_service_to_nodes["core"]: Refreshing state... [id=sgr-045f87c238c2b529b]
+module.network.aws_vpc_security_group_ingress_rule.emr_nodes["master-from-core"]: Refreshing state... [id=sgr-020774daa67cc1229]
+module.network.aws_vpc_security_group_ingress_rule.emr_nodes["core-from-core"]: Refreshing state... [id=sgr-0a9ea98da7f07b43b]
+module.network.aws_vpc_security_group_ingress_rule.emr_nodes["master-from-master"]: Refreshing state... [id=sgr-0cf1adaadf119c1bc]
+module.network.aws_vpc_security_group_ingress_rule.emr_nodes["core-from-master"]: Refreshing state... [id=sgr-01450de110ee29b4f]
+module.datalake.aws_s3_bucket_server_side_encryption_configuration.this["artifacts"]: Refreshing state... [id=scholarchain-dev-artifacts-<ACCOUNT_ID>-us-east-2]
+module.dynamodb.aws_dynamodb_table.this["evidence_bundle"]: Refreshing state... [id=scholarchain-dev-evidence-bundle]
+module.dynamodb.aws_dynamodb_table.this["artifact_registry"]: Refreshing state... [id=scholarchain-dev-artifact-registry]
+module.dynamodb.aws_dynamodb_table.this["entity_link_cache"]: Refreshing state... [id=scholarchain-dev-entity-link-cache]
+module.dynamodb.aws_dynamodb_table.this["graph_read_model"]: Refreshing state... [id=scholarchain-dev-graph-read-model]
+module.dynamodb.aws_dynamodb_table.this["query_session"]: Refreshing state... [id=scholarchain-dev-query-session]
+module.dynamodb.aws_dynamodb_table.this["researcher_metric_cache"]: Refreshing state... [id=scholarchain-dev-researcher-metric-cache]
+module.dynamodb.aws_dynamodb_table.this["run_ledger"]: Refreshing state... [id=scholarchain-dev-run-ledger]
+module.messaging.aws_sqs_queue.embedding_dlq: Refreshing state... [id=https://sqs.us-east-2.amazonaws.com/<ACCOUNT_ID>/scholarchain-dev-embedding-work-dlq]
+module.datalake.aws_s3_bucket_server_side_encryption_configuration.this["curated"]: Refreshing state... [id=scholarchain-dev-curated-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_server_side_encryption_configuration.this["graph"]: Refreshing state... [id=scholarchain-dev-graph-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_server_side_encryption_configuration.this["logs"]: Refreshing state... [id=scholarchain-dev-logs-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_server_side_encryption_configuration.this["rag"]: Refreshing state... [id=scholarchain-dev-rag-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_server_side_encryption_configuration.this["raw"]: Refreshing state... [id=scholarchain-dev-raw-<ACCOUNT_ID>-us-east-2]
+module.logging.aws_cloudwatch_log_group.this["graph-evidence-api"]: Refreshing state... [id=/scholarchain/dev/graph-evidence-api]
+module.logging.aws_cloudwatch_log_group.this["pipeline"]: Refreshing state... [id=/scholarchain/dev/pipeline]
+module.iam.data.aws_iam_policy_document.emr_instance: Reading...
+module.iam.data.aws_iam_policy_document.emr_instance: Read complete after 0s [id=1656880170]
+module.logging.aws_cloudwatch_log_group.this["query-api"]: Refreshing state... [id=/scholarchain/dev/query-api]
+module.logging.aws_cloudwatch_log_group.this["emr-steps"]: Refreshing state... [id=/scholarchain/dev/emr-steps]
+module.iam.data.aws_iam_policy_document.emr_service_extra: Reading...
+module.iam.data.aws_iam_policy_document.emr_service_extra: Read complete after 0s [id=3732894232]
+module.neptune.data.aws_iam_policy_document.loader_permissions: Reading...
+module.neptune.data.aws_iam_policy_document.loader_permissions: Read complete after 0s [id=1761103517]
+module.foundation.aws_sns_topic.alarms: Refreshing state... [id=arn:aws:sns:us-east-2:<ACCOUNT_ID>:scholarchain-dev-alarms]
+module.network.aws_cloudwatch_log_group.flow: Refreshing state... [id=/scholarchain/dev/vpc-flow]
+module.logging.aws_cloudwatch_log_group.this["embedding-worker"]: Refreshing state... [id=/scholarchain/dev/embedding-worker]
+module.registry.aws_ecr_repository.this["query-api"]: Refreshing state... [id=scholarchain/dev/query-api]
+module.registry.aws_ecr_repository.this["graph-evidence-api"]: Refreshing state... [id=scholarchain/dev/graph-evidence-api]
+module.registry.aws_ecr_repository.this["embedding-worker"]: Refreshing state... [id=scholarchain/dev/embedding-worker]
+module.network.aws_route_table_association.public[1]: Refreshing state... [id=rtbassoc-0851ced76a8e402d0]
+module.network.aws_route_table_association.public[0]: Refreshing state... [id=rtbassoc-057bd0d5745ffbe07]
+module.neptune.aws_neptune_subnet_group.this[0]: Refreshing state... [id=scholarchain-dev-neptune]
+module.network.aws_route_table.app: Refreshing state... [id=rtb-07f3b32174f19c91a]
+module.datalake.aws_s3_bucket_lifecycle_configuration.this["graph"]: Refreshing state... [id=scholarchain-dev-graph-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_lifecycle_configuration.this["raw"]: Refreshing state... [id=scholarchain-dev-raw-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_lifecycle_configuration.this["curated"]: Refreshing state... [id=scholarchain-dev-curated-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_lifecycle_configuration.this["logs"]: Refreshing state... [id=scholarchain-dev-logs-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_lifecycle_configuration.this["artifacts"]: Refreshing state... [id=scholarchain-dev-artifacts-<ACCOUNT_ID>-us-east-2]
+module.datalake.aws_s3_bucket_lifecycle_configuration.this["rag"]: Refreshing state... [id=scholarchain-dev-rag-<ACCOUNT_ID>-us-east-2]
+module.compute.aws_lb.this: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:loadbalancer/app/scholarchain-dev-alb/49866ba918eed95a]
+module.iam.aws_iam_role_policy.emr_instance: Refreshing state... [id=scholarchain-dev-emr-instance:job-data-access]
+module.messaging.aws_sqs_queue.embedding: Refreshing state... [id=https://sqs.us-east-2.amazonaws.com/<ACCOUNT_ID>/scholarchain-dev-embedding-work]
+module.iam.aws_iam_role_policy.emr_service_extra: Refreshing state... [id=scholarchain-dev-emr-service:pass-instance-role]
+module.neptune.aws_iam_role_policy.loader[0]: Refreshing state... [id=scholarchain-dev-neptune-bulk-loader:read-export-objects]
+module.network.data.aws_iam_policy_document.flow_permissions: Reading...
+module.network.data.aws_iam_policy_document.flow_permissions: Read complete after 0s [id=628117809]
+module.network.aws_flow_log.vpc: Refreshing state... [id=fl-073ec30ca686d042f]
+module.network.aws_vpc_endpoint.s3: Refreshing state... [id=vpce-091a21150bd327fcf]
+module.network.aws_vpc_endpoint.dynamodb: Refreshing state... [id=vpce-05912f6f9416c68bb]
+module.network.aws_route_table_association.app[0]: Refreshing state... [id=rtbassoc-05c67ce9be7324f90]
+module.network.aws_route_table_association.app[1]: Refreshing state... [id=rtbassoc-00eb79eabea299e4d]
+module.foundation.aws_budgets_budget.monthly: Refreshing state... [id=<ACCOUNT_ID>:scholarchain-dev-monthly]
+module.foundation.data.aws_iam_policy_document.alarms: Reading...
+module.foundation.data.aws_iam_policy_document.alarms: Read complete after 0s [id=919422202]
+module.foundation.aws_sns_topic_subscription.email["<ALERT_EMAIL>"]: Refreshing state... [id=arn:aws:sns:us-east-2:<ACCOUNT_ID>:scholarchain-dev-alarms:63a25fc8-1ca9-4aaa-b4e2-d558259f5330]
+module.registry.aws_ecr_lifecycle_policy.this["graph-evidence-api"]: Refreshing state... [id=scholarchain/dev/graph-evidence-api]
+module.registry.aws_ecr_lifecycle_policy.this["query-api"]: Refreshing state... [id=scholarchain/dev/query-api]
+module.registry.aws_ecr_lifecycle_policy.this["embedding-worker"]: Refreshing state... [id=scholarchain/dev/embedding-worker]
+module.messaging.aws_sqs_queue_redrive_allow_policy.embedding_dlq: Refreshing state... [id=https://sqs.us-east-2.amazonaws.com/<ACCOUNT_ID>/scholarchain-dev-embedding-work-dlq]
+module.network.aws_iam_role_policy.flow: Refreshing state... [id=scholarchain-dev-vpc-flow-logs:write-flow-logs]
+module.messaging.data.aws_iam_policy_document.tls_only["embedding"]: Reading...
+module.messaging.data.aws_iam_policy_document.tls_only["embedding_dlq"]: Reading...
+module.messaging.data.aws_iam_policy_document.tls_only["embedding"]: Read complete after 0s [id=2762545037]
+module.messaging.data.aws_iam_policy_document.tls_only["embedding_dlq"]: Read complete after 0s [id=659020990]
+module.neptune.aws_neptune_cluster.this[0]: Refreshing state... [id=scholarchain-dev-graph]
+module.foundation.aws_sns_topic_policy.alarms: Refreshing state... [id=arn:aws:sns:us-east-2:<ACCOUNT_ID>:scholarchain-dev-alarms]
+module.compute.aws_lb_listener.http_forward[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:listener/app/scholarchain-dev-alb/49866ba918eed95a/95e690cf59df8efe]
+module.messaging.aws_sqs_queue_policy.embedding_dlq: Refreshing state... [id=https://sqs.us-east-2.amazonaws.com/<ACCOUNT_ID>/scholarchain-dev-embedding-work-dlq]
+module.messaging.aws_sqs_queue_policy.embedding: Refreshing state... [id=https://sqs.us-east-2.amazonaws.com/<ACCOUNT_ID>/scholarchain-dev-embedding-work]
+module.observability.aws_cloudwatch_metric_alarm.dlq_not_empty: Refreshing state... [id=scholarchain-dev-embedding-dlq-not-empty]
+module.observability.aws_cloudwatch_metric_alarm.dynamodb_throttles["graph_read_model"]: Refreshing state... [id=scholarchain-dev-graph_read_model-throttles]
+module.observability.aws_cloudwatch_metric_alarm.dynamodb_throttles["query_session"]: Refreshing state... [id=scholarchain-dev-query_session-throttles]
+module.observability.aws_cloudwatch_metric_alarm.dynamodb_throttles["researcher_metric_cache"]: Refreshing state... [id=scholarchain-dev-researcher_metric_cache-throttles]
+module.observability.aws_cloudwatch_metric_alarm.dynamodb_throttles["entity_link_cache"]: Refreshing state... [id=scholarchain-dev-entity_link_cache-throttles]
+module.observability.aws_cloudwatch_metric_alarm.dynamodb_throttles["artifact_registry"]: Refreshing state... [id=scholarchain-dev-artifact_registry-throttles]
+module.observability.aws_cloudwatch_metric_alarm.dynamodb_throttles["evidence_bundle"]: Refreshing state... [id=scholarchain-dev-evidence_bundle-throttles]
+module.observability.aws_cloudwatch_metric_alarm.dynamodb_throttles["run_ledger"]: Refreshing state... [id=scholarchain-dev-run_ledger-throttles]
+module.iam.data.aws_iam_policy_document.execution: Reading...
+module.iam.data.aws_iam_policy_document.execution: Read complete after 0s [id=1090189187]
+module.iam.data.aws_iam_policy_document.embedding_worker: Reading...
+module.iam.aws_iam_role_policy.execution: Refreshing state... [id=scholarchain-dev-ecs-execution:pull-images-write-logs]
+module.iam.data.aws_iam_policy_document.embedding_worker: Read complete after 0s [id=2332557145]
+module.neptune.aws_neptune_cluster_instance.writer[0]: Refreshing state... [id=scholarchain-dev-graph-writer]
+module.iam.data.aws_iam_policy_document.graph_evidence_api: Reading...
+module.iam.data.aws_iam_policy_document.query_api: Reading...
+module.iam.data.aws_iam_policy_document.loader: Reading...
+module.compute.aws_service_discovery_service.this["graph-evidence-api"]: Refreshing state... [id=srv-6zz5fptuzhazc6xe]
+module.iam.data.aws_iam_policy_document.graph_evidence_api: Read complete after 0s [id=3022518746]
+module.compute.aws_service_discovery_service.this["query-api"]: Refreshing state... [id=srv-tnmkowxzbwf46mmd]
+module.compute.aws_lb_target_group.this["query-api"]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:targetgroup/scholarchain-dev-query-api/9393c311bcab0b61]
+module.iam.data.aws_iam_policy_document.loader: Read complete after 0s [id=978715905]
+module.iam.data.aws_iam_policy_document.query_api: Read complete after 0s [id=171574975]
+module.compute.aws_lb_target_group.this["graph-evidence-api"]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:targetgroup/scholarchain-dev-graph-evidence/686b99ae213e96e6]
+module.compute.aws_ecs_task_definition.this["embedding-worker"]: Refreshing state... [id=scholarchain-dev-embedding-worker]
+module.compute.aws_ecs_task_definition.this["graph-evidence-api"]: Refreshing state... [id=scholarchain-dev-graph-evidence-api]
+module.compute.aws_ecs_task_definition.this["query-api"]: Refreshing state... [id=scholarchain-dev-query-api]
+module.iam.aws_iam_role_policy.loader: Refreshing state... [id=scholarchain-dev-loader:load-access]
+module.iam.aws_iam_role_policy.task["query-api"]: Refreshing state... [id=scholarchain-dev-task-query-api:runtime-access]
+module.iam.aws_iam_role_policy.task["embedding-worker"]: Refreshing state... [id=scholarchain-dev-task-embedding-worker:runtime-access]
+module.iam.aws_iam_role_policy.task["graph-evidence-api"]: Refreshing state... [id=scholarchain-dev-task-graph-evidence-api:runtime-access]
+module.observability.aws_cloudwatch_metric_alarm.target_5xx["query-api"]: Refreshing state... [id=scholarchain-dev-query-api-5xx]
+module.observability.aws_cloudwatch_metric_alarm.target_p95["query-api"]: Refreshing state... [id=scholarchain-dev-query-api-p95-latency]
+module.compute.aws_lb_listener_rule.this["graph-evidence-api-0"]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:listener-rule/app/scholarchain-dev-alb/49866ba918eed95a/95e690cf59df8efe/af49c7f3e1c5e8e1]
+module.observability.aws_cloudwatch_metric_alarm.target_p95["graph-evidence-api"]: Refreshing state... [id=scholarchain-dev-graph-evidence-api-p95-latency]
+module.observability.aws_cloudwatch_metric_alarm.target_5xx["graph-evidence-api"]: Refreshing state... [id=scholarchain-dev-graph-evidence-api-5xx]
+module.observability.aws_cloudwatch_metric_alarm.no_healthy_targets["query-api"]: Refreshing state... [id=scholarchain-dev-query-api-no-healthy-targets]
+module.observability.aws_cloudwatch_metric_alarm.no_healthy_targets["graph-evidence-api"]: Refreshing state... [id=scholarchain-dev-graph-evidence-api-no-healthy-targets]
+module.compute.aws_ecs_service.this["embedding-worker"]: Refreshing state... [id=arn:aws:ecs:us-east-2:<ACCOUNT_ID>:service/scholarchain-dev/embedding-worker]
+module.compute.aws_ecs_service.this["query-api"]: Refreshing state... [id=arn:aws:ecs:us-east-2:<ACCOUNT_ID>:service/scholarchain-dev/query-api]
+module.compute.aws_ecs_service.this["graph-evidence-api"]: Refreshing state... [id=arn:aws:ecs:us-east-2:<ACCOUNT_ID>:service/scholarchain-dev/graph-evidence-api]
+module.compute.aws_appautoscaling_target.this["embedding-worker"]: Refreshing state... [id=service/scholarchain-dev/embedding-worker]
+module.compute.aws_appautoscaling_target.this["query-api"]: Refreshing state... [id=service/scholarchain-dev/query-api]
+module.compute.aws_appautoscaling_target.this["graph-evidence-api"]: Refreshing state... [id=service/scholarchain-dev/graph-evidence-api]
+module.observability.aws_cloudwatch_dashboard.main: Refreshing state... [id=scholarchain-dev]
+module.compute.aws_appautoscaling_policy.cpu["graph-evidence-api"]: Refreshing state... [id=scholarchain-dev-graph-evidence-api-cpu]
+module.compute.aws_appautoscaling_policy.cpu["query-api"]: Refreshing state... [id=scholarchain-dev-query-api-cpu]
+module.compute.aws_appautoscaling_policy.worker_backlog: Refreshing state... [id=scholarchain-dev-embedding-worker-backlog]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+  ~ update in-place
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+  # module.compute.aws_ecs_service.this["graph-evidence-api"] will be updated in-place
+  ~ resource "aws_ecs_service" "this" {
+      ~ health_check_grace_period_seconds  = 0 -> 120
+        id                                 = "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:service/scholarchain-dev/graph-evidence-api"
+        name                               = "graph-evidence-api"
+        tags                               = {}
+        # (18 unchanged attributes hidden)
+
+      + load_balancer {
+          + container_name   = "graph-evidence-api"
+          + container_port   = 8081
+          + target_group_arn = "arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:targetgroup/scholarchain-dev-graph-evidence/686b99ae213e96e6"
+            # (1 unchanged attribute hidden)
+        }
+
+        # (6 unchanged blocks hidden)
+    }
+
+  # module.compute.aws_ecs_service.this["query-api"] will be updated in-place
+  ~ resource "aws_ecs_service" "this" {
+      ~ health_check_grace_period_seconds  = 0 -> 120
+        id                                 = "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:service/scholarchain-dev/query-api"
+        name                               = "query-api"
+        tags                               = {}
+        # (18 unchanged attributes hidden)
+
+      + load_balancer {
+          + container_name   = "query-api"
+          + container_port   = 8080
+          + target_group_arn = "arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:targetgroup/scholarchain-dev-query-api/9393c311bcab0b61"
+            # (1 unchanged attribute hidden)
+        }
+
+        # (6 unchanged blocks hidden)
+    }
+
+  # module.compute.aws_ecs_task_definition.this["embedding-worker"] must be replaced
+-/+ resource "aws_ecs_task_definition" "this" {
+      ~ arn                      = "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-embedding-worker:4" -> (known after apply)
+      ~ arn_without_revision     = "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-embedding-worker" -> (known after apply)
+      ~ container_definitions    = jsonencode(
+          ~ [
+              ~ {
+                  ~ image                  = "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/embedding-worker:2365bf5" -> "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/embedding-worker:08fc89b"
+                    name                   = "embedding-worker"
+                  ~ portMappings           = [
+                      ~ {
+                          - hostPort      = 8082
+                            # (2 unchanged attributes hidden)
+                        },
+                    ]
+                  - systemControls         = []
+                  - volumesFrom            = []
+                    # (6 unchanged attributes hidden)
+                },
+            ] # forces replacement
+        )
+      ~ enable_fault_injection   = false -> (known after apply)
+      ~ id                       = "scholarchain-dev-embedding-worker" -> (known after apply)
+      ~ revision                 = 4 -> (known after apply)
+      - tags                     = {} -> null
+        # (13 unchanged attributes hidden)
+
+      - volume {
+          - configure_at_launch = false -> null
+          - name                = "tmp" -> null
+            # (1 unchanged attribute hidden)
+        }
+      + volume {
+          + configure_at_launch = (known after apply)
+          + name                = "tmp"
+            # (1 unchanged attribute hidden)
+        }
+
+        # (1 unchanged block hidden)
+    }
+
+  # module.compute.aws_ecs_task_definition.this["graph-evidence-api"] must be replaced
+-/+ resource "aws_ecs_task_definition" "this" {
+      ~ arn                      = "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-graph-evidence-api:4" -> (known after apply)
+      ~ arn_without_revision     = "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-graph-evidence-api" -> (known after apply)
+      ~ container_definitions    = jsonencode(
+          ~ [
+              ~ {
+                  ~ image                  = "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/graph-evidence-api:2365bf5" -> "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/graph-evidence-api:08fc89b"
+                    name                   = "graph-evidence-api"
+                  ~ portMappings           = [
+                      ~ {
+                          - hostPort      = 8081
+                            # (2 unchanged attributes hidden)
+                        },
+                    ]
+                  - systemControls         = []
+                  - volumesFrom            = []
+                    # (6 unchanged attributes hidden)
+                },
+            ] # forces replacement
+        )
+      ~ enable_fault_injection   = false -> (known after apply)
+      ~ id                       = "scholarchain-dev-graph-evidence-api" -> (known after apply)
+      ~ revision                 = 4 -> (known after apply)
+      - tags                     = {} -> null
+        # (13 unchanged attributes hidden)
+
+      - volume {
+          - configure_at_launch = false -> null
+          - name                = "tmp" -> null
+            # (1 unchanged attribute hidden)
+        }
+      + volume {
+          + configure_at_launch = (known after apply)
+          + name                = "tmp"
+            # (1 unchanged attribute hidden)
+        }
+
+        # (1 unchanged block hidden)
+    }
+
+  # module.compute.aws_ecs_task_definition.this["query-api"] must be replaced
+-/+ resource "aws_ecs_task_definition" "this" {
+      ~ arn                      = "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-query-api:4" -> (known after apply)
+      ~ arn_without_revision     = "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-query-api" -> (known after apply)
+      ~ container_definitions    = jsonencode(
+          ~ [
+              ~ {
+                  ~ image                  = "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/query-api:2365bf5" -> "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/query-api:08fc89b"
+                    name                   = "query-api"
+                  ~ portMappings           = [
+                      ~ {
+                          - hostPort      = 8080
+                            # (2 unchanged attributes hidden)
+                        },
+                    ]
+                  - systemControls         = []
+                  - volumesFrom            = []
+                    # (6 unchanged attributes hidden)
+                },
+            ] # forces replacement
+        )
+      ~ enable_fault_injection   = false -> (known after apply)
+      ~ id                       = "scholarchain-dev-query-api" -> (known after apply)
+      ~ revision                 = 4 -> (known after apply)
+      - tags                     = {} -> null
+        # (13 unchanged attributes hidden)
+
+      - volume {
+          - configure_at_launch = false -> null
+          - name                = "tmp" -> null
+            # (1 unchanged attribute hidden)
+        }
+      + volume {
+          + configure_at_launch = (known after apply)
+          + name                = "tmp"
+            # (1 unchanged attribute hidden)
+        }
+
+        # (1 unchanged block hidden)
+    }
+
+  # module.compute.aws_lb_listener_rule.this["graph-evidence-api"] has moved to module.compute.aws_lb_listener_rule.this["graph-evidence-api-0"]
+    resource "aws_lb_listener_rule" "this" {
+        id           = "arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:listener-rule/app/scholarchain-dev-alb/49866ba918eed95a/95e690cf59df8efe/af49c7f3e1c5e8e1"
+        tags         = {}
+        # (5 unchanged attributes hidden)
+
+        # (2 unchanged blocks hidden)
+    }
+
+  # module.compute.aws_lb_listener_rule.this["query-api-0"] will be created
+  + resource "aws_lb_listener_rule" "this" {
+      + arn          = (known after apply)
+      + id           = (known after apply)
+      + listener_arn = "arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:listener/app/scholarchain-dev-alb/49866ba918eed95a/95e690cf59df8efe"
+      + priority     = 10
+      + region       = "us-east-2"
+      + tags_all     = {
+          + "course"      = "cs441"
+          + "environment" = "dev"
+          + "expiration"  = "2027-01-31"
+          + "owner"       = "Jose Olmos"
+          + "project"     = "scholarchain"
+        }
+
+      + action {
+          + order            = (known after apply)
+          + target_group_arn = "arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:targetgroup/scholarchain-dev-query-api/9393c311bcab0b61"
+          + type             = "forward"
+        }
+
+      + condition {
+          + path_pattern {
+              + regex_values = []
+              + values       = [
+                  + "/healthz",
+                  + "/v1/explain/*",
+                  + "/v1/jobs",
+                  + "/v1/jobs/*",
+                  + "/v1/query",
+                ]
+            }
+        }
+    }
+
+  # module.compute.aws_lb_listener_rule.this["query-api-1"] will be created
+  + resource "aws_lb_listener_rule" "this" {
+      + arn          = (known after apply)
+      + id           = (known after apply)
+      + listener_arn = "arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:listener/app/scholarchain-dev-alb/49866ba918eed95a/95e690cf59df8efe"
+      + priority     = 11
+      + region       = "us-east-2"
+      + tags_all     = {
+          + "course"      = "cs441"
+          + "environment" = "dev"
+          + "expiration"  = "2027-01-31"
+          + "owner"       = "Jose Olmos"
+          + "project"     = "scholarchain"
+        }
+
+      + action {
+          + order            = (known after apply)
+          + target_group_arn = "arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:targetgroup/scholarchain-dev-query-api/9393c311bcab0b61"
+          + type             = "forward"
+        }
+
+      + condition {
+          + path_pattern {
+              + regex_values = []
+              + values       = [
+                  + "/readyz",
+                ]
+            }
+        }
+    }
+
+Plan: 5 to add, 2 to change, 3 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: /tmp/scholarchain-plans/dev-08fc89b.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "/tmp/scholarchain-plans/dev-08fc89b.tfplan"
+==> [plan.sh] STEP: record the plan checksum and summary
+PLAN_SUMMARY env=dev git_sha=08fc89b offline=false dirty=false
+PLAN_FILE=/tmp/scholarchain-plans/dev-08fc89b.tfplan
+PLAN_SHA256=c0986347e293dd682aba6dcad520b5b533d194dd208b3df4c9034e0940583c00
+PLAN_COUNTS add=5 change=2 destroy=3 (replacements counted in both add and destroy: 3)
+
+IAM_AND_POLICY_CHANGES (0)
+
+STATEFUL_CHANGES (0)
+
+STATEFUL_REPLACEMENTS_OR_DESTROYS (0)
+==> [plan.sh] STEP: write build/plan-summary.json
+INFO: PLAN_SUMMARY_JSON=/home/olmos/scholarchain/build/plan-summary.json
+==> [plan.sh] STEP: reject placeholder tags
+==> [plan.sh] STEP: done: hand the plan to the human architect
+INFO: Review /tmp/scholarchain-plans/dev-08fc89b.plan.log and /tmp/scholarchain-plans/dev-08fc89b.summary.txt. Nothing was applied.
+INFO: Human-only next step, after review of account, Region and cost: apply exactly this saved file by hand:
+INFO:   terraform -chdir=/home/olmos/scholarchain/infra/terraform/environments/dev apply /tmp/scholarchain-plans/dev-08fc89b.tfplan
+INFO: Then approve the application rollout by exporting APPROVED_PLAN_SHA256=c0986347e293dd682aba6dcad520b5b533d194dd208b3df4c9034e0940583c00 for scripts/deploy.sh.

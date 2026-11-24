@@ -1,0 +1,21 @@
+[0m[1mmodule.network.aws_vpc_security_group_ingress_rule.alb_http["203.0.113.10/32"]: Destroying... [id=sgr-0a270531823d8b5aa][0m[0m
+[0m[1mmodule.network.aws_vpc_security_group_ingress_rule.alb_https["203.0.113.10/32"]: Destroying... [id=sgr-08386782f134e991b][0m[0m
+[0m[1mmodule.compute.aws_lb_listener.http_forward[0]: Creating...[0m[0m
+[0m[1mmodule.network.aws_vpc_security_group_ingress_rule.alb_https["<OPERATOR_IP>/32"]: Creating...[0m[0m
+[0m[1mmodule.network.aws_vpc_security_group_ingress_rule.alb_http["<OPERATOR_IP>/32"]: Creating...[0m[0m
+[0m[1mmodule.network.aws_vpc_security_group_ingress_rule.alb_http["203.0.113.10/32"]: Destruction complete after 1s[0m
+[0m[1mmodule.network.aws_vpc_security_group_ingress_rule.alb_https["<OPERATOR_IP>/32"]: Creation complete after 1s [id=sgr-0ba927cbd6811acb7][0m
+[0m[1mmodule.compute.aws_lb_listener.http_forward[0]: Creation complete after 1s [id=arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:listener/app/scholarchain-dev-alb/49866ba918eed95a/95e690cf59df8efe][0m
+[0m[1mmodule.network.aws_vpc_security_group_ingress_rule.alb_http["<OPERATOR_IP>/32"]: Creation complete after 1s [id=sgr-0c76ac3ce2e79bc91][0m
+[0m[1mmodule.network.aws_vpc_security_group_ingress_rule.alb_https["203.0.113.10/32"]: Destruction complete after 1s[0m
+[0m[1mmodule.compute.aws_lb_listener_rule.this["graph-evidence-api"]: Creating...[0m[0m
+[0m[1mmodule.compute.aws_lb_listener_rule.this["query-api"]: Creating...[0m[0m
+[0m[1mmodule.compute.aws_lb_listener_rule.this["graph-evidence-api"]: Creation complete after 0s [id=arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:listener-rule/app/scholarchain-dev-alb/49866ba918eed95a/95e690cf59df8efe/af49c7f3e1c5e8e1][0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating ELBv2 Listener Rule: operation error Elastic Load Balancing v2: CreateRule, https response error StatusCode: 400, RequestID: 9b3953e0-e3aa-4ef6-af48-eaac89d786f6, api error ValidationError: A rule can only have '5' condition values and regex values[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.compute.aws_lb_listener_rule.this["query-api"],
+[31m│[0m [0m  on ../../modules/compute/main.tf line 220, in resource "aws_lb_listener_rule" "this":
+[31m│[0m [0m 220: resource "aws_lb_listener_rule" "this" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m

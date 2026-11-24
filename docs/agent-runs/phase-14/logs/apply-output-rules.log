@@ -1,0 +1,238 @@
+[0m[1mmodule.compute.aws_ecs_task_definition.this["embedding-worker"]: Destroying... [id=scholarchain-dev-embedding-worker][0m[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["query-api"]: Destroying... [id=scholarchain-dev-query-api][0m[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["graph-evidence-api"]: Destroying... [id=scholarchain-dev-graph-evidence-api][0m[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["graph-evidence-api"]: Destruction complete after 0s[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["embedding-worker"]: Destruction complete after 0s[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["query-api"]: Destruction complete after 0s[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["query-api"]: Creating...[0m[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["graph-evidence-api"]: Creating...[0m[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["embedding-worker"]: Creating...[0m[0m
+[0m[1mmodule.compute.aws_lb_listener_rule.this["query-api-1"]: Creating...[0m[0m
+[0m[1mmodule.compute.aws_lb_listener_rule.this["query-api-0"]: Creating...[0m[0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["graph-evidence-api"]: Creation complete after 0s [id=scholarchain-dev-graph-evidence-api][0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["query-api"]: Creation complete after 0s [id=scholarchain-dev-query-api][0m
+[0m[1mmodule.compute.aws_lb_listener_rule.this["query-api-0"]: Creation complete after 0s [id=arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:listener-rule/app/scholarchain-dev-alb/49866ba918eed95a/95e690cf59df8efe/f3260dd3c30e7d5b][0m
+[0m[1mmodule.compute.aws_ecs_task_definition.this["embedding-worker"]: Creation complete after 0s [id=scholarchain-dev-embedding-worker][0m
+[0m[1mmodule.compute.aws_lb_listener_rule.this["query-api-1"]: Creation complete after 0s [id=arn:aws:elasticloadbalancing:us-east-2:<ACCOUNT_ID>:listener-rule/app/scholarchain-dev-alb/49866ba918eed95a/95e690cf59df8efe/a2eb934c98e13643][0m
+[0m[1mmodule.compute.aws_ecs_service.this["query-api"]: Modifying... [id=arn:aws:ecs:us-east-2:<ACCOUNT_ID>:service/scholarchain-dev/query-api][0m[0m
+[0m[1mmodule.compute.aws_ecs_service.this["graph-evidence-api"]: Modifying... [id=arn:aws:ecs:us-east-2:<ACCOUNT_ID>:service/scholarchain-dev/graph-evidence-api][0m[0m
+[0m[1mmodule.compute.aws_ecs_service.this["graph-evidence-api"]: Modifications complete after 1s [id=arn:aws:ecs:us-east-2:<ACCOUNT_ID>:service/scholarchain-dev/graph-evidence-api][0m
+[0m[1mmodule.compute.aws_ecs_service.this["query-api"]: Modifications complete after 1s [id=arn:aws:ecs:us-east-2:<ACCOUNT_ID>:service/scholarchain-dev/query-api][0m
+[0m[1m[32m
+Apply complete! Resources: 5 added, 2 changed, 3 destroyed.[0m
+[0m[1m[32m
+Outputs:
+
+[0malarm_topic_arn = "arn:aws:sns:us-east-2:<ACCOUNT_ID>:scholarchain-dev-alarms"
+alb_dns_name = "<DEV_ALB_DNS>"
+api_keys_secret_name = "scholarchain/dev/api-keys"
+bucket_names = {
+  "artifacts" = "scholarchain-dev-artifacts-<ACCOUNT_ID>-us-east-2"
+  "curated" = "scholarchain-dev-curated-<ACCOUNT_ID>-us-east-2"
+  "graph" = "scholarchain-dev-graph-<ACCOUNT_ID>-us-east-2"
+  "logs" = "scholarchain-dev-logs-<ACCOUNT_ID>-us-east-2"
+  "rag" = "scholarchain-dev-rag-<ACCOUNT_ID>-us-east-2"
+  "raw" = "scholarchain-dev-raw-<ACCOUNT_ID>-us-east-2"
+}
+deployer_role_arn = ""
+dynamodb_table_names = {
+  "artifact_registry" = "scholarchain-dev-artifact-registry"
+  "entity_link_cache" = "scholarchain-dev-entity-link-cache"
+  "evidence_bundle" = "scholarchain-dev-evidence-bundle"
+  "graph_read_model" = "scholarchain-dev-graph-read-model"
+  "query_session" = "scholarchain-dev-query-session"
+  "researcher_metric_cache" = "scholarchain-dev-researcher-metric-cache"
+  "run_ledger" = "scholarchain-dev-run-ledger"
+}
+ecr_repository_urls = {
+  "embedding-worker" = "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/embedding-worker"
+  "graph-evidence-api" = "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/graph-evidence-api"
+  "query-api" = "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/query-api"
+}
+ecs_cluster_name = "scholarchain-dev"
+ecs_service_names = {
+  "embedding-worker" = "embedding-worker"
+  "graph-evidence-api" = "graph-evidence-api"
+  "query-api" = "query-api"
+}
+embedding_queue_url = "https://sqs.us-east-2.amazonaws.com/<ACCOUNT_ID>/scholarchain-dev-embedding-work"
+emr_cluster_id = ""
+listener_configured = true
+neptune_endpoint = "<NEPTUNE_ENDPOINT>"
+neptune_loader_role_arn = "arn:aws:iam::<ACCOUNT_ID>:role/scholarchain-dev-neptune-bulk-loader"
+pipeline_state_machine_arn = ""
+service_environment_keys = {
+  "embedding-worker" = tolist([
+    "AWS_REGION",
+    "CURATED_BUCKET",
+    "EMBEDDING_MODEL_ID",
+    "EMBEDDING_MODEL_VERSION",
+    "GRAPH_BUCKET",
+    "NEPTUNE_ENDPOINT",
+    "NEPTUNE_PORT",
+    "NEPTUNE_QUERY_TIMEOUT_MS",
+    "RAG_BUCKET",
+    "RAW_BUCKET",
+    "SCHOLARCHAIN_AWS_ACCOUNT_ID",
+    "SCHOLARCHAIN_DDB_TABLE_ARTIFACT_REGISTRY",
+    "SCHOLARCHAIN_DDB_TABLE_ENTITY_LINK_CACHE",
+    "SCHOLARCHAIN_DDB_TABLE_EVIDENCE_BUNDLE",
+    "SCHOLARCHAIN_DDB_TABLE_PREFIX",
+    "SCHOLARCHAIN_DDB_TABLE_QUERY_SESSION",
+    "SCHOLARCHAIN_DDB_TABLE_RESEARCHER_METRIC_CACHE",
+    "SCHOLARCHAIN_DDB_TABLE_RUN_LEDGER",
+    "SCHOLARCHAIN_EMBEDDING_NORMALIZE",
+    "SCHOLARCHAIN_ENV",
+    "SCHOLARCHAIN_QUERY_SESSION_TTL_DAYS",
+    "SCHOLARCHAIN_RETRIEVAL_GRAPH_LIMIT",
+    "SCHOLARCHAIN_RETRIEVAL_MAX_PATH_DEPTH",
+    "SCHOLARCHAIN_S3_PREFIX_LOGS",
+    "SCHOLARCHAIN_S3_PREFIX_NEPTUNE_EXPORT",
+    "SCHOLARCHAIN_S3_PREFIX_REPORTS",
+    "SCHOLARCHAIN_SVC_EMBEDDING_DLQ_URL",
+    "SCHOLARCHAIN_SVC_EMBEDDING_QUEUE_URL",
+    "SCHOLARCHAIN_VECTOR_INDEX_ABSTRACTS_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_ABSTRACTS_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_ABSTRACTS_TYPE",
+    "SCHOLARCHAIN_VECTOR_INDEX_COMMUNITIES_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_COMMUNITIES_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_COMMUNITIES_TYPE",
+    "SCHOLARCHAIN_VECTOR_INDEX_PATHS_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_PATHS_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_PATHS_TYPE",
+    "SCHOLARCHAIN_VECTOR_INDEX_RESEARCHERS_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_RESEARCHERS_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_RESEARCHERS_TYPE",
+    "SCHOLARCHAIN_VECTOR_INDEX_TOPIC_INSTITUTIONS_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_TOPIC_INSTITUTIONS_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_TOPIC_INSTITUTIONS_TYPE",
+    "SCHOLARCHAIN_VECTOR_INGEST_LEDGER_SEQUENCE",
+    "SCHOLARCHAIN_VECTOR_INGEST_MAX_INSTITUTION_IDS",
+    "SCHOLARCHAIN_VECTOR_INGEST_MAX_TOPIC_IDS",
+    "SCHOLARCHAIN_VECTOR_INGEST_RATE_LIMIT_PER_SECOND",
+    "VECTOR_BUCKET",
+    "VECTOR_INDEX_ABSTRACTS",
+    "VECTOR_INDEX_COMMUNITIES",
+    "VECTOR_INDEX_PATHS",
+    "VECTOR_INDEX_RESEARCHERS",
+    "VECTOR_INDEX_TOPIC_INSTITUTIONS",
+  ])
+  "graph-evidence-api" = tolist([
+    "AWS_REGION",
+    "CURATED_BUCKET",
+    "EMBEDDING_MODEL_ID",
+    "GRAPH_BUCKET",
+    "NEPTUNE_ENDPOINT",
+    "NEPTUNE_PORT",
+    "NEPTUNE_QUERY_TIMEOUT_MS",
+    "RAG_BUCKET",
+    "RAW_BUCKET",
+    "SCHOLARCHAIN_AWS_ACCOUNT_ID",
+    "SCHOLARCHAIN_DDB_TABLE_ARTIFACT_REGISTRY",
+    "SCHOLARCHAIN_DDB_TABLE_ENTITY_LINK_CACHE",
+    "SCHOLARCHAIN_DDB_TABLE_EVIDENCE_BUNDLE",
+    "SCHOLARCHAIN_DDB_TABLE_PREFIX",
+    "SCHOLARCHAIN_DDB_TABLE_QUERY_SESSION",
+    "SCHOLARCHAIN_DDB_TABLE_RESEARCHER_METRIC_CACHE",
+    "SCHOLARCHAIN_DDB_TABLE_RUN_LEDGER",
+    "SCHOLARCHAIN_ENV",
+    "SCHOLARCHAIN_OPS_MAX_CONCURRENT_LLM_CALLS",
+    "SCHOLARCHAIN_OPS_MAX_WORKFLOW_RETRIES",
+    "SCHOLARCHAIN_OPS_SYNCHRONOUS_DEADLINE_MS",
+    "SCHOLARCHAIN_QUERY_SESSION_TTL_DAYS",
+    "SCHOLARCHAIN_RETRIEVAL_CONTEXT_TOKEN_BUDGET",
+    "SCHOLARCHAIN_RETRIEVAL_FUSION_POLICY_VERSION",
+    "SCHOLARCHAIN_RETRIEVAL_GRAPH_LIMIT",
+    "SCHOLARCHAIN_RETRIEVAL_MAX_PATH_DEPTH",
+    "SCHOLARCHAIN_RETRIEVAL_VECTOR_LIMIT",
+    "SCHOLARCHAIN_S3_PREFIX_LOGS",
+    "SCHOLARCHAIN_S3_PREFIX_NEPTUNE_EXPORT",
+    "SCHOLARCHAIN_S3_PREFIX_REPORTS",
+    "SCHOLARCHAIN_SVC_KEY_SECRET_NAME",
+    "SCHOLARCHAIN_SVC_TRUSTED_PROXY_HOPS",
+    "SCHOLARCHAIN_VECTOR_INDEX_ABSTRACTS_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_ABSTRACTS_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_ABSTRACTS_TYPE",
+    "SCHOLARCHAIN_VECTOR_INDEX_COMMUNITIES_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_COMMUNITIES_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_COMMUNITIES_TYPE",
+    "SCHOLARCHAIN_VECTOR_INDEX_PATHS_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_PATHS_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_PATHS_TYPE",
+    "SCHOLARCHAIN_VECTOR_INDEX_RESEARCHERS_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_RESEARCHERS_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_RESEARCHERS_TYPE",
+    "SCHOLARCHAIN_VECTOR_INDEX_TOPIC_INSTITUTIONS_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_TOPIC_INSTITUTIONS_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_TOPIC_INSTITUTIONS_TYPE",
+    "VECTOR_BUCKET",
+    "VECTOR_INDEX_ABSTRACTS",
+    "VECTOR_INDEX_COMMUNITIES",
+    "VECTOR_INDEX_PATHS",
+    "VECTOR_INDEX_RESEARCHERS",
+    "VECTOR_INDEX_TOPIC_INSTITUTIONS",
+  ])
+  "query-api" = tolist([
+    "AWS_REGION",
+    "CURATED_BUCKET",
+    "EMBEDDING_MODEL_ID",
+    "EMBEDDING_MODEL_VERSION",
+    "GRAPH_BUCKET",
+    "NEPTUNE_ENDPOINT",
+    "NEPTUNE_PORT",
+    "NEPTUNE_QUERY_TIMEOUT_MS",
+    "RAG_BUCKET",
+    "RAW_BUCKET",
+    "SCHOLARCHAIN_AWS_ACCOUNT_ID",
+    "SCHOLARCHAIN_DDB_TABLE_ARTIFACT_REGISTRY",
+    "SCHOLARCHAIN_DDB_TABLE_ENTITY_LINK_CACHE",
+    "SCHOLARCHAIN_DDB_TABLE_EVIDENCE_BUNDLE",
+    "SCHOLARCHAIN_DDB_TABLE_PREFIX",
+    "SCHOLARCHAIN_DDB_TABLE_QUERY_SESSION",
+    "SCHOLARCHAIN_DDB_TABLE_RESEARCHER_METRIC_CACHE",
+    "SCHOLARCHAIN_DDB_TABLE_RUN_LEDGER",
+    "SCHOLARCHAIN_EMBEDDING_NORMALIZE",
+    "SCHOLARCHAIN_ENV",
+    "SCHOLARCHAIN_OPS_MAX_CONCURRENT_LLM_CALLS",
+    "SCHOLARCHAIN_OPS_MAX_WORKFLOW_RETRIES",
+    "SCHOLARCHAIN_OPS_SYNCHRONOUS_DEADLINE_MS",
+    "SCHOLARCHAIN_QUERY_SESSION_TTL_DAYS",
+    "SCHOLARCHAIN_RETRIEVAL_CONTEXT_TOKEN_BUDGET",
+    "SCHOLARCHAIN_RETRIEVAL_FUSION_POLICY_VERSION",
+    "SCHOLARCHAIN_RETRIEVAL_GRAPH_LIMIT",
+    "SCHOLARCHAIN_RETRIEVAL_MAX_PATH_DEPTH",
+    "SCHOLARCHAIN_RETRIEVAL_VECTOR_LIMIT",
+    "SCHOLARCHAIN_S3_PREFIX_LOGS",
+    "SCHOLARCHAIN_S3_PREFIX_NEPTUNE_EXPORT",
+    "SCHOLARCHAIN_S3_PREFIX_REPORTS",
+    "SCHOLARCHAIN_SVC_KEY_SECRET_NAME",
+    "SCHOLARCHAIN_SVC_PROMPTS_DIR",
+    "SCHOLARCHAIN_SVC_RUN_ID",
+    "SCHOLARCHAIN_SVC_SNAPSHOT",
+    "SCHOLARCHAIN_SVC_TRUSTED_PROXY_HOPS",
+    "SCHOLARCHAIN_VECTOR_INDEX_ABSTRACTS_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_ABSTRACTS_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_ABSTRACTS_TYPE",
+    "SCHOLARCHAIN_VECTOR_INDEX_COMMUNITIES_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_COMMUNITIES_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_COMMUNITIES_TYPE",
+    "SCHOLARCHAIN_VECTOR_INDEX_PATHS_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_PATHS_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_PATHS_TYPE",
+    "SCHOLARCHAIN_VECTOR_INDEX_RESEARCHERS_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_RESEARCHERS_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_RESEARCHERS_TYPE",
+    "SCHOLARCHAIN_VECTOR_INDEX_TOPIC_INSTITUTIONS_DIMENSION",
+    "SCHOLARCHAIN_VECTOR_INDEX_TOPIC_INSTITUTIONS_DISTANCE_METRIC",
+    "SCHOLARCHAIN_VECTOR_INDEX_TOPIC_INSTITUTIONS_TYPE",
+    "SYNTHESIS_MODEL_ID",
+    "VECTOR_BUCKET",
+    "VECTOR_INDEX_ABSTRACTS",
+    "VECTOR_INDEX_COMMUNITIES",
+    "VECTOR_INDEX_PATHS",
+    "VECTOR_INDEX_RESEARCHERS",
+    "VECTOR_INDEX_TOPIC_INSTITUTIONS",
+    "VERIFICATION_MODEL_ID",
+  ])
+}
+vector_bucket_name = "scholarchain-dev-vectors-<ACCOUNT_ID>"
