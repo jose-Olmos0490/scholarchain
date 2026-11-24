@@ -1,0 +1,2124 @@
+[info] welcome to sbt 1.13.1 (Ubuntu Java 17.0.21.1)
+[info] loading settings for project scholarchain-build from plugins.sbt...
+[info] loading project definition from /home/olmos/scholarchain/project
+[info] loading settings for project root from build.sbt...
+[info] set current project to scholarchain (in build file:/home/olmos/scholarchain/)
+[info] running (fork) scholarchain.spark.run.GraphPipeline --local --code-version a75b607
+[error] Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+[error] 26/11/24 08:32:23 WARN Utils: Your hostname, DESKTOP-AHI4NU7, resolves to a loopback address: 127.0.1.1; using 10.255.255.254 instead (on interface lo)
+[error] 26/11/24 08:32:23 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+[error] 26/11/24 08:32:23 INFO SparkContext: Running Spark version 4.1.1
+[error] 26/11/24 08:32:23 INFO SparkContext: OS info Linux, 6.6.87.2-microsoft-standard-WSL2, amd64
+[error] 26/11/24 08:32:23 INFO SparkContext: Java version 17.0.21.1+2-1-24.04.1-Ubuntu
+[error] 26/11/24 08:32:23 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+[error] 26/11/24 08:32:24 INFO ResourceUtils: ==============================================================
+[error] 26/11/24 08:32:24 INFO ResourceUtils: No custom resources configured for spark.driver.
+[error] 26/11/24 08:32:24 INFO ResourceUtils: ==============================================================
+[error] 26/11/24 08:32:24 INFO SparkContext: Submitted application: scholarchain-spark-graph-analytics
+[error] 26/11/24 08:32:24 INFO SecurityManager: Changing view acls to: olmos
+[error] 26/11/24 08:32:24 INFO SecurityManager: Changing modify acls to: olmos
+[error] 26/11/24 08:32:24 INFO SecurityManager: Changing view acls groups to: olmos
+[error] 26/11/24 08:32:24 INFO SecurityManager: Changing modify acls groups to: olmos
+[error] 26/11/24 08:32:24 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: olmos groups with view permissions: EMPTY; users with modify permissions: olmos; groups with modify permissions: EMPTY; RPC SSL disabled
+[error] 26/11/24 08:32:24 INFO Utils: Successfully started service 'sparkDriver' on port 43543.
+[error] 26/11/24 08:32:24 INFO SparkEnv: Registering MapOutputTracker
+[error] 26/11/24 08:32:24 INFO SparkEnv: Registering BlockManagerMaster
+[error] 26/11/24 08:32:24 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+[error] 26/11/24 08:32:24 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+[error] 26/11/24 08:32:24 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+[error] 26/11/24 08:32:24 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-780bc544-0fc7-4dd8-897e-a87f1c255904
+[error] 26/11/24 08:32:24 INFO SparkEnv: Registering OutputCommitCoordinator
+[error] 26/11/24 08:32:24 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 1, script: , vendor: , memory -> name: memory, amount: 1024, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+[error] 26/11/24 08:32:24 INFO ResourceProfile: Limiting resource is cpu
+[error] 26/11/24 08:32:24 INFO ResourceProfileManager: Added ResourceProfile id: 0
+[error] 26/11/24 08:32:24 INFO SecurityManager: Changing view acls to: olmos
+[error] 26/11/24 08:32:24 INFO SecurityManager: Changing modify acls to: olmos
+[error] 26/11/24 08:32:24 INFO SecurityManager: Changing view acls groups to: olmos
+[error] 26/11/24 08:32:24 INFO SecurityManager: Changing modify acls groups to: olmos
+[error] 26/11/24 08:32:24 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: olmos groups with view permissions: EMPTY; users with modify permissions: olmos; groups with modify permissions: EMPTY; RPC SSL disabled
+[error] 26/11/24 08:32:24 INFO Executor: Starting executor ID driver on host 10.255.255.254
+[error] 26/11/24 08:32:24 INFO Executor: OS info Linux, 6.6.87.2-microsoft-standard-WSL2, amd64
+[error] 26/11/24 08:32:24 INFO Executor: Java version 17.0.21.1+2-1-24.04.1-Ubuntu
+[error] 26/11/24 08:32:24 INFO Executor: Starting executor with user classpath (userClassPathFirst = false): ''
+[error] 26/11/24 08:32:24 INFO Executor: Created or updated repl class loader org.apache.spark.util.MutableURLClassLoader@12567179 for default.
+[error] 26/11/24 08:32:24 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 41207.
+[error] 26/11/24 08:32:24 INFO NettyBlockTransferService: Server created on 10.255.255.254:41207
+[error] 26/11/24 08:32:24 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+[error] 26/11/24 08:32:24 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 10.255.255.254, 41207, None)
+[error] 26/11/24 08:32:24 INFO BlockManagerMasterEndpoint: Registering block manager 10.255.255.254:41207 with 987.6 MiB RAM, BlockManagerId(driver, 10.255.255.254, 41207, None)
+[error] 26/11/24 08:32:24 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 10.255.255.254, 41207, None)
+[error] 26/11/24 08:32:24 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 10.255.255.254, 41207, None)
+[error] 26/11/24 08:32:49 WARN DAGScheduler: Broadcasting large task binary with size 2.0 MiB
+[error] 26/11/24 08:33:12 WARN CacheManager: Asked to cache already cached data.
+[error] 26/11/24 08:33:12 WARN CacheManager: Asked to cache already cached data.
+[error] 26/11/24 08:33:17 WARN SparkStringUtils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
+[error] 26/11/24 08:33:47 WARN DAGScheduler: Broadcasting large task binary with size 1043.9 KiB
+[error] 26/11/24 08:33:47 WARN DAGScheduler: Broadcasting large task binary with size 2.1 MiB
+[error] 26/11/24 08:33:47 WARN DAGScheduler: Broadcasting large task binary with size 1100.7 KiB
+[error] 26/11/24 08:33:48 WARN DAGScheduler: Broadcasting large task binary with size 1086.1 KiB
+[error] 26/11/24 08:33:49 WARN DAGScheduler: Broadcasting large task binary with size 1157.1 KiB
+[error] 26/11/24 08:33:49 WARN DAGScheduler: Broadcasting large task binary with size 1156.5 KiB
+[error] 26/11/24 08:33:49 WARN DAGScheduler: Broadcasting large task binary with size 1244.0 KiB
+[error] 26/11/24 08:33:50 WARN DAGScheduler: Broadcasting large task binary with size 1202.5 KiB
+[error] 26/11/24 08:33:50 WARN DAGScheduler: Broadcasting large task binary with size 1144.4 KiB
+[error] 26/11/24 08:33:50 WARN DAGScheduler: Broadcasting large task binary with size 1231.7 KiB
+[error] 26/11/24 08:33:51 WARN DAGScheduler: Broadcasting large task binary with size 1190.4 KiB
+[error] 26/11/24 08:33:51 WARN DAGScheduler: Broadcasting large task binary with size 1155.2 KiB
+[error] 26/11/24 08:33:52 WARN DAGScheduler: Broadcasting large task binary with size 1242.4 KiB
+[error] 26/11/24 08:33:52 WARN DAGScheduler: Broadcasting large task binary with size 1201.0 KiB
+[error] 26/11/24 08:33:53 WARN DAGScheduler: Broadcasting large task binary with size 3.4 MiB
+[error] 26/11/24 08:33:58 WARN DAGScheduler: Broadcasting large task binary with size 1043.9 KiB
+[error] 26/11/24 08:33:58 WARN DAGScheduler: Broadcasting large task binary with size 2.1 MiB
+[error] 26/11/24 08:33:58 WARN DAGScheduler: Broadcasting large task binary with size 1100.7 KiB
+[error] 26/11/24 08:33:59 WARN DAGScheduler: Broadcasting large task binary with size 1086.1 KiB
+[error] 26/11/24 08:33:59 WARN DAGScheduler: Broadcasting large task binary with size 1157.1 KiB
+[error] 26/11/24 08:33:59 WARN DAGScheduler: Broadcasting large task binary with size 1156.7 KiB
+[error] 26/11/24 08:34:00 WARN DAGScheduler: Broadcasting large task binary with size 1244.1 KiB
+[error] 26/11/24 08:34:01 WARN DAGScheduler: Broadcasting large task binary with size 1202.6 KiB
+[error] 26/11/24 08:34:01 WARN DAGScheduler: Broadcasting large task binary with size 1144.4 KiB
+[error] 26/11/24 08:34:01 WARN DAGScheduler: Broadcasting large task binary with size 1231.7 KiB
+[error] 26/11/24 08:34:02 WARN DAGScheduler: Broadcasting large task binary with size 1190.4 KiB
+[error] 26/11/24 08:34:02 WARN DAGScheduler: Broadcasting large task binary with size 1155.2 KiB
+[error] 26/11/24 08:34:02 WARN DAGScheduler: Broadcasting large task binary with size 1242.4 KiB
+[error] 26/11/24 08:34:02 WARN DAGScheduler: Broadcasting large task binary with size 1201.0 KiB
+[error] 26/11/24 08:34:03 WARN DAGScheduler: Broadcasting large task binary with size 3.4 MiB
+[error] 26/11/24 08:34:07 WARN DAGScheduler: Broadcasting large task binary with size 1043.9 KiB
+[error] 26/11/24 08:34:08 WARN DAGScheduler: Broadcasting large task binary with size 2.1 MiB
+[error] 26/11/24 08:34:08 WARN DAGScheduler: Broadcasting large task binary with size 1100.7 KiB
+[error] 26/11/24 08:34:09 WARN DAGScheduler: Broadcasting large task binary with size 1086.1 KiB
+[error] 26/11/24 08:34:09 WARN DAGScheduler: Broadcasting large task binary with size 1156.9 KiB
+[error] 26/11/24 08:34:09 WARN DAGScheduler: Broadcasting large task binary with size 1156.7 KiB
+[error] 26/11/24 08:34:10 WARN DAGScheduler: Broadcasting large task binary with size 1244.1 KiB
+[error] 26/11/24 08:34:10 WARN DAGScheduler: Broadcasting large task binary with size 1202.4 KiB
+[error] 26/11/24 08:34:10 WARN DAGScheduler: Broadcasting large task binary with size 1144.4 KiB
+[error] 26/11/24 08:34:10 WARN DAGScheduler: Broadcasting large task binary with size 1231.7 KiB
+[error] 26/11/24 08:34:11 WARN DAGScheduler: Broadcasting large task binary with size 1190.2 KiB
+[error] 26/11/24 08:34:11 WARN DAGScheduler: Broadcasting large task binary with size 1155.2 KiB
+[error] 26/11/24 08:34:11 WARN DAGScheduler: Broadcasting large task binary with size 1242.4 KiB
+[error] 26/11/24 08:34:12 WARN DAGScheduler: Broadcasting large task binary with size 1200.8 KiB
+[error] 26/11/24 08:34:12 WARN DAGScheduler: Broadcasting large task binary with size 3.4 MiB
+[error] 26/11/24 08:34:17 WARN DAGScheduler: Broadcasting large task binary with size 1043.9 KiB
+[error] 26/11/24 08:34:18 WARN DAGScheduler: Broadcasting large task binary with size 2.1 MiB
+[error] 26/11/24 08:34:18 WARN DAGScheduler: Broadcasting large task binary with size 1100.7 KiB
+[error] 26/11/24 08:34:19 WARN DAGScheduler: Broadcasting large task binary with size 1086.1 KiB
+[error] 26/11/24 08:34:19 WARN DAGScheduler: Broadcasting large task binary with size 1156.9 KiB
+[error] 26/11/24 08:34:19 WARN DAGScheduler: Broadcasting large task binary with size 1156.7 KiB
+[error] 26/11/24 08:34:20 WARN DAGScheduler: Broadcasting large task binary with size 1244.1 KiB
+[error] 26/11/24 08:34:20 WARN DAGScheduler: Broadcasting large task binary with size 1202.4 KiB
+[error] 26/11/24 08:34:21 WARN DAGScheduler: Broadcasting large task binary with size 1144.4 KiB
+[error] 26/11/24 08:34:21 WARN DAGScheduler: Broadcasting large task binary with size 1231.7 KiB
+[error] 26/11/24 08:34:22 WARN DAGScheduler: Broadcasting large task binary with size 1190.2 KiB
+[error] 26/11/24 08:34:22 WARN DAGScheduler: Broadcasting large task binary with size 1155.2 KiB
+[error] 26/11/24 08:34:22 WARN DAGScheduler: Broadcasting large task binary with size 1242.4 KiB
+[error] 26/11/24 08:34:23 WARN DAGScheduler: Broadcasting large task binary with size 1200.8 KiB
+[error] 26/11/24 08:34:23 WARN DAGScheduler: Broadcasting large task binary with size 3.4 MiB
+[error] 26/11/24 08:34:29 WARN DAGScheduler: Broadcasting large task binary with size 1043.9 KiB
+[error] 26/11/24 08:34:29 WARN DAGScheduler: Broadcasting large task binary with size 2.1 MiB
+[error] 26/11/24 08:34:30 WARN DAGScheduler: Broadcasting large task binary with size 1100.7 KiB
+[error] 26/11/24 08:34:31 WARN DAGScheduler: Broadcasting large task binary with size 1156.7 KiB
+[error] 26/11/24 08:34:31 WARN DAGScheduler: Broadcasting large task binary with size 1243.9 KiB
+[error] 26/11/24 08:34:32 WARN DAGScheduler: Broadcasting large task binary with size 1144.4 KiB
+[error] 26/11/24 08:34:32 WARN DAGScheduler: Broadcasting large task binary with size 1984.2 KiB
+[error] 26/11/24 08:34:36 WARN DAGScheduler: Broadcasting large task binary with size 1043.9 KiB
+[error] 26/11/24 08:34:37 WARN DAGScheduler: Broadcasting large task binary with size 2.1 MiB
+[error] 26/11/24 08:34:37 WARN DAGScheduler: Broadcasting large task binary with size 1100.7 KiB
+[error] 26/11/24 08:34:38 WARN DAGScheduler: Broadcasting large task binary with size 1086.1 KiB
+[error] 26/11/24 08:34:38 WARN DAGScheduler: Broadcasting large task binary with size 1156.9 KiB
+[error] 26/11/24 08:34:38 WARN DAGScheduler: Broadcasting large task binary with size 1156.7 KiB
+[error] 26/11/24 08:34:39 WARN DAGScheduler: Broadcasting large task binary with size 1244.1 KiB
+[error] 26/11/24 08:34:39 WARN DAGScheduler: Broadcasting large task binary with size 1144.4 KiB
+[error] 26/11/24 08:34:40 WARN DAGScheduler: Broadcasting large task binary with size 1155.2 KiB
+[error] 26/11/24 08:34:50 WARN DAGScheduler: Broadcasting large task binary with size 2.0 MiB
+[error] 26/11/24 08:34:50 WARN DAGScheduler: Broadcasting large task binary with size 2.0 MiB
+[error] 26/11/24 08:34:58 WARN DAGScheduler: Broadcasting large task binary with size 2.0 MiB
+[error] 26/11/24 08:34:58 WARN DAGScheduler: Broadcasting large task binary with size 2.0 MiB
+[error] 26/11/24 08:34:59 WARN DAGScheduler: Broadcasting large task binary with size 4.3 MiB
+[info] RUN run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60
+[info] RUN DIR target/pipeline-local/phase14/spark/graph/runs/run_id=f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60
+[info] INPUT spark_author_paper         rows=89     files=27  sha256:5679fb2efacff9cd6c14d18c5407529e47f73a509d60116b23b690433c6c416a
+[info] INPUT spark_coauthor_pair        rows=167    files=26  sha256:6fcc0b124364acf209e49c36b7f99f4a7ff5f863bb22a657b40a20d96720937e
+[info] INPUT spark_work                 rows=69     files=32  sha256:db7202f00b9e8a7c5c6ffc824cd03f6b2fb10a6d3ee312ab4e35e690e89aad24
+[info] INPUT spark_author_mention       rows=193    files=2   sha256:e421295240ef87d6c0e60d6f14dd0e9ec62df0c7feb14e2a303fd85a010ca375
+[info] INPUT spark_oversize_team        rows=0      files=0   sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+[info] INPUT spark_venue                rows=13     files=2   sha256:55f112a0d5431b38ceb856f1cd2f64d66f97089390f7461950f4ea19c5572245
+[info] INPUT spark_topic                rows=63     files=2   sha256:6c6a9efc64dd9ce00c5607925878496e46fcbd2a61af8ff1faf0c23ff02ab1c9
+[info] INPUT spark_institution          rows=32     files=2   sha256:237644810d1d52c9ce76a0269fdeade1f281044dcc23391bc7f1565d37478f89
+[info] INPUT spark_graph_edge           rows=182    files=2   sha256:5efc709136a056665ad761b7d029d4d63ffe03dcbb3db5a85e94a62733adce1f
+[info] INPUT decisions_accepted         rows=77     files=1   sha256:bb03fa2effd5ecaab996d611fcf6aa210a7949c77ee95298968db52088d0c47b
+[info] INPUT decisions_conflict         rows=3      files=1   sha256:b623bd765a0321913e822a9cdf34dd4afafb06a7b3a026617091743299ea04f2
+[info] INPUT decisions_rejected         rows=1      files=1   sha256:ff1aca50ee2ce1ff041779c11eb4af9a3032db060d1a76d94a8523dc819bde71
+[info] INPUT decisions_unresolved       rows=11     files=1   sha256:ce31f0ba741b073bb36d7aa27c215f0a639eaa84620716a46130e818f634cacc
+[info] OUTPUT researcher                 rows=89     files=8   contractViolations=0 target/pipeline-local/phase14/spark/graph/nodes/type=researcher
+[info] OUTPUT work                       rows=24     files=7   contractViolations=n/a target/pipeline-local/phase14/spark/graph/nodes/type=work
+[info] OUTPUT venue                      rows=13     files=2   contractViolations=n/a target/pipeline-local/phase14/spark/graph/nodes/type=venue
+[info] OUTPUT topic                      rows=63     files=2   contractViolations=n/a target/pipeline-local/phase14/spark/graph/nodes/type=topic
+[info] OUTPUT institution                rows=32     files=2   contractViolations=n/a target/pipeline-local/phase14/spark/graph/nodes/type=institution
+[info] OUTPUT authored                   rows=89     files=8   contractViolations=0 target/pipeline-local/phase14/spark/graph/edges/type=authored
+[info] OUTPUT has_topic                  rows=12     files=7   contractViolations=0 target/pipeline-local/phase14/spark/graph/edges/type=has_topic
+[info] OUTPUT coauthored_with            rows=334    files=45  contractViolations=0 target/pipeline-local/phase14/spark/graph/edges/type=coauthored_with
+[info] OUTPUT coauthored_with_support    rows=334    files=43  contractViolations=0 target/pipeline-local/phase14/spark/graph/edges/type=coauthored_with_support
+[info] OUTPUT researcher_collaboration   rows=178    files=39  contractViolations=0 target/pipeline-local/phase14/spark/graph/metrics/type=researcher_collaboration
+[info] OUTPUT components                 rows=178    files=30  contractViolations=0 target/pipeline-local/phase14/spark/graph/metrics/type=components
+[info] OUTPUT wt_invariant               rows=178    files=39  contractViolations=n/a target/pipeline-local/phase14/spark/graph/metrics/type=wt_invariant
+[info] OUTPUT community_membership       rows=178    files=30  contractViolations=0 target/pipeline-local/phase14/spark/graph/metrics/type=communities
+[info] OUTPUT cross_community_edge       rows=0      files=6   contractViolations=0 target/pipeline-local/phase14/spark/graph/edges/type=cross_community
+[info] OUTPUT bridge_measures            rows=178    files=39  contractViolations=0 target/pipeline-local/phase14/spark/graph/metrics/type=bridges
+[info] OUTPUT coreness                   rows=178    files=39  contractViolations=0 target/pipeline-local/phase14/spark/graph/metrics/type=coreness
+[info] OUTPUT path_evidence              rows=28     files=17  contractViolations=0 target/pipeline-local/phase14/spark/graph/paths/type=path_evidence
+[info] OUTPUT semantic_fact              rows=278    files=94  contractViolations=0 target/pipeline-local/phase14/spark/graph/semantic/type=semantic_fact
+[info] OUTPUT researcher_window_change   rows=123    files=31  contractViolations=0 target/pipeline-local/phase14/spark/graph/temporal/type=researcher_window_change
+[info] OUTPUT identity_conflict          rows=0      files=1   contractViolations=0 target/pipeline-local/phase14/spark/graph/identity/type=identity_conflict
+[info] OUTPUT integrity_reject           rows=0      files=1   contractViolations=0 target/pipeline-local/phase14/spark/graph/rejects/type=integrity
+[info] OUTPUT window_summary             rows=6      files=11  contractViolations=n/a target/pipeline-local/phase14/spark/graph/metrics/type=window_summary
+[info] WINDOW 2000-2025 allYears=true researchers=89 works=24 yearless=0 edges=167 selfPairsDropped=0 oversizeWorks=0 components=24 largest=8 largestFraction=0.0899 singletons=0 iterations=2 converged=true
+[info] WINDOW 2000-2005 allYears=false researchers=20 works=7 yearless=0 edges=23 selfPairsDropped=0 oversizeWorks=0 components=7 largest=5 largestFraction=0.2500 singletons=0 iterations=2 converged=true
+[info] WINDOW 2006-2010 allYears=false researchers=5 works=2 yearless=0 edges=4 selfPairsDropped=0 oversizeWorks=0 components=2 largest=3 largestFraction=0.6000 singletons=0 iterations=2 converged=true
+[info] WINDOW 2011-2015 allYears=false researchers=16 works=5 yearless=0 edges=32 selfPairsDropped=0 oversizeWorks=0 components=5 largest=8 largestFraction=0.5000 singletons=0 iterations=2 converged=true
+[info] WINDOW 2016-2020 allYears=false researchers=13 works=3 yearless=0 edges=26 selfPairsDropped=0 oversizeWorks=0 components=3 largest=6 largestFraction=0.4615 singletons=0 iterations=2 converged=true
+[info] WINDOW 2021-2025 allYears=false researchers=35 works=7 yearless=0 edges=82 selfPairsDropped=0 oversizeWorks=0 components=7 largest=8 largestFraction=0.2286 singletons=0 iterations=2 converged=true
+[info] RESEARCHERS_BY_ID_SOURCE OPENALEX=2 ORCID=9 SCHOLARCHAIN_FALLBACK=78
+[info] RESEARCHERS_BY_ID_SOURCE_AND_STATUS OPENALEX/MERGED=2 ORCID/MERGED=9 SCHOLARCHAIN_FALLBACK/UNLINKED=78
+[info] IDENTITY_GROUPS_BY_STATUS MERGED=37 UNLINKED=108
+[info] IDENTITY_CONFLICTS total=0 byReason: 
+[info] INTEGRITY_REJECTS total=0 
+[info] SELF_PAIRS_DROPPED distinctPairCandidates=0
+[info] WT_INVARIANT failures=0 exceptions=0 oversizeTeamExceptions=0 2000-2005/EQUAL=20 2000-2025/EQUAL=89 2006-2010/EQUAL=5 2011-2015/EQUAL=16 2016-2020/EQUAL=13 2021-2025/EQUAL=35
+[info] DISTRIBUTION 2000-2005 rows=20 P[min=1 max=1 mean=1.000] C[min=1 max=4 mean=2.300] T[min=1 max=4 mean=2.300] A[min=1.0 max=4.0 mean=2.300] M[min=1 max=4 mean=2.300] W[min=1.0 max=4.0 mean=2.300]
+[info] DISTRIBUTION 2000-2025 rows=89 P[min=1 max=1 mean=1.000] C[min=1 max=7 mean=3.753] T[min=1 max=7 mean=3.753] A[min=1.0 max=7.0 mean=3.753] M[min=1 max=7 mean=3.753] W[min=1.0 max=7.0 mean=3.753]
+[info] DISTRIBUTION 2006-2010 rows=5 P[min=1 max=1 mean=1.000] C[min=1 max=2 mean=1.600] T[min=1 max=2 mean=1.600] A[min=1.0 max=2.0 mean=1.600] M[min=1 max=2 mean=1.600] W[min=1.0 max=2.0 mean=1.600]
+[info] DISTRIBUTION 2011-2015 rows=16 P[min=1 max=1 mean=1.000] C[min=1 max=7 mean=4.000] T[min=1 max=7 mean=4.000] A[min=1.0 max=7.0 mean=4.000] M[min=1 max=7 mean=4.000] W[min=1.0 max=7.0 mean=4.000]
+[info] DISTRIBUTION 2016-2020 rows=13 P[min=1 max=1 mean=1.000] C[min=1 max=5 mean=4.000] T[min=1 max=5 mean=4.000] A[min=1.0 max=5.0 mean=4.000] M[min=1 max=5 mean=4.000] W[min=1.0 max=5.0 mean=4.000]
+[info] DISTRIBUTION 2021-2025 rows=35 P[min=1 max=1 mean=1.000] C[min=2 max=7 mean=4.686] T[min=2 max=7 mean=4.686] A[min=2.0 max=7.0 mean=4.686] M[min=2 max=7 mean=4.686] W[min=2.0 max=7.0 mean=4.686]
+[info] TOP_C 2000-2025 #1 researcher:sc-researcher-v1:1c23dbfcda3713feea7a00b9eb764c6cad65611be2b52889332e8b40024964ca 'Ajay Joshi' source=SCHOLARCHAIN_FALLBACK P=1 C=7 T=7 A=7.000 M=7 W=7 componentSize=8
+[info] TOP_C 2000-2025 #2 researcher:sc-researcher-v1:2512aa6a9444d6b89ef64da5e3ce0e4425273837885de74ecd6d1afa51d1bca2 'Li Jiang 0002' source=SCHOLARCHAIN_FALLBACK P=1 C=7 T=7 A=7.000 M=7 W=7 componentSize=8
+[info] TOP_C 2000-2025 #3 researcher:sc-researcher-v1:414e6fcf634ed70092d60ca208e6a7bc10b6c3db8d37b3c17447acd04b29dfbd 'Zongwu Wang' source=SCHOLARCHAIN_FALLBACK P=1 C=7 T=7 A=7.000 M=7 W=7 componentSize=8
+[info] TOP_C 2000-2025 #4 researcher:sc-researcher-v1:4399cc1f6ee7467b7a36cce5b944b780a57c162fb4845522254a790ff2ee1921 'Mahmoud Zangeneh' source=SCHOLARCHAIN_FALLBACK P=1 C=7 T=7 A=7.000 M=7 W=7 componentSize=8
+[info] TOP_C 2000-2025 #5 researcher:sc-researcher-v1:48684781c9135da52b4293ccbfa912f3129310d14116159b8acb9788ff0451f5 'Zhezhi He' source=SCHOLARCHAIN_FALLBACK P=1 C=7 T=7 A=7.000 M=7 W=7 componentSize=8
+[info] TOP_C 2000-2025 #6 researcher:sc-researcher-v1:4f57890674af1748f801518369675ecc771b3e7455255052cc0c178fa9e1ca3d 'Bennett B. Goldberg' source=SCHOLARCHAIN_FALLBACK P=1 C=7 T=7 A=7.000 M=7 W=7 componentSize=8
+[info] TOP_C 2000-2025 #7 researcher:sc-researcher-v1:74ab0ffb5c1c61d17c66b9a1c9c2ba67abc7271c5dcfc8fa1abc27bd00d4bff0 'Tianyu Yang' source=SCHOLARCHAIN_FALLBACK P=1 C=7 T=7 A=7.000 M=7 W=7 componentSize=8
+[info] TOP_C 2000-2025 #8 researcher:sc-researcher-v1:8caa70f74bcd3feaa581539519d3ccc50dfc499ccca148037859973ed44f3ca1 'Fangxin Liu' source=SCHOLARCHAIN_FALLBACK P=1 C=7 T=7 A=7.000 M=7 W=7 componentSize=8
+[info] TOP_C 2000-2025 #9 researcher:sc-researcher-v1:90060ef8414eae14d16799f2597c400ea46d5e2f266b8e8fd9d9992023c9bc98 'Aydan Uyar' source=SCHOLARCHAIN_FALLBACK P=1 C=7 T=7 A=7.000 M=7 W=7 componentSize=8
+[info] TOP_C 2000-2025 #10 researcher:sc-researcher-v1:9671e86202bae8796601f4910cf0707376e448869a4d5f94b20fa25d41b9b666 'Wenbo Zhao 0005' source=SCHOLARCHAIN_FALLBACK P=1 C=7 T=7 A=7.000 M=7 W=7 componentSize=8
+[info] STAGES 2385 totalShuffleReadBytes=12333401 totalShuffleWriteBytes=11281483
+[info] EXPLAIN edge aggregation (formatted physical plan):
+[info] == Physical Plan ==
+[info] AdaptiveSparkPlan (28)
+[info] +- == Final Plan ==
+[info]    ResultQueryStage (18)
+[info]    +- * Project (17)
+[info]       +- ObjectHashAggregate (16)
+[info]          +- ShuffleQueryStage (15), Statistics(sizeInBytes=124.9 KiB, rowCount=334)
+[info]             +- Exchange (14)
+[info]                +- ObjectHashAggregate (13)
+[info]                   +- * HashAggregate (12)
+[info]                      +- ShuffleQueryStage (11), Statistics(sizeInBytes=106.6 KiB, rowCount=334)
+[info]                         +- Exchange (10)
+[info]                            +- * HashAggregate (9)
+[info]                               +- * Project (8)
+[info]                                  +- * BroadcastNestedLoopJoin Inner BuildRight (7)
+[info]                                     :- * Project (3)
+[info]                                     :  +- * Filter (2)
+[info]                                     :     +- * Scan ExistingRDD (1)
+[info]                                     +- BroadcastQueryStage (6), Statistics(sizeInBytes=192.0 B, rowCount=6)
+[info]                                        +- BroadcastExchange (5)
+[info]                                           +- LocalTableScan (4)
+[info] +- == Initial Plan ==
+[info]    Project (27)
+[info]    +- ObjectHashAggregate (26)
+[info]       +- Exchange (25)
+[info]          +- ObjectHashAggregate (24)
+[info]             +- HashAggregate (23)
+[info]                +- Exchange (22)
+[info]                   +- HashAggregate (21)
+[info]                      +- Project (20)
+[info]                         +- BroadcastNestedLoopJoin Inner BuildRight (19)
+[info]                            :- Project (3)
+[info]                            :  +- Filter (2)
+[info]                            :     +- Scan ExistingRDD (1)
+[info]                            +- BroadcastExchange (5)
+[info]                               +- LocalTableScan (4)
+[info] (1) Scan ExistingRDD [codegen id : 1]
+[info] Output [6]: [candidateId#57, workId#58, year#63, rA#4578, rB#4581, selfPair#4598]
+[info] Arguments: [candidateId#57, workId#58, year#63, rA#4578, rB#4581, selfPair#4598], MapPartitionsRDD[552] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (2) Filter [codegen id : 1]
+[info] Input [6]: [candidateId#57, workId#58, year#63, rA#4578, rB#4581, selfPair#4598]
+[info] Condition : ((isnotnull(selfPair#4598) AND NOT selfPair#4598) AND (isnotnull(year#63) OR isnull(year#63)))
+[info] (3) Project [codegen id : 1]
+[info] Output [4]: [workId#58, year#63, rA#4578, rB#4581]
+[info] Input [6]: [candidateId#57, workId#58, year#63, rA#4578, rB#4581, selfPair#4598]
+[info] (4) LocalTableScan
+[info] Output [3]: [windowStartYear#398, windowEndYear#399, allYearsWindow#400]
+[info] Arguments: [windowStartYear#398, windowEndYear#399, allYearsWindow#400]
+[info] (5) BroadcastExchange
+[info] Input [3]: [windowStartYear#398, windowEndYear#399, allYearsWindow#400]
+[info] Arguments: IdentityBroadcastMode, [plan_id=20909]
+[info] (6) BroadcastQueryStage
+[info] Output [3]: [windowStartYear#398, windowEndYear#399, allYearsWindow#400]
+[info] Arguments: 0
+[info] (7) BroadcastNestedLoopJoin [codegen id : 1]
+[info] Join type: Inner
+[info] Join condition: ((isnotnull(year#63) AND ((year#63 >= windowStartYear#398) AND (year#63 <= windowEndYear#399))) OR (isnull(year#63) AND allYearsWindow#400))
+[info] (8) Project [codegen id : 1]
+[info] Output [6]: [windowStartYear#398, windowEndYear#399, least(rA#4578, rB#4581) AS researcherA#4710, greatest(rA#4578, rB#4581) AS researcherB#4711, workId#58, year#63]
+[info] Input [7]: [workId#58, year#63, rA#4578, rB#4581, windowStartYear#398, windowEndYear#399, allYearsWindow#400]
+[info] (9) HashAggregate [codegen id : 1]
+[info] Input [6]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, year#63]
+[info] Keys [5]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58]
+[info] Functions [1]: [partial_min(year#63)]
+[info] Aggregate Attributes [1]: [min#4760]
+[info] Results [6]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, min#4761]
+[info] (10) Exchange
+[info] Input [6]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, min#4761]
+[info] Arguments: hashpartitioning(windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, 8), ENSURE_REQUIREMENTS, [plan_id=21009]
+[info] (11) ShuffleQueryStage
+[info] Output [6]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, min#4761]
+[info] Arguments: 1
+[info] (12) HashAggregate [codegen id : 2]
+[info] Input [6]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, min#4761]
+[info] Keys [5]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58]
+[info] Functions [1]: [min(year#63)]
+[info] Aggregate Attributes [1]: [min(year#63)#4719]
+[info] Results [6]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, min(year#63)#4719 AS workYear#4712]
+[info] (13) ObjectHashAggregate
+[info] Input [6]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, workYear#4712]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711]
+[info] Functions [4]: [partial_count(1), partial_min(workYear#4712), partial_max(workYear#4712), partial_collect_list(workId#58, 0, 0)]
+[info] Aggregate Attributes [4]: [count#4752L, min#4753, max#4754, buf#4755]
+[info] Results [8]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, count#4756L, min#4757, max#4758, buf#4759]
+[info] (14) Exchange
+[info] Input [8]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, count#4756L, min#4757, max#4758, buf#4759]
+[info] Arguments: hashpartitioning(windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, 8), ENSURE_REQUIREMENTS, [plan_id=21048]
+[info] (15) ShuffleQueryStage
+[info] Output [8]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, count#4756L, min#4757, max#4758, buf#4759]
+[info] Arguments: 2
+[info] (16) ObjectHashAggregate
+[info] Input [8]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, count#4756L, min#4757, max#4758, buf#4759]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711]
+[info] Functions [4]: [count(1), min(workYear#4712), max(workYear#4712), collect_list(workId#58, 0, 0)]
+[info] Aggregate Attributes [4]: [count(1)#4730L, min(workYear#4712)#4731, max(workYear#4712)#4732, collect_list(workId#58, 0, 0)#4733]
+[info] Results [9]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, count(1)#4730L AS jointPublicationCount#4720L, min(workYear#4712)#4731 AS firstCollaborationYear#4721, max(workYear#4712)#4732 AS lastCollaborationYear#4722, array_sort(collect_list(workId#58, 0, 0)#4733, lambdafunction(if ((lambda left#4734 < lambda right#4735)) -1 else if ((lambda left#4734 > lambda right#4735)) 1 else 0, lambda left#4734, lambda right#4735, false), false) AS supportWorkIds#4723, UDF(researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, sc-coauthor-edge-policy-v1) AS edgeId#4736]
+[info] (17) Project [codegen id : 3]
+[info] Output [14]: [coauthor-edge-v1 AS schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, slice(supportWorkIds#4723, 1, 5) AS representativeWorkIds#4738, concat(coauthor-edge-support-v1:, edgeId#4736) AS supportingWorkIdsRef#4739, sc-coauthor-edge-policy-v1 AS policyVersion#4740, struct(schemaVersion, provenance-v1, sourceDataset, SCHOLARCHAIN, sourceRecordId, element_at(supportWorkIds#4723, 1, None, true), snapshot, 2026-11-01, runId, run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60, policyVersion, sc-coauthor-edge-policy-v1, modelVersion, null, promptVersion, null, derivedFrom, slice(supportWorkIds#4723, 1, 5)) AS provenance#4750, run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60 AS runId#4751]
+[info] Input [9]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, supportWorkIds#4723, edgeId#4736]
+[info] (18) ResultQueryStage
+[info] Output [14]: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751]
+[info] Arguments: 3
+[info] (19) BroadcastNestedLoopJoin
+[info] Join type: Inner
+[info] Join condition: ((isnotnull(year#63) AND ((year#63 >= windowStartYear#398) AND (year#63 <= windowEndYear#399))) OR (isnull(year#63) AND allYearsWindow#400))
+[info] (20) Project
+[info] Output [6]: [windowStartYear#398, windowEndYear#399, least(rA#4578, rB#4581) AS researcherA#4710, greatest(rA#4578, rB#4581) AS researcherB#4711, workId#58, year#63]
+[info] Input [7]: [workId#58, year#63, rA#4578, rB#4581, windowStartYear#398, windowEndYear#399, allYearsWindow#400]
+[info] (21) HashAggregate
+[info] Input [6]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, year#63]
+[info] Keys [5]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58]
+[info] Functions [1]: [partial_min(year#63)]
+[info] Aggregate Attributes [1]: [min#4760]
+[info] Results [6]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, min#4761]
+[info] (22) Exchange
+[info] Input [6]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, min#4761]
+[info] Arguments: hashpartitioning(windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, 8), ENSURE_REQUIREMENTS, [plan_id=20914]
+[info] (23) HashAggregate
+[info] Input [6]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, min#4761]
+[info] Keys [5]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58]
+[info] Functions [1]: [min(year#63)]
+[info] Aggregate Attributes [1]: [min(year#63)#4719]
+[info] Results [6]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, min(year#63)#4719 AS workYear#4712]
+[info] (24) ObjectHashAggregate
+[info] Input [6]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, workId#58, workYear#4712]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711]
+[info] Functions [4]: [partial_count(1), partial_min(workYear#4712), partial_max(workYear#4712), partial_collect_list(workId#58, 0, 0)]
+[info] Aggregate Attributes [4]: [count#4752L, min#4753, max#4754, buf#4755]
+[info] Results [8]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, count#4756L, min#4757, max#4758, buf#4759]
+[info] (25) Exchange
+[info] Input [8]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, count#4756L, min#4757, max#4758, buf#4759]
+[info] Arguments: hashpartitioning(windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, 8), ENSURE_REQUIREMENTS, [plan_id=20918]
+[info] (26) ObjectHashAggregate
+[info] Input [8]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, count#4756L, min#4757, max#4758, buf#4759]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711]
+[info] Functions [4]: [count(1), min(workYear#4712), max(workYear#4712), collect_list(workId#58, 0, 0)]
+[info] Aggregate Attributes [4]: [count(1)#4730L, min(workYear#4712)#4731, max(workYear#4712)#4732, collect_list(workId#58, 0, 0)#4733]
+[info] Results [9]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, count(1)#4730L AS jointPublicationCount#4720L, min(workYear#4712)#4731 AS firstCollaborationYear#4721, max(workYear#4712)#4732 AS lastCollaborationYear#4722, array_sort(collect_list(workId#58, 0, 0)#4733, lambdafunction(if ((lambda left#4734 < lambda right#4735)) -1 else if ((lambda left#4734 > lambda right#4735)) 1 else 0, lambda left#4734, lambda right#4735, false), false) AS supportWorkIds#4723, UDF(researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, sc-coauthor-edge-policy-v1) AS edgeId#4736]
+[info] (27) Project
+[info] Output [14]: [coauthor-edge-v1 AS schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, slice(supportWorkIds#4723, 1, 5) AS representativeWorkIds#4738, concat(coauthor-edge-support-v1:, edgeId#4736) AS supportingWorkIdsRef#4739, sc-coauthor-edge-policy-v1 AS policyVersion#4740, struct(schemaVersion, provenance-v1, sourceDataset, SCHOLARCHAIN, sourceRecordId, element_at(supportWorkIds#4723, 1, None, true), snapshot, 2026-11-01, runId, run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60, policyVersion, sc-coauthor-edge-policy-v1, modelVersion, null, promptVersion, null, derivedFrom, slice(supportWorkIds#4723, 1, 5)) AS provenance#4750, run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60 AS runId#4751]
+[info] Input [9]: [windowStartYear#398, windowEndYear#399, researcherA#4710, researcherB#4711, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, supportWorkIds#4723, edgeId#4736]
+[info] (28) AdaptiveSparkPlan
+[info] Output [14]: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751]
+[info] Arguments: isFinalPlan=true
+[info] EXPLAIN component iteration 1 (formatted physical plan):
+[info] == Physical Plan ==
+[info] AdaptiveSparkPlan (31)
+[info] +- Project (30)
+[info]    +- SortMergeJoin LeftOuter (29)
+[info]       :- Sort (4)
+[info]       :  +- Exchange (3)
+[info]       :     +- Project (2)
+[info]       :        +- Scan ExistingRDD (1)
+[info]       +- SortAggregate (28)
+[info]          +- Sort (27)
+[info]             +- Exchange (26)
+[info]                +- SortAggregate (25)
+[info]                   +- Sort (24)
+[info]                      +- Project (23)
+[info]                         +- SortMergeJoin Inner (22)
+[info]                            :- Sort (16)
+[info]                            :  +- Exchange (15)
+[info]                            :     +- HashAggregate (14)
+[info]                            :        +- Exchange (13)
+[info]                            :           +- HashAggregate (12)
+[info]                            :              +- Union (11)
+[info]                            :                 :- Project (7)
+[info]                            :                 :  +- Filter (6)
+[info]                            :                 :     +- Scan ExistingRDD (5)
+[info]                            :                 +- Project (10)
+[info]                            :                    +- Filter (9)
+[info]                            :                       +- Scan ExistingRDD (8)
+[info]                            +- Sort (21)
+[info]                               +- Exchange (20)
+[info]                                  +- Project (19)
+[info]                                     +- Filter (18)
+[info]                                        +- Scan ExistingRDD (17)
+[info] (1) Scan ExistingRDD
+[info] Output [9]: [windowStartYear#398, windowEndYear#399, researcherId#4233, P#4915L, T#4916L, M#4917L, Tpairable#4918L, oversizeWorks#4919L, yearlessWorks#4920L]
+[info] Arguments: [windowStartYear#398, windowEndYear#399, researcherId#4233, P#4915L, T#4916L, M#4917L, Tpairable#4918L, oversizeWorks#4919L, yearlessWorks#4920L], MapPartitionsRDD[589] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (2) Project
+[info] Output [4]: [windowStartYear#398, windowEndYear#399, researcherId#4233 AS node#5000, researcherId#4233 AS label#5043]
+[info] Input [9]: [windowStartYear#398, windowEndYear#399, researcherId#4233, P#4915L, T#4916L, M#4917L, Tpairable#4918L, oversizeWorks#4919L, yearlessWorks#4920L]
+[info] (3) Exchange
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, node#5000, label#5043]
+[info] Arguments: hashpartitioning(windowStartYear#398, windowEndYear#399, node#5000, 8), ENSURE_REQUIREMENTS, [plan_id=22561]
+[info] (4) Sort
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, node#5000, label#5043]
+[info] Arguments: [windowStartYear#398 ASC NULLS FIRST, windowEndYear#399 ASC NULLS FIRST, node#5000 ASC NULLS FIRST], false, 0
+[info] (5) Scan ExistingRDD
+[info] Output [14]: [schemaVersion#5082, edgeId#5083, researcherA#5084, researcherB#5085, windowStartYear#5086, windowEndYear#5087, jointPublicationCount#5088L, firstCollaborationYear#5089, lastCollaborationYear#5090, representativeWorkIds#5091, supportingWorkIdsRef#5092, policyVersion#5093, provenance#5094, runId#5095]
+[info] Arguments: [schemaVersion#5082, edgeId#5083, researcherA#5084, researcherB#5085, windowStartYear#5086, windowEndYear#5087, jointPublicationCount#5088L, firstCollaborationYear#5089, lastCollaborationYear#5090, representativeWorkIds#5091, supportingWorkIdsRef#5092, policyVersion#5093, provenance#5094, runId#5095], MapPartitionsRDD[566] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (6) Filter
+[info] Input [14]: [schemaVersion#5082, edgeId#5083, researcherA#5084, researcherB#5085, windowStartYear#5086, windowEndYear#5087, jointPublicationCount#5088L, firstCollaborationYear#5089, lastCollaborationYear#5090, representativeWorkIds#5091, supportingWorkIdsRef#5092, policyVersion#5093, provenance#5094, runId#5095]
+[info] Condition : ((isnotnull(researcherA#5084) AND isnotnull(researcherB#5085)) AND NOT (researcherA#5084 = researcherB#5085))
+[info] (7) Project
+[info] Output [4]: [windowStartYear#5086, windowEndYear#5087, researcherA#5084 AS a#5003, researcherB#5085 AS b#5004]
+[info] Input [14]: [schemaVersion#5082, edgeId#5083, researcherA#5084, researcherB#5085, windowStartYear#5086, windowEndYear#5087, jointPublicationCount#5088L, firstCollaborationYear#5089, lastCollaborationYear#5090, representativeWorkIds#5091, supportingWorkIdsRef#5092, policyVersion#5093, provenance#5094, runId#5095]
+[info] (8) Scan ExistingRDD
+[info] Output [14]: [schemaVersion#5007, edgeId#5008, researcherA#5009, researcherB#5010, windowStartYear#5011, windowEndYear#5012, jointPublicationCount#5013L, firstCollaborationYear#5014, lastCollaborationYear#5015, representativeWorkIds#5016, supportingWorkIdsRef#5017, policyVersion#5018, provenance#5019, runId#5020]
+[info] Arguments: [schemaVersion#5007, edgeId#5008, researcherA#5009, researcherB#5010, windowStartYear#5011, windowEndYear#5012, jointPublicationCount#5013L, firstCollaborationYear#5014, lastCollaborationYear#5015, representativeWorkIds#5016, supportingWorkIdsRef#5017, policyVersion#5018, provenance#5019, runId#5020], MapPartitionsRDD[566] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (9) Filter
+[info] Input [14]: [schemaVersion#5007, edgeId#5008, researcherA#5009, researcherB#5010, windowStartYear#5011, windowEndYear#5012, jointPublicationCount#5013L, firstCollaborationYear#5014, lastCollaborationYear#5015, representativeWorkIds#5016, supportingWorkIdsRef#5017, policyVersion#5018, provenance#5019, runId#5020]
+[info] Condition : ((isnotnull(researcherB#5010) AND isnotnull(researcherA#5009)) AND NOT (researcherB#5010 = researcherA#5009))
+[info] (10) Project
+[info] Output [4]: [windowStartYear#5011, windowEndYear#5012, researcherB#5010 AS a#5005, researcherA#5009 AS b#5006]
+[info] Input [14]: [schemaVersion#5007, edgeId#5008, researcherA#5009, researcherB#5010, windowStartYear#5011, windowEndYear#5012, jointPublicationCount#5013L, firstCollaborationYear#5014, lastCollaborationYear#5015, representativeWorkIds#5016, supportingWorkIdsRef#5017, policyVersion#5018, provenance#5019, runId#5020]
+[info] (11) Union
+[info] (12) HashAggregate
+[info] Input [4]: [windowStartYear#5086, windowEndYear#5087, a#5003, b#5004]
+[info] Keys [4]: [windowStartYear#5086, windowEndYear#5087, a#5003, b#5004]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#5086, windowEndYear#5087, a#5003, b#5004]
+[info] (13) Exchange
+[info] Input [4]: [windowStartYear#5086, windowEndYear#5087, a#5003, b#5004]
+[info] Arguments: hashpartitioning(windowStartYear#5086, windowEndYear#5087, a#5003, b#5004, 8), ENSURE_REQUIREMENTS, [plan_id=22542]
+[info] (14) HashAggregate
+[info] Input [4]: [windowStartYear#5086, windowEndYear#5087, a#5003, b#5004]
+[info] Keys [4]: [windowStartYear#5086, windowEndYear#5087, a#5003, b#5004]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#5086, windowEndYear#5087, a#5003, b#5004]
+[info] (15) Exchange
+[info] Input [4]: [windowStartYear#5086, windowEndYear#5087, a#5003, b#5004]
+[info] Arguments: hashpartitioning(windowStartYear#5086, windowEndYear#5087, a#5003, 8), ENSURE_REQUIREMENTS, [plan_id=22546]
+[info] (16) Sort
+[info] Input [4]: [windowStartYear#5086, windowEndYear#5087, a#5003, b#5004]
+[info] Arguments: [windowStartYear#5086 ASC NULLS FIRST, windowEndYear#5087 ASC NULLS FIRST, a#5003 ASC NULLS FIRST], false, 0
+[info] (17) Scan ExistingRDD
+[info] Output [9]: [windowStartYear#5065, windowEndYear#5066, researcherId#5067, P#5068L, T#5069L, M#5070L, Tpairable#5071L, oversizeWorks#5072L, yearlessWorks#5073L]
+[info] Arguments: [windowStartYear#5065, windowEndYear#5066, researcherId#5067, P#5068L, T#5069L, M#5070L, Tpairable#5071L, oversizeWorks#5072L, yearlessWorks#5073L], MapPartitionsRDD[589] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (18) Filter
+[info] Input [9]: [windowStartYear#5065, windowEndYear#5066, researcherId#5067, P#5068L, T#5069L, M#5070L, Tpairable#5071L, oversizeWorks#5072L, yearlessWorks#5073L]
+[info] Condition : isnotnull(researcherId#5067)
+[info] (19) Project
+[info] Output [4]: [windowStartYear#5065, windowEndYear#5066, researcherId#5067 AS a#5064, researcherId#5067 AS label#5097]
+[info] Input [9]: [windowStartYear#5065, windowEndYear#5066, researcherId#5067, P#5068L, T#5069L, M#5070L, Tpairable#5071L, oversizeWorks#5072L, yearlessWorks#5073L]
+[info] (20) Exchange
+[info] Input [4]: [windowStartYear#5065, windowEndYear#5066, a#5064, label#5097]
+[info] Arguments: hashpartitioning(windowStartYear#5065, windowEndYear#5066, a#5064, 8), ENSURE_REQUIREMENTS, [plan_id=22547]
+[info] (21) Sort
+[info] Input [4]: [windowStartYear#5065, windowEndYear#5066, a#5064, label#5097]
+[info] Arguments: [windowStartYear#5065 ASC NULLS FIRST, windowEndYear#5066 ASC NULLS FIRST, a#5064 ASC NULLS FIRST], false, 0
+[info] (22) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#5086, windowEndYear#5087, a#5003]
+[info] Right keys [3]: [windowStartYear#5065, windowEndYear#5066, a#5064]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (23) Project
+[info] Output [4]: [windowStartYear#5086, windowEndYear#5087, b#5004, label#5097]
+[info] Input [8]: [windowStartYear#5086, windowEndYear#5087, a#5003, b#5004, windowStartYear#5065, windowEndYear#5066, a#5064, label#5097]
+[info] (24) Sort
+[info] Input [4]: [windowStartYear#5086, windowEndYear#5087, b#5004, label#5097]
+[info] Arguments: [windowStartYear#5086 ASC NULLS FIRST, windowEndYear#5087 ASC NULLS FIRST, b#5004 ASC NULLS FIRST], false, 0
+[info] (25) SortAggregate
+[info] Input [4]: [windowStartYear#5086, windowEndYear#5087, b#5004, label#5097]
+[info] Keys [3]: [windowStartYear#5086, windowEndYear#5087, b#5004]
+[info] Functions [1]: [partial_min(label#5097)]
+[info] Aggregate Attributes [1]: [min#5280]
+[info] Results [4]: [windowStartYear#5086, windowEndYear#5087, b#5004, min#5281]
+[info] (26) Exchange
+[info] Input [4]: [windowStartYear#5086, windowEndYear#5087, b#5004, min#5281]
+[info] Arguments: hashpartitioning(windowStartYear#5086, windowEndYear#5087, b#5004, 8), ENSURE_REQUIREMENTS, [plan_id=22556]
+[info] (27) Sort
+[info] Input [4]: [windowStartYear#5086, windowEndYear#5087, b#5004, min#5281]
+[info] Arguments: [windowStartYear#5086 ASC NULLS FIRST, windowEndYear#5087 ASC NULLS FIRST, b#5004 ASC NULLS FIRST], false, 0
+[info] (28) SortAggregate
+[info] Input [4]: [windowStartYear#5086, windowEndYear#5087, b#5004, min#5281]
+[info] Keys [3]: [windowStartYear#5086, windowEndYear#5087, b#5004]
+[info] Functions [1]: [min(label#5097)]
+[info] Aggregate Attributes [1]: [min(label#5097)#5081]
+[info] Results [4]: [windowStartYear#5086, windowEndYear#5087, b#5004 AS node#5074, min(label#5097)#5081 AS msg#5075]
+[info] (29) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#398, windowEndYear#399, node#5000]
+[info] Right keys [3]: [windowStartYear#5086, windowEndYear#5087, node#5074]
+[info] Join type: LeftOuter
+[info] Join condition: None
+[info] (30) Project
+[info] Output [5]: [windowStartYear#398, windowEndYear#399, node#5000, least(label#5043, coalesce(msg#5075, label#5043)) AS label#5098, (coalesce(msg#5075, label#5043) < label#5043) AS changed#5099]
+[info] Input [8]: [windowStartYear#398, windowEndYear#399, node#5000, label#5043, windowStartYear#5086, windowEndYear#5087, node#5074, msg#5075]
+[info] (31) AdaptiveSparkPlan
+[info] Output [5]: [windowStartYear#398, windowEndYear#399, node#5000, label#5098, changed#5099]
+[info] Arguments: isFinalPlan=false
+[info] BRIDGES 2000-2005 researchers=20 bridging(cross>0)=0 meanPC=0.0000 maxPC=0.0000 maxCross=0 maxCommunitiesConnected=1
+[info] BRIDGES 2000-2025 researchers=89 bridging(cross>0)=0 meanPC=0.0000 maxPC=0.0000 maxCross=0 maxCommunitiesConnected=1
+[info] BRIDGES 2006-2010 researchers=5 bridging(cross>0)=0 meanPC=0.0000 maxPC=0.0000 maxCross=0 maxCommunitiesConnected=1
+[info] BRIDGES 2011-2015 researchers=16 bridging(cross>0)=0 meanPC=0.0000 maxPC=0.0000 maxCross=0 maxCommunitiesConnected=1
+[info] BRIDGES 2016-2020 researchers=13 bridging(cross>0)=0 meanPC=0.0000 maxPC=0.0000 maxCross=0 maxCommunitiesConnected=1
+[info] BRIDGES 2021-2025 researchers=35 bridging(cross>0)=0 meanPC=0.0000 maxPC=0.0000 maxCross=0 maxCommunitiesConnected=1
+[info] TOP 10 BRIDGES (2000-2025, by participationCoefficient desc, crossCommunityDegree desc, researcherId asc)
+[info]    1 researcher:openalex:6c4442cc7fc666b968c4ab9e7312bf848c7f6dad9973a5e6400797b4633d55fd community=researcher:openalex:6c4442cc7fc666b968c4ab9e7312bf848c7f6dad9973a5e6400797b4633d55fd degree=3 cross=0 connected=1 pc=0.0000
+[info]    2 researcher:openalex:d6b3b58291fc1079092f1061e23c1bcc36f234ac39e2ea0f44ea0944d4ca94eb community=researcher:openalex:d6b3b58291fc1079092f1061e23c1bcc36f234ac39e2ea0f44ea0944d4ca94eb degree=1 cross=0 connected=1 pc=0.0000
+[info]    3 researcher:orcid:206cd7498791aa29c087be0fbf955684e1875f144c15223e0790b64ef7014d2a community=researcher:orcid:206cd7498791aa29c087be0fbf955684e1875f144c15223e0790b64ef7014d2a degree=1 cross=0 connected=1 pc=0.0000
+[info]    4 researcher:orcid:27322f6aa8929322df796e18011028ad42feb7e37ad66f2f5c12d99df38706d2 community=researcher:openalex:6c4442cc7fc666b968c4ab9e7312bf848c7f6dad9973a5e6400797b4633d55fd degree=3 cross=0 connected=1 pc=0.0000
+[info]    5 researcher:orcid:2e47f765b3b6825f641a846c72387ae7970240e07009ce0692a433f58ea146f4 community=researcher:orcid:2e47f765b3b6825f641a846c72387ae7970240e07009ce0692a433f58ea146f4 degree=2 cross=0 connected=1 pc=0.0000
+[info]    6 researcher:orcid:49383942f07dd07e70114503996f2d58ee06a6f3b797033a9cc9d6ac86fc5d04 community=researcher:orcid:2e47f765b3b6825f641a846c72387ae7970240e07009ce0692a433f58ea146f4 degree=2 cross=0 connected=1 pc=0.0000
+[info]    7 researcher:orcid:5cdfa5e8ac5de2d37b9fd4e0907cf55fe6236be400797504f3c1d13478826618 community=researcher:openalex:6c4442cc7fc666b968c4ab9e7312bf848c7f6dad9973a5e6400797b4633d55fd degree=3 cross=0 connected=1 pc=0.0000
+[info]    8 researcher:orcid:73859d15f70b2c3f43bc68cf68bc6b09080d103c76239cf47ff80d3eaf4ccf7c community=researcher:openalex:6c4442cc7fc666b968c4ab9e7312bf848c7f6dad9973a5e6400797b4633d55fd degree=3 cross=0 connected=1 pc=0.0000
+[info]    9 researcher:orcid:bc4022e6997d6199ad0666b246f1985c9136e2de8af2b9d11de0771ad475616c community=researcher:orcid:2e47f765b3b6825f641a846c72387ae7970240e07009ce0692a433f58ea146f4 degree=2 cross=0 connected=1 pc=0.0000
+[info]   10 researcher:orcid:ddfd65835ace8c15fbc0f8a5f7626c17df783b1d1455cb10beeb73665003b6dc community=researcher:orcid:206cd7498791aa29c087be0fbf955684e1875f144c15223e0790b64ef7014d2a degree=1 cross=0 connected=1 pc=0.0000
+[info] CORENESS 2000-2025 1:20 2:12 3:12 4:10 5:12 6:7 7:16
+[info] CORENESS 2000-2005 1:8 2:3 3:4 4:5
+[info] CORENESS 2006-2010 1:2 2:3
+[info] CORENESS 2011-2015 1:8 7:8
+[info] CORENESS 2016-2020 1:2 4:5 5:6
+[info] CORENESS 2021-2025 2:6 3:8 5:6 6:7 7:8
+[info] COMMUNITIES 2000-2025 count=24 sizes=2x10,3x4,4x3,5x2,6x2,7x1,8x2
+[info] ITERATIONS 2000-2025 connected-components-min-label-propagation iterations=2/50 converged=true
+[info] ITERATIONS 2000-2025 label-propagation-synchronous iterations=2/30 converged=true
+[info] ITERATIONS 2000-2025 k-core-peeling iterations=7/100 converged=true
+[info] COMMUNITIES 2000-2005 count=7 sizes=2x4,3x1,4x1,5x1
+[info] ITERATIONS 2000-2005 connected-components-min-label-propagation iterations=2/50 converged=true
+[info] ITERATIONS 2000-2005 label-propagation-synchronous iterations=2/30 converged=true
+[info] ITERATIONS 2000-2005 k-core-peeling iterations=4/100 converged=true
+[info] COMMUNITIES 2006-2010 count=2 sizes=2x1,3x1
+[info] ITERATIONS 2006-2010 connected-components-min-label-propagation iterations=2/50 converged=true
+[info] ITERATIONS 2006-2010 label-propagation-synchronous iterations=2/30 converged=true
+[info] ITERATIONS 2006-2010 k-core-peeling iterations=2/100 converged=true
+[info] COMMUNITIES 2011-2015 count=5 sizes=2x4,8x1
+[info] ITERATIONS 2011-2015 connected-components-min-label-propagation iterations=2/50 converged=true
+[info] ITERATIONS 2011-2015 label-propagation-synchronous iterations=2/30 converged=true
+[info] ITERATIONS 2011-2015 k-core-peeling iterations=2/100 converged=true
+[info] COMMUNITIES 2016-2020 count=3 sizes=2x1,5x1,6x1
+[info] ITERATIONS 2016-2020 connected-components-min-label-propagation iterations=2/50 converged=true
+[info] ITERATIONS 2016-2020 label-propagation-synchronous iterations=2/30 converged=true
+[info] ITERATIONS 2016-2020 k-core-peeling iterations=3/100 converged=true
+[info] COMMUNITIES 2021-2025 count=7 sizes=3x2,4x2,6x1,7x1,8x1
+[info] ITERATIONS 2021-2025 connected-components-min-label-propagation iterations=2/50 converged=true
+[info] ITERATIONS 2021-2025 label-propagation-synchronous iterations=2/30 converged=true
+[info] ITERATIONS 2021-2025 k-core-peeling iterations=5/100 converged=true
+[info] PATH 2000-2005 SAMPLED FOUND length=1 researcher:sc-researcher-v1:b0b55c380e852c81dbeb1d95fdc753151da9b6e71645709fe0199f25dee06754 -> researcher:sc-researcher-v1:e3376c5d39580338cecee4e6a11f0530c1ecd0e74b235933ad2bc411ca49c5a3 via researcher:sc-researcher-v1:b0b55c380e852c81dbeb1d95fdc753151da9b6e71645709fe0199f25dee06754 > researcher:sc-researcher-v1:e3376c5d39580338cecee4e6a11f0530c1ecd0e74b235933ad2bc411ca49c5a3 weights=1
+[info] PATH 2000-2005 SAMPLED FOUND length=1 researcher:sc-researcher-v1:93c66444abc7f7f58c9b355189caac9f534394f1264d3bcdb9bad25392bb8979 -> researcher:sc-researcher-v1:cbfb2b1f3590bd544044f442df44380d1ddfaa25cef7448d5bad65100a260ffa via researcher:sc-researcher-v1:93c66444abc7f7f58c9b355189caac9f534394f1264d3bcdb9bad25392bb8979 > researcher:sc-researcher-v1:cbfb2b1f3590bd544044f442df44380d1ddfaa25cef7448d5bad65100a260ffa weights=1
+[info] PATH 2000-2005 SAMPLED FOUND length=1 researcher:sc-researcher-v1:b0b55c380e852c81dbeb1d95fdc753151da9b6e71645709fe0199f25dee06754 -> researcher:sc-researcher-v1:cbfb2b1f3590bd544044f442df44380d1ddfaa25cef7448d5bad65100a260ffa via researcher:sc-researcher-v1:b0b55c380e852c81dbeb1d95fdc753151da9b6e71645709fe0199f25dee06754 > researcher:sc-researcher-v1:cbfb2b1f3590bd544044f442df44380d1ddfaa25cef7448d5bad65100a260ffa weights=1
+[info] PATH 2000-2005 SAMPLED FOUND length=1 researcher:sc-researcher-v1:b0b55c380e852c81dbeb1d95fdc753151da9b6e71645709fe0199f25dee06754 -> researcher:sc-researcher-v1:74afe429e76a8b50b21d75a815787f38da16d6e49f9d351b8664f6800721ccc3 via researcher:sc-researcher-v1:b0b55c380e852c81dbeb1d95fdc753151da9b6e71645709fe0199f25dee06754 > researcher:sc-researcher-v1:74afe429e76a8b50b21d75a815787f38da16d6e49f9d351b8664f6800721ccc3 weights=1
+[info] PATH 2000-2005 SAMPLED FOUND length=1 researcher:sc-researcher-v1:b0b55c380e852c81dbeb1d95fdc753151da9b6e71645709fe0199f25dee06754 -> researcher:sc-researcher-v1:93c66444abc7f7f58c9b355189caac9f534394f1264d3bcdb9bad25392bb8979 via researcher:sc-researcher-v1:b0b55c380e852c81dbeb1d95fdc753151da9b6e71645709fe0199f25dee06754 > researcher:sc-researcher-v1:93c66444abc7f7f58c9b355189caac9f534394f1264d3bcdb9bad25392bb8979 weights=1
+[info] PATH 2000-2025 SAMPLED FOUND length=1 researcher:sc-researcher-v1:f5791b2c1e1d011dd987e5354608ecc81dfccd22815a0bf9f1f380132cabc0c4 -> researcher:sc-researcher-v1:1c23dbfcda3713feea7a00b9eb764c6cad65611be2b52889332e8b40024964ca via researcher:sc-researcher-v1:f5791b2c1e1d011dd987e5354608ecc81dfccd22815a0bf9f1f380132cabc0c4 > researcher:sc-researcher-v1:1c23dbfcda3713feea7a00b9eb764c6cad65611be2b52889332e8b40024964ca weights=1
+[info] PATH 2000-2025 SAMPLED FOUND length=1 researcher:sc-researcher-v1:4399cc1f6ee7467b7a36cce5b944b780a57c162fb4845522254a790ff2ee1921 -> researcher:sc-researcher-v1:9902df0085e7d84feae8324e92612daa9cc9fe4c2f6dbd8397b91a83008e0cd5 via researcher:sc-researcher-v1:4399cc1f6ee7467b7a36cce5b944b780a57c162fb4845522254a790ff2ee1921 > researcher:sc-researcher-v1:9902df0085e7d84feae8324e92612daa9cc9fe4c2f6dbd8397b91a83008e0cd5 weights=1
+[info] PATH 2000-2025 SAMPLED FOUND length=1 researcher:sc-researcher-v1:4f57890674af1748f801518369675ecc771b3e7455255052cc0c178fa9e1ca3d -> researcher:sc-researcher-v1:74ab0ffb5c1c61d17c66b9a1c9c2ba67abc7271c5dcfc8fa1abc27bd00d4bff0 via researcher:sc-researcher-v1:4f57890674af1748f801518369675ecc771b3e7455255052cc0c178fa9e1ca3d > researcher:sc-researcher-v1:74ab0ffb5c1c61d17c66b9a1c9c2ba67abc7271c5dcfc8fa1abc27bd00d4bff0 weights=1
+[info] PATH 2000-2025 SAMPLED FOUND length=1 researcher:sc-researcher-v1:f8b9fdfeb8900ac0765779e0547ea3f2d12ee747987e08791f346042e8470d84 -> researcher:sc-researcher-v1:90060ef8414eae14d16799f2597c400ea46d5e2f266b8e8fd9d9992023c9bc98 via researcher:sc-researcher-v1:f8b9fdfeb8900ac0765779e0547ea3f2d12ee747987e08791f346042e8470d84 > researcher:sc-researcher-v1:90060ef8414eae14d16799f2597c400ea46d5e2f266b8e8fd9d9992023c9bc98 weights=1
+[info] PATH 2000-2025 SAMPLED FOUND length=1 researcher:sc-researcher-v1:4399cc1f6ee7467b7a36cce5b944b780a57c162fb4845522254a790ff2ee1921 -> researcher:sc-researcher-v1:f5791b2c1e1d011dd987e5354608ecc81dfccd22815a0bf9f1f380132cabc0c4 via researcher:sc-researcher-v1:4399cc1f6ee7467b7a36cce5b944b780a57c162fb4845522254a790ff2ee1921 > researcher:sc-researcher-v1:f5791b2c1e1d011dd987e5354608ecc81dfccd22815a0bf9f1f380132cabc0c4 weights=1
+[info] PATH 2006-2010 SAMPLED FOUND length=1 researcher:orcid:49383942f07dd07e70114503996f2d58ee06a6f3b797033a9cc9d6ac86fc5d04 -> researcher:orcid:2e47f765b3b6825f641a846c72387ae7970240e07009ce0692a433f58ea146f4 via researcher:orcid:49383942f07dd07e70114503996f2d58ee06a6f3b797033a9cc9d6ac86fc5d04 > researcher:orcid:2e47f765b3b6825f641a846c72387ae7970240e07009ce0692a433f58ea146f4 weights=1
+[info] PATH 2006-2010 SAMPLED FOUND length=1 researcher:orcid:49383942f07dd07e70114503996f2d58ee06a6f3b797033a9cc9d6ac86fc5d04 -> researcher:orcid:bc4022e6997d6199ad0666b246f1985c9136e2de8af2b9d11de0771ad475616c via researcher:orcid:49383942f07dd07e70114503996f2d58ee06a6f3b797033a9cc9d6ac86fc5d04 > researcher:orcid:bc4022e6997d6199ad0666b246f1985c9136e2de8af2b9d11de0771ad475616c weights=1
+[info] PATH 2006-2010 SAMPLED FOUND length=1 researcher:orcid:2e47f765b3b6825f641a846c72387ae7970240e07009ce0692a433f58ea146f4 -> researcher:orcid:bc4022e6997d6199ad0666b246f1985c9136e2de8af2b9d11de0771ad475616c via researcher:orcid:2e47f765b3b6825f641a846c72387ae7970240e07009ce0692a433f58ea146f4 > researcher:orcid:bc4022e6997d6199ad0666b246f1985c9136e2de8af2b9d11de0771ad475616c weights=1
+[info] PATH 2011-2015 SAMPLED FOUND length=1 researcher:sc-researcher-v1:f5791b2c1e1d011dd987e5354608ecc81dfccd22815a0bf9f1f380132cabc0c4 -> researcher:sc-researcher-v1:1c23dbfcda3713feea7a00b9eb764c6cad65611be2b52889332e8b40024964ca via researcher:sc-researcher-v1:f5791b2c1e1d011dd987e5354608ecc81dfccd22815a0bf9f1f380132cabc0c4 > researcher:sc-researcher-v1:1c23dbfcda3713feea7a00b9eb764c6cad65611be2b52889332e8b40024964ca weights=1
+[info] PATH 2011-2015 SAMPLED FOUND length=1 researcher:sc-researcher-v1:4399cc1f6ee7467b7a36cce5b944b780a57c162fb4845522254a790ff2ee1921 -> researcher:sc-researcher-v1:f5791b2c1e1d011dd987e5354608ecc81dfccd22815a0bf9f1f380132cabc0c4 via researcher:sc-researcher-v1:4399cc1f6ee7467b7a36cce5b944b780a57c162fb4845522254a790ff2ee1921 > researcher:sc-researcher-v1:f5791b2c1e1d011dd987e5354608ecc81dfccd22815a0bf9f1f380132cabc0c4 weights=1
+[info] PATH 2011-2015 SAMPLED FOUND length=1 researcher:sc-researcher-v1:4399cc1f6ee7467b7a36cce5b944b780a57c162fb4845522254a790ff2ee1921 -> researcher:sc-researcher-v1:9902df0085e7d84feae8324e92612daa9cc9fe4c2f6dbd8397b91a83008e0cd5 via researcher:sc-researcher-v1:4399cc1f6ee7467b7a36cce5b944b780a57c162fb4845522254a790ff2ee1921 > researcher:sc-researcher-v1:9902df0085e7d84feae8324e92612daa9cc9fe4c2f6dbd8397b91a83008e0cd5 weights=1
+[info] PATH 2011-2015 SAMPLED FOUND length=1 researcher:sc-researcher-v1:f8b9fdfeb8900ac0765779e0547ea3f2d12ee747987e08791f346042e8470d84 -> researcher:sc-researcher-v1:90060ef8414eae14d16799f2597c400ea46d5e2f266b8e8fd9d9992023c9bc98 via researcher:sc-researcher-v1:f8b9fdfeb8900ac0765779e0547ea3f2d12ee747987e08791f346042e8470d84 > researcher:sc-researcher-v1:90060ef8414eae14d16799f2597c400ea46d5e2f266b8e8fd9d9992023c9bc98 weights=1
+[info] PATH 2011-2015 SAMPLED FOUND length=1 researcher:sc-researcher-v1:4f57890674af1748f801518369675ecc771b3e7455255052cc0c178fa9e1ca3d -> researcher:sc-researcher-v1:74ab0ffb5c1c61d17c66b9a1c9c2ba67abc7271c5dcfc8fa1abc27bd00d4bff0 via researcher:sc-researcher-v1:4f57890674af1748f801518369675ecc771b3e7455255052cc0c178fa9e1ca3d > researcher:sc-researcher-v1:74ab0ffb5c1c61d17c66b9a1c9c2ba67abc7271c5dcfc8fa1abc27bd00d4bff0 weights=1
+[info] PATH 2016-2020 SAMPLED FOUND length=1 researcher:sc-researcher-v1:025df10d0b13ee5e1deffe35d7dba3389714dceb226e68360ccf222b65fd2519 -> researcher:sc-researcher-v1:a022b402e45c8bf67eaae1dc4aa9e7ab6a73ada7df30e0e4cc5660a01a4c384c via researcher:sc-researcher-v1:025df10d0b13ee5e1deffe35d7dba3389714dceb226e68360ccf222b65fd2519 > researcher:sc-researcher-v1:a022b402e45c8bf67eaae1dc4aa9e7ab6a73ada7df30e0e4cc5660a01a4c384c weights=1
+[info] PATH 2016-2020 SAMPLED FOUND length=1 researcher:sc-researcher-v1:6af5c919b24580b7379bf1b1ed6196f36ab3973ad4a572152e7893b5f9d158da -> researcher:sc-researcher-v1:fa64b7437665eeaf31a85c5347fe6b2ee199eaf107c5b441f636b62102d3a4e3 via researcher:sc-researcher-v1:6af5c919b24580b7379bf1b1ed6196f36ab3973ad4a572152e7893b5f9d158da > researcher:sc-researcher-v1:fa64b7437665eeaf31a85c5347fe6b2ee199eaf107c5b441f636b62102d3a4e3 weights=1
+[info] PATH 2016-2020 SAMPLED FOUND length=1 researcher:sc-researcher-v1:105305bbefeb3c2a209b5b12f68f1baf93010c1335d4764e8339d5b091c68905 -> researcher:sc-researcher-v1:a022b402e45c8bf67eaae1dc4aa9e7ab6a73ada7df30e0e4cc5660a01a4c384c via researcher:sc-researcher-v1:105305bbefeb3c2a209b5b12f68f1baf93010c1335d4764e8339d5b091c68905 > researcher:sc-researcher-v1:a022b402e45c8bf67eaae1dc4aa9e7ab6a73ada7df30e0e4cc5660a01a4c384c weights=1
+[info] PATH 2016-2020 SAMPLED FOUND length=1 researcher:sc-researcher-v1:105305bbefeb3c2a209b5b12f68f1baf93010c1335d4764e8339d5b091c68905 -> researcher:sc-researcher-v1:025df10d0b13ee5e1deffe35d7dba3389714dceb226e68360ccf222b65fd2519 via researcher:sc-researcher-v1:105305bbefeb3c2a209b5b12f68f1baf93010c1335d4764e8339d5b091c68905 > researcher:sc-researcher-v1:025df10d0b13ee5e1deffe35d7dba3389714dceb226e68360ccf222b65fd2519 weights=1
+[info] PATH 2016-2020 SAMPLED FOUND length=1 researcher:sc-researcher-v1:105305bbefeb3c2a209b5b12f68f1baf93010c1335d4764e8339d5b091c68905 -> researcher:sc-researcher-v1:ca853a704f21877c87f2c027a998253982ef967e769f56a29a73fd8f6aac398f via researcher:sc-researcher-v1:105305bbefeb3c2a209b5b12f68f1baf93010c1335d4764e8339d5b091c68905 > researcher:sc-researcher-v1:ca853a704f21877c87f2c027a998253982ef967e769f56a29a73fd8f6aac398f weights=1
+[info] PATH 2021-2025 SAMPLED FOUND length=1 researcher:sc-researcher-v1:2512aa6a9444d6b89ef64da5e3ce0e4425273837885de74ecd6d1afa51d1bca2 -> researcher:sc-researcher-v1:8caa70f74bcd3feaa581539519d3ccc50dfc499ccca148037859973ed44f3ca1 via researcher:sc-researcher-v1:2512aa6a9444d6b89ef64da5e3ce0e4425273837885de74ecd6d1afa51d1bca2 > researcher:sc-researcher-v1:8caa70f74bcd3feaa581539519d3ccc50dfc499ccca148037859973ed44f3ca1 weights=1
+[info] PATH 2021-2025 SAMPLED FOUND length=1 researcher:sc-researcher-v1:8caa70f74bcd3feaa581539519d3ccc50dfc499ccca148037859973ed44f3ca1 -> researcher:sc-researcher-v1:dd4b0e3e72e43e75e01054a3b8199ba5f8d63e185fe17ceb5a23a5e0b14e605a via researcher:sc-researcher-v1:8caa70f74bcd3feaa581539519d3ccc50dfc499ccca148037859973ed44f3ca1 > researcher:sc-researcher-v1:dd4b0e3e72e43e75e01054a3b8199ba5f8d63e185fe17ceb5a23a5e0b14e605a weights=1
+[info] PATH 2021-2025 SAMPLED FOUND length=1 researcher:sc-researcher-v1:ddff4155109e2de0a0b5a068de05b949d79df01037e7c4909146a3a4ff546079 -> researcher:sc-researcher-v1:48684781c9135da52b4293ccbfa912f3129310d14116159b8acb9788ff0451f5 via researcher:sc-researcher-v1:ddff4155109e2de0a0b5a068de05b949d79df01037e7c4909146a3a4ff546079 > researcher:sc-researcher-v1:48684781c9135da52b4293ccbfa912f3129310d14116159b8acb9788ff0451f5 weights=1
+[info] PATH 2021-2025 SAMPLED FOUND length=1 researcher:sc-researcher-v1:9671e86202bae8796601f4910cf0707376e448869a4d5f94b20fa25d41b9b666 -> researcher:sc-researcher-v1:414e6fcf634ed70092d60ca208e6a7bc10b6c3db8d37b3c17447acd04b29dfbd via researcher:sc-researcher-v1:9671e86202bae8796601f4910cf0707376e448869a4d5f94b20fa25d41b9b666 > researcher:sc-researcher-v1:414e6fcf634ed70092d60ca208e6a7bc10b6c3db8d37b3c17447acd04b29dfbd weights=1
+[info] PATH 2021-2025 SAMPLED FOUND length=1 researcher:sc-researcher-v1:2512aa6a9444d6b89ef64da5e3ce0e4425273837885de74ecd6d1afa51d1bca2 -> researcher:sc-researcher-v1:ba03493c5f1eac7060ea1dbc1ab20789bf96e2909499e63f7b0eda697ae6a829 via researcher:sc-researcher-v1:2512aa6a9444d6b89ef64da5e3ce0e4425273837885de74ecd6d1afa51d1bca2 > researcher:sc-researcher-v1:ba03493c5f1eac7060ea1dbc1ab20789bf96e2909499e63f7b0eda697ae6a829 weights=1
+[info] DISTANCE-ESTIMATE 2000-2025 (ESTIMATE: sampled BFS sources) component=researcher:sc-researcher-v1:1c23dbfcda3713feea7a00b9eb764c6cad65611be2b52889332e8b40024964ca size=8 k=4 (configured 4) seed=20261122 reachedPairs=28 meanDistance=1.0000 p90EffectiveDiameter=1 maxObserved=1 exactAllSources=false bfsLevels=2 exhausted=true
+[info] DISTANCE-ESTIMATE 2000-2005 (ESTIMATE: sampled BFS sources) component=researcher:sc-researcher-v1:74afe429e76a8b50b21d75a815787f38da16d6e49f9d351b8664f6800721ccc3 size=5 k=4 (configured 4) seed=20261122 reachedPairs=16 meanDistance=1.0000 p90EffectiveDiameter=1 maxObserved=1 exactAllSources=false bfsLevels=2 exhausted=true
+[info] DISTANCE-ESTIMATE 2006-2010 (ESTIMATE: sampled BFS sources) component=researcher:orcid:2e47f765b3b6825f641a846c72387ae7970240e07009ce0692a433f58ea146f4 size=3 k=3 (configured 4) seed=20261122 reachedPairs=6 meanDistance=1.0000 p90EffectiveDiameter=1 maxObserved=1 exactAllSources=true bfsLevels=2 exhausted=true
+[info] DISTANCE-ESTIMATE 2011-2015 (ESTIMATE: sampled BFS sources) component=researcher:sc-researcher-v1:1c23dbfcda3713feea7a00b9eb764c6cad65611be2b52889332e8b40024964ca size=8 k=4 (configured 4) seed=20261122 reachedPairs=28 meanDistance=1.0000 p90EffectiveDiameter=1 maxObserved=1 exactAllSources=false bfsLevels=2 exhausted=true
+[info] DISTANCE-ESTIMATE 2016-2020 (ESTIMATE: sampled BFS sources) component=researcher:sc-researcher-v1:025df10d0b13ee5e1deffe35d7dba3389714dceb226e68360ccf222b65fd2519 size=6 k=4 (configured 4) seed=20261122 reachedPairs=20 meanDistance=1.0000 p90EffectiveDiameter=1 maxObserved=1 exactAllSources=false bfsLevels=2 exhausted=true
+[info] DISTANCE-ESTIMATE 2021-2025 (ESTIMATE: sampled BFS sources) component=researcher:sc-researcher-v1:2512aa6a9444d6b89ef64da5e3ce0e4425273837885de74ecd6d1afa51d1bca2 size=8 k=4 (configured 4) seed=20261122 reachedPairs=28 meanDistance=1.0000 p90EffectiveDiameter=1 maxObserved=1 exactAllSources=false bfsLevels=2 exhausted=true
+[info] TEMPORAL 2000-2005 -> 2006-2010 researchers 20->5 edges 23->4 components 7->2 largestComponent 5->3 communities 7->2 bridging 0->0 maxCoreness 4->2
+[info] TEMPORAL 2006-2010 -> 2011-2015 researchers 5->16 edges 4->32 components 2->5 largestComponent 3->8 communities 2->5 bridging 0->0 maxCoreness 2->7
+[info] TEMPORAL 2011-2015 -> 2016-2020 researchers 16->13 edges 32->26 components 5->3 largestComponent 8->6 communities 5->3 bridging 0->0 maxCoreness 7->5
+[info] TEMPORAL 2016-2020 -> 2021-2025 researchers 13->35 edges 26->82 components 3->7 largestComponent 6->8 communities 3->7 bridging 0->0 maxCoreness 5->7
+[info] TEMPORAL-RESEARCHERS 2000-2005 -> 2006-2010 rows=25 inBoth=0 onlyTo=5 onlyFrom=20
+[info] TEMPORAL-RESEARCHERS 2006-2010 -> 2011-2015 rows=21 inBoth=0 onlyTo=16 onlyFrom=5
+[info] TEMPORAL-RESEARCHERS 2011-2015 -> 2016-2020 rows=29 inBoth=0 onlyTo=13 onlyFrom=16
+[info] TEMPORAL-RESEARCHERS 2016-2020 -> 2021-2025 rows=48 inBoth=0 onlyTo=35 onlyFrom=13
+[info] TEMPORAL-LIMITATION Community and component IDs are window-local labels (a community ID is a label-propagation label, a component ID the smallest member ID in that window). They are not comparable across windows, so only sizes and measures are compared, never labels.
+[info] LOAD-MANIFEST NEPTUNE target/pipeline-local/phase14/spark/graph/load-manifests/target=neptune/run_id=f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60/load-manifest.json
+[info] LOAD-MANIFEST DYNAMODB target/pipeline-local/phase14/spark/graph/load-manifests/target=dynamodb/run_id=f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60/load-manifest.json
+[info] LOAD-MANIFEST S3VECTORS_INPUT target/pipeline-local/phase14/spark/graph/load-manifests/target=s3vectors-input/run_id=f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60/load-manifest.json
+[info] LOAD-MANIFEST S3 target/pipeline-local/phase14/spark/graph/load-manifests/target=s3/run_id=f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60/load-manifest.json
+[info] EXPLAIN LPA iteration 1 (formatted physical plan):
+[info] == Physical Plan ==
+[info] AdaptiveSparkPlan (75)
+[info] +- Project (74)
+[info]    +- SortMergeJoin Inner (73)
+[info]       :- Sort (16)
+[info]       :  +- Exchange (15)
+[info]       :     +- Project (14)
+[info]       :        +- SortMergeJoin Inner (13)
+[info]       :           :- Sort (5)
+[info]       :           :  +- Exchange (4)
+[info]       :           :     +- Project (3)
+[info]       :           :        +- Filter (2)
+[info]       :           :           +- Scan ExistingRDD (1)
+[info]       :           +- Sort (12)
+[info]       :              +- HashAggregate (11)
+[info]       :                 +- Exchange (10)
+[info]       :                    +- HashAggregate (9)
+[info]       :                       +- Project (8)
+[info]       :                          +- Filter (7)
+[info]       :                             +- Scan ExistingRDD (6)
+[info]       +- Project (72)
+[info]          +- Filter (71)
+[info]             +- Window (70)
+[info]                +- WindowGroupLimit (69)
+[info]                   +- Sort (68)
+[info]                      +- Exchange (67)
+[info]                         +- WindowGroupLimit (66)
+[info]                            +- Sort (65)
+[info]                               +- HashAggregate (64)
+[info]                                  +- Exchange (63)
+[info]                                     +- HashAggregate (62)
+[info]                                        +- Union (61)
+[info]                                           :- Project (46)
+[info]                                           :  +- SortMergeJoin Inner (45)
+[info]                                           :     :- Sort (28)
+[info]                                           :     :  +- Exchange (27)
+[info]                                           :     :     +- HashAggregate (26)
+[info]                                           :     :        +- Exchange (25)
+[info]                                           :     :           +- HashAggregate (24)
+[info]                                           :     :              +- Union (23)
+[info]                                           :     :                 :- Project (19)
+[info]                                           :     :                 :  +- Filter (18)
+[info]                                           :     :                 :     +- Scan ExistingRDD (17)
+[info]                                           :     :                 +- Project (22)
+[info]                                           :     :                    +- Filter (21)
+[info]                                           :     :                       +- Scan ExistingRDD (20)
+[info]                                           :     +- Sort (44)
+[info]                                           :        +- Exchange (43)
+[info]                                           :           +- Project (42)
+[info]                                           :              +- SortMergeJoin Inner (41)
+[info]                                           :                 :- Sort (33)
+[info]                                           :                 :  +- Exchange (32)
+[info]                                           :                 :     +- Project (31)
+[info]                                           :                 :        +- Filter (30)
+[info]                                           :                 :           +- Scan ExistingRDD (29)
+[info]                                           :                 +- Sort (40)
+[info]                                           :                    +- HashAggregate (39)
+[info]                                           :                       +- Exchange (38)
+[info]                                           :                          +- HashAggregate (37)
+[info]                                           :                             +- Project (36)
+[info]                                           :                                +- Filter (35)
+[info]                                           :                                   +- Scan ExistingRDD (34)
+[info]                                           +- Project (60)
+[info]                                              +- SortMergeJoin Inner (59)
+[info]                                                 :- Sort (51)
+[info]                                                 :  +- Exchange (50)
+[info]                                                 :     +- Project (49)
+[info]                                                 :        +- Filter (48)
+[info]                                                 :           +- Scan ExistingRDD (47)
+[info]                                                 +- Sort (58)
+[info]                                                    +- HashAggregate (57)
+[info]                                                       +- Exchange (56)
+[info]                                                          +- HashAggregate (55)
+[info]                                                             +- Project (54)
+[info]                                                                +- Filter (53)
+[info]                                                                   +- Scan ExistingRDD (52)
+[info] (1) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#6102, windowEndYear#6103, node#6104, label#6105]
+[info] Arguments: [windowStartYear#6102, windowEndYear#6103, node#6104, label#6105], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (2) Filter
+[info] Input [4]: [windowStartYear#6102, windowEndYear#6103, node#6104, label#6105]
+[info] Condition : (isnotnull(label#6105) AND isnotnull(node#6104))
+[info] (3) Project
+[info] Output [4]: [windowStartYear#6102, windowEndYear#6103, node#6104 AS researcherId#6106, label#6105 AS componentId#6107]
+[info] Input [4]: [windowStartYear#6102, windowEndYear#6103, node#6104, label#6105]
+[info] (4) Exchange
+[info] Input [4]: [windowStartYear#6102, windowEndYear#6103, researcherId#6106, componentId#6107]
+[info] Arguments: hashpartitioning(windowStartYear#6102, windowEndYear#6103, componentId#6107, 8), ENSURE_REQUIREMENTS, [plan_id=54441]
+[info] (5) Sort
+[info] Input [4]: [windowStartYear#6102, windowEndYear#6103, researcherId#6106, componentId#6107]
+[info] Arguments: [windowStartYear#6102 ASC NULLS FIRST, windowEndYear#6103 ASC NULLS FIRST, componentId#6107 ASC NULLS FIRST], false, 0
+[info] (6) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#6114, windowEndYear#6115, node#6116, label#6117]
+[info] Arguments: [windowStartYear#6114, windowEndYear#6115, node#6116, label#6117], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (7) Filter
+[info] Input [4]: [windowStartYear#6114, windowEndYear#6115, node#6116, label#6117]
+[info] Condition : isnotnull(label#6117)
+[info] (8) Project
+[info] Output [3]: [windowStartYear#6114, windowEndYear#6115, label#6117 AS componentId#6119]
+[info] Input [4]: [windowStartYear#6114, windowEndYear#6115, node#6116, label#6117]
+[info] (9) HashAggregate
+[info] Input [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Keys [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] (10) Exchange
+[info] Input [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Arguments: hashpartitioning(windowStartYear#6114, windowEndYear#6115, componentId#6119, 8), ENSURE_REQUIREMENTS, [plan_id=54437]
+[info] (11) HashAggregate
+[info] Input [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Keys [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] (12) Sort
+[info] Input [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Arguments: [windowStartYear#6114 ASC NULLS FIRST, windowEndYear#6115 ASC NULLS FIRST, componentId#6119 ASC NULLS FIRST], false, 0
+[info] (13) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#6102, windowEndYear#6103, componentId#6107]
+[info] Right keys [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (14) Project
+[info] Output [4]: [windowStartYear#6102, windowEndYear#6103, researcherId#6106 AS node#6620, researcherId#6106 AS label#6621]
+[info] Input [7]: [windowStartYear#6102, windowEndYear#6103, researcherId#6106, componentId#6107, windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] (15) Exchange
+[info] Input [4]: [windowStartYear#6102, windowEndYear#6103, node#6620, label#6621]
+[info] Arguments: hashpartitioning(windowStartYear#6102, windowEndYear#6103, node#6620, 8), ENSURE_REQUIREMENTS, [plan_id=54491]
+[info] (16) Sort
+[info] Input [4]: [windowStartYear#6102, windowEndYear#6103, node#6620, label#6621]
+[info] Arguments: [windowStartYear#6102 ASC NULLS FIRST, windowEndYear#6103 ASC NULLS FIRST, node#6620 ASC NULLS FIRST], false, 0
+[info] (17) Scan ExistingRDD
+[info] Output [14]: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751]
+[info] Arguments: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751], MapPartitionsRDD[566] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (18) Filter
+[info] Input [14]: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751]
+[info] Condition : ((isnotnull(researcherA#4710) AND isnotnull(researcherB#4711)) AND NOT (researcherA#4710 = researcherB#4711))
+[info] (19) Project
+[info] Output [4]: [windowStartYear#398, windowEndYear#399, researcherA#4710 AS a#6582, researcherB#4711 AS b#6583]
+[info] Input [14]: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751]
+[info] (20) Scan ExistingRDD
+[info] Output [14]: [schemaVersion#6586, edgeId#6587, researcherA#6588, researcherB#6589, windowStartYear#6590, windowEndYear#6591, jointPublicationCount#6592L, firstCollaborationYear#6593, lastCollaborationYear#6594, representativeWorkIds#6595, supportingWorkIdsRef#6596, policyVersion#6597, provenance#6598, runId#6599]
+[info] Arguments: [schemaVersion#6586, edgeId#6587, researcherA#6588, researcherB#6589, windowStartYear#6590, windowEndYear#6591, jointPublicationCount#6592L, firstCollaborationYear#6593, lastCollaborationYear#6594, representativeWorkIds#6595, supportingWorkIdsRef#6596, policyVersion#6597, provenance#6598, runId#6599], MapPartitionsRDD[566] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (21) Filter
+[info] Input [14]: [schemaVersion#6586, edgeId#6587, researcherA#6588, researcherB#6589, windowStartYear#6590, windowEndYear#6591, jointPublicationCount#6592L, firstCollaborationYear#6593, lastCollaborationYear#6594, representativeWorkIds#6595, supportingWorkIdsRef#6596, policyVersion#6597, provenance#6598, runId#6599]
+[info] Condition : ((isnotnull(researcherB#6589) AND isnotnull(researcherA#6588)) AND NOT (researcherB#6589 = researcherA#6588))
+[info] (22) Project
+[info] Output [4]: [windowStartYear#6590, windowEndYear#6591, researcherB#6589 AS a#6584, researcherA#6588 AS b#6585]
+[info] Input [14]: [schemaVersion#6586, edgeId#6587, researcherA#6588, researcherB#6589, windowStartYear#6590, windowEndYear#6591, jointPublicationCount#6592L, firstCollaborationYear#6593, lastCollaborationYear#6594, representativeWorkIds#6595, supportingWorkIdsRef#6596, policyVersion#6597, provenance#6598, runId#6599]
+[info] (23) Union
+[info] (24) HashAggregate
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#6582, b#6583]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, a#6582, b#6583]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#398, windowEndYear#399, a#6582, b#6583]
+[info] (25) Exchange
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#6582, b#6583]
+[info] Arguments: hashpartitioning(windowStartYear#398, windowEndYear#399, a#6582, b#6583, 8), ENSURE_REQUIREMENTS, [plan_id=54446]
+[info] (26) HashAggregate
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#6582, b#6583]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, a#6582, b#6583]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#398, windowEndYear#399, a#6582, b#6583]
+[info] (27) Exchange
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#6582, b#6583]
+[info] Arguments: hashpartitioning(windowStartYear#398, windowEndYear#399, a#6582, 8), ENSURE_REQUIREMENTS, [plan_id=54459]
+[info] (28) Sort
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#6582, b#6583]
+[info] Arguments: [windowStartYear#398 ASC NULLS FIRST, windowEndYear#399 ASC NULLS FIRST, a#6582 ASC NULLS FIRST], false, 0
+[info] (29) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#6672, windowEndYear#6673, node#6674, label#6675]
+[info] Arguments: [windowStartYear#6672, windowEndYear#6673, node#6674, label#6675], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (30) Filter
+[info] Input [4]: [windowStartYear#6672, windowEndYear#6673, node#6674, label#6675]
+[info] Condition : (isnotnull(label#6675) AND isnotnull(node#6674))
+[info] (31) Project
+[info] Output [4]: [windowStartYear#6672, windowEndYear#6673, node#6674 AS researcherId#6676, label#6675 AS componentId#6677]
+[info] Input [4]: [windowStartYear#6672, windowEndYear#6673, node#6674, label#6675]
+[info] (32) Exchange
+[info] Input [4]: [windowStartYear#6672, windowEndYear#6673, researcherId#6676, componentId#6677]
+[info] Arguments: hashpartitioning(windowStartYear#6672, windowEndYear#6673, componentId#6677, 8), ENSURE_REQUIREMENTS, [plan_id=54452]
+[info] (33) Sort
+[info] Input [4]: [windowStartYear#6672, windowEndYear#6673, researcherId#6676, componentId#6677]
+[info] Arguments: [windowStartYear#6672 ASC NULLS FIRST, windowEndYear#6673 ASC NULLS FIRST, componentId#6677 ASC NULLS FIRST], false, 0
+[info] (34) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#6678, windowEndYear#6679, node#6680, label#6681]
+[info] Arguments: [windowStartYear#6678, windowEndYear#6679, node#6680, label#6681], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (35) Filter
+[info] Input [4]: [windowStartYear#6678, windowEndYear#6679, node#6680, label#6681]
+[info] Condition : isnotnull(label#6681)
+[info] (36) Project
+[info] Output [3]: [windowStartYear#6678, windowEndYear#6679, label#6681 AS componentId#6683]
+[info] Input [4]: [windowStartYear#6678, windowEndYear#6679, node#6680, label#6681]
+[info] (37) HashAggregate
+[info] Input [3]: [windowStartYear#6678, windowEndYear#6679, componentId#6683]
+[info] Keys [3]: [windowStartYear#6678, windowEndYear#6679, componentId#6683]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#6678, windowEndYear#6679, componentId#6683]
+[info] (38) Exchange
+[info] Input [3]: [windowStartYear#6678, windowEndYear#6679, componentId#6683]
+[info] Arguments: hashpartitioning(windowStartYear#6678, windowEndYear#6679, componentId#6683, 8), ENSURE_REQUIREMENTS, [plan_id=54448]
+[info] (39) HashAggregate
+[info] Input [3]: [windowStartYear#6678, windowEndYear#6679, componentId#6683]
+[info] Keys [3]: [windowStartYear#6678, windowEndYear#6679, componentId#6683]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#6678, windowEndYear#6679, componentId#6683]
+[info] (40) Sort
+[info] Input [3]: [windowStartYear#6678, windowEndYear#6679, componentId#6683]
+[info] Arguments: [windowStartYear#6678 ASC NULLS FIRST, windowEndYear#6679 ASC NULLS FIRST, componentId#6683 ASC NULLS FIRST], false, 0
+[info] (41) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#6672, windowEndYear#6673, componentId#6677]
+[info] Right keys [3]: [windowStartYear#6678, windowEndYear#6679, componentId#6683]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (42) Project
+[info] Output [4]: [windowStartYear#6672, windowEndYear#6673, researcherId#6676 AS a#6642, researcherId#6676 AS label#6690]
+[info] Input [7]: [windowStartYear#6672, windowEndYear#6673, researcherId#6676, componentId#6677, windowStartYear#6678, windowEndYear#6679, componentId#6683]
+[info] (43) Exchange
+[info] Input [4]: [windowStartYear#6672, windowEndYear#6673, a#6642, label#6690]
+[info] Arguments: hashpartitioning(windowStartYear#6672, windowEndYear#6673, a#6642, 8), ENSURE_REQUIREMENTS, [plan_id=54460]
+[info] (44) Sort
+[info] Input [4]: [windowStartYear#6672, windowEndYear#6673, a#6642, label#6690]
+[info] Arguments: [windowStartYear#6672 ASC NULLS FIRST, windowEndYear#6673 ASC NULLS FIRST, a#6642 ASC NULLS FIRST], false, 0
+[info] (45) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#398, windowEndYear#399, a#6582]
+[info] Right keys [3]: [windowStartYear#6672, windowEndYear#6673, a#6642]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (46) Project
+[info] Output [4]: [windowStartYear#398, windowEndYear#399, b#6583 AS node#6643, label#6690]
+[info] Input [8]: [windowStartYear#398, windowEndYear#399, a#6582, b#6583, windowStartYear#6672, windowEndYear#6673, a#6642, label#6690]
+[info] (47) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#6644, windowEndYear#6645, node#6646, label#6647]
+[info] Arguments: [windowStartYear#6644, windowEndYear#6645, node#6646, label#6647], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (48) Filter
+[info] Input [4]: [windowStartYear#6644, windowEndYear#6645, node#6646, label#6647]
+[info] Condition : (isnotnull(label#6647) AND isnotnull(node#6646))
+[info] (49) Project
+[info] Output [4]: [windowStartYear#6644, windowEndYear#6645, node#6646 AS researcherId#6648, label#6647 AS componentId#6649]
+[info] Input [4]: [windowStartYear#6644, windowEndYear#6645, node#6646, label#6647]
+[info] (50) Exchange
+[info] Input [4]: [windowStartYear#6644, windowEndYear#6645, researcherId#6648, componentId#6649]
+[info] Arguments: hashpartitioning(windowStartYear#6644, windowEndYear#6645, componentId#6649, 8), ENSURE_REQUIREMENTS, [plan_id=54469]
+[info] (51) Sort
+[info] Input [4]: [windowStartYear#6644, windowEndYear#6645, researcherId#6648, componentId#6649]
+[info] Arguments: [windowStartYear#6644 ASC NULLS FIRST, windowEndYear#6645 ASC NULLS FIRST, componentId#6649 ASC NULLS FIRST], false, 0
+[info] (52) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#6650, windowEndYear#6651, node#6652, label#6653]
+[info] Arguments: [windowStartYear#6650, windowEndYear#6651, node#6652, label#6653], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (53) Filter
+[info] Input [4]: [windowStartYear#6650, windowEndYear#6651, node#6652, label#6653]
+[info] Condition : isnotnull(label#6653)
+[info] (54) Project
+[info] Output [3]: [windowStartYear#6650, windowEndYear#6651, label#6653 AS componentId#6655]
+[info] Input [4]: [windowStartYear#6650, windowEndYear#6651, node#6652, label#6653]
+[info] (55) HashAggregate
+[info] Input [3]: [windowStartYear#6650, windowEndYear#6651, componentId#6655]
+[info] Keys [3]: [windowStartYear#6650, windowEndYear#6651, componentId#6655]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#6650, windowEndYear#6651, componentId#6655]
+[info] (56) Exchange
+[info] Input [3]: [windowStartYear#6650, windowEndYear#6651, componentId#6655]
+[info] Arguments: hashpartitioning(windowStartYear#6650, windowEndYear#6651, componentId#6655, 8), ENSURE_REQUIREMENTS, [plan_id=54465]
+[info] (57) HashAggregate
+[info] Input [3]: [windowStartYear#6650, windowEndYear#6651, componentId#6655]
+[info] Keys [3]: [windowStartYear#6650, windowEndYear#6651, componentId#6655]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#6650, windowEndYear#6651, componentId#6655]
+[info] (58) Sort
+[info] Input [3]: [windowStartYear#6650, windowEndYear#6651, componentId#6655]
+[info] Arguments: [windowStartYear#6650 ASC NULLS FIRST, windowEndYear#6651 ASC NULLS FIRST, componentId#6655 ASC NULLS FIRST], false, 0
+[info] (59) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#6644, windowEndYear#6645, componentId#6649]
+[info] Right keys [3]: [windowStartYear#6650, windowEndYear#6651, componentId#6655]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (60) Project
+[info] Output [4]: [windowStartYear#6644, windowEndYear#6645, researcherId#6648 AS node#6661, researcherId#6648 AS label#6662]
+[info] Input [7]: [windowStartYear#6644, windowEndYear#6645, researcherId#6648, componentId#6649, windowStartYear#6650, windowEndYear#6651, componentId#6655]
+[info] (61) Union
+[info] (62) HashAggregate
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690]
+[info] Functions [1]: [partial_count(1)]
+[info] Aggregate Attributes [1]: [count#6933L]
+[info] Results [5]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690, count#6934L]
+[info] (63) Exchange
+[info] Input [5]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690, count#6934L]
+[info] Arguments: hashpartitioning(windowStartYear#398, windowEndYear#399, node#6643, label#6690, 8), ENSURE_REQUIREMENTS, [plan_id=54477]
+[info] (64) HashAggregate
+[info] Input [5]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690, count#6934L]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690]
+[info] Functions [1]: [count(1)]
+[info] Aggregate Attributes [1]: [count(1)#6668L]
+[info] Results [5]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690, count(1)#6668L AS votes#6663L]
+[info] (65) Sort
+[info] Input [5]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690, votes#6663L]
+[info] Arguments: [windowStartYear#398 ASC NULLS FIRST, windowEndYear#399 ASC NULLS FIRST, node#6643 ASC NULLS FIRST, votes#6663L DESC NULLS LAST, label#6690 ASC NULLS FIRST], false, 0
+[info] (66) WindowGroupLimit
+[info] Input [5]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690, votes#6663L]
+[info] Arguments: [windowStartYear#398, windowEndYear#399, node#6643], [votes#6663L DESC NULLS LAST, label#6690 ASC NULLS FIRST], row_number(), 1, Partial
+[info] (67) Exchange
+[info] Input [5]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690, votes#6663L]
+[info] Arguments: hashpartitioning(windowStartYear#398, windowEndYear#399, node#6643, 8), ENSURE_REQUIREMENTS, [plan_id=54483]
+[info] (68) Sort
+[info] Input [5]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690, votes#6663L]
+[info] Arguments: [windowStartYear#398 ASC NULLS FIRST, windowEndYear#399 ASC NULLS FIRST, node#6643 ASC NULLS FIRST, votes#6663L DESC NULLS LAST, label#6690 ASC NULLS FIRST], false, 0
+[info] (69) WindowGroupLimit
+[info] Input [5]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690, votes#6663L]
+[info] Arguments: [windowStartYear#398, windowEndYear#399, node#6643], [votes#6663L DESC NULLS LAST, label#6690 ASC NULLS FIRST], row_number(), 1, Final
+[info] (70) Window
+[info] Input [5]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690, votes#6663L]
+[info] Arguments: [row_number() windowspecdefinition(windowStartYear#398, windowEndYear#399, node#6643, votes#6663L DESC NULLS LAST, label#6690 ASC NULLS FIRST, specifiedwindowframe(RowFrame, unboundedpreceding$(), currentrow$())) AS rk#6669], [windowStartYear#398, windowEndYear#399, node#6643], [votes#6663L DESC NULLS LAST, label#6690 ASC NULLS FIRST]
+[info] (71) Filter
+[info] Input [6]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690, votes#6663L, rk#6669]
+[info] Condition : (rk#6669 = 1)
+[info] (72) Project
+[info] Output [4]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690 AS newLabel#6671]
+[info] Input [6]: [windowStartYear#398, windowEndYear#399, node#6643, label#6690, votes#6663L, rk#6669]
+[info] (73) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#6102, windowEndYear#6103, node#6620]
+[info] Right keys [3]: [windowStartYear#398, windowEndYear#399, node#6643]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (74) Project
+[info] Output [5]: [windowStartYear#6102, windowEndYear#6103, node#6620, newLabel#6671 AS label#6691, NOT (newLabel#6671 = label#6621) AS changed#6692]
+[info] Input [8]: [windowStartYear#6102, windowEndYear#6103, node#6620, label#6621, windowStartYear#398, windowEndYear#399, node#6643, newLabel#6671]
+[info] (75) AdaptiveSparkPlan
+[info] Output [5]: [windowStartYear#6102, windowEndYear#6103, node#6620, label#6691, changed#6692]
+[info] Arguments: isFinalPlan=false
+[info] EXPLAIN BFS frontier step 1 (formatted physical plan):
+[info] == Physical Plan ==
+[info] AdaptiveSparkPlan (61)
+[info] +- InMemoryTableScan (1)
+[info]       +- InMemoryRelation (2)
+[info]             +- AdaptiveSparkPlan (60)
+[info]                +- == Final Plan ==
+[info]                   ResultQueryStage (49)
+[info]                   +- * HashAggregate (48)
+[info]                      +- ShuffleQueryStage (47), Statistics(sizeInBytes=31.6 KiB, rowCount=156)
+[info]                         +- Exchange (46)
+[info]                            +- * HashAggregate (45)
+[info]                               +- * Project (44)
+[info]                                  +- * BroadcastHashJoin LeftAnti BuildRight (43)
+[info]                                     :- * Project (34)
+[info]                                     :  +- * BroadcastHashJoin Inner BuildLeft (33)
+[info]                                     :     :- BroadcastQueryStage (11), Statistics(sizeInBytes=4.0 MiB, rowCount=28)
+[info]                                     :     :  +- BroadcastExchange (10)
+[info]                                     :     :     +- TableCacheQueryStage (9), Statistics(sizeInBytes=1568.0 B)
+[info]                                     :     :        +- InMemoryTableScan (3)
+[info]                                     :     :              +- InMemoryRelation (4)
+[info]                                     :     :                    +- * Project (8)
+[info]                                     :     :                       +- InMemoryTableScan (5)
+[info]                                     :     :                             +- InMemoryRelation (6)
+[info]                                     :     :                                   +- LocalTableScan (7)
+[info]                                     :     +- * Filter (32)
+[info]                                     :        +- TableCacheQueryStage (31), Statistics(sizeInBytes=3.99E+98 B)
+[info]                                     :           +- InMemoryTableScan (12)
+[info]                                     :                 +- InMemoryRelation (13)
+[info]                                     :                       +- AdaptiveSparkPlan (30)
+[info]                                              +- == Final Plan ==
+[info]                                                 ResultQueryStage (25)
+[info]                                                 +- * HashAggregate (24)
+[info]                                                    +- ShuffleQueryStage (23), Statistics(sizeInBytes=150.7 KiB, rowCount=668)
+[info]                                                       +- Exchange (22)
+[info]                                                          +- * HashAggregate (21)
+[info]                                                             +- Union (20)
+[info]                                                                :- * Project (16)
+[info]                                                                :  +- * Filter (15)
+[info]                                                                :     +- * Scan ExistingRDD (14)
+[info]                                                                +- * Project (19)
+[info]                                                                   +- * Filter (18)
+[info]                                                                      +- * Scan ExistingRDD (17)
+[info]                                              +- == Initial Plan ==
+[info]                                                 HashAggregate (29)
+[info]                                                 +- Exchange (28)
+[info]                                                    +- HashAggregate (27)
+[info]                                                       +- Union (26)
+[info]                                                          :- Project (16)
+[info]                                                          :  +- Filter (15)
+[info]                                                          :     +- Scan ExistingRDD (14)
+[info]                                                          +- Project (19)
+[info]                                                             +- Filter (18)
+[info]                                                                +- Scan ExistingRDD (17)
+[info]                                     +- BroadcastQueryStage (42), Statistics(sizeInBytes=4.0 MiB, rowCount=28)
+[info]                                        +- BroadcastExchange (41)
+[info]                                           +- TableCacheQueryStage (40), Statistics(sizeInBytes=1680.0 B)
+[info]                                              +- InMemoryTableScan (35)
+[info]                                                    +- InMemoryRelation (36)
+[info]                                                          +- * Project (39)
+[info]                                                             +- InMemoryTableScan (37)
+[info]                                                                   +- InMemoryRelation (38)
+[info]                                                                         +- LocalTableScan (7)
+[info]                +- == Initial Plan ==
+[info]                   HashAggregate (59)
+[info]                   +- Exchange (58)
+[info]                      +- HashAggregate (57)
+[info]                         +- Project (56)
+[info]                            +- BroadcastHashJoin LeftAnti BuildRight (55)
+[info]                               :- Project (53)
+[info]                               :  +- BroadcastHashJoin Inner BuildLeft (52)
+[info]                               :     :- BroadcastExchange (50)
+[info]                               :     :  +- InMemoryTableScan (3)
+[info]                               :     :        +- InMemoryRelation (4)
+[info]                               :     :              +- * Project (8)
+[info]                               :     :                 +- InMemoryTableScan (5)
+[info]                               :     :                       +- InMemoryRelation (6)
+[info]                               :     :                             +- LocalTableScan (7)
+[info]                               :     +- Filter (51)
+[info]                               :        +- InMemoryTableScan (12)
+[info]                               :              +- InMemoryRelation (13)
+[info]                               :                    +- AdaptiveSparkPlan (30)
+[info]                                     +- == Final Plan ==
+[info]                                        ResultQueryStage (25)
+[info]                                        +- * HashAggregate (24)
+[info]                                           +- ShuffleQueryStage (23), Statistics(sizeInBytes=150.7 KiB, rowCount=668)
+[info]                                              +- Exchange (22)
+[info]                                                 +- * HashAggregate (21)
+[info]                                                    +- Union (20)
+[info]                                                       :- * Project (16)
+[info]                                                       :  +- * Filter (15)
+[info]                                                       :     +- * Scan ExistingRDD (14)
+[info]                                                       +- * Project (19)
+[info]                                                          +- * Filter (18)
+[info]                                                             +- * Scan ExistingRDD (17)
+[info]                                     +- == Initial Plan ==
+[info]                                        HashAggregate (29)
+[info]                                        +- Exchange (28)
+[info]                                           +- HashAggregate (27)
+[info]                                              +- Union (26)
+[info]                                                 :- Project (16)
+[info]                                                 :  +- Filter (15)
+[info]                                                 :     +- Scan ExistingRDD (14)
+[info]                                                 +- Project (19)
+[info]                                                    +- Filter (18)
+[info]                                                       +- Scan ExistingRDD (17)
+[info]                               +- BroadcastExchange (54)
+[info]                                  +- InMemoryTableScan (35)
+[info]                                        +- InMemoryRelation (36)
+[info]                                              +- * Project (39)
+[info]                                                 +- InMemoryTableScan (37)
+[info]                                                       +- InMemoryRelation (38)
+[info]                                                             +- LocalTableScan (7)
+[info] (1) InMemoryTableScan
+[info] Output [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Arguments: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] (2) InMemoryRelation
+[info] Arguments: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451], StorageLevel(disk, memory, deserialized, 1 replicas)
+[info] (3) InMemoryTableScan
+[info] Output [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, a#14450]
+[info] Arguments: [windowStartYear#14048, windowEndYear#14049, qid#14050, a#14450]
+[info] (4) InMemoryRelation
+[info] Arguments: [windowStartYear#14048, windowEndYear#14049, qid#14050, a#14450], StorageLevel(disk, memory, deserialized, 1 replicas)
+[info] (5) InMemoryTableScan
+[info] Output [4]: [qid#14050, target#14052, windowEndYear#14049, windowStartYear#14048]
+[info] Arguments: [qid#14050, target#14052, windowEndYear#14049, windowStartYear#14048]
+[info] (6) InMemoryRelation
+[info] Arguments: [windowStartYear#14048, windowEndYear#14049, qid#14050, source#14051, target#14052, selection#14053], StorageLevel(disk, memory, deserialized, 1 replicas)
+[info] (7) LocalTableScan
+[info] Output [6]: [windowStartYear#14048, windowEndYear#14049, qid#14050, source#14051, target#14052, selection#14053]
+[info] Arguments: [windowStartYear#14048, windowEndYear#14049, qid#14050, source#14051, target#14052, selection#14053]
+[info] (8) Project [codegen id : 1]
+[info] Output [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, target#14052 AS node#14084]
+[info] Input [4]: [qid#14050, target#14052, windowEndYear#14049, windowStartYear#14048]
+[info] (9) TableCacheQueryStage
+[info] Output [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, a#14450]
+[info] Arguments: 0
+[info] (10) BroadcastExchange
+[info] Input [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, a#14450]
+[info] Arguments: HashedRelationBroadcastMode(List(input[0, int, false], input[1, int, false], input[3, string, false]),false), [plan_id=45058]
+[info] (11) BroadcastQueryStage
+[info] Output [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, a#14450]
+[info] Arguments: 3
+[info] (12) InMemoryTableScan
+[info] Output [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Arguments: [windowStartYear#398, windowEndYear#399, a#14010, b#14011], [isnotnull(a#14010)]
+[info] (13) InMemoryRelation
+[info] Arguments: [windowStartYear#398, windowEndYear#399, a#14010, b#14011], StorageLevel(disk, memory, deserialized, 1 replicas)
+[info] (14) Scan ExistingRDD [codegen id : 1]
+[info] Output [14]: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751]
+[info] Arguments: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751], MapPartitionsRDD[566] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (15) Filter [codegen id : 1]
+[info] Input [14]: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751]
+[info] Condition : ((isnotnull(researcherA#4710) AND isnotnull(researcherB#4711)) AND NOT (researcherA#4710 = researcherB#4711))
+[info] (16) Project [codegen id : 1]
+[info] Output [4]: [windowStartYear#398, windowEndYear#399, researcherA#4710 AS a#14010, researcherB#4711 AS b#14011]
+[info] Input [14]: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751]
+[info] (17) Scan ExistingRDD [codegen id : 2]
+[info] Output [14]: [schemaVersion#14014, edgeId#14015, researcherA#14016, researcherB#14017, windowStartYear#14018, windowEndYear#14019, jointPublicationCount#14020L, firstCollaborationYear#14021, lastCollaborationYear#14022, representativeWorkIds#14023, supportingWorkIdsRef#14024, policyVersion#14025, provenance#14026, runId#14027]
+[info] Arguments: [schemaVersion#14014, edgeId#14015, researcherA#14016, researcherB#14017, windowStartYear#14018, windowEndYear#14019, jointPublicationCount#14020L, firstCollaborationYear#14021, lastCollaborationYear#14022, representativeWorkIds#14023, supportingWorkIdsRef#14024, policyVersion#14025, provenance#14026, runId#14027], MapPartitionsRDD[566] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (18) Filter [codegen id : 2]
+[info] Input [14]: [schemaVersion#14014, edgeId#14015, researcherA#14016, researcherB#14017, windowStartYear#14018, windowEndYear#14019, jointPublicationCount#14020L, firstCollaborationYear#14021, lastCollaborationYear#14022, representativeWorkIds#14023, supportingWorkIdsRef#14024, policyVersion#14025, provenance#14026, runId#14027]
+[info] Condition : ((isnotnull(researcherB#14017) AND isnotnull(researcherA#14016)) AND NOT (researcherB#14017 = researcherA#14016))
+[info] (19) Project [codegen id : 2]
+[info] Output [4]: [windowStartYear#14018, windowEndYear#14019, researcherB#14017 AS a#14012, researcherA#14016 AS b#14013]
+[info] Input [14]: [schemaVersion#14014, edgeId#14015, researcherA#14016, researcherB#14017, windowStartYear#14018, windowEndYear#14019, jointPublicationCount#14020L, firstCollaborationYear#14021, lastCollaborationYear#14022, representativeWorkIds#14023, supportingWorkIdsRef#14024, policyVersion#14025, provenance#14026, runId#14027]
+[info] (20) Union
+[info] (21) HashAggregate [codegen id : 3]
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] (22) Exchange
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Arguments: hashpartitioning(windowStartYear#398, windowEndYear#399, a#14010, b#14011, 8), ENSURE_REQUIREMENTS, [plan_id=45093]
+[info] (23) ShuffleQueryStage
+[info] Output [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Arguments: 0
+[info] (24) HashAggregate [codegen id : 4]
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] (25) ResultQueryStage
+[info] Output [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Arguments: 1
+[info] (26) Union
+[info] (27) HashAggregate
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] (28) Exchange
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Arguments: hashpartitioning(windowStartYear#398, windowEndYear#399, a#14010, b#14011, 8), ENSURE_REQUIREMENTS, [plan_id=44883]
+[info] (29) HashAggregate
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] (30) AdaptiveSparkPlan
+[info] Output [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Arguments: isFinalPlan=true
+[info] (31) TableCacheQueryStage
+[info] Output [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Arguments: 1
+[info] (32) Filter
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Condition : isnotnull(a#14010)
+[info] (33) BroadcastHashJoin [codegen id : 1]
+[info] Left keys [3]: [windowStartYear#14048, windowEndYear#14049, a#14450]
+[info] Right keys [3]: [windowStartYear#398, windowEndYear#399, a#14010]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (34) Project [codegen id : 1]
+[info] Output [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, b#14011]
+[info] Input [8]: [windowStartYear#14048, windowEndYear#14049, qid#14050, a#14450, windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] (35) InMemoryTableScan
+[info] Output [4]: [windowStartYear#14452, windowEndYear#14453, qid#14454, node#14458]
+[info] Arguments: [windowStartYear#14452, windowEndYear#14453, qid#14454, node#14458]
+[info] (36) InMemoryRelation
+[info] Arguments: [windowStartYear#14452, windowEndYear#14453, qid#14454, node#14458, dist#14086], StorageLevel(disk, memory, deserialized, 1 replicas)
+[info] (37) InMemoryTableScan
+[info] Output [4]: [qid#14050, target#14052, windowEndYear#14049, windowStartYear#14048]
+[info] Arguments: [qid#14050, target#14052, windowEndYear#14049, windowStartYear#14048]
+[info] (38) InMemoryRelation
+[info] Arguments: [windowStartYear#14048, windowEndYear#14049, qid#14050, source#14051, target#14052, selection#14053], StorageLevel(disk, memory, deserialized, 1 replicas)
+[info] (39) Project [codegen id : 1]
+[info] Output [5]: [windowStartYear#14048, windowEndYear#14049, qid#14050, target#14052 AS node#14084, 0 AS dist#14086]
+[info] Input [4]: [qid#14050, target#14052, windowEndYear#14049, windowStartYear#14048]
+[info] (40) TableCacheQueryStage
+[info] Output [4]: [windowStartYear#14452, windowEndYear#14453, qid#14454, node#14458]
+[info] Arguments: 2
+[info] (41) BroadcastExchange
+[info] Input [4]: [windowStartYear#14452, windowEndYear#14453, qid#14454, node#14458]
+[info] Arguments: HashedRelationBroadcastMode(List(input[0, int, false], input[1, int, false], input[2, string, false], input[3, string, false]),false), [plan_id=45064]
+[info] (42) BroadcastQueryStage
+[info] Output [4]: [windowStartYear#14452, windowEndYear#14453, qid#14454, node#14458]
+[info] Arguments: 4
+[info] (43) BroadcastHashJoin [codegen id : 1]
+[info] Left keys [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, b#14011]
+[info] Right keys [4]: [windowStartYear#14452, windowEndYear#14453, qid#14454, node#14458]
+[info] Join type: LeftAnti
+[info] Join condition: None
+[info] (44) Project [codegen id : 1]
+[info] Output [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, b#14011 AS node#14451]
+[info] Input [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, b#14011]
+[info] (45) HashAggregate [codegen id : 1]
+[info] Input [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Keys [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] (46) Exchange
+[info] Input [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Arguments: hashpartitioning(windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451, 8), ENSURE_REQUIREMENTS, [plan_id=45306]
+[info] (47) ShuffleQueryStage
+[info] Output [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Arguments: 5
+[info] (48) HashAggregate [codegen id : 2]
+[info] Input [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Keys [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] (49) ResultQueryStage
+[info] Output [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Arguments: 6
+[info] (50) BroadcastExchange
+[info] Input [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, a#14450]
+[info] Arguments: HashedRelationBroadcastMode(List(input[0, int, false], input[1, int, false], input[3, string, false]),false), [plan_id=44988]
+[info] (51) Filter
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] Condition : isnotnull(a#14010)
+[info] (52) BroadcastHashJoin
+[info] Left keys [3]: [windowStartYear#14048, windowEndYear#14049, a#14450]
+[info] Right keys [3]: [windowStartYear#398, windowEndYear#399, a#14010]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (53) Project
+[info] Output [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, b#14011]
+[info] Input [8]: [windowStartYear#14048, windowEndYear#14049, qid#14050, a#14450, windowStartYear#398, windowEndYear#399, a#14010, b#14011]
+[info] (54) BroadcastExchange
+[info] Input [4]: [windowStartYear#14452, windowEndYear#14453, qid#14454, node#14458]
+[info] Arguments: HashedRelationBroadcastMode(List(input[0, int, false], input[1, int, false], input[2, string, false], input[3, string, false]),false), [plan_id=44992]
+[info] (55) BroadcastHashJoin
+[info] Left keys [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, b#14011]
+[info] Right keys [4]: [windowStartYear#14452, windowEndYear#14453, qid#14454, node#14458]
+[info] Join type: LeftAnti
+[info] Join condition: None
+[info] (56) Project
+[info] Output [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, b#14011 AS node#14451]
+[info] Input [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, b#14011]
+[info] (57) HashAggregate
+[info] Input [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Keys [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] (58) Exchange
+[info] Input [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Arguments: hashpartitioning(windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451, 8), ENSURE_REQUIREMENTS, [plan_id=44997]
+[info] (59) HashAggregate
+[info] Input [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Keys [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] (60) AdaptiveSparkPlan
+[info] Output [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Arguments: isFinalPlan=true
+[info] (61) AdaptiveSparkPlan
+[info] Output [4]: [windowStartYear#14048, windowEndYear#14049, qid#14050, node#14451]
+[info] Arguments: isFinalPlan=false
+[info] EXPLAIN k-core peel round 1 (formatted physical plan):
+[info] == Physical Plan ==
+[info] AdaptiveSparkPlan (193)
+[info] +- Project (192)
+[info]    +- SortMergeJoin LeftOuter (191)
+[info]       :- Project (32)
+[info]       :  +- SortMergeJoin LeftOuter (31)
+[info]       :     :- Sort (16)
+[info]       :     :  +- Exchange (15)
+[info]       :     :     +- Project (14)
+[info]       :     :        +- SortMergeJoin Inner (13)
+[info]       :     :           :- Sort (5)
+[info]       :     :           :  +- Exchange (4)
+[info]       :     :           :     +- Project (3)
+[info]       :     :           :        +- Filter (2)
+[info]       :     :           :           +- Scan ExistingRDD (1)
+[info]       :     :           +- Sort (12)
+[info]       :     :              +- HashAggregate (11)
+[info]       :     :                 +- Exchange (10)
+[info]       :     :                    +- HashAggregate (9)
+[info]       :     :                       +- Project (8)
+[info]       :     :                          +- Filter (7)
+[info]       :     :                             +- Scan ExistingRDD (6)
+[info]       :     +- Sort (30)
+[info]       :        +- HashAggregate (29)
+[info]       :           +- Exchange (28)
+[info]       :              +- HashAggregate (27)
+[info]       :                 +- HashAggregate (26)
+[info]       :                    +- Exchange (25)
+[info]       :                       +- HashAggregate (24)
+[info]       :                          +- Union (23)
+[info]       :                             :- Project (19)
+[info]       :                             :  +- Filter (18)
+[info]       :                             :     +- Scan ExistingRDD (17)
+[info]       :                             +- Project (22)
+[info]       :                                +- Filter (21)
+[info]       :                                   +- Scan ExistingRDD (20)
+[info]       +- Sort (190)
+[info]          +- Exchange (189)
+[info]             +- Project (188)
+[info]                +- BroadcastHashJoin Inner BuildRight (187)
+[info]                   :- Project (184)
+[info]                   :  +- SortMergeJoin Inner (183)
+[info]                   :     :- Sort (106)
+[info]                   :     :  +- Exchange (105)
+[info]                   :     :     +- Project (104)
+[info]                   :     :        +- SortMergeJoin LeftOuter (103)
+[info]                   :     :           :- Sort (48)
+[info]                   :     :           :  +- Exchange (47)
+[info]                   :     :           :     +- Project (46)
+[info]                   :     :           :        +- SortMergeJoin Inner (45)
+[info]                   :     :           :           :- Sort (37)
+[info]                   :     :           :           :  +- Exchange (36)
+[info]                   :     :           :           :     +- Project (35)
+[info]                   :     :           :           :        +- Filter (34)
+[info]                   :     :           :           :           +- Scan ExistingRDD (33)
+[info]                   :     :           :           +- Sort (44)
+[info]                   :     :           :              +- HashAggregate (43)
+[info]                   :     :           :                 +- Exchange (42)
+[info]                   :     :           :                    +- HashAggregate (41)
+[info]                   :     :           :                       +- Project (40)
+[info]                   :     :           :                          +- Filter (39)
+[info]                   :     :           :                             +- Scan ExistingRDD (38)
+[info]                   :     :           +- Sort (102)
+[info]                   :     :              +- HashAggregate (101)
+[info]                   :     :                 +- Exchange (100)
+[info]                   :     :                    +- HashAggregate (99)
+[info]                   :     :                       +- Project (98)
+[info]                   :     :                          +- SortMergeJoin Inner (97)
+[info]                   :     :                             :- Sort (80)
+[info]                   :     :                             :  +- Exchange (79)
+[info]                   :     :                             :     +- Project (78)
+[info]                   :     :                             :        +- SortMergeJoin Inner (77)
+[info]                   :     :                             :           :- Sort (60)
+[info]                   :     :                             :           :  +- Exchange (59)
+[info]                   :     :                             :           :     +- HashAggregate (58)
+[info]                   :     :                             :           :        +- Exchange (57)
+[info]                   :     :                             :           :           +- HashAggregate (56)
+[info]                   :     :                             :           :              +- Union (55)
+[info]                   :     :                             :           :                 :- Project (51)
+[info]                   :     :                             :           :                 :  +- Filter (50)
+[info]                   :     :                             :           :                 :     +- Scan ExistingRDD (49)
+[info]                   :     :                             :           :                 +- Project (54)
+[info]                   :     :                             :           :                    +- Filter (53)
+[info]                   :     :                             :           :                       +- Scan ExistingRDD (52)
+[info]                   :     :                             :           +- Sort (76)
+[info]                   :     :                             :              +- Exchange (75)
+[info]                   :     :                             :                 +- Project (74)
+[info]                   :     :                             :                    +- SortMergeJoin Inner (73)
+[info]                   :     :                             :                       :- Sort (65)
+[info]                   :     :                             :                       :  +- Exchange (64)
+[info]                   :     :                             :                       :     +- Project (63)
+[info]                   :     :                             :                       :        +- Filter (62)
+[info]                   :     :                             :                       :           +- Scan ExistingRDD (61)
+[info]                   :     :                             :                       +- Sort (72)
+[info]                   :     :                             :                          +- HashAggregate (71)
+[info]                   :     :                             :                             +- Exchange (70)
+[info]                   :     :                             :                                +- HashAggregate (69)
+[info]                   :     :                             :                                   +- Project (68)
+[info]                   :     :                             :                                      +- Filter (67)
+[info]                   :     :                             :                                         +- Scan ExistingRDD (66)
+[info]                   :     :                             +- Sort (96)
+[info]                   :     :                                +- Exchange (95)
+[info]                   :     :                                   +- Project (94)
+[info]                   :     :                                      +- SortMergeJoin Inner (93)
+[info]                   :     :                                         :- Sort (85)
+[info]                   :     :                                         :  +- Exchange (84)
+[info]                   :     :                                         :     +- Project (83)
+[info]                   :     :                                         :        +- Filter (82)
+[info]                   :     :                                         :           +- Scan ExistingRDD (81)
+[info]                   :     :                                         +- Sort (92)
+[info]                   :     :                                            +- HashAggregate (91)
+[info]                   :     :                                               +- Exchange (90)
+[info]                   :     :                                                  +- HashAggregate (89)
+[info]                   :     :                                                     +- Project (88)
+[info]                   :     :                                                        +- Filter (87)
+[info]                   :     :                                                           +- Scan ExistingRDD (86)
+[info]                   :     +- Sort (182)
+[info]                   :        +- HashAggregate (181)
+[info]                   :           +- Exchange (180)
+[info]                   :              +- HashAggregate (179)
+[info]                   :                 +- Project (178)
+[info]                   :                    +- SortMergeJoin LeftOuter (177)
+[info]                   :                       :- Sort (122)
+[info]                   :                       :  +- Exchange (121)
+[info]                   :                       :     +- Project (120)
+[info]                   :                       :        +- SortMergeJoin Inner (119)
+[info]                   :                       :           :- Sort (111)
+[info]                   :                       :           :  +- Exchange (110)
+[info]                   :                       :           :     +- Project (109)
+[info]                   :                       :           :        +- Filter (108)
+[info]                   :                       :           :           +- Scan ExistingRDD (107)
+[info]                   :                       :           +- Sort (118)
+[info]                   :                       :              +- HashAggregate (117)
+[info]                   :                       :                 +- Exchange (116)
+[info]                   :                       :                    +- HashAggregate (115)
+[info]                   :                       :                       +- Project (114)
+[info]                   :                       :                          +- Filter (113)
+[info]                   :                       :                             +- Scan ExistingRDD (112)
+[info]                   :                       +- Sort (176)
+[info]                   :                          +- HashAggregate (175)
+[info]                   :                             +- Exchange (174)
+[info]                   :                                +- HashAggregate (173)
+[info]                   :                                   +- Project (172)
+[info]                   :                                      +- SortMergeJoin Inner (171)
+[info]                   :                                         :- Sort (154)
+[info]                   :                                         :  +- Exchange (153)
+[info]                   :                                         :     +- Project (152)
+[info]                   :                                         :        +- SortMergeJoin Inner (151)
+[info]                   :                                         :           :- Sort (134)
+[info]                   :                                         :           :  +- Exchange (133)
+[info]                   :                                         :           :     +- HashAggregate (132)
+[info]                   :                                         :           :        +- Exchange (131)
+[info]                   :                                         :           :           +- HashAggregate (130)
+[info]                   :                                         :           :              +- Union (129)
+[info]                   :                                         :           :                 :- Project (125)
+[info]                   :                                         :           :                 :  +- Filter (124)
+[info]                   :                                         :           :                 :     +- Scan ExistingRDD (123)
+[info]                   :                                         :           :                 +- Project (128)
+[info]                   :                                         :           :                    +- Filter (127)
+[info]                   :                                         :           :                       +- Scan ExistingRDD (126)
+[info]                   :                                         :           +- Sort (150)
+[info]                   :                                         :              +- Exchange (149)
+[info]                   :                                         :                 +- Project (148)
+[info]                   :                                         :                    +- SortMergeJoin Inner (147)
+[info]                   :                                         :                       :- Sort (139)
+[info]                   :                                         :                       :  +- Exchange (138)
+[info]                   :                                         :                       :     +- Project (137)
+[info]                   :                                         :                       :        +- Filter (136)
+[info]                   :                                         :                       :           +- Scan ExistingRDD (135)
+[info]                   :                                         :                       +- Sort (146)
+[info]                   :                                         :                          +- HashAggregate (145)
+[info]                   :                                         :                             +- Exchange (144)
+[info]                   :                                         :                                +- HashAggregate (143)
+[info]                   :                                         :                                   +- Project (142)
+[info]                   :                                         :                                      +- Filter (141)
+[info]                   :                                         :                                         +- Scan ExistingRDD (140)
+[info]                   :                                         +- Sort (170)
+[info]                   :                                            +- Exchange (169)
+[info]                   :                                               +- Project (168)
+[info]                   :                                                  +- SortMergeJoin Inner (167)
+[info]                   :                                                     :- Sort (159)
+[info]                   :                                                     :  +- Exchange (158)
+[info]                   :                                                     :     +- Project (157)
+[info]                   :                                                     :        +- Filter (156)
+[info]                   :                                                     :           +- Scan ExistingRDD (155)
+[info]                   :                                                     +- Sort (166)
+[info]                   :                                                        +- HashAggregate (165)
+[info]                   :                                                           +- Exchange (164)
+[info]                   :                                                              +- HashAggregate (163)
+[info]                   :                                                                 +- Project (162)
+[info]                   :                                                                    +- Filter (161)
+[info]                   :                                                                       +- Scan ExistingRDD (160)
+[info]                   +- BroadcastExchange (186)
+[info]                      +- LocalTableScan (185)
+[info] (1) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#6102, windowEndYear#6103, node#6104, label#6105]
+[info] Arguments: [windowStartYear#6102, windowEndYear#6103, node#6104, label#6105], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (2) Filter
+[info] Input [4]: [windowStartYear#6102, windowEndYear#6103, node#6104, label#6105]
+[info] Condition : isnotnull(label#6105)
+[info] (3) Project
+[info] Output [4]: [windowStartYear#6102, windowEndYear#6103, node#6104 AS researcherId#6106, label#6105 AS componentId#6107]
+[info] Input [4]: [windowStartYear#6102, windowEndYear#6103, node#6104, label#6105]
+[info] (4) Exchange
+[info] Input [4]: [windowStartYear#6102, windowEndYear#6103, researcherId#6106, componentId#6107]
+[info] Arguments: hashpartitioning(windowStartYear#6102, windowEndYear#6103, componentId#6107, 8), ENSURE_REQUIREMENTS, [plan_id=54989]
+[info] (5) Sort
+[info] Input [4]: [windowStartYear#6102, windowEndYear#6103, researcherId#6106, componentId#6107]
+[info] Arguments: [windowStartYear#6102 ASC NULLS FIRST, windowEndYear#6103 ASC NULLS FIRST, componentId#6107 ASC NULLS FIRST], false, 0
+[info] (6) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#6114, windowEndYear#6115, node#6116, label#6117]
+[info] Arguments: [windowStartYear#6114, windowEndYear#6115, node#6116, label#6117], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (7) Filter
+[info] Input [4]: [windowStartYear#6114, windowEndYear#6115, node#6116, label#6117]
+[info] Condition : isnotnull(label#6117)
+[info] (8) Project
+[info] Output [3]: [windowStartYear#6114, windowEndYear#6115, label#6117 AS componentId#6119]
+[info] Input [4]: [windowStartYear#6114, windowEndYear#6115, node#6116, label#6117]
+[info] (9) HashAggregate
+[info] Input [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Keys [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] (10) Exchange
+[info] Input [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Arguments: hashpartitioning(windowStartYear#6114, windowEndYear#6115, componentId#6119, 8), ENSURE_REQUIREMENTS, [plan_id=54985]
+[info] (11) HashAggregate
+[info] Input [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Keys [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] (12) Sort
+[info] Input [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Arguments: [windowStartYear#6114 ASC NULLS FIRST, windowEndYear#6115 ASC NULLS FIRST, componentId#6119 ASC NULLS FIRST], false, 0
+[info] (13) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#6102, windowEndYear#6103, componentId#6107]
+[info] Right keys [3]: [windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (14) Project
+[info] Output [3]: [windowStartYear#6102, windowEndYear#6103, researcherId#6106]
+[info] Input [7]: [windowStartYear#6102, windowEndYear#6103, researcherId#6106, componentId#6107, windowStartYear#6114, windowEndYear#6115, componentId#6119]
+[info] (15) Exchange
+[info] Input [3]: [windowStartYear#6102, windowEndYear#6103, researcherId#6106]
+[info] Arguments: hashpartitioning(windowStartYear#6102, windowEndYear#6103, researcherId#6106, 8), ENSURE_REQUIREMENTS, [plan_id=55002]
+[info] (16) Sort
+[info] Input [3]: [windowStartYear#6102, windowEndYear#6103, researcherId#6106]
+[info] Arguments: [windowStartYear#6102 ASC NULLS FIRST, windowEndYear#6103 ASC NULLS FIRST, researcherId#6106 ASC NULLS FIRST], false, 0
+[info] (17) Scan ExistingRDD
+[info] Output [14]: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751]
+[info] Arguments: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751], MapPartitionsRDD[566] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (18) Filter
+[info] Input [14]: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751]
+[info] Condition : ((isnotnull(researcherA#4710) AND isnotnull(researcherB#4711)) AND NOT (researcherA#4710 = researcherB#4711))
+[info] (19) Project
+[info] Output [4]: [windowStartYear#398, windowEndYear#399, researcherA#4710 AS a#7937, researcherB#4711 AS b#7938]
+[info] Input [14]: [schemaVersion#4737, edgeId#4736, researcherA#4710, researcherB#4711, windowStartYear#398, windowEndYear#399, jointPublicationCount#4720L, firstCollaborationYear#4721, lastCollaborationYear#4722, representativeWorkIds#4738, supportingWorkIdsRef#4739, policyVersion#4740, provenance#4750, runId#4751]
+[info] (20) Scan ExistingRDD
+[info] Output [14]: [schemaVersion#7941, edgeId#7942, researcherA#7943, researcherB#7944, windowStartYear#7945, windowEndYear#7946, jointPublicationCount#7947L, firstCollaborationYear#7948, lastCollaborationYear#7949, representativeWorkIds#7950, supportingWorkIdsRef#7951, policyVersion#7952, provenance#7953, runId#7954]
+[info] Arguments: [schemaVersion#7941, edgeId#7942, researcherA#7943, researcherB#7944, windowStartYear#7945, windowEndYear#7946, jointPublicationCount#7947L, firstCollaborationYear#7948, lastCollaborationYear#7949, representativeWorkIds#7950, supportingWorkIdsRef#7951, policyVersion#7952, provenance#7953, runId#7954], MapPartitionsRDD[566] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (21) Filter
+[info] Input [14]: [schemaVersion#7941, edgeId#7942, researcherA#7943, researcherB#7944, windowStartYear#7945, windowEndYear#7946, jointPublicationCount#7947L, firstCollaborationYear#7948, lastCollaborationYear#7949, representativeWorkIds#7950, supportingWorkIdsRef#7951, policyVersion#7952, provenance#7953, runId#7954]
+[info] Condition : ((isnotnull(researcherB#7944) AND isnotnull(researcherA#7943)) AND NOT (researcherB#7944 = researcherA#7943))
+[info] (22) Project
+[info] Output [4]: [windowStartYear#7945, windowEndYear#7946, researcherB#7944 AS a#7939, researcherA#7943 AS b#7940]
+[info] Input [14]: [schemaVersion#7941, edgeId#7942, researcherA#7943, researcherB#7944, windowStartYear#7945, windowEndYear#7946, jointPublicationCount#7947L, firstCollaborationYear#7948, lastCollaborationYear#7949, representativeWorkIds#7950, supportingWorkIdsRef#7951, policyVersion#7952, provenance#7953, runId#7954]
+[info] (23) Union
+[info] (24) HashAggregate
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#7937, b#7938]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, a#7937, b#7938]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#398, windowEndYear#399, a#7937, b#7938]
+[info] (25) Exchange
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#7937, b#7938]
+[info] Arguments: hashpartitioning(windowStartYear#398, windowEndYear#399, a#7937, b#7938, 8), ENSURE_REQUIREMENTS, [plan_id=54994]
+[info] (26) HashAggregate
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#7937, b#7938]
+[info] Keys [4]: [windowStartYear#398, windowEndYear#399, a#7937, b#7938]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#398, windowEndYear#399, a#7937]
+[info] (27) HashAggregate
+[info] Input [3]: [windowStartYear#398, windowEndYear#399, a#7937]
+[info] Keys [3]: [windowStartYear#398, windowEndYear#399, a#7937]
+[info] Functions [1]: [partial_count(1)]
+[info] Aggregate Attributes [1]: [count#8045L]
+[info] Results [4]: [windowStartYear#398, windowEndYear#399, a#7937, count#8046L]
+[info] (28) Exchange
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#7937, count#8046L]
+[info] Arguments: hashpartitioning(windowStartYear#398, windowEndYear#399, a#7937, 8), ENSURE_REQUIREMENTS, [plan_id=54998]
+[info] (29) HashAggregate
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, a#7937, count#8046L]
+[info] Keys [3]: [windowStartYear#398, windowEndYear#399, a#7937]
+[info] Functions [1]: [count(1)]
+[info] Aggregate Attributes [1]: [count(1)#7981L]
+[info] Results [4]: [windowStartYear#398, windowEndYear#399, a#7937 AS researcherId#7975, count(1)#7981L AS d#7976L]
+[info] (30) Sort
+[info] Input [4]: [windowStartYear#398, windowEndYear#399, researcherId#7975, d#7976L]
+[info] Arguments: [windowStartYear#398 ASC NULLS FIRST, windowEndYear#399 ASC NULLS FIRST, researcherId#7975 ASC NULLS FIRST], false, 0
+[info] (31) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#6102, windowEndYear#6103, researcherId#6106]
+[info] Right keys [3]: [windowStartYear#398, windowEndYear#399, researcherId#7975]
+[info] Join type: LeftOuter
+[info] Join condition: None
+[info] (32) Project
+[info] Output [4]: [windowStartYear#6102, windowEndYear#6103, researcherId#6106 AS node#7982, coalesce(d#7976L, 0) AS degree#7983L]
+[info] Input [7]: [windowStartYear#6102, windowEndYear#6103, researcherId#6106, windowStartYear#398, windowEndYear#399, researcherId#7975, d#7976L]
+[info] (33) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#8431, windowEndYear#8432, node#8433, label#8434]
+[info] Arguments: [windowStartYear#8431, windowEndYear#8432, node#8433, label#8434], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (34) Filter
+[info] Input [4]: [windowStartYear#8431, windowEndYear#8432, node#8433, label#8434]
+[info] Condition : (isnotnull(label#8434) AND isnotnull(node#8433))
+[info] (35) Project
+[info] Output [4]: [windowStartYear#8431, windowEndYear#8432, node#8433 AS researcherId#8435, label#8434 AS componentId#8436]
+[info] Input [4]: [windowStartYear#8431, windowEndYear#8432, node#8433, label#8434]
+[info] (36) Exchange
+[info] Input [4]: [windowStartYear#8431, windowEndYear#8432, researcherId#8435, componentId#8436]
+[info] Arguments: hashpartitioning(windowStartYear#8431, windowEndYear#8432, componentId#8436, 8), ENSURE_REQUIREMENTS, [plan_id=55011]
+[info] (37) Sort
+[info] Input [4]: [windowStartYear#8431, windowEndYear#8432, researcherId#8435, componentId#8436]
+[info] Arguments: [windowStartYear#8431 ASC NULLS FIRST, windowEndYear#8432 ASC NULLS FIRST, componentId#8436 ASC NULLS FIRST], false, 0
+[info] (38) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#8437, windowEndYear#8438, node#8439, label#8440]
+[info] Arguments: [windowStartYear#8437, windowEndYear#8438, node#8439, label#8440], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (39) Filter
+[info] Input [4]: [windowStartYear#8437, windowEndYear#8438, node#8439, label#8440]
+[info] Condition : isnotnull(label#8440)
+[info] (40) Project
+[info] Output [3]: [windowStartYear#8437, windowEndYear#8438, label#8440 AS componentId#8442]
+[info] Input [4]: [windowStartYear#8437, windowEndYear#8438, node#8439, label#8440]
+[info] (41) HashAggregate
+[info] Input [3]: [windowStartYear#8437, windowEndYear#8438, componentId#8442]
+[info] Keys [3]: [windowStartYear#8437, windowEndYear#8438, componentId#8442]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#8437, windowEndYear#8438, componentId#8442]
+[info] (42) Exchange
+[info] Input [3]: [windowStartYear#8437, windowEndYear#8438, componentId#8442]
+[info] Arguments: hashpartitioning(windowStartYear#8437, windowEndYear#8438, componentId#8442, 8), ENSURE_REQUIREMENTS, [plan_id=55007]
+[info] (43) HashAggregate
+[info] Input [3]: [windowStartYear#8437, windowEndYear#8438, componentId#8442]
+[info] Keys [3]: [windowStartYear#8437, windowEndYear#8438, componentId#8442]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#8437, windowEndYear#8438, componentId#8442]
+[info] (44) Sort
+[info] Input [3]: [windowStartYear#8437, windowEndYear#8438, componentId#8442]
+[info] Arguments: [windowStartYear#8437 ASC NULLS FIRST, windowEndYear#8438 ASC NULLS FIRST, componentId#8442 ASC NULLS FIRST], false, 0
+[info] (45) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#8431, windowEndYear#8432, componentId#8436]
+[info] Right keys [3]: [windowStartYear#8437, windowEndYear#8438, componentId#8442]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (46) Project
+[info] Output [3]: [windowStartYear#8431, windowEndYear#8432, researcherId#8435 AS node#8482]
+[info] Input [7]: [windowStartYear#8431, windowEndYear#8432, researcherId#8435, componentId#8436, windowStartYear#8437, windowEndYear#8438, componentId#8442]
+[info] (47) Exchange
+[info] Input [3]: [windowStartYear#8431, windowEndYear#8432, node#8482]
+[info] Arguments: hashpartitioning(windowStartYear#8431, windowEndYear#8432, node#8482, 8), ENSURE_REQUIREMENTS, [plan_id=55058]
+[info] (48) Sort
+[info] Input [3]: [windowStartYear#8431, windowEndYear#8432, node#8482]
+[info] Arguments: [windowStartYear#8431 ASC NULLS FIRST, windowEndYear#8432 ASC NULLS FIRST, node#8482 ASC NULLS FIRST], false, 0
+[info] (49) Scan ExistingRDD
+[info] Output [14]: [schemaVersion#8167, edgeId#8168, researcherA#8169, researcherB#8170, windowStartYear#8171, windowEndYear#8172, jointPublicationCount#8173L, firstCollaborationYear#8174, lastCollaborationYear#8175, representativeWorkIds#8176, supportingWorkIdsRef#8177, policyVersion#8178, provenance#8179, runId#8180]
+[info] Arguments: [schemaVersion#8167, edgeId#8168, researcherA#8169, researcherB#8170, windowStartYear#8171, windowEndYear#8172, jointPublicationCount#8173L, firstCollaborationYear#8174, lastCollaborationYear#8175, representativeWorkIds#8176, supportingWorkIdsRef#8177, policyVersion#8178, provenance#8179, runId#8180], MapPartitionsRDD[566] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (50) Filter
+[info] Input [14]: [schemaVersion#8167, edgeId#8168, researcherA#8169, researcherB#8170, windowStartYear#8171, windowEndYear#8172, jointPublicationCount#8173L, firstCollaborationYear#8174, lastCollaborationYear#8175, representativeWorkIds#8176, supportingWorkIdsRef#8177, policyVersion#8178, provenance#8179, runId#8180]
+[info] Condition : ((isnotnull(researcherA#8169) AND isnotnull(researcherB#8170)) AND NOT (researcherA#8169 = researcherB#8170))
+[info] (51) Project
+[info] Output [4]: [windowStartYear#8171, windowEndYear#8172, researcherA#8169 AS a#8181, researcherB#8170 AS b#8182]
+[info] Input [14]: [schemaVersion#8167, edgeId#8168, researcherA#8169, researcherB#8170, windowStartYear#8171, windowEndYear#8172, jointPublicationCount#8173L, firstCollaborationYear#8174, lastCollaborationYear#8175, representativeWorkIds#8176, supportingWorkIdsRef#8177, policyVersion#8178, provenance#8179, runId#8180]
+[info] (52) Scan ExistingRDD
+[info] Output [14]: [schemaVersion#8183, edgeId#8184, researcherA#8185, researcherB#8186, windowStartYear#8187, windowEndYear#8188, jointPublicationCount#8189L, firstCollaborationYear#8190, lastCollaborationYear#8191, representativeWorkIds#8192, supportingWorkIdsRef#8193, policyVersion#8194, provenance#8195, runId#8196]
+[info] Arguments: [schemaVersion#8183, edgeId#8184, researcherA#8185, researcherB#8186, windowStartYear#8187, windowEndYear#8188, jointPublicationCount#8189L, firstCollaborationYear#8190, lastCollaborationYear#8191, representativeWorkIds#8192, supportingWorkIdsRef#8193, policyVersion#8194, provenance#8195, runId#8196], MapPartitionsRDD[566] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (53) Filter
+[info] Input [14]: [schemaVersion#8183, edgeId#8184, researcherA#8185, researcherB#8186, windowStartYear#8187, windowEndYear#8188, jointPublicationCount#8189L, firstCollaborationYear#8190, lastCollaborationYear#8191, representativeWorkIds#8192, supportingWorkIdsRef#8193, policyVersion#8194, provenance#8195, runId#8196]
+[info] Condition : ((isnotnull(researcherB#8186) AND isnotnull(researcherA#8185)) AND NOT (researcherB#8186 = researcherA#8185))
+[info] (54) Project
+[info] Output [4]: [windowStartYear#8187, windowEndYear#8188, researcherB#8186 AS a#8197, researcherA#8185 AS b#8198]
+[info] Input [14]: [schemaVersion#8183, edgeId#8184, researcherA#8185, researcherB#8186, windowStartYear#8187, windowEndYear#8188, jointPublicationCount#8189L, firstCollaborationYear#8190, lastCollaborationYear#8191, representativeWorkIds#8192, supportingWorkIdsRef#8193, policyVersion#8194, provenance#8195, runId#8196]
+[info] (55) Union
+[info] (56) HashAggregate
+[info] Input [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182]
+[info] Keys [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182]
+[info] (57) Exchange
+[info] Input [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182]
+[info] Arguments: hashpartitioning(windowStartYear#8171, windowEndYear#8172, a#8181, b#8182, 8), ENSURE_REQUIREMENTS, [plan_id=55016]
+[info] (58) HashAggregate
+[info] Input [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182]
+[info] Keys [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182]
+[info] (59) Exchange
+[info] Input [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182]
+[info] Arguments: hashpartitioning(windowStartYear#8171, windowEndYear#8172, a#8181, 8), ENSURE_REQUIREMENTS, [plan_id=55029]
+[info] (60) Sort
+[info] Input [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182]
+[info] Arguments: [windowStartYear#8171 ASC NULLS FIRST, windowEndYear#8172 ASC NULLS FIRST, a#8181 ASC NULLS FIRST], false, 0
+[info] (61) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#8199, windowEndYear#8200, node#8201, label#8202]
+[info] Arguments: [windowStartYear#8199, windowEndYear#8200, node#8201, label#8202], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (62) Filter
+[info] Input [4]: [windowStartYear#8199, windowEndYear#8200, node#8201, label#8202]
+[info] Condition : (isnotnull(label#8202) AND isnotnull(node#8201))
+[info] (63) Project
+[info] Output [4]: [windowStartYear#8199, windowEndYear#8200, node#8201 AS researcherId#8203, label#8202 AS componentId#8204]
+[info] Input [4]: [windowStartYear#8199, windowEndYear#8200, node#8201, label#8202]
+[info] (64) Exchange
+[info] Input [4]: [windowStartYear#8199, windowEndYear#8200, researcherId#8203, componentId#8204]
+[info] Arguments: hashpartitioning(windowStartYear#8199, windowEndYear#8200, componentId#8204, 8), ENSURE_REQUIREMENTS, [plan_id=55022]
+[info] (65) Sort
+[info] Input [4]: [windowStartYear#8199, windowEndYear#8200, researcherId#8203, componentId#8204]
+[info] Arguments: [windowStartYear#8199 ASC NULLS FIRST, windowEndYear#8200 ASC NULLS FIRST, componentId#8204 ASC NULLS FIRST], false, 0
+[info] (66) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#8205, windowEndYear#8206, node#8207, label#8208]
+[info] Arguments: [windowStartYear#8205, windowEndYear#8206, node#8207, label#8208], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (67) Filter
+[info] Input [4]: [windowStartYear#8205, windowEndYear#8206, node#8207, label#8208]
+[info] Condition : isnotnull(label#8208)
+[info] (68) Project
+[info] Output [3]: [windowStartYear#8205, windowEndYear#8206, label#8208 AS componentId#8210]
+[info] Input [4]: [windowStartYear#8205, windowEndYear#8206, node#8207, label#8208]
+[info] (69) HashAggregate
+[info] Input [3]: [windowStartYear#8205, windowEndYear#8206, componentId#8210]
+[info] Keys [3]: [windowStartYear#8205, windowEndYear#8206, componentId#8210]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#8205, windowEndYear#8206, componentId#8210]
+[info] (70) Exchange
+[info] Input [3]: [windowStartYear#8205, windowEndYear#8206, componentId#8210]
+[info] Arguments: hashpartitioning(windowStartYear#8205, windowEndYear#8206, componentId#8210, 8), ENSURE_REQUIREMENTS, [plan_id=55018]
+[info] (71) HashAggregate
+[info] Input [3]: [windowStartYear#8205, windowEndYear#8206, componentId#8210]
+[info] Keys [3]: [windowStartYear#8205, windowEndYear#8206, componentId#8210]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#8205, windowEndYear#8206, componentId#8210]
+[info] (72) Sort
+[info] Input [3]: [windowStartYear#8205, windowEndYear#8206, componentId#8210]
+[info] Arguments: [windowStartYear#8205 ASC NULLS FIRST, windowEndYear#8206 ASC NULLS FIRST, componentId#8210 ASC NULLS FIRST], false, 0
+[info] (73) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#8199, windowEndYear#8200, componentId#8204]
+[info] Right keys [3]: [windowStartYear#8205, windowEndYear#8206, componentId#8210]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (74) Project
+[info] Output [3]: [windowStartYear#8199, windowEndYear#8200, researcherId#8203 AS a#8072]
+[info] Input [7]: [windowStartYear#8199, windowEndYear#8200, researcherId#8203, componentId#8204, windowStartYear#8205, windowEndYear#8206, componentId#8210]
+[info] (75) Exchange
+[info] Input [3]: [windowStartYear#8199, windowEndYear#8200, a#8072]
+[info] Arguments: hashpartitioning(windowStartYear#8199, windowEndYear#8200, a#8072, 8), ENSURE_REQUIREMENTS, [plan_id=55030]
+[info] (76) Sort
+[info] Input [3]: [windowStartYear#8199, windowEndYear#8200, a#8072]
+[info] Arguments: [windowStartYear#8199 ASC NULLS FIRST, windowEndYear#8200 ASC NULLS FIRST, a#8072 ASC NULLS FIRST], false, 0
+[info] (77) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#8171, windowEndYear#8172, a#8181]
+[info] Right keys [3]: [windowStartYear#8199, windowEndYear#8200, a#8072]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (78) Project
+[info] Output [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182]
+[info] Input [7]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182, windowStartYear#8199, windowEndYear#8200, a#8072]
+[info] (79) Exchange
+[info] Input [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182]
+[info] Arguments: hashpartitioning(windowStartYear#8171, windowEndYear#8172, b#8182, 8), ENSURE_REQUIREMENTS, [plan_id=55046]
+[info] (80) Sort
+[info] Input [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182]
+[info] Arguments: [windowStartYear#8171 ASC NULLS FIRST, windowEndYear#8172 ASC NULLS FIRST, b#8182 ASC NULLS FIRST], false, 0
+[info] (81) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#8106, windowEndYear#8107, node#8108, label#8109]
+[info] Arguments: [windowStartYear#8106, windowEndYear#8107, node#8108, label#8109], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (82) Filter
+[info] Input [4]: [windowStartYear#8106, windowEndYear#8107, node#8108, label#8109]
+[info] Condition : (isnotnull(label#8109) AND isnotnull(node#8108))
+[info] (83) Project
+[info] Output [4]: [windowStartYear#8106, windowEndYear#8107, node#8108 AS researcherId#8110, label#8109 AS componentId#8111]
+[info] Input [4]: [windowStartYear#8106, windowEndYear#8107, node#8108, label#8109]
+[info] (84) Exchange
+[info] Input [4]: [windowStartYear#8106, windowEndYear#8107, researcherId#8110, componentId#8111]
+[info] Arguments: hashpartitioning(windowStartYear#8106, windowEndYear#8107, componentId#8111, 8), ENSURE_REQUIREMENTS, [plan_id=55039]
+[info] (85) Sort
+[info] Input [4]: [windowStartYear#8106, windowEndYear#8107, researcherId#8110, componentId#8111]
+[info] Arguments: [windowStartYear#8106 ASC NULLS FIRST, windowEndYear#8107 ASC NULLS FIRST, componentId#8111 ASC NULLS FIRST], false, 0
+[info] (86) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#8112, windowEndYear#8113, node#8114, label#8115]
+[info] Arguments: [windowStartYear#8112, windowEndYear#8113, node#8114, label#8115], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (87) Filter
+[info] Input [4]: [windowStartYear#8112, windowEndYear#8113, node#8114, label#8115]
+[info] Condition : isnotnull(label#8115)
+[info] (88) Project
+[info] Output [3]: [windowStartYear#8112, windowEndYear#8113, label#8115 AS componentId#8117]
+[info] Input [4]: [windowStartYear#8112, windowEndYear#8113, node#8114, label#8115]
+[info] (89) HashAggregate
+[info] Input [3]: [windowStartYear#8112, windowEndYear#8113, componentId#8117]
+[info] Keys [3]: [windowStartYear#8112, windowEndYear#8113, componentId#8117]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#8112, windowEndYear#8113, componentId#8117]
+[info] (90) Exchange
+[info] Input [3]: [windowStartYear#8112, windowEndYear#8113, componentId#8117]
+[info] Arguments: hashpartitioning(windowStartYear#8112, windowEndYear#8113, componentId#8117, 8), ENSURE_REQUIREMENTS, [plan_id=55035]
+[info] (91) HashAggregate
+[info] Input [3]: [windowStartYear#8112, windowEndYear#8113, componentId#8117]
+[info] Keys [3]: [windowStartYear#8112, windowEndYear#8113, componentId#8117]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#8112, windowEndYear#8113, componentId#8117]
+[info] (92) Sort
+[info] Input [3]: [windowStartYear#8112, windowEndYear#8113, componentId#8117]
+[info] Arguments: [windowStartYear#8112 ASC NULLS FIRST, windowEndYear#8113 ASC NULLS FIRST, componentId#8117 ASC NULLS FIRST], false, 0
+[info] (93) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#8106, windowEndYear#8107, componentId#8111]
+[info] Right keys [3]: [windowStartYear#8112, windowEndYear#8113, componentId#8117]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (94) Project
+[info] Output [3]: [windowStartYear#8106, windowEndYear#8107, researcherId#8110 AS b#8105]
+[info] Input [7]: [windowStartYear#8106, windowEndYear#8107, researcherId#8110, componentId#8111, windowStartYear#8112, windowEndYear#8113, componentId#8117]
+[info] (95) Exchange
+[info] Input [3]: [windowStartYear#8106, windowEndYear#8107, b#8105]
+[info] Arguments: hashpartitioning(windowStartYear#8106, windowEndYear#8107, b#8105, 8), ENSURE_REQUIREMENTS, [plan_id=55047]
+[info] (96) Sort
+[info] Input [3]: [windowStartYear#8106, windowEndYear#8107, b#8105]
+[info] Arguments: [windowStartYear#8106 ASC NULLS FIRST, windowEndYear#8107 ASC NULLS FIRST, b#8105 ASC NULLS FIRST], false, 0
+[info] (97) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#8171, windowEndYear#8172, b#8182]
+[info] Right keys [3]: [windowStartYear#8106, windowEndYear#8107, b#8105]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (98) Project
+[info] Output [3]: [windowStartYear#8171, windowEndYear#8172, a#8181]
+[info] Input [7]: [windowStartYear#8171, windowEndYear#8172, a#8181, b#8182, windowStartYear#8106, windowEndYear#8107, b#8105]
+[info] (99) HashAggregate
+[info] Input [3]: [windowStartYear#8171, windowEndYear#8172, a#8181]
+[info] Keys [3]: [windowStartYear#8171, windowEndYear#8172, a#8181]
+[info] Functions [1]: [partial_count(1)]
+[info] Aggregate Attributes [1]: [count#9132L]
+[info] Results [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, count#9133L]
+[info] (100) Exchange
+[info] Input [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, count#9133L]
+[info] Arguments: hashpartitioning(windowStartYear#8171, windowEndYear#8172, a#8181, 8), ENSURE_REQUIREMENTS, [plan_id=55054]
+[info] (101) HashAggregate
+[info] Input [4]: [windowStartYear#8171, windowEndYear#8172, a#8181, count#9133L]
+[info] Keys [3]: [windowStartYear#8171, windowEndYear#8172, a#8181]
+[info] Functions [1]: [count(1)]
+[info] Aggregate Attributes [1]: [count(1)#8166L]
+[info] Results [4]: [windowStartYear#8171, windowEndYear#8172, a#8181 AS node#8160, cast(count(1)#8166L as int) AS aliveDegree#8161]
+[info] (102) Sort
+[info] Input [4]: [windowStartYear#8171, windowEndYear#8172, node#8160, aliveDegree#8161]
+[info] Arguments: [windowStartYear#8171 ASC NULLS FIRST, windowEndYear#8172 ASC NULLS FIRST, node#8160 ASC NULLS FIRST], false, 0
+[info] (103) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#8431, windowEndYear#8432, node#8482]
+[info] Right keys [3]: [windowStartYear#8171, windowEndYear#8172, node#8160]
+[info] Join type: LeftOuter
+[info] Join condition: None
+[info] (104) Project
+[info] Output [4]: [windowStartYear#8431, windowEndYear#8432, node#8482, coalesce(aliveDegree#8161, 0) AS aliveDegree#8221]
+[info] Input [7]: [windowStartYear#8431, windowEndYear#8432, node#8482, windowStartYear#8171, windowEndYear#8172, node#8160, aliveDegree#8161]
+[info] (105) Exchange
+[info] Input [4]: [windowStartYear#8431, windowEndYear#8432, node#8482, aliveDegree#8221]
+[info] Arguments: hashpartitioning(windowStartYear#8431, windowEndYear#8432, 8), ENSURE_REQUIREMENTS, [plan_id=55125]
+[info] (106) Sort
+[info] Input [4]: [windowStartYear#8431, windowEndYear#8432, node#8482, aliveDegree#8221]
+[info] Arguments: [windowStartYear#8431 ASC NULLS FIRST, windowEndYear#8432 ASC NULLS FIRST], false, 0
+[info] (107) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#8231, windowEndYear#8232, node#8233, label#8234]
+[info] Arguments: [windowStartYear#8231, windowEndYear#8232, node#8233, label#8234], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (108) Filter
+[info] Input [4]: [windowStartYear#8231, windowEndYear#8232, node#8233, label#8234]
+[info] Condition : isnotnull(label#8234)
+[info] (109) Project
+[info] Output [4]: [windowStartYear#8231, windowEndYear#8232, node#8233 AS researcherId#8235, label#8234 AS componentId#8236]
+[info] Input [4]: [windowStartYear#8231, windowEndYear#8232, node#8233, label#8234]
+[info] (110) Exchange
+[info] Input [4]: [windowStartYear#8231, windowEndYear#8232, researcherId#8235, componentId#8236]
+[info] Arguments: hashpartitioning(windowStartYear#8231, windowEndYear#8232, componentId#8236, 8), ENSURE_REQUIREMENTS, [plan_id=55067]
+[info] (111) Sort
+[info] Input [4]: [windowStartYear#8231, windowEndYear#8232, researcherId#8235, componentId#8236]
+[info] Arguments: [windowStartYear#8231 ASC NULLS FIRST, windowEndYear#8232 ASC NULLS FIRST, componentId#8236 ASC NULLS FIRST], false, 0
+[info] (112) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#8237, windowEndYear#8238, node#8239, label#8240]
+[info] Arguments: [windowStartYear#8237, windowEndYear#8238, node#8239, label#8240], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (113) Filter
+[info] Input [4]: [windowStartYear#8237, windowEndYear#8238, node#8239, label#8240]
+[info] Condition : isnotnull(label#8240)
+[info] (114) Project
+[info] Output [3]: [windowStartYear#8237, windowEndYear#8238, label#8240 AS componentId#8242]
+[info] Input [4]: [windowStartYear#8237, windowEndYear#8238, node#8239, label#8240]
+[info] (115) HashAggregate
+[info] Input [3]: [windowStartYear#8237, windowEndYear#8238, componentId#8242]
+[info] Keys [3]: [windowStartYear#8237, windowEndYear#8238, componentId#8242]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#8237, windowEndYear#8238, componentId#8242]
+[info] (116) Exchange
+[info] Input [3]: [windowStartYear#8237, windowEndYear#8238, componentId#8242]
+[info] Arguments: hashpartitioning(windowStartYear#8237, windowEndYear#8238, componentId#8242, 8), ENSURE_REQUIREMENTS, [plan_id=55063]
+[info] (117) HashAggregate
+[info] Input [3]: [windowStartYear#8237, windowEndYear#8238, componentId#8242]
+[info] Keys [3]: [windowStartYear#8237, windowEndYear#8238, componentId#8242]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#8237, windowEndYear#8238, componentId#8242]
+[info] (118) Sort
+[info] Input [3]: [windowStartYear#8237, windowEndYear#8238, componentId#8242]
+[info] Arguments: [windowStartYear#8237 ASC NULLS FIRST, windowEndYear#8238 ASC NULLS FIRST, componentId#8242 ASC NULLS FIRST], false, 0
+[info] (119) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#8231, windowEndYear#8232, componentId#8236]
+[info] Right keys [3]: [windowStartYear#8237, windowEndYear#8238, componentId#8242]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (120) Project
+[info] Output [3]: [windowStartYear#8231, windowEndYear#8232, researcherId#8235 AS node#8282]
+[info] Input [7]: [windowStartYear#8231, windowEndYear#8232, researcherId#8235, componentId#8236, windowStartYear#8237, windowEndYear#8238, componentId#8242]
+[info] (121) Exchange
+[info] Input [3]: [windowStartYear#8231, windowEndYear#8232, node#8282]
+[info] Arguments: hashpartitioning(windowStartYear#8231, windowEndYear#8232, node#8282, 8), ENSURE_REQUIREMENTS, [plan_id=55114]
+[info] (122) Sort
+[info] Input [3]: [windowStartYear#8231, windowEndYear#8232, node#8282]
+[info] Arguments: [windowStartYear#8231 ASC NULLS FIRST, windowEndYear#8232 ASC NULLS FIRST, node#8282 ASC NULLS FIRST], false, 0
+[info] (123) Scan ExistingRDD
+[info] Output [14]: [schemaVersion#8285, edgeId#8286, researcherA#8287, researcherB#8288, windowStartYear#8289, windowEndYear#8290, jointPublicationCount#8291L, firstCollaborationYear#8292, lastCollaborationYear#8293, representativeWorkIds#8294, supportingWorkIdsRef#8295, policyVersion#8296, provenance#8297, runId#8298]
+[info] Arguments: [schemaVersion#8285, edgeId#8286, researcherA#8287, researcherB#8288, windowStartYear#8289, windowEndYear#8290, jointPublicationCount#8291L, firstCollaborationYear#8292, lastCollaborationYear#8293, representativeWorkIds#8294, supportingWorkIdsRef#8295, policyVersion#8296, provenance#8297, runId#8298], MapPartitionsRDD[566] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (124) Filter
+[info] Input [14]: [schemaVersion#8285, edgeId#8286, researcherA#8287, researcherB#8288, windowStartYear#8289, windowEndYear#8290, jointPublicationCount#8291L, firstCollaborationYear#8292, lastCollaborationYear#8293, representativeWorkIds#8294, supportingWorkIdsRef#8295, policyVersion#8296, provenance#8297, runId#8298]
+[info] Condition : ((isnotnull(researcherA#8287) AND isnotnull(researcherB#8288)) AND NOT (researcherA#8287 = researcherB#8288))
+[info] (125) Project
+[info] Output [4]: [windowStartYear#8289, windowEndYear#8290, researcherA#8287 AS a#8299, researcherB#8288 AS b#8300]
+[info] Input [14]: [schemaVersion#8285, edgeId#8286, researcherA#8287, researcherB#8288, windowStartYear#8289, windowEndYear#8290, jointPublicationCount#8291L, firstCollaborationYear#8292, lastCollaborationYear#8293, representativeWorkIds#8294, supportingWorkIdsRef#8295, policyVersion#8296, provenance#8297, runId#8298]
+[info] (126) Scan ExistingRDD
+[info] Output [14]: [schemaVersion#8301, edgeId#8302, researcherA#8303, researcherB#8304, windowStartYear#8305, windowEndYear#8306, jointPublicationCount#8307L, firstCollaborationYear#8308, lastCollaborationYear#8309, representativeWorkIds#8310, supportingWorkIdsRef#8311, policyVersion#8312, provenance#8313, runId#8314]
+[info] Arguments: [schemaVersion#8301, edgeId#8302, researcherA#8303, researcherB#8304, windowStartYear#8305, windowEndYear#8306, jointPublicationCount#8307L, firstCollaborationYear#8308, lastCollaborationYear#8309, representativeWorkIds#8310, supportingWorkIdsRef#8311, policyVersion#8312, provenance#8313, runId#8314], MapPartitionsRDD[566] at checkpoint at Lineage.scala:15, ExistingRDD, UnknownPartitioning(0)
+[info] (127) Filter
+[info] Input [14]: [schemaVersion#8301, edgeId#8302, researcherA#8303, researcherB#8304, windowStartYear#8305, windowEndYear#8306, jointPublicationCount#8307L, firstCollaborationYear#8308, lastCollaborationYear#8309, representativeWorkIds#8310, supportingWorkIdsRef#8311, policyVersion#8312, provenance#8313, runId#8314]
+[info] Condition : ((isnotnull(researcherB#8304) AND isnotnull(researcherA#8303)) AND NOT (researcherB#8304 = researcherA#8303))
+[info] (128) Project
+[info] Output [4]: [windowStartYear#8305, windowEndYear#8306, researcherB#8304 AS a#8315, researcherA#8303 AS b#8316]
+[info] Input [14]: [schemaVersion#8301, edgeId#8302, researcherA#8303, researcherB#8304, windowStartYear#8305, windowEndYear#8306, jointPublicationCount#8307L, firstCollaborationYear#8308, lastCollaborationYear#8309, representativeWorkIds#8310, supportingWorkIdsRef#8311, policyVersion#8312, provenance#8313, runId#8314]
+[info] (129) Union
+[info] (130) HashAggregate
+[info] Input [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300]
+[info] Keys [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300]
+[info] (131) Exchange
+[info] Input [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300]
+[info] Arguments: hashpartitioning(windowStartYear#8289, windowEndYear#8290, a#8299, b#8300, 8), ENSURE_REQUIREMENTS, [plan_id=55072]
+[info] (132) HashAggregate
+[info] Input [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300]
+[info] Keys [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300]
+[info] (133) Exchange
+[info] Input [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300]
+[info] Arguments: hashpartitioning(windowStartYear#8289, windowEndYear#8290, a#8299, 8), ENSURE_REQUIREMENTS, [plan_id=55085]
+[info] (134) Sort
+[info] Input [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300]
+[info] Arguments: [windowStartYear#8289 ASC NULLS FIRST, windowEndYear#8290 ASC NULLS FIRST, a#8299 ASC NULLS FIRST], false, 0
+[info] (135) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#8317, windowEndYear#8318, node#8319, label#8320]
+[info] Arguments: [windowStartYear#8317, windowEndYear#8318, node#8319, label#8320], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (136) Filter
+[info] Input [4]: [windowStartYear#8317, windowEndYear#8318, node#8319, label#8320]
+[info] Condition : (isnotnull(label#8320) AND isnotnull(node#8319))
+[info] (137) Project
+[info] Output [4]: [windowStartYear#8317, windowEndYear#8318, node#8319 AS researcherId#8321, label#8320 AS componentId#8322]
+[info] Input [4]: [windowStartYear#8317, windowEndYear#8318, node#8319, label#8320]
+[info] (138) Exchange
+[info] Input [4]: [windowStartYear#8317, windowEndYear#8318, researcherId#8321, componentId#8322]
+[info] Arguments: hashpartitioning(windowStartYear#8317, windowEndYear#8318, componentId#8322, 8), ENSURE_REQUIREMENTS, [plan_id=55078]
+[info] (139) Sort
+[info] Input [4]: [windowStartYear#8317, windowEndYear#8318, researcherId#8321, componentId#8322]
+[info] Arguments: [windowStartYear#8317 ASC NULLS FIRST, windowEndYear#8318 ASC NULLS FIRST, componentId#8322 ASC NULLS FIRST], false, 0
+[info] (140) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#8323, windowEndYear#8324, node#8325, label#8326]
+[info] Arguments: [windowStartYear#8323, windowEndYear#8324, node#8325, label#8326], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (141) Filter
+[info] Input [4]: [windowStartYear#8323, windowEndYear#8324, node#8325, label#8326]
+[info] Condition : isnotnull(label#8326)
+[info] (142) Project
+[info] Output [3]: [windowStartYear#8323, windowEndYear#8324, label#8326 AS componentId#8328]
+[info] Input [4]: [windowStartYear#8323, windowEndYear#8324, node#8325, label#8326]
+[info] (143) HashAggregate
+[info] Input [3]: [windowStartYear#8323, windowEndYear#8324, componentId#8328]
+[info] Keys [3]: [windowStartYear#8323, windowEndYear#8324, componentId#8328]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#8323, windowEndYear#8324, componentId#8328]
+[info] (144) Exchange
+[info] Input [3]: [windowStartYear#8323, windowEndYear#8324, componentId#8328]
+[info] Arguments: hashpartitioning(windowStartYear#8323, windowEndYear#8324, componentId#8328, 8), ENSURE_REQUIREMENTS, [plan_id=55074]
+[info] (145) HashAggregate
+[info] Input [3]: [windowStartYear#8323, windowEndYear#8324, componentId#8328]
+[info] Keys [3]: [windowStartYear#8323, windowEndYear#8324, componentId#8328]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#8323, windowEndYear#8324, componentId#8328]
+[info] (146) Sort
+[info] Input [3]: [windowStartYear#8323, windowEndYear#8324, componentId#8328]
+[info] Arguments: [windowStartYear#8323 ASC NULLS FIRST, windowEndYear#8324 ASC NULLS FIRST, componentId#8328 ASC NULLS FIRST], false, 0
+[info] (147) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#8317, windowEndYear#8318, componentId#8322]
+[info] Right keys [3]: [windowStartYear#8323, windowEndYear#8324, componentId#8328]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (148) Project
+[info] Output [3]: [windowStartYear#8317, windowEndYear#8318, researcherId#8321 AS a#8371]
+[info] Input [7]: [windowStartYear#8317, windowEndYear#8318, researcherId#8321, componentId#8322, windowStartYear#8323, windowEndYear#8324, componentId#8328]
+[info] (149) Exchange
+[info] Input [3]: [windowStartYear#8317, windowEndYear#8318, a#8371]
+[info] Arguments: hashpartitioning(windowStartYear#8317, windowEndYear#8318, a#8371, 8), ENSURE_REQUIREMENTS, [plan_id=55086]
+[info] (150) Sort
+[info] Input [3]: [windowStartYear#8317, windowEndYear#8318, a#8371]
+[info] Arguments: [windowStartYear#8317 ASC NULLS FIRST, windowEndYear#8318 ASC NULLS FIRST, a#8371 ASC NULLS FIRST], false, 0
+[info] (151) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#8289, windowEndYear#8290, a#8299]
+[info] Right keys [3]: [windowStartYear#8317, windowEndYear#8318, a#8371]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (152) Project
+[info] Output [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300]
+[info] Input [7]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300, windowStartYear#8317, windowEndYear#8318, a#8371]
+[info] (153) Exchange
+[info] Input [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300]
+[info] Arguments: hashpartitioning(windowStartYear#8289, windowEndYear#8290, b#8300, 8), ENSURE_REQUIREMENTS, [plan_id=55102]
+[info] (154) Sort
+[info] Input [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300]
+[info] Arguments: [windowStartYear#8289 ASC NULLS FIRST, windowEndYear#8290 ASC NULLS FIRST, b#8300 ASC NULLS FIRST], false, 0
+[info] (155) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#8372, windowEndYear#8373, node#8374, label#8375]
+[info] Arguments: [windowStartYear#8372, windowEndYear#8373, node#8374, label#8375], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (156) Filter
+[info] Input [4]: [windowStartYear#8372, windowEndYear#8373, node#8374, label#8375]
+[info] Condition : (isnotnull(label#8375) AND isnotnull(node#8374))
+[info] (157) Project
+[info] Output [4]: [windowStartYear#8372, windowEndYear#8373, node#8374 AS researcherId#8376, label#8375 AS componentId#8377]
+[info] Input [4]: [windowStartYear#8372, windowEndYear#8373, node#8374, label#8375]
+[info] (158) Exchange
+[info] Input [4]: [windowStartYear#8372, windowEndYear#8373, researcherId#8376, componentId#8377]
+[info] Arguments: hashpartitioning(windowStartYear#8372, windowEndYear#8373, componentId#8377, 8), ENSURE_REQUIREMENTS, [plan_id=55095]
+[info] (159) Sort
+[info] Input [4]: [windowStartYear#8372, windowEndYear#8373, researcherId#8376, componentId#8377]
+[info] Arguments: [windowStartYear#8372 ASC NULLS FIRST, windowEndYear#8373 ASC NULLS FIRST, componentId#8377 ASC NULLS FIRST], false, 0
+[info] (160) Scan ExistingRDD
+[info] Output [4]: [windowStartYear#8378, windowEndYear#8379, node#8380, label#8381]
+[info] Arguments: [windowStartYear#8378, windowEndYear#8379, node#8380, label#8381], MapPartitionsRDD[671] at createDataFrame at ConnectedComponents.scala:126, ExistingRDD, UnknownPartitioning(0)
+[info] (161) Filter
+[info] Input [4]: [windowStartYear#8378, windowEndYear#8379, node#8380, label#8381]
+[info] Condition : isnotnull(label#8381)
+[info] (162) Project
+[info] Output [3]: [windowStartYear#8378, windowEndYear#8379, label#8381 AS componentId#8383]
+[info] Input [4]: [windowStartYear#8378, windowEndYear#8379, node#8380, label#8381]
+[info] (163) HashAggregate
+[info] Input [3]: [windowStartYear#8378, windowEndYear#8379, componentId#8383]
+[info] Keys [3]: [windowStartYear#8378, windowEndYear#8379, componentId#8383]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#8378, windowEndYear#8379, componentId#8383]
+[info] (164) Exchange
+[info] Input [3]: [windowStartYear#8378, windowEndYear#8379, componentId#8383]
+[info] Arguments: hashpartitioning(windowStartYear#8378, windowEndYear#8379, componentId#8383, 8), ENSURE_REQUIREMENTS, [plan_id=55091]
+[info] (165) HashAggregate
+[info] Input [3]: [windowStartYear#8378, windowEndYear#8379, componentId#8383]
+[info] Keys [3]: [windowStartYear#8378, windowEndYear#8379, componentId#8383]
+[info] Functions: []
+[info] Aggregate Attributes: []
+[info] Results [3]: [windowStartYear#8378, windowEndYear#8379, componentId#8383]
+[info] (166) Sort
+[info] Input [3]: [windowStartYear#8378, windowEndYear#8379, componentId#8383]
+[info] Arguments: [windowStartYear#8378 ASC NULLS FIRST, windowEndYear#8379 ASC NULLS FIRST, componentId#8383 ASC NULLS FIRST], false, 0
+[info] (167) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#8372, windowEndYear#8373, componentId#8377]
+[info] Right keys [3]: [windowStartYear#8378, windowEndYear#8379, componentId#8383]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (168) Project
+[info] Output [3]: [windowStartYear#8372, windowEndYear#8373, researcherId#8376 AS b#8426]
+[info] Input [7]: [windowStartYear#8372, windowEndYear#8373, researcherId#8376, componentId#8377, windowStartYear#8378, windowEndYear#8379, componentId#8383]
+[info] (169) Exchange
+[info] Input [3]: [windowStartYear#8372, windowEndYear#8373, b#8426]
+[info] Arguments: hashpartitioning(windowStartYear#8372, windowEndYear#8373, b#8426, 8), ENSURE_REQUIREMENTS, [plan_id=55103]
+[info] (170) Sort
+[info] Input [3]: [windowStartYear#8372, windowEndYear#8373, b#8426]
+[info] Arguments: [windowStartYear#8372 ASC NULLS FIRST, windowEndYear#8373 ASC NULLS FIRST, b#8426 ASC NULLS FIRST], false, 0
+[info] (171) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#8289, windowEndYear#8290, b#8300]
+[info] Right keys [3]: [windowStartYear#8372, windowEndYear#8373, b#8426]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (172) Project
+[info] Output [3]: [windowStartYear#8289, windowEndYear#8290, a#8299]
+[info] Input [7]: [windowStartYear#8289, windowEndYear#8290, a#8299, b#8300, windowStartYear#8372, windowEndYear#8373, b#8426]
+[info] (173) HashAggregate
+[info] Input [3]: [windowStartYear#8289, windowEndYear#8290, a#8299]
+[info] Keys [3]: [windowStartYear#8289, windowEndYear#8290, a#8299]
+[info] Functions [1]: [partial_count(1)]
+[info] Aggregate Attributes [1]: [count#9132L]
+[info] Results [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, count#9133L]
+[info] (174) Exchange
+[info] Input [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, count#9133L]
+[info] Arguments: hashpartitioning(windowStartYear#8289, windowEndYear#8290, a#8299, 8), ENSURE_REQUIREMENTS, [plan_id=55110]
+[info] (175) HashAggregate
+[info] Input [4]: [windowStartYear#8289, windowEndYear#8290, a#8299, count#9133L]
+[info] Keys [3]: [windowStartYear#8289, windowEndYear#8290, a#8299]
+[info] Functions [1]: [count(1)]
+[info] Aggregate Attributes [1]: [count(1)#8166L]
+[info] Results [4]: [windowStartYear#8289, windowEndYear#8290, a#8299 AS node#8427, cast(count(1)#8166L as int) AS aliveDegree#8428]
+[info] (176) Sort
+[info] Input [4]: [windowStartYear#8289, windowEndYear#8290, node#8427, aliveDegree#8428]
+[info] Arguments: [windowStartYear#8289 ASC NULLS FIRST, windowEndYear#8290 ASC NULLS FIRST, node#8427 ASC NULLS FIRST], false, 0
+[info] (177) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#8231, windowEndYear#8232, node#8282]
+[info] Right keys [3]: [windowStartYear#8289, windowEndYear#8290, node#8427]
+[info] Join type: LeftOuter
+[info] Join condition: None
+[info] (178) Project
+[info] Output [3]: [windowStartYear#8231, windowEndYear#8232, coalesce(aliveDegree#8428, 0) AS aliveDegree#8429]
+[info] Input [7]: [windowStartYear#8231, windowEndYear#8232, node#8282, windowStartYear#8289, windowEndYear#8290, node#8427, aliveDegree#8428]
+[info] (179) HashAggregate
+[info] Input [3]: [windowStartYear#8231, windowEndYear#8232, aliveDegree#8429]
+[info] Keys [2]: [windowStartYear#8231, windowEndYear#8232]
+[info] Functions [1]: [partial_min(aliveDegree#8429)]
+[info] Aggregate Attributes [1]: [min#9134]
+[info] Results [3]: [windowStartYear#8231, windowEndYear#8232, min#9135]
+[info] (180) Exchange
+[info] Input [3]: [windowStartYear#8231, windowEndYear#8232, min#9135]
+[info] Arguments: hashpartitioning(windowStartYear#8231, windowEndYear#8232, 8), ENSURE_REQUIREMENTS, [plan_id=55121]
+[info] (181) HashAggregate
+[info] Input [3]: [windowStartYear#8231, windowEndYear#8232, min#9135]
+[info] Keys [2]: [windowStartYear#8231, windowEndYear#8232]
+[info] Functions [1]: [min(aliveDegree#8429)]
+[info] Aggregate Attributes [1]: [min(aliveDegree#8429)#8227]
+[info] Results [3]: [windowStartYear#8231, windowEndYear#8232, min(aliveDegree#8429)#8227 AS minDegree#8222]
+[info] (182) Sort
+[info] Input [3]: [windowStartYear#8231, windowEndYear#8232, minDegree#8222]
+[info] Arguments: [windowStartYear#8231 ASC NULLS FIRST, windowEndYear#8232 ASC NULLS FIRST], false, 0
+[info] (183) SortMergeJoin
+[info] Left keys [2]: [windowStartYear#8431, windowEndYear#8432]
+[info] Right keys [2]: [windowStartYear#8231, windowEndYear#8232]
+[info] Join type: Inner
+[info] Join condition: None
+[info] (184) Project
+[info] Output [5]: [windowStartYear#8431, windowEndYear#8432, node#8482, aliveDegree#8221, minDegree#8222]
+[info] Input [7]: [windowStartYear#8431, windowEndYear#8432, node#8482, aliveDegree#8221, windowStartYear#8231, windowEndYear#8232, minDegree#8222]
+[info] (185) LocalTableScan
+[info] Output [3]: [windowStartYear#8228, windowEndYear#8229, level#8230]
+[info] Arguments: [windowStartYear#8228, windowEndYear#8229, level#8230]
+[info] (186) BroadcastExchange
+[info] Input [3]: [windowStartYear#8228, windowEndYear#8229, level#8230]
+[info] Arguments: HashedRelationBroadcastMode(List((shiftleft(cast(input[0, int, false] as bigint), 32) | (cast(input[1, int, false] as bigint) & 4294967295))),false), [plan_id=55131]
+[info] (187) BroadcastHashJoin
+[info] Left keys [2]: [windowStartYear#8431, windowEndYear#8432]
+[info] Right keys [2]: [windowStartYear#8228, windowEndYear#8229]
+[info] Join type: Inner
+[info] Join condition: (aliveDegree#8221 <= greatest(level#8230, minDegree#8222))
+[info] (188) Project
+[info] Output [4]: [windowStartYear#8431, windowEndYear#8432, node#8482, greatest(level#8230, minDegree#8222) AS kEff#8430]
+[info] Input [8]: [windowStartYear#8431, windowEndYear#8432, node#8482, aliveDegree#8221, minDegree#8222, windowStartYear#8228, windowEndYear#8229, level#8230]
+[info] (189) Exchange
+[info] Input [4]: [windowStartYear#8431, windowEndYear#8432, node#8482, kEff#8430]
+[info] Arguments: hashpartitioning(windowStartYear#8431, windowEndYear#8432, node#8482, 8), ENSURE_REQUIREMENTS, [plan_id=55136]
+[info] (190) Sort
+[info] Input [4]: [windowStartYear#8431, windowEndYear#8432, node#8482, kEff#8430]
+[info] Arguments: [windowStartYear#8431 ASC NULLS FIRST, windowEndYear#8432 ASC NULLS FIRST, node#8482 ASC NULLS FIRST], false, 0
+[info] (191) SortMergeJoin
+[info] Left keys [3]: [windowStartYear#6102, windowEndYear#6103, node#7982]
+[info] Right keys [3]: [windowStartYear#8431, windowEndYear#8432, node#8482]
+[info] Join type: LeftOuter
+[info] Join condition: None
+[info] (192) Project
+[info] Output [6]: [windowStartYear#6102, windowEndYear#6103, node#7982, degree#7983L, kEff#8430 AS coreness#8485, isnotnull(kEff#8430) AS removedNow#8486]
+[info] Input [8]: [windowStartYear#6102, windowEndYear#6103, node#7982, degree#7983L, windowStartYear#8431, windowEndYear#8432, node#8482, kEff#8430]
+[info] (193) AdaptiveSparkPlan
+[info] Output [6]: [windowStartYear#6102, windowEndYear#6103, node#7982, degree#7983L, coreness#8485, removedNow#8486]
+[info] Arguments: isFinalPlan=false
+[success] Total time: 175 s (0:02:55.0), completed Nov 24, 2026, 8:35:15 AM

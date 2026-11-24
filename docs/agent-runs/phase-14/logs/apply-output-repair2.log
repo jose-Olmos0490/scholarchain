@@ -1,0 +1,9 @@
+[0m[1mmodule.neptune.aws_neptune_cluster.this[0]: Creating...[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating Neptune Cluster (scholarchain-dev-graph): operation error Neptune: CreateDBCluster, https response error StatusCode: 400, RequestID: d62c6d41-2c01-444e-92a0-38ed52149223, api error FreeTierRestrictionError: The specified cluster engine type is not available with free plan accounts. Available engine types: [aurora-postgresql] To remove all limitations, upgrade your account plan.[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.neptune.aws_neptune_cluster.this[0],
+[31m│[0m [0m  on ../../modules/neptune/main.tf line 89, in resource "aws_neptune_cluster" "this":
+[31m│[0m [0m  89: resource "aws_neptune_cluster" "this" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m

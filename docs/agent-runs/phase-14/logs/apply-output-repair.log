@@ -1,0 +1,4 @@
+[0m[1mvar.git_sha[0m
+  Git SHA of the commit being deployed; the image tag of every service.
+
+  [1mEnter a value:[0m [0m

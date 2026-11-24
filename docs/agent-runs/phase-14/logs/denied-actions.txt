@@ -1,0 +1,7 @@
+not authorized to perform: ec2:AllocateAddress
+not authorized to perform: ec2:CreateVpc
+not authorized to perform: ecs:CreateCluster
+not authorized to perform: kms:TagResource
+not authorized to perform: rds:CreateDBClusterParameterGroup
+not authorized to perform: rds:CreateDBParameterGroup
+not authorized to perform: s3:CreateBucket

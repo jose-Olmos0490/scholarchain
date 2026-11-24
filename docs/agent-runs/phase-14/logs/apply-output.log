@@ -1,0 +1,146 @@
+[0m[1mmodule.iam.aws_iam_role.emr_instance: Creating...[0m[0m
+[0m[1mmodule.security.aws_kms_key.main: Creating...[0m[0m
+[0m[1mmodule.neptune.aws_neptune_parameter_group.this[0]: Creating...[0m[0m
+[0m[1mmodule.network.aws_vpc.main: Creating...[0m[0m
+[0m[1mmodule.network.aws_iam_role.flow: Creating...[0m[0m
+[0m[1mmodule.neptune.aws_neptune_cluster_parameter_group.this[0]: Creating...[0m[0m
+[0m[1mmodule.compute.aws_ecs_cluster.this: Creating...[0m[0m
+[0m[1mmodule.network.aws_eip.nat: Creating...[0m[0m
+[0m[1mmodule.iam.aws_iam_role.loader: Creating...[0m[0m
+[0m[1mmodule.datalake.aws_s3_bucket.this["curated"]: Creating...[0m[0m
+[0m[1mmodule.datalake.aws_s3_bucket.this["raw"]: Creating...[0m[0m
+[0m[1mmodule.datalake.aws_s3_bucket.this["rag"]: Creating...[0m[0m
+[0m[1mmodule.datalake.aws_s3_bucket.this["artifacts"]: Creating...[0m[0m
+[0m[1mmodule.datalake.aws_s3_bucket.this["logs"]: Creating...[0m[0m
+[0m[1mmodule.datalake.aws_s3_bucket.this["graph"]: Creating...[0m[0m
+[0m[1mmodule.iam.aws_iam_role.task["graph-evidence-api"]: Creating...[0m[0m
+[0m[1mmodule.iam.aws_iam_role.task["query-api"]: Creating...[0m[0m
+[0m[1mmodule.iam.aws_iam_role.emr_instance: Creation complete after 0s [id=scholarchain-dev-emr-instance][0m
+[0m[1mmodule.iam.aws_iam_role.task["embedding-worker"]: Creating...[0m[0m
+[0m[1mmodule.iam.aws_iam_role.emr_service: Creating...[0m[0m
+[0m[1mmodule.iam.aws_iam_role.execution: Creating...[0m[0m
+[0m[1mmodule.vectors.aws_s3vectors_vector_bucket.this: Creating...[0m[0m
+[0m[1mmodule.neptune.aws_iam_role.loader[0]: Creating...[0m[0m
+[0m[1mmodule.iam.aws_iam_role.loader: Creation complete after 0s [id=scholarchain-dev-loader][0m
+[0m[1mmodule.iam.aws_iam_instance_profile.emr: Creating...[0m[0m
+[0m[1mmodule.network.aws_iam_role.flow: Creation complete after 0s [id=scholarchain-dev-vpc-flow-logs][0m
+[0m[1mmodule.iam.aws_iam_role.task["graph-evidence-api"]: Creation complete after 0s [id=scholarchain-dev-task-graph-evidence-api][0m
+[0m[1mmodule.iam.aws_iam_role.task["embedding-worker"]: Creation complete after 1s [id=scholarchain-dev-task-embedding-worker][0m
+[0m[1mmodule.iam.aws_iam_role.emr_service: Creation complete after 1s [id=scholarchain-dev-emr-service][0m
+[0m[1mmodule.iam.aws_iam_role_policy_attachment.emr_service_managed: Creating...[0m[0m
+[0m[1mmodule.iam.aws_iam_role.task["query-api"]: Creation complete after 1s [id=scholarchain-dev-task-query-api][0m
+[0m[1mmodule.neptune.aws_iam_role.loader[0]: Creation complete after 1s [id=scholarchain-dev-neptune-bulk-loader][0m
+[0m[1mmodule.iam.aws_iam_role.execution: Creation complete after 1s [id=scholarchain-dev-ecs-execution][0m
+[0m[1mmodule.iam.aws_iam_role_policy_attachment.emr_service_managed: Creation complete after 0s [id=scholarchain-dev-emr-service/arn:aws:iam::aws:policy/service-role/AmazonEMRServicePolicy_v2][0m
+[0m[1mmodule.iam.aws_iam_instance_profile.emr: Creation complete after 6s [id=scholarchain-dev-emr-instance][0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating ECS Cluster (scholarchain-dev): operation error ECS: CreateCluster, https response error StatusCode: 400, RequestID: bdbccf54-0295-4a84-883e-ae019288dd8b, AccessDeniedException: User: arn:aws:iam::<ACCOUNT_ID>:user/CS441_Dev is not authorized to perform: ecs:CreateCluster on resource: arn:aws:ecs:us-east-1:<ACCOUNT_ID>:cluster/scholarchain-dev with an explicit deny in a service control policy: arn:aws:organizations::474398633155:policy/o-m795r8w8fx/service_control_policy/p-44sywhjj[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.compute.aws_ecs_cluster.this,
+[31m│[0m [0m  on ../../modules/compute/main.tf line 16, in resource "aws_ecs_cluster" "this":
+[31m│[0m [0m  16: resource "aws_ecs_cluster" "this" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating S3 Bucket (scholarchain-dev-curated-<ACCOUNT_ID>-us-east-1): operation error S3: CreateBucket, https response error StatusCode: 403, RequestID: TD1JT34ANC4BRWCR, HostID: GDvxQfnu+ByXE3ZQ6l2/2oi7en1uaHIap1PbaI+khqCwPmcbaDprsthhTFkLe8tjY4/a/7orOWJLn9jcAHyRxLlAxBynUyoZ, api error AccessDenied: User: arn:aws:iam::<ACCOUNT_ID>:user/CS441_Dev is not authorized to perform: s3:CreateBucket on resource: "arn:aws:s3:::scholarchain-dev-curated-<ACCOUNT_ID>-us-east-1" with an explicit deny in a service control policy: arn:aws:organizations::474398633155:policy/o-m795r8w8fx/service_control_policy/p-44sywhjj[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.datalake.aws_s3_bucket.this["curated"],
+[31m│[0m [0m  on ../../modules/datalake/main.tf line 26, in resource "aws_s3_bucket" "this":
+[31m│[0m [0m  26: resource "aws_s3_bucket" "this" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating S3 Bucket (scholarchain-dev-logs-<ACCOUNT_ID>-us-east-1): operation error S3: CreateBucket, https response error StatusCode: 403, RequestID: VKE24TDXV9BZZNG6, HostID: 2Cusu2Bq/i7FzqRL/87rZTlcVoh1pYjS07EMYRaG4tlIlYWYbKX9D+xmUnHMRcWBb6eNkxpu8UNLUJ01bJF3wFbXY26jI+6g, api error AccessDenied: User: arn:aws:iam::<ACCOUNT_ID>:user/CS441_Dev is not authorized to perform: s3:CreateBucket on resource: "arn:aws:s3:::scholarchain-dev-logs-<ACCOUNT_ID>-us-east-1" with an explicit deny in a service control policy: arn:aws:organizations::474398633155:policy/o-m795r8w8fx/service_control_policy/p-44sywhjj[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.datalake.aws_s3_bucket.this["logs"],
+[31m│[0m [0m  on ../../modules/datalake/main.tf line 26, in resource "aws_s3_bucket" "this":
+[31m│[0m [0m  26: resource "aws_s3_bucket" "this" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating S3 Bucket (scholarchain-dev-graph-<ACCOUNT_ID>-us-east-1): operation error S3: CreateBucket, https response error StatusCode: 403, RequestID: VKEFZM2YVZQTA4KA, HostID: KWZn38b1WVv3wZkb3fu6EBCYQu8mLCiv3FNz1+cZ2KrHOrIhwHlMUGoBU0QvVGnvjqgmCUEVM8eAJ24E1AjhoFpphnKXXi7q, api error AccessDenied: User: arn:aws:iam::<ACCOUNT_ID>:user/CS441_Dev is not authorized to perform: s3:CreateBucket on resource: "arn:aws:s3:::scholarchain-dev-graph-<ACCOUNT_ID>-us-east-1" with an explicit deny in a service control policy: arn:aws:organizations::474398633155:policy/o-m795r8w8fx/service_control_policy/p-44sywhjj[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.datalake.aws_s3_bucket.this["graph"],
+[31m│[0m [0m  on ../../modules/datalake/main.tf line 26, in resource "aws_s3_bucket" "this":
+[31m│[0m [0m  26: resource "aws_s3_bucket" "this" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating S3 Bucket (scholarchain-dev-rag-<ACCOUNT_ID>-us-east-1): operation error S3: CreateBucket, https response error StatusCode: 403, RequestID: VKE4P374JJTQ8VPG, HostID: d1zUgUBRPO92Uot4iFeFjyzavDW/ofqkzua0JZ1reHh0KGLKfHQgDReJ3idvG4w538rWRCBImie2M5Y4g3j2U4TB5BiVanAa, api error AccessDenied: User: arn:aws:iam::<ACCOUNT_ID>:user/CS441_Dev is not authorized to perform: s3:CreateBucket on resource: "arn:aws:s3:::scholarchain-dev-rag-<ACCOUNT_ID>-us-east-1" with an explicit deny in a service control policy: arn:aws:organizations::474398633155:policy/o-m795r8w8fx/service_control_policy/p-44sywhjj[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.datalake.aws_s3_bucket.this["rag"],
+[31m│[0m [0m  on ../../modules/datalake/main.tf line 26, in resource "aws_s3_bucket" "this":
+[31m│[0m [0m  26: resource "aws_s3_bucket" "this" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating S3 Bucket (scholarchain-dev-raw-<ACCOUNT_ID>-us-east-1): operation error S3: CreateBucket, https response error StatusCode: 403, RequestID: VKE01FAXPGPFQK7Y, HostID: 7iFcTc8yLvCLD/qmjIGeZU1QBF5+7M8v0VRd+N7PU9YECU5s5CuTJuP7y0Y2Ia5QuMCVJRozyFJcbjkX0ak+QoMvuOx9SjbU, api error AccessDenied: User: arn:aws:iam::<ACCOUNT_ID>:user/CS441_Dev is not authorized to perform: s3:CreateBucket on resource: "arn:aws:s3:::scholarchain-dev-raw-<ACCOUNT_ID>-us-east-1" with an explicit deny in a service control policy: arn:aws:organizations::474398633155:policy/o-m795r8w8fx/service_control_policy/p-44sywhjj[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.datalake.aws_s3_bucket.this["raw"],
+[31m│[0m [0m  on ../../modules/datalake/main.tf line 26, in resource "aws_s3_bucket" "this":
+[31m│[0m [0m  26: resource "aws_s3_bucket" "this" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating S3 Bucket (scholarchain-dev-artifacts-<ACCOUNT_ID>-us-east-1): operation error S3: CreateBucket, https response error StatusCode: 403, RequestID: VKE0RN7578AJC7KP, HostID: hfkhC0hZ5I9gqEqoX9iwK9vKeD5I3cLhiYhmmAac4TMC5Rj9gTO0kDnunwfPYTOWqLM0DJJtleU=, api error AccessDenied: User: arn:aws:iam::<ACCOUNT_ID>:user/CS441_Dev is not authorized to perform: s3:CreateBucket on resource: "arn:aws:s3:::scholarchain-dev-artifacts-<ACCOUNT_ID>-us-east-1" with an explicit deny in a service control policy: arn:aws:organizations::474398633155:policy/o-m795r8w8fx/service_control_policy/p-44sywhjj[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.datalake.aws_s3_bucket.this["artifacts"],
+[31m│[0m [0m  on ../../modules/datalake/main.tf line 26, in resource "aws_s3_bucket" "this":
+[31m│[0m [0m  26: resource "aws_s3_bucket" "this" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating Neptune Cluster Parameter Group (scholarchain-dev-neptune-cluster): operation error Neptune: CreateDBClusterParameterGroup, https response error StatusCode: 403, RequestID: 06121b1a-d54c-4bf4-a70c-84ac22078179, api error AccessDenied: User: arn:aws:iam::<ACCOUNT_ID>:user/CS441_Dev is not authorized to perform: rds:CreateDBClusterParameterGroup on resource: arn:aws:rds:us-east-1:<ACCOUNT_ID>:cluster-pg:scholarchain-dev-neptune-cluster with an explicit deny in a service control policy: arn:aws:organizations::474398633155:policy/o-m795r8w8fx/service_control_policy/p-44sywhjj[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.neptune.aws_neptune_cluster_parameter_group.this[0],
+[31m│[0m [0m  on ../../modules/neptune/main.tf line 12, in resource "aws_neptune_cluster_parameter_group" "this":
+[31m│[0m [0m  12: resource "aws_neptune_cluster_parameter_group" "this" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating Neptune Parameter Group (scholarchain-dev-neptune-instance): operation error Neptune: CreateDBParameterGroup, https response error StatusCode: 403, RequestID: 1b3a2a8e-d494-4022-a50f-cf5cc8b6367d, api error AccessDenied: User: arn:aws:iam::<ACCOUNT_ID>:user/CS441_Dev is not authorized to perform: rds:CreateDBParameterGroup on resource: arn:aws:rds:us-east-1:<ACCOUNT_ID>:pg:scholarchain-dev-neptune-instance with an explicit deny in a service control policy: arn:aws:organizations::474398633155:policy/o-m795r8w8fx/service_control_policy/p-44sywhjj[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.neptune.aws_neptune_parameter_group.this[0],
+[31m│[0m [0m  on ../../modules/neptune/main.tf line 25, in resource "aws_neptune_parameter_group" "this":
+[31m│[0m [0m  25: resource "aws_neptune_parameter_group" "this" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating EC2 VPC: operation error EC2: CreateVpc, https response error StatusCode: 403, RequestID: 930a56ce-be4b-49a0-8bf8-72aebddc126f, api error UnauthorizedOperation: You are not authorized to perform this operation. User: arn:aws:iam::<ACCOUNT_ID>:user/CS441_Dev is not authorized to perform: ec2:CreateVpc on resource: arn:aws:ec2:us-east-1:<ACCOUNT_ID>:vpc/* with an explicit deny in a service control policy: arn:aws:organizations::474398633155:policy/o-m795r8w8fx/service_control_policy/p-44sywhjj. Go to https://us-east-1.console.aws.amazon.com/iam/home?region=us-east-1#/authorization-details/4qemq5l5tsqsz3g5ipk6r9rxp for complete details, or call the GetRequestAuthorizationDetails API with the following authorization id: 4qemq5l5tsqsz3g5ipk6r9rxp. Encoded authorization failure message: I6rzPY3Ude9NTRiwjPftBp2dGrQM6BgF--EO-XO6lWk5mF3bEJP00ZfxeTx4rTXqXS7KBLJT-7XNACqtxHFzn3oGps2cf4V1fOWHJosT2mhIukZ4fHjBjyLXfZVOt8kt0G6yr2-K2nLTLpISTvVDzqfy0ohJ9uxjoX3_etlpkehZkPqSi9SwaS1vCg7JfdNlX9_qdtevSy9kfVWrOCBdYMNOnYlhfeS5kFgsZFxI7YVM15l8qWEvSyRvAFUtj1LhHst-DmcuQxAcHy4TvequOjIlNejiqfytsJYq-4B_S78caGmft1YeeZfzgq_b8tiEvn9cGP9qKUi6z8lpWZnmIse2r7Uov-JbaUMoenr8RqfyzQq2GMitgMx97kZk-Fl6EcXHirxi9U05KoJSIngAeYZpFgBpQ3ZGTqME9o5ehrzx02dciCx35tnU9nx5214DLX-A2PHuAGPcHk40UAfGdcDSaD5L-c6RSqYCYSK347LtD2L6EBw-jmtwdwVSUmT85FDqxxjoxFmOQqnj-tTfMUcW7sbglvjiVgzU-OH23jtcFe6Ec9ahswJu4RGJGftDkflK4NCX3ADshuZjpd5hCMvWHp3nC2M2KE8UDDnNroPPjuE61yTFrnu5B_-XnN17ddRIUr7TC_WYrSQLxTFqj7Cl0M-8XfSIiRJLKN_aRekQpQwXMWoYNjrPWFUtWXcYeFKNYDiPlstoOn9Q2W_ba0z6H583sst0WwhmxD1DqGYx-qQAQ3oTM6Lni0Ko9xJibndNTuGCJhZvcVr_PfV8MR7DHKpd60ECaBD4k2Cd2tCYrZpmyBN_2VtHDnOqr1G9095Qd_g6j2j2-B33PoC9lNnFJ5kVHVbpkRPT17Xe7GLnzn_rDiCIGhWQt_XhVfL979skBoJxn4YVh_MSTU0Bocx2GMjJttMV08hdGeJFPM2j29fwxiJWHlMvy9lcw59F3cv12tKDy_dEoQNzzrJo5zEjThh4Yj_OGPoe4v6k3e6dMjJ9RslPVGxdAihpHiN8c9RIEUH8BlJOyMUvduMBIRBrDwARhOZuB7tvmmk1JYptAwBHwbK0Gb4JcOjwZiJLH7ShoMcqVQOZHaHYQN9dUj8p8oCmfjvUwFWYwPmHdZ3-mz4MhGxhUod8McyuNxE-9v5sjmtWPxXxlUsSjmZsmAAlwQxOBemzxYAveQXMzU14RaEQwnSTxJ81nX4D1wcceIK_6MtsJKHCIllWEMnh8BKSHBcu1SBobS6rcMmeTWGWfX0s-YspQs1kcPBxtCuh2sHBVkjVMc71zjIJLOqNU6eU6sG3601PHAvkeLeELOYa-c_bNe_G3wJwFy57VDYk7-ZYQ5w8F4a0fl3NdG6rOJOpB0RCBUeR0tMX5YCeEhXzCmNUn3eurJbgDDWLaOPiOglXDmCe0jauiBHqzwouL3603EPlLbLBNpzjkNMhYcJL8tPyPAwvwc5_8EG6utkzcz6ic6AHMUyByL8weUu4KNbIi-cHvAz_54E_YJD_8WCgVdndBrcyUC-QVEBVvd7BGQ9AdkWQLtixK8f60Ujxs0RCxls1bzk861JKGEHTO9jncjuzd6iMoGX41Skb6zMaBDjqSogWwLR1-Jrow48IXk_nkhRE2cOxqf7dEPOnIGvexVhSGcuo-xRwzMzp0rbxbz7b3v0SwqLDC19g97fFUhyV_ACXndwtnC7wm6JeQIBQjAgIIjaQlG23gxRZ6H9zcHifamjRieD0DQFWhoyPV5URMNFjMT5sB3du2nPQGLRm9jBG-wGO_wgeYyubqrgkmHs7cRcb_QM1VHA2cw5GaQKYNxcvn0IMu3DGdqR9bUoI4UKb2hvcqsxzneF998W9S46aQKNGGNVXDqZN2iiXz8uM2hNFPoGC5Vl-jmLjNpyZgXsS6D1onJ4rGjSN5vBSdPkS2VNHsWWfLzrRtu0sVEnMrXLv9Q[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.network.aws_vpc.main,
+[31m│[0m [0m  on ../../modules/network/main.tf line 18, in resource "aws_vpc" "main":
+[31m│[0m [0m  18: resource "aws_vpc" "main" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating EC2 EIP: operation error EC2: AllocateAddress, https response error StatusCode: 403, RequestID: e0d15574-c7dc-4004-a6d3-5a1d002d15ca, api error UnauthorizedOperation: You are not authorized to perform this operation. User: arn:aws:iam::<ACCOUNT_ID>:user/CS441_Dev is not authorized to perform: ec2:AllocateAddress on resource: arn:aws:ec2:us-east-1:<ACCOUNT_ID>:elastic-ip/* with an explicit deny in a service control policy: arn:aws:organizations::474398633155:policy/o-m795r8w8fx/service_control_policy/p-44sywhjj. Go to https://us-east-1.console.aws.amazon.com/iam/home?region=us-east-1#/authorization-details/bwn5l4s0p2mss4u4v13uep0vr for complete details, or call the GetRequestAuthorizationDetails API with the following authorization id: bwn5l4s0p2mss4u4v13uep0vr. Encoded authorization failure message: pjwGoEjjsIqCQfOxwb3fBKbO6kMNcWlRgQIYA8PoyEnzEbPfN5Svc4OLQJJ2tk6axvhHIlprd4znfZtI9vtW30xubiLbkDUh0aYVLqqUGFTY7-7Gm92KSQNrJYpTiuYGD3B8clQjweXq3IhkdowvYaVrwcHNXrSF_8UVIoxvVLBZIT-PUuN91KfgqWp-Yf2BPMaWPSzCIxk09vCo6y2YIWseiVODEe7uKM1uYGh7rkw6XMxmWTWF4Zmnn_7ZvuUdpyI-eLOV58-u5Ep_bU7i67qE4JwUUWPuCOwNIa-eM7490PnKYzAR0BXl-V9am1Z1UaIqj3sdAywuBcJ9FC_NgMkHQVpdvQlVyx8VAtmfwL4P9d_hfpYneD8ro6U568wgk7voMj8GFMUCYA8iiEZxJCdqiQplQSh1L2ZY6hU4prFbjtmTfliqzSNkJhT2zU9U_5ziQLVJzD09fDb0sPYaBg7TdjE0c4q0ay6dJhBPV5y4NjfOzZxANP6vkSdy8JEAaVxOMxTXUoaitGHOre8YlyMwMV0Cc8I2XF0ZeTK0nhV_Q0L_GOCXvBLb4ykX7KI81o3GAAR_j19M2z2vbzTIicCPnmDxvD1W5llPC3-cUWW31RMULEqkZCaF_fJqTZ86fTjBtoSD-87DdLs8vTcEi4dZvKol2tr3oMoRtm2hY03K1vikHLd-MZMlJz4kC_buYz5XwFqi6qrYR4kCYZSgvLzQt5V5hHkxrntQ9kHdybyAB_8TUAeGjgyuTKcS9BVAdQBnsyRKnvQLOfFnSZseq0tWtUTetFHXZ_6oOvf4p667elmyIueUHj3PJmVgwEN_GGvIpyUIFZEwV71bbfyGXsXucWr2YzBSS2MekVDuCXOqwSZAiuX0FICsfL1wnKN_o-nvEPArR7LsA_9FV5ToywNcFbPdRmLWI1ReMVM4AfuFbutaP4FglSiE1jvrACd0OnG9pllAZY5sULN2WlbJyH_VPPl10648ks2H6mqCaME_hl6RZmWP7CYYZKK1c29ZcZGxC5iVHkH1l41m0EJ_Pd4fP6uYGsrYx27iGY5RmF3fQP3BtJc0UQygwxI1VIBXV-Xp8w79rQLcwAxalnQfRoytBNSMgSELjp_712LggRf_VJZRiAttLHI6HBtz94zIiBRwUTY9aC89-2BFmNq-Z1L1TJiYdmrwbDyWmKW0vFgxZF5JafGskZZTLLNfz7ypGm5ldKNFHBUN4TAUI7k-RPZk37yBFQsHurwo_VKvnK0SuerBABiE1UssYXQV-zzIcEqQJlssw7DzDG2VBx4gxX4SXYTeh6dyBKkMfE4ExYsoF0_v8EqD6fzqQtfo5m1KzuPOpBPjft1suWD8yLAhOoM30QXUQmyVTSlD9JjTx9n4c7TQWE-_nHbLo_QdHx_NIyFSQLCcy1v3O7Ha7rHEpq82cmB0c3OMxj4ppqJ9-XvGl6dzZao2qzGr41SVM7IMsAKvYskzCVa4bALFjkGtEt7xr6TT2oBoApSn8gAqOLtyIGGPco9qYimqnm1JQy9c1jIhe4t2zigGfNJzEwhtal5GjKvJfzo8BAYp782HGFgIk5bKCD36L-KIHQ6W2QMBfW7HjRXkFNZULxnv74vLp7VdvAdgLldg8PU348JdM-hlVYTDlZWgMe-HW5g_lyCEC0120p0C7dcOgaG7gf_x03mUDj7Mau89lEvTzo8F_mcfV82i9TLd1LAY3zDqVFIuvHmhN30D7Wmro7wD8YOK49DtWrEkLvCyslhv6FymEB3XtxuKgR153kr8HaGKjtsK7joVAMKZEwDmZqJpN_bZ_HsChrm-AQuNSxsK5440KAJUuc93J_KWaWI6U4I-YPlLB6aU3r6O1--MWkZG9VT4o91sq5ldHc8xqsVyiNK1REAvLoEs8v507QoTGsa_GGIZioXukoPgzfsN5qtwPKcIyU9ZYlGASNnhhA[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.network.aws_eip.nat,
+[31m│[0m [0m  on ../../modules/network/main.tf line 67, in resource "aws_eip" "nat":
+[31m│[0m [0m  67: resource "aws_eip" "nat" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating KMS Key: operation error KMS: CreateKey, https response error StatusCode: 400, RequestID: 2afd2c7e-860b-4b5b-a9c4-eb6e4f1932c5, api error AccessDeniedException: User: arn:aws:iam::<ACCOUNT_ID>:user/CS441_Dev is not authorized to perform: kms:TagResource with an explicit deny in a service control policy: arn:aws:organizations::474398633155:policy/o-m795r8w8fx/service_control_policy/p-44sywhjj[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.security.aws_kms_key.main,
+[31m│[0m [0m  on ../../modules/security/main.tf line 67, in resource "aws_kms_key" "main":
+[31m│[0m [0m  67: resource "aws_kms_key" "main" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mcreating S3 Vectors Vector Bucket (scholarchain-dev-vectors-<ACCOUNT_ID>)[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.vectors.aws_s3vectors_vector_bucket.this,
+[31m│[0m [0m  on ../../modules/vectors/main.tf line 27, in resource "aws_s3vectors_vector_bucket" "this":
+[31m│[0m [0m  27: resource "aws_s3vectors_vector_bucket" "this" [4m{[0m[0m
+[31m│[0m [0m
+[31m│[0m [0moperation error S3Vectors: CreateVectorBucket, https response error
+[31m│[0m [0mStatusCode: 403, RequestID: , AccessDeniedException: User:
+[31m│[0m [0marn:aws:iam::<ACCOUNT_ID>:user/CS441_Dev is not authorized to perform:
+[31m│[0m [0ms3vectors:CreateVectorBucket on resource:
+[31m│[0m [0marn:aws:s3vectors:us-east-1:<ACCOUNT_ID>:bucket/scholarchain-dev-vectors-<ACCOUNT_ID>
+[31m│[0m [0mwith an explicit deny in a service control policy:
+[31m│[0m [0marn:aws:organizations::474398633155:policy/o-m795r8w8fx/service_control_policy/p-44sywhjj
+[31m╵[0m[0m

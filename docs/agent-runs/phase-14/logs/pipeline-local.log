@@ -1,0 +1,491 @@
+==> [run-bounded-pipeline.sh] STEP: local Hadoop stage on datasets/samples -> target/pipeline-local/phase14/hadoop
+[info] welcome to sbt 1.13.1 (Ubuntu Java 17.0.21.1)
+[info] loading settings for project scholarchain-build from plugins.sbt...
+[info] loading project definition from /home/olmos/scholarchain/project
+[info] loading settings for project root from build.sbt...
+[info] set current project to scholarchain (in build file:/home/olmos/scholarchain/)
+[info] running (fork) scholarchain.hadoop.driver.PipelineDriver --local --input-root datasets/samples --output-root target/pipeline-local/phase14/hadoop --code-version a75b607
+[error] SLF4J(W): No SLF4J providers were found.
+[error] SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+[error] SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+[info] [scholarchain-hadoop] run ID run:dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4 (seed snapshot dblp=2026-11-01)
+[info] [scholarchain-hadoop] input crossref/crossref-works-api-linked.jsonl dataset=CROSSREF kind=CrossrefWorks snapshot=undated-855c221447d1 sha256:855c221447d1ab399bae0db0ab4c974a70c5f31bad65fdca53e06a05b14efa6c
+[info] [scholarchain-hadoop] input dblp/dblp-2026-11-01-excerpt.xml dataset=DBLP kind=DblpXml snapshot=2026-11-01 sha256:b5d5c46dbe60284c46ddc50174ea2106fd6f55f4623611c310dc8e0b177428a1
+[info] [scholarchain-hadoop] input openalex/openalex-authors-snapshot-2026-10-14-excerpt.jsonl dataset=OPENALEX kind=OpenAlexAuthors snapshot=2026-10-14 sha256:fbafa1af8db022dcf0336c39c0ba48df2e1eafc07c86f8382672f5af5a97d696
+[info] [scholarchain-hadoop] input openalex/openalex-works-api-linked.jsonl dataset=OPENALEX kind=OpenAlexWorks snapshot=undated-3121da4dfcc7 sha256:3121da4dfcc7f667d2a9923ac4593779339ab62b17bfa969fc1acd04c34280b8
+[info] [scholarchain-hadoop] input openalex/openalex-works-snapshot-2026-10-14-excerpt.jsonl dataset=OPENALEX kind=OpenAlexWorks snapshot=2026-10-14 sha256:59935f5ba2b34620a2c31090f0102c414758143c54c3dc84c8db019deccf2db8
+[info] [scholarchain-hadoop] input orcid/orcid-0000-0002-1825-0097-record.xml dataset=ORCID kind=OrcidRecord snapshot=undated-d2816257d678 sha256:d2816257d6788c06d37948ae0fa529ce093f9b022b387889da1d2f5203dbef1f
+[info] [scholarchain-hadoop] JOB j01 DblpExtractJob: SUCCEEDED (map tasks 1, reduce tasks 2)
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_INPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_OUTPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   TaskCounter.MAP_INPUT_RECORDS = 35
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_BYTES = 86624
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_MATERIALIZED_BYTES = 13418
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_RECORDS = 24
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_GROUPS = 24
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_RECORDS = 24
+[info] [scholarchain-hadoop]   HadoopCounter.ACCEPTED = 24
+[info] [scholarchain-hadoop]   HadoopCounter.BLOCKS_EMITTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CAPPED_WORKS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CONFLICT = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE_AUTHOR_IN_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_MATCH_CANDIDATES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_PAIRS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_OUTCOMES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_SINGLETONS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.INPUT_RECORDS = 35
+[info] [scholarchain-hadoop]   HadoopCounter.LARGE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.MISSING_KEY = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OUT_OF_SUBSET = 11
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REJECTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REKEYED_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SCHEMA_FAILURE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SIDE_OUTPUT_RECORDS = 24
+[info] [scholarchain-hadoop]   HadoopCounter.UNKNOWN_ENTITY = 0
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/cap_histogram/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/rejects_j01/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/work_extracted/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop] maxWorks cap: 24 distinct subset works, maxWorks=100000, bucket limit 65536, kept 24
+[info] [scholarchain-hadoop] JOB j01c WorkCapJob: SUCCEEDED (map tasks 2, reduce tasks 2)
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_INPUT_RECORDS = 161
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_OUTPUT_RECORDS = 140
+[info] [scholarchain-hadoop]   TaskCounter.MAP_INPUT_RECORDS = 24
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_BYTES = 194206
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_MATERIALIZED_BYTES = 24612
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_RECORDS = 161
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_GROUPS = 139
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_RECORDS = 140
+[info] [scholarchain-hadoop]   HadoopCounter.ACCEPTED = 139
+[info] [scholarchain-hadoop]   HadoopCounter.BLOCKS_EMITTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CAPPED_WORKS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CONFLICT = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE_AUTHOR_IN_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_MATCH_CANDIDATES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_PAIRS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_OUTCOMES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_SINGLETONS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.INPUT_RECORDS = 24
+[info] [scholarchain-hadoop]   HadoopCounter.LARGE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.MISSING_KEY = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OUT_OF_SUBSET = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REJECTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REKEYED_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SCHEMA_FAILURE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SIDE_OUTPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.UNKNOWN_ENTITY = 0
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/author_mention/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/rejects_j01c/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/venue/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/work/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/work_node/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop] JOB j02 SourceNormalizeJob: SUCCEEDED (map tasks 5, reduce tasks 2)
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_INPUT_RECORDS = 684
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_OUTPUT_RECORDS = 608
+[info] [scholarchain-hadoop]   TaskCounter.MAP_INPUT_RECORDS = 72
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_BYTES = 708969
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_MATERIALIZED_BYTES = 87559
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_RECORDS = 684
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_GROUPS = 608
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_RECORDS = 608
+[info] [scholarchain-hadoop]   HadoopCounter.ACCEPTED = 608
+[info] [scholarchain-hadoop]   HadoopCounter.BLOCKS_EMITTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CAPPED_WORKS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CONFLICT = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE_AUTHOR_IN_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_MATCH_CANDIDATES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_PAIRS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_OUTCOMES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_SINGLETONS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.INPUT_RECORDS = 72
+[info] [scholarchain-hadoop]   HadoopCounter.LARGE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.MISSING_KEY = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OUT_OF_SUBSET = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REJECTED = 5
+[info] [scholarchain-hadoop]   HadoopCounter.REKEYED_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SCHEMA_FAILURE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SIDE_OUTPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.UNKNOWN_ENTITY = 0
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/crossref/author_mention/snapshot=undated-855c221447d1/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/crossref/graph_edge/snapshot=undated-855c221447d1/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/crossref/mention_node/snapshot=undated-855c221447d1/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/crossref/rejects_j02/snapshot=undated-855c221447d1/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/crossref/venue/snapshot=undated-855c221447d1/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/crossref/work/snapshot=undated-855c221447d1/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/crossref/work_node/snapshot=undated-855c221447d1/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/author_mention/snapshot=2026-10-14/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/author_mention/snapshot=undated-3121da4dfcc7/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/graph_edge/snapshot=2026-10-14/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/graph_edge/snapshot=undated-3121da4dfcc7/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/institution/snapshot=2026-10-14/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/institution/snapshot=undated-3121da4dfcc7/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/mention_node/snapshot=2026-10-14/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/mention_node/snapshot=undated-3121da4dfcc7/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/rejects_j02/snapshot=2026-10-14/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/rejects_j02/snapshot=undated-3121da4dfcc7/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/researcher_node/snapshot=2026-10-14/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/topic/snapshot=2026-10-14/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/topic/snapshot=undated-3121da4dfcc7/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/venue/snapshot=2026-10-14/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/venue/snapshot=undated-3121da4dfcc7/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/work/snapshot=2026-10-14/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/work/snapshot=undated-3121da4dfcc7/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/work_node/snapshot=2026-10-14/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/openalex/work_node/snapshot=undated-3121da4dfcc7/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/orcid/rejects_j02/snapshot=undated-d2816257d678/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/orcid/researcher_node/snapshot=undated-d2816257d678/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop] JOB j03 ExactIdentifierJob: SUCCEEDED (map tasks 11, reduce tasks 2)
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_INPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_OUTPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   TaskCounter.MAP_INPUT_RECORDS = 91
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_BYTES = 67201
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_MATERIALIZED_BYTES = 17953
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_RECORDS = 295
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_GROUPS = 271
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_RECORDS = 295
+[info] [scholarchain-hadoop]   HadoopCounter.ACCEPTED = 20
+[info] [scholarchain-hadoop]   HadoopCounter.BLOCKS_EMITTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CAPPED_WORKS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CONFLICT = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE_AUTHOR_IN_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_MATCH_CANDIDATES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_PAIRS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_OUTCOMES = 20
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_SINGLETONS = 251
+[info] [scholarchain-hadoop]   HadoopCounter.INPUT_RECORDS = 91
+[info] [scholarchain-hadoop]   HadoopCounter.LARGE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.MISSING_KEY = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OUT_OF_SUBSET = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REJECTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REKEYED_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SCHEMA_FAILURE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SIDE_OUTPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.UNKNOWN_ENTITY = 0
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/exact_identifier_outcome/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/rejects_j03/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop] JOB j05 BlockingKeyJob: SUCCEEDED (map tasks 8, reduce tasks 2)
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_INPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_OUTPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   TaskCounter.MAP_INPUT_RECORDS = 69
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_BYTES = 223110
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_MATERIALIZED_BYTES = 41852
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_RECORDS = 262
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_GROUPS = 191
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_RECORDS = 262
+[info] [scholarchain-hadoop]   HadoopCounter.ACCEPTED = 51
+[info] [scholarchain-hadoop]   HadoopCounter.BLOCKS_EMITTED = 51
+[info] [scholarchain-hadoop]   HadoopCounter.CAPPED_WORKS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CONFLICT = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE_AUTHOR_IN_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_MATCH_CANDIDATES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_PAIRS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_OUTCOMES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_SINGLETONS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.INPUT_RECORDS = 69
+[info] [scholarchain-hadoop]   HadoopCounter.LARGE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.MISSING_KEY = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OUT_OF_SUBSET = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REJECTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REKEYED_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SCHEMA_FAILURE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SIDE_OUTPUT_RECORDS = 2
+[info] [scholarchain-hadoop]   HadoopCounter.UNKNOWN_ENTITY = 0
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/blocking_block/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/blocking_rekeyed/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/rejects_j05/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/stats_j05/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop] JOB j05b FallbackBlockingJob: SUCCEEDED (map tasks 0, reduce tasks 2)
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_INPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_OUTPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_GROUPS = 0
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.ACCEPTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.BLOCKS_EMITTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CAPPED_WORKS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CONFLICT = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE_AUTHOR_IN_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_MATCH_CANDIDATES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_PAIRS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_OUTCOMES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_SINGLETONS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.INPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.LARGE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.MISSING_KEY = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OUT_OF_SUBSET = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REJECTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REKEYED_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SCHEMA_FAILURE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SIDE_OUTPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.UNKNOWN_ENTITY = 0
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/blocking_block_fallback/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/oversize_block/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/rejects_j05b/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/stats_j05b/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop] JOB j06 CandidateJoinJob: SUCCEEDED (map tasks 2, reduce tasks 2)
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_INPUT_RECORDS = 91
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_OUTPUT_RECORDS = 91
+[info] [scholarchain-hadoop]   TaskCounter.MAP_INPUT_RECORDS = 51
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_BYTES = 115239
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_MATERIALIZED_BYTES = 16112
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_RECORDS = 91
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_GROUPS = 91
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_RECORDS = 91
+[info] [scholarchain-hadoop]   HadoopCounter.ACCEPTED = 91
+[info] [scholarchain-hadoop]   HadoopCounter.BLOCKS_EMITTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CAPPED_WORKS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CONFLICT = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE_AUTHOR_IN_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_MATCH_CANDIDATES = 91
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_PAIRS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_OUTCOMES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_SINGLETONS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.INPUT_RECORDS = 51
+[info] [scholarchain-hadoop]   HadoopCounter.LARGE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.MISSING_KEY = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OUT_OF_SUBSET = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REJECTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REKEYED_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SCHEMA_FAILURE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SIDE_OUTPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.UNKNOWN_ENTITY = 0
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/match_candidate/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/rejects_j06/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop] JOB j07 PublicationTeamJob: SUCCEEDED (map tasks 2, reduce tasks 2)
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_INPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_OUTPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   TaskCounter.MAP_INPUT_RECORDS = 24
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_BYTES = 78184
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_MATERIALIZED_BYTES = 11952
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_RECORDS = 24
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_GROUPS = 24
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_RECORDS = 24
+[info] [scholarchain-hadoop]   HadoopCounter.ACCEPTED = 24
+[info] [scholarchain-hadoop]   HadoopCounter.BLOCKS_EMITTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CAPPED_WORKS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CONFLICT = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE_AUTHOR_IN_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_MATCH_CANDIDATES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_PAIRS = 167
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_OUTCOMES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_SINGLETONS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.INPUT_RECORDS = 24
+[info] [scholarchain-hadoop]   HadoopCounter.LARGE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.MISSING_KEY = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OUT_OF_SUBSET = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REJECTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REKEYED_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SCHEMA_FAILURE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SIDE_OUTPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.UNKNOWN_ENTITY = 0
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/author_paper/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/coauthor_pair/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/large_team/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/oversize_team/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/publication_team/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/dblp/rejects_j07/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/stats_j07/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop] JOB j09 GraphCandidateExportJob: SUCCEEDED (map tasks 59, reduce tasks 2)
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_INPUT_RECORDS = 1138
+[info] [scholarchain-hadoop]   TaskCounter.COMBINE_OUTPUT_RECORDS = 1138
+[info] [scholarchain-hadoop]   TaskCounter.MAP_INPUT_RECORDS = 1138
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_BYTES = 1269245
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_MATERIALIZED_BYTES = 196224
+[info] [scholarchain-hadoop]   TaskCounter.MAP_OUTPUT_RECORDS = 1138
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_GROUPS = 1138
+[info] [scholarchain-hadoop]   TaskCounter.REDUCE_INPUT_RECORDS = 1138
+[info] [scholarchain-hadoop]   HadoopCounter.ACCEPTED = 1138
+[info] [scholarchain-hadoop]   HadoopCounter.BLOCKS_EMITTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CAPPED_WORKS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.CONFLICT = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.DUPLICATE_AUTHOR_IN_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_MATCH_CANDIDATES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EMITTED_PAIRS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_OUTCOMES = 0
+[info] [scholarchain-hadoop]   HadoopCounter.EXACT_ID_SINGLETONS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.INPUT_RECORDS = 1138
+[info] [scholarchain-hadoop]   HadoopCounter.LARGE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.MISSING_KEY = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OUT_OF_SUBSET = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_AUTHOR_TEAM = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK = 0
+[info] [scholarchain-hadoop]   HadoopCounter.OVERSIZE_BLOCK_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REJECTED = 0
+[info] [scholarchain-hadoop]   HadoopCounter.REKEYED_MEMBERS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SCHEMA_FAILURE = 0
+[info] [scholarchain-hadoop]   HadoopCounter.SIDE_OUTPUT_RECORDS = 0
+[info] [scholarchain-hadoop]   HadoopCounter.UNKNOWN_ENTITY = 0
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/rejects_j09/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_author_mention/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_author_paper/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_coauthor_pair/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_exact_identifier_outcome/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_graph_edge/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_graph_node/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_institution/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_large_team/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_match_candidate/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_oversize_team/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_publication_team/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_topic/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_venue/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop]   output file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop/scholarchain/spark_work/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4
+[info] [scholarchain-hadoop] SUMMARY {
+[info]   "runId": "run:dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+[info]   "seedSnapshot": "2026-11-01",
+[info]   "outputRoot": "file:/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop",
+[info]   "dblpSubsetWorks": 24,
+[info]   "dblpWorksKeptAfterCap": 24,
+[info]   "capBucketLimit": 65536,
+[info]   "maxTeamSize": {
+[info]     "value": 8,
+[info]     "workId": "work:dblp:372df4658fb939c4c66446d58792681a390753a7e1ea99189790a89121f9fd2d"
+[info]   },
+[info]   "largestPairExpansion": {
+[info]     "pairs": 28,
+[info]     "workId": "work:dblp:372df4658fb939c4c66446d58792681a390753a7e1ea99189790a89121f9fd2d"
+[info]   },
+[info]   "largestBlockingGroup": {
+[info]     "size": 3,
+[info]     "blockKey": "r|brown|t",
+[info]     "job": "j05"
+[info]   },
+[info]   "jobs": [
+[info]     {
+[info]       "slug": "j01",
+[info]       "name": "DblpExtractJob",
+[info]       "status": "SUCCEEDED"
+[info]     },
+[info]     {
+[info]       "slug": "j01c",
+[info]       "name": "WorkCapJob",
+[info]       "status": "SUCCEEDED"
+[info]     },
+[info]     {
+[info]       "slug": "j02",
+[info]       "name": "SourceNormalizeJob",
+[info]       "status": "SUCCEEDED"
+[info]     },
+[info]     {
+[info]       "slug": "j03",
+[info]       "name": "ExactIdentifierJob",
+[info]       "status": "SUCCEEDED"
+[info]     },
+[info]     {
+[info]       "slug": "j05",
+[info]       "name": "BlockingKeyJob",
+[info]       "status": "SUCCEEDED"
+[info]     },
+[info]     {
+[info]       "slug": "j05b",
+[info]       "name": "FallbackBlockingJob",
+[info]       "status": "SUCCEEDED"
+[info]     },
+[info]     {
+[info]       "slug": "j06",
+[info]       "name": "CandidateJoinJob",
+[info]       "status": "SUCCEEDED"
+[info]     },
+[info]     {
+[info]       "slug": "j07",
+[info]       "name": "PublicationTeamJob",
+[info]       "status": "SUCCEEDED"
+[info]     },
+[info]     {
+[info]       "slug": "j09",
+[info]       "name": "GraphCandidateExportJob",
+[info]       "status": "SUCCEEDED"
+[info]     }
+[info]   ]
+[info] }
+[success] Total time: 52 s, completed Nov 24, 2026, 8:29:42 AM
+==> [run-bounded-pipeline.sh] STEP: local Spark stage with modules/spark/config/local-run.properties
+[info] welcome to sbt 1.13.1 (Ubuntu Java 17.0.21.1)
+[info] loading settings for project scholarchain-build from plugins.sbt...
+[info] loading project definition from /home/olmos/scholarchain/project
+[info] loading settings for project root from build.sbt...
+[info] set current project to scholarchain (in build file:/home/olmos/scholarchain/)
+[info] running (fork) scholarchain.spark.run.GraphPipeline --local --code-version a75b607
+[error] Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+[error] 26/11/24 08:29:52 WARN Utils: Your hostname, DESKTOP-AHI4NU7, resolves to a loopback address: 127.0.1.1; using 10.255.255.254 instead (on interface lo)
+[error] 26/11/24 08:29:52 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+[error] 26/11/24 08:29:52 INFO SparkContext: Running Spark version 4.1.1
+[error] 26/11/24 08:29:53 INFO SparkContext: OS info Linux, 6.6.87.2-microsoft-standard-WSL2, amd64
+[error] 26/11/24 08:29:53 INFO SparkContext: Java version 17.0.21.1+2-1-24.04.1-Ubuntu
+[error] 26/11/24 08:29:53 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+[error] 26/11/24 08:29:53 INFO ResourceUtils: ==============================================================
+[error] 26/11/24 08:29:53 INFO ResourceUtils: No custom resources configured for spark.driver.
+[error] 26/11/24 08:29:53 INFO ResourceUtils: ==============================================================
+[error] 26/11/24 08:29:53 INFO SparkContext: Submitted application: scholarchain-spark-graph-analytics
+[error] 26/11/24 08:29:53 INFO SecurityManager: Changing view acls to: olmos
+[error] 26/11/24 08:29:53 INFO SecurityManager: Changing modify acls to: olmos
+[error] 26/11/24 08:29:53 INFO SecurityManager: Changing view acls groups to: olmos
+[error] 26/11/24 08:29:53 INFO SecurityManager: Changing modify acls groups to: olmos
+[error] 26/11/24 08:29:53 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: olmos groups with view permissions: EMPTY; users with modify permissions: olmos; groups with modify permissions: EMPTY; RPC SSL disabled
+[error] 26/11/24 08:29:53 INFO Utils: Successfully started service 'sparkDriver' on port 40175.
+[error] 26/11/24 08:29:53 INFO SparkEnv: Registering MapOutputTracker
+[error] 26/11/24 08:29:53 INFO SparkEnv: Registering BlockManagerMaster
+[error] 26/11/24 08:29:53 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+[error] 26/11/24 08:29:53 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+[error] 26/11/24 08:29:53 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+[error] 26/11/24 08:29:53 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-236465c3-dede-48c7-8081-ed2b1e1ccc23
+[error] 26/11/24 08:29:53 INFO SparkEnv: Registering OutputCommitCoordinator
+[error] 26/11/24 08:29:53 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 1, script: , vendor: , memory -> name: memory, amount: 1024, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+[error] 26/11/24 08:29:53 INFO ResourceProfile: Limiting resource is cpu
+[error] 26/11/24 08:29:53 INFO ResourceProfileManager: Added ResourceProfile id: 0
+[error] 26/11/24 08:29:53 INFO SecurityManager: Changing view acls to: olmos
+[error] 26/11/24 08:29:53 INFO SecurityManager: Changing modify acls to: olmos
+[error] 26/11/24 08:29:53 INFO SecurityManager: Changing view acls groups to: olmos
+[error] 26/11/24 08:29:53 INFO SecurityManager: Changing modify acls groups to: olmos
+[error] 26/11/24 08:29:53 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: olmos groups with view permissions: EMPTY; users with modify permissions: olmos; groups with modify permissions: EMPTY; RPC SSL disabled
+[error] 26/11/24 08:29:54 INFO Executor: Starting executor ID driver on host 10.255.255.254
+[error] 26/11/24 08:29:54 INFO Executor: OS info Linux, 6.6.87.2-microsoft-standard-WSL2, amd64
+[error] 26/11/24 08:29:54 INFO Executor: Java version 17.0.21.1+2-1-24.04.1-Ubuntu
+[error] 26/11/24 08:29:54 INFO Executor: Starting executor with user classpath (userClassPathFirst = false): ''
+[error] 26/11/24 08:29:54 INFO Executor: Created or updated repl class loader org.apache.spark.util.MutableURLClassLoader@12567179 for default.
+[error] 26/11/24 08:29:54 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 42975.
+[error] 26/11/24 08:29:54 INFO NettyBlockTransferService: Server created on 10.255.255.254:42975
+[error] 26/11/24 08:29:54 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+[error] 26/11/24 08:29:54 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 10.255.255.254, 42975, None)
+[error] 26/11/24 08:29:54 INFO BlockManagerMasterEndpoint: Registering block manager 10.255.255.254:42975 with 987.6 MiB RAM, BlockManagerId(driver, 10.255.255.254, 42975, None)
+[error] 26/11/24 08:29:54 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 10.255.255.254, 42975, None)
+[error] 26/11/24 08:29:54 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 10.255.255.254, 42975, None)
+[error] Exception in thread "main" java.lang.IllegalArgumentException: no Hadoop export table at target/phase04/run-b4/scholarchain/spark_work
+[error] 	at scholarchain.spark.io.InputCatalog$.selectRun(InputCatalog.scala:57)
+[error] 	at scholarchain.spark.run.GraphPipeline$.run(GraphPipeline.scala:138)
+[error] 	at scholarchain.spark.run.GraphPipeline$.main(GraphPipeline.scala:95)
+[error] 	at scholarchain.spark.run.GraphPipeline.main(GraphPipeline.scala)
+[error] nonzero exit code returned from runner: 1
+[error] (sparkAnalytics / Compile / runMain) nonzero exit code returned from runner: 1
+[error] Total time: 7 s, completed Nov 24, 2026, 8:29:55 AM
