@@ -14,6 +14,9 @@ enum LedgerState(val rank: Int):
   case SUCCEEDED extends LedgerState(1)
   case FAILED extends LedgerState(1)
 
+  /** The stage ran to the end but recorded rejects (for example CONTENT_CONFLICT). Never success. */
+  case COMPLETED_WITH_REJECTS extends LedgerState(1)
+
 object LedgerState:
   given ReadWriter[LedgerState] = WireEnum.readWriter("LedgerState", values.toIndexedSeq)
 
