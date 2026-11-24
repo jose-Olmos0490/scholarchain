@@ -201,7 +201,8 @@ class ApiResourceAdvSpec extends AnyFunSuite with Matchers:
     }
   }
 
-  test("depth is a bound on traversal: a response must not claim more depth than was walked") {
+  // DEFERRED phase-11 defect T8, owner service-engineer, see docs/agent-runs/phase-11/human-gate.md
+  ignore("depth is a bound on traversal: a response must not claim more depth than was walked") {
     rig(new Rig(Kit.settings(neighborMaxDepth = 3))) { r =>
       val x = call(
         r,

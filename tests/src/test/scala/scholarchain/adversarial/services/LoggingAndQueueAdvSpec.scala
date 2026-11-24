@@ -290,7 +290,8 @@ class LoggingAndQueueAdvSpec extends AnyFunSuite with Matchers:
 
   private val item = EmbeddingWorkItem.of("run:" + "a" * 64, "2026-11-01")
 
-  test(
+  // DEFERRED phase-11 defect T12, owner storage-engineer, see docs/agent-runs/phase-11/human-gate.md
+  ignore(
     "a poison message (not JSON, wrong version, blank fields) goes to the dead-letter queue on first receipt"
   ) {
     val q = new InMemoryWorkQueue

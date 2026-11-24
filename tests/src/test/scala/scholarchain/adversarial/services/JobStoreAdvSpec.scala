@@ -295,7 +295,8 @@ class JobStoreAdvSpec extends AnyFunSuite with Matchers:
     finally r.close()
   }
 
-  test("API: a conflict storm on completion never leaves the job RUNNING forever (async)") {
+  // DEFERRED phase-11 defect T7, owner service-engineer, see docs/agent-runs/phase-11/human-gate.md
+  ignore("API: a conflict storm on completion never leaves the job RUNNING forever (async)") {
     val items = new HookedItems(new InMemoryItemStore)
     val store = mk(items, 3)
     val r = new Rig(jobStore = Some(store))

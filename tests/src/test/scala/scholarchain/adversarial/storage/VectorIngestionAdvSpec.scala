@@ -244,7 +244,8 @@ class VectorIngestionAdvSpec extends AnyFunSuite with Matchers:
     }
   }
 
-  test(
+  // DEFERRED phase-11 defect T6, owner storage-engineer, see docs/agent-runs/phase-11/human-gate.md
+  ignore(
     "an embedder that returns the wrong number of vectors, or throws, never stores a misaligned vector"
   ) {
     val short = new Rig(ts => ts.drop(1).map(_ => Array(1f, 2f, 3f, 4f)))

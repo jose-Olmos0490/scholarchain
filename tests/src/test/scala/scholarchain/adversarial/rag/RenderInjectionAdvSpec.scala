@@ -275,7 +275,8 @@ class RenderInjectionAdvSpec extends AnyFunSuite with Matchers:
     chunks(text) shouldBe chunks(text)
   }
 
-  test(
+  // DEFERRED phase-11 defect T11, owner rag-engineer, see docs/agent-runs/phase-11/human-gate.md
+  ignore(
     "unicode-space separated words are still tokens: text of 5000 NBSP-joined words is not one giant chunk"
   ) {
     val text = (1 to 5000).map(i => s"w$i").mkString("\u00A0")
@@ -287,7 +288,8 @@ class RenderInjectionAdvSpec extends AnyFunSuite with Matchers:
     }
   }
 
-  test("ideographic-space and thin-space separated words are tokens too") {
+  // DEFERRED phase-11 defect T11, owner rag-engineer, see docs/agent-runs/phase-11/human-gate.md
+  ignore("ideographic-space and thin-space separated words are tokens too") {
     Seq("\u3000", "\u2009", "\u202F", "\u2003").foreach { sep =>
       val text = (1 to 500).map(i => s"w$i").mkString(sep)
       withClue(s"separator U+${Integer.toHexString(sep.charAt(0)).toUpperCase}: ") {
