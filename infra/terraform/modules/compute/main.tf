@@ -11,6 +11,30 @@
 locals {
   alb_services = { for k, v in var.services : k => v if length(v.alb_paths) > 0 }
   has_listener = var.certificate_arn != null || var.allow_plaintext_http
+
+  # An ALB path-pattern condition holds at most 5 values, so each service's paths
+  # are split into chunks of 5 and each chunk gets its own rule. Priority is the
+  # service alb_priority plus the chunk index (services are spaced 10 apart, so
+  # up to 10 chunks / 50 paths per service cannot collide).
+  alb_rule_chunks = merge([
+    for k, v in local.alb_services : {
+      for i in range(ceil(length(v.alb_paths) / 5)) : "${k}-${i}" => {
+        service  = k
+        paths    = slice(v.alb_paths, i * 5, min((i + 1) * 5, length(v.alb_paths)))
+        priority = v.alb_priority + i
+      }
+    }
+  ]...)
+}
+
+moved {
+  from = aws_lb_listener_rule.this["graph-evidence-api"]
+  to   = aws_lb_listener_rule.this["graph-evidence-api-0"]
+}
+
+moved {
+  from = aws_lb_listener_rule.this["query-api"]
+  to   = aws_lb_listener_rule.this["query-api-0"]
 }
 
 resource "aws_ecs_cluster" "this" {
@@ -218,19 +242,19 @@ resource "aws_lb_listener" "http_forward" {
 }
 
 resource "aws_lb_listener_rule" "this" {
-  for_each = local.has_listener ? local.alb_services : {}
+  for_each = local.has_listener ? local.alb_rule_chunks : {}
 
   listener_arn = var.certificate_arn != null ? aws_lb_listener.https[0].arn : aws_lb_listener.http_forward[0].arn
-  priority     = each.value.alb_priority
+  priority     = each.value.priority
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.this[each.key].arn
+    target_group_arn = aws_lb_target_group.this[each.value.service].arn
   }
 
   condition {
     path_pattern {
-      values = each.value.alb_paths
+      values = each.value.paths
     }
   }
 }
