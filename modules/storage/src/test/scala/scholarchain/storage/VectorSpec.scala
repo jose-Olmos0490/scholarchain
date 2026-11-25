@@ -236,3 +236,43 @@ class S3VectorsIndexAdapterSpec extends StorageSuite:
         .build()
     ok(index(stub).describe(classic.name)) shouldBe Some(classic)
   }
+
+  test("describe of an index listing its keys alphabetically still matches configuration") {
+    val sorted = classic.nonFilterableKeys.sorted
+    sorted should not be classic.nonFilterableKeys
+    val stub = new Stub
+    stub.onIndex = _ =>
+      GetIndexResponse
+        .builder()
+        .index(
+          software.amazon.awssdk.services.s3vectors.model.Index
+            .builder()
+            .indexName(classic.name)
+            .dimension(classic.dimension)
+            .distanceMetric("cosine")
+            .indexMode("CLASSIC")
+            .metadataConfiguration(
+              MetadataConfiguration.builder().nonFilterableMetadataKeys(sorted.asJava).build()
+            )
+            .build()
+        )
+        .build()
+    val deployed = ok(index(stub).describe(classic.name)).get
+    deployed.nonFilterableKeys shouldBe sorted
+    classic.matches(deployed) shouldBe true
+  }
+
+  test("matches ignores key order but not name, dimension, metric, index type or key set") {
+    val keys = classic.nonFilterableKeys
+    classic.matches(classic.copy(nonFilterableKeys = keys.reverse)) shouldBe true
+    Vector(
+      classic.copy(name = "other"),
+      classic.copy(dimension = classic.dimension + 1),
+      classic.copy(distanceMetric = DistanceMetric.Euclidean),
+      classic.copy(indexType = VectorIndexType.Enhanced),
+      classic.copy(nonFilterableKeys = keys.tail),
+      classic.copy(nonFilterableKeys = keys :+ "extra"),
+      classic.copy(nonFilterableKeys = keys.tail :+ "extra"),
+      classic.copy(nonFilterableKeys = Vector.empty)
+    ).foreach(d => withClue(s"$d: ")(classic.matches(d) shouldBe false))
+  }

@@ -69,7 +69,10 @@ abstract class VectorIndexContract extends StorageSuite with PortGate:
   private def scopeFilter(scope: String) = VectorFilter.Eq("communityId", ujson.Str(scope))
 
   contract("describe returns the deployed definition; an unknown index is None") {
-    ok(index.describe(definition.name)) shouldBe Some(definition)
+    val deployed = ok(index.describe(definition.name))
+    withClue(s"deployed $deployed, configured $definition: ") {
+      deployed.exists(definition.matches) shouldBe true
+    }
     ok(index.describe("no-such-index-v9")) shouldBe None
   }
 

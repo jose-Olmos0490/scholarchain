@@ -45,7 +45,17 @@ final case class IndexDefinition(
     distanceMetric: DistanceMetric,
     indexType: VectorIndexType,
     nonFilterableKeys: Vector[String]
-)
+):
+  /** Whether `deployed` is the same index as this one. The non-filterable keys are compared as a
+    * set: GetIndex does not return them in the order they were configured. Use this, never `==`, to
+    * check a deployed index against configuration.
+    */
+  def matches(deployed: IndexDefinition): Boolean =
+    name == deployed.name &&
+      dimension == deployed.dimension &&
+      distanceMetric == deployed.distanceMetric &&
+      indexType == deployed.indexType &&
+      nonFilterableKeys.toSet == deployed.nonFilterableKeys.toSet
 
 object IndexDefinition:
   /** Index keys that are never filterable: pointers and versions, not search dimensions. */

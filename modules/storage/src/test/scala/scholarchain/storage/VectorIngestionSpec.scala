@@ -1,7 +1,7 @@
 package scholarchain.storage
 
 import scala.collection.mutable
-import scholarchain.core.config.RetryPolicyConfig
+import scholarchain.core.config.{DistanceMetric, RetryPolicyConfig, VectorIndexType}
 import scholarchain.core.model.SourceType
 import scholarchain.storage.common.*
 import scholarchain.storage.dynamo.*
@@ -538,13 +538,12 @@ class VectorIngestionSpec extends StorageSuite:
     codes(Array(0f, 0f, 0f, 0f)) shouldBe Vector(Some("ZERO_VECTOR"))
   }
 
-  test(
-    "an index that differs from configuration, or is missing, rejects its items and writes nothing"
-  ) {
+  /** One document through the ingestion path against an index deployed as `deploy(classic)`. */
+  private def ingestAgainst(deploy: IndexDefinition => Option[IndexDefinition]) =
     val rig = new IngestRig
-    val drifted = new InMemoryVectorIndex(Vector(rig.classic.copy(dimension = 8)))
+    val deployed = new InMemoryVectorIndex(deploy(rig.classic).toVector)
     val ing = new VectorIngestor(
-      drifted,
+      deployed,
       rig.defs,
       new DocumentStore(rig.objects, rig.layout),
       new ManifestStore(rig.objects, rig.layout),
@@ -561,8 +560,40 @@ class VectorIngestionSpec extends StorageSuite:
     )
     val staged = ok(ing.stage(rig.run, Iterator(rig.doc(1, "x"))))
     val report = ok(ing.ingest(rig.run, staged.manifest))
-    report.results.map(_.reasonCode) shouldBe Vector(Some("INDEX_UNAVAILABLE"))
-    drifted.stored(rig.classic.name) shouldBe empty
+    (report, deployed.stored(rig.classic.name))
+
+  test("a deployed index that lists the non-filterable keys in another order is accepted") {
+    val (report, written) = ingestAgainst { c =>
+      val sorted = c.nonFilterableKeys.sorted
+      sorted should not be c.nonFilterableKeys
+      Some(c.copy(nonFilterableKeys = sorted))
+    }
+    report.results.map(r => (r.status, r.reasonCode)) shouldBe Vector((ItemStatus.Created, None))
+    written should have size 1
+  }
+
+  private val drifts: Vector[(String, IndexDefinition => Option[IndexDefinition])] = Vector(
+    "is missing" -> (_ => None),
+    "has another dimension" -> (c => Some(c.copy(dimension = 8))),
+    "has another distance metric" -> (c => Some(c.copy(distanceMetric = DistanceMetric.Euclidean))),
+    "has another index type" -> (c => Some(c.copy(indexType = VectorIndexType.Enhanced))),
+    "lacks a non-filterable key" -> (c =>
+      Some(c.copy(nonFilterableKeys = c.nonFilterableKeys.tail))
+    ),
+    "has an extra non-filterable key" -> (c =>
+      Some(c.copy(nonFilterableKeys = c.nonFilterableKeys :+ "extra"))
+    ),
+    "has a substituted non-filterable key" -> (c =>
+      Some(c.copy(nonFilterableKeys = c.nonFilterableKeys.tail :+ "extra"))
+    )
+  )
+
+  drifts.foreach { (what, deploy) =>
+    test(s"an index that $what rejects its items and writes nothing") {
+      val (report, written) = ingestAgainst(deploy)
+      report.results.map(_.reasonCode) shouldBe Vector(Some("INDEX_UNAVAILABLE"))
+      written shouldBe empty
+    }
   }
 
   test("a document for an unconfigured index is rejected at staging") {

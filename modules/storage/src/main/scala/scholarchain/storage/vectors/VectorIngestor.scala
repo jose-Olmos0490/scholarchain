@@ -328,7 +328,7 @@ final class VectorIngestor(
         finish()
       case Some(defn) =>
         index.describe(name) match
-          case Right(Some(actual)) if actual == defn => ()
+          case Right(Some(actual)) if defn.matches(actual) => ()
           case other =>
             val why = other match
               case Right(Some(actual)) => s"deployed $actual differs from configured $defn"
