@@ -1,0 +1,124 @@
+# Experiment B. Format: scripts/run-experiment.sh (name, runner, target, limits, args, metrics).
+# Other keys are ignored by that script and read by load-tests/ and experiments/bin/.
+# A human must approve this file (approval block) and commit it before it runs.
+# To approve, the human (only) sets approval.status: APPROVED, approval.approved_by: their name,
+# approval.approved_on: 'YYYY-MM-DD', then commits. `blocked` must be the boolean false.
+# NOT ENFORCED for runner: pipeline: neither run-experiment.sh nor the pipeline script reads
+# approval or `blocked` (owner of that check: infra-engineer).
+id: B
+name: B-emr-burst
+priority: 5
+purpose: 'Hadoop and Spark burst with a larger input or higher partition count: requested, provisioned and released
+  EMR capacity over time.'
+approval:
+  status: PENDING_HUMAN_APPROVAL
+  approved_by: null
+  approved_on: null
+blocked: true
+blocked_reason: the pipeline runner cannot select a larger input or partition count
+region: us-east-2
+environment: dev
+commit_sha: FILLED_AT_RUN_TIME (run record field commitSha)
+dataset_snapshot:
+  dblp: '2026-11-01'
+  openalex: '2026-10-14'
+  orcid: '2026-10-13'
+  crossref: UNDETERMINED (dataset-manifest.yaml holds ${RETRIEVAL_DATE})
+  raw_bucket_contents: 'UNDETERMINED: no record shows what is staged under the cloud raw bucket'
+  source: datasets/dataset-manifest.yaml
+runner: pipeline
+args: []
+limits:
+  max_duration_seconds: 7200
+  emr_max_nodes: 4
+resource_bounds:
+  emr:
+    primary_nodes: 1
+    initial_core_nodes: 2
+    managed_scaling_unit_type: Instances
+    managed_scaling_min_units: 2
+    managed_scaling_max_units: 4
+    max_core_units: 4
+    instance_type: m5.xlarge
+    idle_timeout_seconds: 3600
+    step_timeout_seconds: 7200
+    enable_emr_default: false
+    source: infra/terraform/environments/dev/variables.tf:92,170-188; infra/terraform/modules/emr/variables.tf:55-91;
+      infra/terraform/modules/emr/main.tf:126-129; infra/terraform/modules/pipeline/variables.tf:25
+  emr_max_nodes_note: 4 managed-scaling instance units (core and task) plus 1 primary node
+cost_estimate_usd:
+  incremental: 2.4
+  worst_case: 3.6
+cost_cap_usd: 6.0
+stop_conditions:
+- 7200 s hard timeout by run-experiment.sh (inner wait 6900 s stops the Step Functions execution)
+- 7200 s per-step timeout in the state machine; no retry
+preconditions:
+- 'BLOCKED: the pipeline runner cannot select a larger input or partition count'
+- everything listed for experiment A
+- a commit different from A's (the output prefix is keyed by commit SHA)
+collect:
+  pre_seconds: 300
+  post_seconds: 3900
+  deployed_services: []
+metrics:
+- id: emr_nodes_total_requested
+  namespace: AWS/ElasticMapReduce
+  metric: TotalNodesRequested
+  stat: Maximum
+  dimensionsFrom:
+    JobFlowId: SC_EMR_CLUSTER_ID
+- id: emr_nodes_total_running
+  namespace: AWS/ElasticMapReduce
+  metric: TotalNodesRunning
+  stat: Maximum
+  dimensionsFrom:
+    JobFlowId: SC_EMR_CLUSTER_ID
+- id: emr_nodes_core_requested
+  namespace: AWS/ElasticMapReduce
+  metric: CoreNodesRequested
+  stat: Maximum
+  dimensionsFrom:
+    JobFlowId: SC_EMR_CLUSTER_ID
+- id: emr_nodes_core_running
+  namespace: AWS/ElasticMapReduce
+  metric: CoreNodesRunning
+  stat: Maximum
+  dimensionsFrom:
+    JobFlowId: SC_EMR_CLUSTER_ID
+- id: emr_nodes_task_requested
+  namespace: AWS/ElasticMapReduce
+  metric: TaskNodesRequested
+  stat: Maximum
+  dimensionsFrom:
+    JobFlowId: SC_EMR_CLUSTER_ID
+- id: emr_nodes_task_running
+  namespace: AWS/ElasticMapReduce
+  metric: TaskNodesRunning
+  stat: Maximum
+  dimensionsFrom:
+    JobFlowId: SC_EMR_CLUSTER_ID
+- id: emr_load_pending_ratio
+  namespace: AWS/ElasticMapReduce
+  metric: ContainerPendingRatio
+  stat: Average
+  dimensionsFrom:
+    JobFlowId: SC_EMR_CLUSTER_ID
+- id: emr_load_yarn_mem_available_pct
+  namespace: AWS/ElasticMapReduce
+  metric: YARNMemoryAvailablePercentage
+  stat: Average
+  dimensionsFrom:
+    JobFlowId: SC_EMR_CLUSTER_ID
+- id: emr_load_apps_running
+  namespace: AWS/ElasticMapReduce
+  metric: AppsRunning
+  stat: Average
+  dimensionsFrom:
+    JobFlowId: SC_EMR_CLUSTER_ID
+- id: emr_load_apps_pending
+  namespace: AWS/ElasticMapReduce
+  metric: AppsPending
+  stat: Average
+  dimensionsFrom:
+    JobFlowId: SC_EMR_CLUSTER_ID

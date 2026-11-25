@@ -1,0 +1,284 @@
+# Experiment E. Format: scripts/run-experiment.sh (name, runner, target, limits, args, metrics).
+# Other keys are ignored by that script and read by load-tests/ and experiments/bin/.
+# A human must approve this file (approval block) and commit it before it runs.
+# To approve, the human (only) sets approval.status: APPROVED, approval.approved_by: their name,
+# approval.approved_on: 'YYYY-MM-DD', then commits. `blocked` must be the boolean false.
+# The load tools refuse to run otherwise, through run-experiment.sh or invoked directly.
+id: E
+name: E-retrieval-modes
+priority: 6
+purpose: Graph-only, vector-only and fused retrieval on the same questions, emulated through the operations field.
+approval:
+  status: PENDING_HUMAN_APPROVAL
+  approved_by: null
+  approved_on: null
+blocked: false
+region: us-east-2
+environment: dev
+commit_sha: FILLED_AT_RUN_TIME (run record field commitSha)
+dataset_snapshot:
+  dataset: dblp
+  date: '2026-11-01'
+  label: dblp Monthly Snapshot XML Release of November 2026
+  serving_run_id: run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60
+  scope: bounded sample-derived run loaded in phase 14/14b (89 researcher rows); current store contents are unverified
+  source: phase-14 and phase-14b records (phase-14b/load-live.log), datasets/dataset-manifest.yaml
+runner: load-test
+target: query_load.py
+args:
+- --manifest
+- experiments/manifests/E-retrieval-modes.yaml
+limits:
+  max_duration_seconds: 1200
+  ecs_max_tasks: 3
+resource_bounds:
+  services:
+    query-api:
+      min_tasks: 1
+      max_tasks: 3
+      cpu_units: 1024
+      memory_mib: 2048
+      source: infra/terraform/environments/dev/variables.tf:210-216
+    graph-evidence-api:
+      min_tasks: 1
+      max_tasks: 2
+      cpu_units: 512
+      memory_mib: 1024
+      source: infra/terraform/environments/dev/variables.tf:217-223
+    embedding-worker:
+      min_tasks: 0
+      max_tasks: 2
+      cpu_units: 512
+      memory_mib: 1024
+      source: infra/terraform/environments/dev/variables.tf:224-230
+    caveat: repository defaults; the git-ignored terraform.tfvars may override them and was not read
+  neptune:
+    min_ncu: 1
+    max_ncu: 4
+    source: infra/terraform/environments/dev/variables.tf:145-153
+  retrieval_limits:
+    graph_limit: 25
+    vector_limit: 8
+    source: infra/terraform/environments/dev/variables.tf (variable runtime_settings)
+retrieval_mode_method: No server-side mode switch exists. graph_only omits SEMANTIC_EXPLANATION (vectorLimit 0);
+  vector_only requests only SEMANTIC_EXPLANATION; fused requests both. Researcher resolution and identity evidence
+  still run in vector_only.
+cost_estimate_usd:
+  incremental: 3.0
+  note: synthesis-model tokens; model and price unverified
+cost_cap_usd: 5.0
+stop_conditions:
+- hard request cap 80
+- no preflight (fused) request returns a non-abstained 200
+- 3 consecutive 401/403
+- over 50% 5xx or transport errors, or 429, in the last 20 requests
+- 1000 s of load, 1200 s hard timeout
+- 'estimated spend would pass cost_cap_usd (COST_CAP_REACHED): requests sent x load.estimated_usd_per_request,
+  an estimate and not a bill'
+preconditions:
+- 'human decision (phase 15 review, finding 21): plain HTTP to the dev load balancer is accepted for this experiment
+  only; set SC_ALLOW_PLAINTEXT_HTTP=1'
+- 'SCHOLARCHAIN_API_TOKEN holds a dedicated short-lived API token issued for these experiment runs only'
+- 'the human revokes that token after the runs'
+load:
+  kind: retrieval_modes
+  question_set: load-tests/questions/query-v1.json
+  repetitions: 5
+  concurrency: 1
+  max_total_requests: 80
+  max_requests_per_minute: 60
+  # cost_estimate_usd.incremental 3.0 / 80 requests; model and price unverified
+  estimated_usd_per_request: 0.0375
+  request_timeout_seconds: 45
+  level_max_seconds: 900
+  max_load_seconds: 1000
+  request_limits:
+    graphLimit: 5
+    vectorLimit: 4
+  stop:
+    max_consecutive_auth_failures: 3
+    error_rate_min_samples: 20
+    max_error_rate: 0.5
+    max_rate_limited_rate: 0.5
+    require_answered_preflight: true
+collect:
+  pre_seconds: 300
+  post_seconds: 300
+  deployed_services:
+  - query-api
+  - graph-evidence-api
+  - embedding-worker
+  logs:
+  - kind: workflow_stages
+    logGroupFrom: SC_QUERY_API_LOG_GROUP
+metrics:
+- id: tasks_desired_query_api
+  namespace: ECS/ContainerInsights
+  metric: DesiredTaskCount
+  stat: Average
+  dimensions:
+    ServiceName: query-api
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: tasks_running_query_api
+  namespace: ECS/ContainerInsights
+  metric: RunningTaskCount
+  stat: Average
+  dimensions:
+    ServiceName: query-api
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: tasks_pending_query_api
+  namespace: ECS/ContainerInsights
+  metric: PendingTaskCount
+  stat: Average
+  dimensions:
+    ServiceName: query-api
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: cpu_query_api
+  namespace: AWS/ECS
+  metric: CPUUtilization
+  stat: Average
+  dimensions:
+    ServiceName: query-api
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: mem_query_api
+  namespace: AWS/ECS
+  metric: MemoryUtilization
+  stat: Average
+  dimensions:
+    ServiceName: query-api
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: tasks_desired_graph_api
+  namespace: ECS/ContainerInsights
+  metric: DesiredTaskCount
+  stat: Average
+  dimensions:
+    ServiceName: graph-evidence-api
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: tasks_running_graph_api
+  namespace: ECS/ContainerInsights
+  metric: RunningTaskCount
+  stat: Average
+  dimensions:
+    ServiceName: graph-evidence-api
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: tasks_pending_graph_api
+  namespace: ECS/ContainerInsights
+  metric: PendingTaskCount
+  stat: Average
+  dimensions:
+    ServiceName: graph-evidence-api
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: cpu_graph_api
+  namespace: AWS/ECS
+  metric: CPUUtilization
+  stat: Average
+  dimensions:
+    ServiceName: graph-evidence-api
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: mem_graph_api
+  namespace: AWS/ECS
+  metric: MemoryUtilization
+  stat: Average
+  dimensions:
+    ServiceName: graph-evidence-api
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: alb_latency_p50_query_api
+  namespace: AWS/ApplicationELB
+  metric: TargetResponseTime
+  stat: p50
+  dimensionsFrom:
+    LoadBalancer: SC_ALB_ARN_SUFFIX
+    TargetGroup: SC_TG_QUERY_API_ARN_SUFFIX
+- id: alb_latency_p95_query_api
+  namespace: AWS/ApplicationELB
+  metric: TargetResponseTime
+  stat: p95
+  dimensionsFrom:
+    LoadBalancer: SC_ALB_ARN_SUFFIX
+    TargetGroup: SC_TG_QUERY_API_ARN_SUFFIX
+- id: alb_latency_p99_query_api
+  namespace: AWS/ApplicationELB
+  metric: TargetResponseTime
+  stat: p99
+  dimensionsFrom:
+    LoadBalancer: SC_ALB_ARN_SUFFIX
+    TargetGroup: SC_TG_QUERY_API_ARN_SUFFIX
+- id: alb_count_requests_query_api
+  namespace: AWS/ApplicationELB
+  metric: RequestCount
+  stat: Sum
+  dimensionsFrom:
+    LoadBalancer: SC_ALB_ARN_SUFFIX
+    TargetGroup: SC_TG_QUERY_API_ARN_SUFFIX
+- id: alb_count_5xx_query_api
+  namespace: AWS/ApplicationELB
+  metric: HTTPCode_Target_5XX_Count
+  stat: Sum
+  dimensionsFrom:
+    LoadBalancer: SC_ALB_ARN_SUFFIX
+    TargetGroup: SC_TG_QUERY_API_ARN_SUFFIX
+- id: alb_count_4xx_query_api
+  namespace: AWS/ApplicationELB
+  metric: HTTPCode_Target_4XX_Count
+  stat: Sum
+  dimensionsFrom:
+    LoadBalancer: SC_ALB_ARN_SUFFIX
+    TargetGroup: SC_TG_QUERY_API_ARN_SUFFIX
+- id: ddb_read_throttle_query_session
+  namespace: AWS/DynamoDB
+  metric: ReadThrottleEvents
+  stat: Sum
+  dimensionsFrom:
+    TableName: SC_DDB_TABLE_QUERY_SESSION
+- id: ddb_write_throttle_query_session
+  namespace: AWS/DynamoDB
+  metric: WriteThrottleEvents
+  stat: Sum
+  dimensionsFrom:
+    TableName: SC_DDB_TABLE_QUERY_SESSION
+- id: ddb_read_throttle_evidence_bundle
+  namespace: AWS/DynamoDB
+  metric: ReadThrottleEvents
+  stat: Sum
+  dimensionsFrom:
+    TableName: SC_DDB_TABLE_EVIDENCE_BUNDLE
+- id: ddb_write_throttle_evidence_bundle
+  namespace: AWS/DynamoDB
+  metric: WriteThrottleEvents
+  stat: Sum
+  dimensionsFrom:
+    TableName: SC_DDB_TABLE_EVIDENCE_BUNDLE
+- id: ddb_read_throttle_graph_read_model
+  namespace: AWS/DynamoDB
+  metric: ReadThrottleEvents
+  stat: Sum
+  dimensionsFrom:
+    TableName: SC_DDB_TABLE_GRAPH_READ_MODEL
+- id: ddb_write_throttle_graph_read_model
+  namespace: AWS/DynamoDB
+  metric: WriteThrottleEvents
+  stat: Sum
+  dimensionsFrom:
+    TableName: SC_DDB_TABLE_GRAPH_READ_MODEL
+- id: neptune_capacity_ncu
+  namespace: AWS/Neptune
+  metric: ServerlessDatabaseCapacity
+  stat: Average
+  dimensionsFrom:
+    DBClusterIdentifier: SC_NEPTUNE_CLUSTER_ID
+- id: neptune_cpu
+  namespace: AWS/Neptune
+  metric: CPUUtilization
+  stat: Average
+  dimensionsFrom:
+    DBClusterIdentifier: SC_NEPTUNE_CLUSTER_ID

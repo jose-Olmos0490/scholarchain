@@ -1,0 +1,221 @@
+# Experiment F. Format: scripts/run-experiment.sh (name, runner, target, limits, args, metrics).
+# Other keys are ignored by that script and read by load-tests/ and experiments/bin/.
+# A human must approve this file (approval block) and commit it before it runs.
+# To approve, the human (only) sets approval.status: APPROVED, approval.approved_by: their name,
+# approval.approved_on: 'YYYY-MM-DD', then commits. `blocked` must be the boolean false.
+# The load tools refuse to run otherwise, through run-experiment.sh or invoked directly.
+id: F
+name: F-poison-message
+priority: 2
+purpose: 'Failure and recovery: poison messages reach the dead-letter queue, the worker keeps consuming, and duplicate
+  valid messages are harmless (idempotency).'
+approval:
+  status: PENDING_HUMAN_APPROVAL
+  approved_by: null
+  approved_on: null
+# BLOCKED: C and F cannot yet be given disjoint item subsets (see the first precondition).
+blocked: true
+region: us-east-2
+environment: dev
+commit_sha: FILLED_AT_RUN_TIME (run record field commitSha)
+dataset_snapshot:
+  dataset: dblp
+  date: '2026-11-01'
+  label: dblp Monthly Snapshot XML Release of November 2026
+  serving_run_id: run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60
+  scope: bounded sample-derived run loaded in phase 14/14b (89 researcher rows); current store contents are unverified
+  source: phase-14 and phase-14b records (phase-14b/load-live.log), datasets/dataset-manifest.yaml
+  ingestion_run: SC_EMBEDDING_RUN_ID and SC_EMBEDDING_SNAPSHOT at run time; no staged ingestion manifest is recorded
+    in the repository
+runner: load-test
+target: queue_scenario.py
+args:
+- --manifest
+- experiments/manifests/F-poison-message.yaml
+limits:
+  max_duration_seconds: 3600
+  ecs_max_tasks: 2
+  sqs_max_workers: 2
+resource_bounds:
+  services:
+    query-api:
+      min_tasks: 1
+      max_tasks: 3
+      cpu_units: 1024
+      memory_mib: 2048
+      source: infra/terraform/environments/dev/variables.tf:210-216
+    graph-evidence-api:
+      min_tasks: 1
+      max_tasks: 2
+      cpu_units: 512
+      memory_mib: 1024
+      source: infra/terraform/environments/dev/variables.tf:217-223
+    embedding-worker:
+      min_tasks: 0
+      max_tasks: 2
+      cpu_units: 512
+      memory_mib: 1024
+      source: infra/terraform/environments/dev/variables.tf:224-230
+    caveat: repository defaults; the git-ignored terraform.tfvars may override them and was not read
+  worker_autoscaling:
+    backlog_per_task_target: 5
+    scale_out_cooldown_seconds: 60
+    scale_in_cooldown_seconds: 300
+    source: infra/terraform/environments/dev/variables.tf:328; infra/terraform/modules/compute/main.tf:362-365,414
+  queue:
+    visibility_timeout_seconds: 1800
+    redrive_max_receive_count: 10
+    source: infra/terraform/modules/messaging/variables.tf:9-18
+  worker_dead_letter_max_receive_count:
+    value: 5
+    source: modules/services/src/main/resources/scholarchain-services.conf (embeddingWorker.consumer)
+cost_estimate_usd:
+  incremental: 0.06
+  infrastructure: 0.05
+  embedding:
+    model: amazon.titan-embed-text-v2:0
+    model_source: docs/agent-runs/phase-12/agent-report.md:142 (the deployed value is not verified)
+    assumed_items: 500
+    assumed_tokens_per_item: 500
+    usd_per_1000_input_tokens: 0.00002
+    price_source: from memory, unverified
+    expected_full_passes: 2
+    expected_usd: 0.01
+    put_failure_full_passes: 2
+    put_failure_usd: 0.01
+    redelivery_ceiling_full_passes: 10
+    redelivery_ceiling_usd: 0.05
+  put_failure_total_usd: 0.06
+  cap_covers_put_failure: true
+  note: 'item and token counts are assumptions: no staged ingestion manifest is recorded. The 2 identical valid
+    messages embed every item at most once each; the poison messages cause no embedding call. The cap is declared
+    only: no code enforces it'
+cost_cap_usd: 1.0
+stop_conditions:
+- 'precondition: work queue empty and worker desired/running/pending all 0, else nothing is sent'
+- no worker task running 900 s after the send (NO_SCALE_OUT)
+- queue not drained 1500 s after the send (DRAIN_TIMEOUT)
+- worker not back to 0 tasks 1500 s after the drain (NO_SCALE_IN)
+- worker desired count above 2 (WORKER_BOUND_EXCEEDED)
+- 5 consecutive failed observations (OBSERVATION_FAILED)
+- 3420 s watch cap; 3600 s hard timeout by run-experiment.sh
+- dead-letter growth above the 12 poison messages (UNEXPECTED_DEAD_LETTERS)
+- queue drained and workers at 0 with fewer than 12 dead-lettered (POISON_NOT_DEAD_LETTERED)
+- message cap 20 (planned 14)
+success_condition: 'at least one new SUCCEEDED vector-ingest put batch in the run ledger for SC_EMBEDDING_RUN_ID;
+  otherwise status FAILED (NO_VECTORS_WRITTEN or WRITE_EVIDENCE_UNAVAILABLE)'
+preconditions:
+- 'BLOCKED: C and F must use disjoint item subsets (human decision, phase 15). A work message names only runId and
+  snapshot and the worker ingests that whole staged manifest, so both would take the same items, and F would depend
+  on C. Needs storage-engineer (item selection) or rag-engineer (stage without indexing)'
+- 'SC_DDB_TABLE_RUN_LEDGER names the run ledger table (read with dynamodb query)'
+- 'the staged ingestion run has items that are not yet in the vector index (the human expects this of the existing
+  staged run; not verified): an already indexed run is skipped as unchanged, writes nothing and reports FAILED'
+- 'the human provides SC_EMBEDDING_RUN_ID and SC_EMBEDDING_SNAPSHOT of a staged ingestion manifest: none is recorded
+  in the repository'
+queue:
+  worker_service: embedding-worker
+  expected_max_workers: 2
+  poll_interval_seconds: 15
+  scale_out_timeout_seconds: 900
+  drain_timeout_seconds: 1500
+  scale_in_timeout_seconds: 1500
+  max_watch_seconds: 3420
+  scenario: poison
+  poison_undecodable: 6
+  poison_unknown_run: 6
+  valid_duplicates: 2
+  max_messages: 20
+collect:
+  pre_seconds: 300
+  post_seconds: 180
+  deployed_services:
+  - query-api
+  - graph-evidence-api
+  - embedding-worker
+  logs:
+  - kind: worker_outcomes
+    logGroupFrom: SC_WORKER_LOG_GROUP
+metrics:
+- id: tasks_desired_worker
+  namespace: ECS/ContainerInsights
+  metric: DesiredTaskCount
+  stat: Average
+  dimensions:
+    ServiceName: embedding-worker
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: tasks_running_worker
+  namespace: ECS/ContainerInsights
+  metric: RunningTaskCount
+  stat: Average
+  dimensions:
+    ServiceName: embedding-worker
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: tasks_pending_worker
+  namespace: ECS/ContainerInsights
+  metric: PendingTaskCount
+  stat: Average
+  dimensions:
+    ServiceName: embedding-worker
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: cpu_worker
+  namespace: AWS/ECS
+  metric: CPUUtilization
+  stat: Average
+  dimensions:
+    ServiceName: embedding-worker
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: mem_worker
+  namespace: AWS/ECS
+  metric: MemoryUtilization
+  stat: Average
+  dimensions:
+    ServiceName: embedding-worker
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: sqs_depth_visible
+  namespace: AWS/SQS
+  metric: ApproximateNumberOfMessagesVisible
+  stat: Maximum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_QUEUE_NAME
+- id: sqs_depth_inflight
+  namespace: AWS/SQS
+  metric: ApproximateNumberOfMessagesNotVisible
+  stat: Maximum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_QUEUE_NAME
+- id: sqs_depth_dlq
+  namespace: AWS/SQS
+  metric: ApproximateNumberOfMessagesVisible
+  stat: Maximum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_DLQ_NAME
+- id: sqs_age_oldest
+  namespace: AWS/SQS
+  metric: ApproximateAgeOfOldestMessage
+  stat: Maximum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_QUEUE_NAME
+- id: sqs_flow_sent
+  namespace: AWS/SQS
+  metric: NumberOfMessagesSent
+  stat: Sum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_QUEUE_NAME
+- id: sqs_flow_received
+  namespace: AWS/SQS
+  metric: NumberOfMessagesReceived
+  stat: Sum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_QUEUE_NAME
+- id: sqs_flow_deleted
+  namespace: AWS/SQS
+  metric: NumberOfMessagesDeleted
+  stat: Sum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_QUEUE_NAME

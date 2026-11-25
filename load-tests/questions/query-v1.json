@@ -1,0 +1,69 @@
+{
+  "version": "query-v1",
+  "runId": "run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60",
+  "snapshot": "2026-11-01",
+  "window": {
+    "startYear": 2000,
+    "endYear": 2025
+  },
+  "source": "researcher IDs selected from the local phase14 Spark semantic export of this run: top DISTINCT_COAUTHOR_COUNT (ties by ID) and the longest FOUND path for window 2000-2025",
+  "questions": [
+    {
+      "id": "coauthors-a",
+      "text": "Who are the direct coauthors of this researcher and what do they work on together?",
+      "graphOperations": [
+        "DIRECT_COAUTHORS"
+      ],
+      "researcherIds": [
+        "researcher:sc-researcher-v1:1c23dbfcda3713feea7a00b9eb764c6cad65611be2b52889332e8b40024964ca"
+      ],
+      "semantic": true
+    },
+    {
+      "id": "coauthors-b",
+      "text": "Who has this researcher published with?",
+      "graphOperations": [
+        "DIRECT_COAUTHORS"
+      ],
+      "researcherIds": [
+        "researcher:sc-researcher-v1:2512aa6a9444d6b89ef64da5e3ce0e4425273837885de74ecd6d1afa51d1bca2"
+      ],
+      "semantic": false
+    },
+    {
+      "id": "component-a",
+      "text": "Which connected component of the collaboration graph is this researcher in?",
+      "graphOperations": [
+        "COMPONENT_LOOKUP"
+      ],
+      "researcherIds": [
+        "researcher:sc-researcher-v1:1c23dbfcda3713feea7a00b9eb764c6cad65611be2b52889332e8b40024964ca"
+      ],
+      "semantic": false
+    },
+    {
+      "id": "community-ac",
+      "text": "Do these two researchers belong to the same collaboration community?",
+      "graphOperations": [
+        "COMMUNITY_COMPARISON"
+      ],
+      "researcherIds": [
+        "researcher:sc-researcher-v1:1c23dbfcda3713feea7a00b9eb764c6cad65611be2b52889332e8b40024964ca",
+        "researcher:sc-researcher-v1:414e6fcf634ed70092d60ca208e6a7bc10b6c3db8d37b3c17447acd04b29dfbd"
+      ],
+      "semantic": false
+    },
+    {
+      "id": "path-longest",
+      "text": "What is the shortest collaboration path between these two researchers?",
+      "graphOperations": [
+        "SHORTEST_PATH"
+      ],
+      "researcherIds": [
+        "researcher:sc-researcher-v1:f5791b2c1e1d011dd987e5354608ecc81dfccd22815a0bf9f1f380132cabc0c4",
+        "researcher:sc-researcher-v1:1c23dbfcda3713feea7a00b9eb764c6cad65611be2b52889332e8b40024964ca"
+      ],
+      "semantic": false
+    }
+  ]
+}
