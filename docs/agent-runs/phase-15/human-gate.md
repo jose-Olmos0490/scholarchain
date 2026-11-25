@@ -34,3 +34,10 @@
 - Accepted: incident-responder used simpler read-only command forms when the guard blocked compound commands; no guard or settings changed.
 - Known: AWS account ID appears in 23 earlier tracked evidence files; not rewritten (private repo, ID is not a credential).
 - Bedrock blocked account-wide: authorizationStatus NOT_AUTHORIZED for Titan Embed V1/V2, Cohere Embed v4, Nova Micro in us-east-1/us-east-2/us-west-2. put-foundation-model-entitlement does not exist in the CLI. AWS Support case (Account and billing) opened and instructor emailed on 2026-11-25.
+
+## 2026-11-25 ~14:20 — logging fix deployed, incident contained
+- Logging fix (service-engineer, code-reviewer APPROVE, 3 minor findings deferred) committed as 3c3e1a1; plan 47dd1a5c... (3 add / 0 change / 3 destroy, task definitions only) applied by the human; deployed by deploy-engineer. Smoke 7/8, same "evidence" failure (suspected cause: Bedrock account block). No rollback.
+- Containment verified by the human with counts-only Logs Insights queries (the guard blocks agents from start-query):
+  - New tasks (194a6c8e..., 72763c57...): 136 log lines, 0 credential/DEBUG matches, including 10 min before task start.
+  - All matches since rollout are in the old task streams (query-api 6031e502...: 2130, last 20:05:06Z; graph-evidence-api ba974696...: 860, last 20:05:34Z), ending at old-task shutdown.
+- Still open: rotate API token (sent over plain HTTP), old log material (30-day retention), Neptune audit log, TLS on the dev ALB.
