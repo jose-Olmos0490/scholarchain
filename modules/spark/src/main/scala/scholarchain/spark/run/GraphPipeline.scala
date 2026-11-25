@@ -547,6 +547,9 @@ object GraphPipeline:
     writeText(new Path(runDir, "explain-bfs-frontier-step-1.txt"), bfsPlan, conf)
     writeText(new Path(runDir, "explain-kcore-peel-1.txt"), kcorePlan, conf)
     val tables = written :+ summaryTable
+    // Flat JSONL input of the rag IngestMain, rendered from this run's semantic_fact,
+    // path_evidence, work and venue tables (see SemanticJsonlExport).
+    val jsonl = SemanticJsonlExport.exportRun(spark, sc.outputRoot, runHex, runId, conf)
     val loadManifests = LoadManifests.manifests(tables, runId, snapshot, conf)
     val manifestPaths = loadManifests.map { m =>
       val mp = new Path(root, LoadManifests.relativePath(m.target, runHex))
@@ -573,6 +576,12 @@ object GraphPipeline:
             "target" -> q.target,
             "selection" -> q.selection.toString
           )
+        )
+      ),
+      "semanticJsonl" -> ujson.Obj(
+        "dir" -> SemanticJsonlExport.outputDir(sc.outputRoot).toString,
+        "files" -> ujson.Arr.from(
+          jsonl.map(f => ujson.Obj("name" -> f.name, "lines" -> f.lines.toDouble))
         )
       ),
       "loadManifests" -> ujson.Obj.from(manifestPaths.map((t, p) => t -> ujson.Str(p))),

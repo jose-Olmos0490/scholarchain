@@ -21,13 +21,28 @@ import upickle.default.*
 /** The three input files of an ingestion run, one JSON object per line. `semantic-facts.jsonl`
   * holds core `SemanticFact`, `paths.jsonl` core `PathEvidence`, `papers.jsonl`
   * `{"work": WorkRecord, "venueName": ..., "abstractText": ...}`. A missing file is an empty
-  * input; a malformed line refuses the whole run (nothing is guessed).
+  * input; a malformed line refuses the whole run (nothing is guessed). The entrypoint refuses a
+  * directory whose files hold no record at all ([[IngestionInputs.nonEmptyFrom]]).
   */
 final case class IngestionInputs(
     facts: Vector[SemanticFact],
     paths: Vector[PathEvidence],
     papers: Vector[PaperInput]
-)
+):
+  /** Refuses inputs with zero records in total: a wrong directory or misnamed files must not look
+    * like a successful run. One empty or absent file is fine when another has records.
+    */
+  def nonEmptyFrom(location: String): RResult[IngestionInputs] =
+    import IngestionInputs.{FactsFile, PapersFile, PathsFile}
+    Either.cond(
+      facts.nonEmpty || paths.nonEmpty || papers.nonEmpty,
+      this,
+      RagProblem(
+        "NO_INPUT_RECORDS",
+        s"read 0 records from input directory '$location'; expected at least one record in " +
+          s"$FactsFile, $PathsFile or $PapersFile (check the directory and the file names)"
+      )
+    )
 
 object IngestionInputs:
   val FactsFile = "semantic-facts.jsonl"

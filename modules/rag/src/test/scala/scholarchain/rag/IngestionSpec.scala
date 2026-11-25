@@ -199,3 +199,53 @@ class IngestionSpec extends RagSuite:
     exec(Seq("--input-dir", dir.toString, "--dry-run")) shouldBe 2
     err.last should include("BAD_INPUT")
   }
+
+  test(
+    "the entrypoint fails when zero records are read: empty directory, misnamed or empty files"
+  ) {
+    def dirWith(files: (String, String)*): Path =
+      val d = Files.createTempDirectory("rag-ingest-none-")
+      files.foreach((name, body) => Files.writeString(d.resolve(name), body))
+      d
+    val misnamed = Files.readString(inputDir().resolve(IngestionInputs.FactsFile))
+    val dirs = Vector(
+      dirWith(),
+      dirWith("semantic_facts.jsonl" -> misnamed),
+      dirWith(
+        IngestionInputs.FactsFile -> "",
+        IngestionInputs.PathsFile -> "\n  \n",
+        IngestionInputs.PapersFile -> ""
+      )
+    )
+    val modes = Vector(
+      Seq("--dry-run"),
+      Seq("--limit", "5", "--run-id", runId, "--snapshot", snapshot)
+    )
+    for d <- dirs; mode <- modes do
+      val out = mutable.ArrayBuffer.empty[String]
+      val err = mutable.ArrayBuffer.empty[String]
+      val code = IngestMain.execute(
+        Seq("--input-dir", d.toString) ++ mode,
+        SmokeEnv.vars,
+        out += _,
+        err += _
+      )
+      code shouldBe 2
+      out shouldBe empty
+      err.mkString should (include("NO_INPUT_RECORDS") and include(d.toString) and include(
+        IngestionInputs.FactsFile
+      ) and include(IngestionInputs.PathsFile) and include(IngestionInputs.PapersFile))
+  }
+
+  test("one input file with records is enough: absent sibling files are not an error") {
+    val d = Files.createTempDirectory("rag-ingest-one-")
+    writeLines(d, IngestionInputs.FactsFile, facts)
+    val err = mutable.ArrayBuffer.empty[String]
+    IngestMain.execute(
+      Seq("--input-dir", d.toString, "--dry-run"),
+      SmokeEnv.vars,
+      _ => (),
+      err += _
+    ) shouldBe 0
+    err shouldBe empty
+  }

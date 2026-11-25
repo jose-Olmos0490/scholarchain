@@ -575,3 +575,30 @@ Phase 06 PART B report.
   `explain()` plans (edge aggregation, component iteration 1, LPA iteration 1, BFS frontier step 1,
   k-core peel round 1) plus partition counts; per-stage listener metrics are also in the summary.
 
+## Semantic JSONL export (`SemanticJsonlExport`)
+
+Flat input of rag `IngestMain --input-dir`, written to `<spark.outputRoot>/graph/semantic-jsonl/`.
+`GraphPipeline` runs it after the tables are written; it can also be run alone against an
+existing run (same configuration environment as the pipeline):
+
+```
+sbt "sparkAnalytics/runMain scholarchain.spark.run.SemanticJsonlExport --local [--run-id run:<hex>]"
+```
+
+| File | Line type | Source tables | Sort key |
+|---|---|---|---|
+| `semantic-facts.jsonl` | core `SemanticFact` | `semantic_fact` (all windows) | `factId`, then line |
+| `paths.jsonl` | core `PathEvidence` | `path_evidence` (all windows, every status) | `pathId`, then line |
+| `papers.jsonl` | `{work, venueName, abstractText}` | `work` left join `venue` | `workId`, then line |
+
+- **DAG and shuffles.** Per file: Parquet scan, JSON rendering UDF, `repartition(1)` (the one
+  exchange), `sortWithinPartitions`, text write, rename of the single part file, then a count of
+  the written file. `papers.jsonl` adds one left join on `venueId` (Spark's own broadcast rule).
+- **No** caching, checkpoint, explicit broadcast or driver collect of data rows.
+- **Determinism.** Same run tables give byte-identical files. A rerun replaces them.
+- **Provenance.** Every record keeps its `provenance` (and `runId`, `metricVersion` where the
+  contract has them). `export-manifest.json` records the run ID, metric version and line counts.
+- **Directory holds one run.** The directory is not partitioned by run ID; the last export wins.
+- **Limitations.** `abstractText` is always null (the pipeline carries no abstract text). One
+  task writes each file, which suits the bounded run only.
+

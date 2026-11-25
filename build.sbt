@@ -252,6 +252,10 @@ lazy val services = (project in file("modules/services"))
     }
   )
 
+// POSIX shell contract test of docker/launch.sh; needs no Docker daemon, JVM, or AWS.
+lazy val dockerLauncherCheck =
+  taskKey[Unit]("Check that docker/launch.sh forwards its arguments to the main class")
+
 // ---------------------------------------------------------------------------
 // Test-only project: tests/** (test-engineer territory). Adversarial,
 // cross-module, contract, and integration suites. Layout:
@@ -294,6 +298,11 @@ lazy val root = (project in file("."))
   .settings(
     name := "scholarchain",
     publish / skip := true,
+    dockerLauncherCheck := {
+      val script = (ThisBuild / baseDirectory).value / "docker" / "test" / "launch-args-test.sh"
+      val code = scala.sys.process.Process(Seq("sh", script.getPath)).!(streams.value.log)
+      if (code != 0) sys.error(s"launcher argument check failed (exit $code)")
+    },
     markTestRun := {
       // Depends on Test/test across every aggregated project. If any test
       // fails, this task fails before the marker is touched.
@@ -314,7 +323,7 @@ addCommandAlias(
   "check",
   // markTestRun itself depends on Test/test of every aggregated project, so a
   // separate `test` step would run the whole suite twice.
-  "; scalafmtCheckAll; scalafmtSbtCheck; Test/compile; markTestRun"
+  "; scalafmtCheckAll; scalafmtSbtCheck; Test/compile; dockerLauncherCheck; markTestRun"
 )
 addCommandAlias("packageJobs", "; hadoop/assembly; sparkAnalytics/assembly")
 addCommandAlias("dockerLocal", "; services/dockerBuildLocal")

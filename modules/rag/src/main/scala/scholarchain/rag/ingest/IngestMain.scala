@@ -17,6 +17,7 @@ import scholarchain.storage.vectors.*
   * }}}
   * `--dry-run` reads only local files and prints counts and sample metadata: no AWS client is
   * built. A live run needs `--limit`, `--run-id`, `--snapshot` and the configuration environment.
+  * An input directory that yields no record at all is an error (exit 2), dry run or not.
   */
 object IngestMain:
   val SampleCount = 3
@@ -35,7 +36,7 @@ object IngestMain:
       for
         o <- IngestionOptions.parse(args)
         dir <- o.inputDir.toRight(RagProblem("BAD_ARGUMENT", "--input-dir is required"))
-        inputs <- IngestionInputs.readDir(Paths.get(dir))
+        inputs <- IngestionInputs.readDir(Paths.get(dir)).flatMap(_.nonEmptyFrom(dir))
         rs <- RenderSettings.load(env)
         s <- StorageSettings.load(env).left.map(e => RagProblem("MISCONFIGURED", e.message))
         defs = IndexDefinition.fromSettings(s)

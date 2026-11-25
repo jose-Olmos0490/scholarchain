@@ -7,7 +7,8 @@ import org.scalatest.funsuite.AnyFunSuite
 import scholarchain.core.config.ConfigLoader
 import scholarchain.core.ids.StableIds
 import scholarchain.core.json.WireCodec
-import scholarchain.core.model.{MatchOutcome, RunManifest}
+import scholarchain.core.model.{MatchOutcome, PathEvidence, RunManifest, SemanticFact, WorkRecord}
+import upickle.default.{ReadWriter, read}
 import scholarchain.spark.Fixture.*
 import scholarchain.spark.SparkTestSupport.spark
 import scholarchain.spark.run.{GraphPipeline, RunResult}
@@ -16,6 +17,16 @@ import scholarchain.spark.run.{GraphPipeline, RunResult}
   * and the entity-resolution run directory: inputs located and fingerprinted, run ID from the
   * manifest, Parquet layout, contract check of every written row, and determinism across runs.
   */
+/** Mirror of rag `PaperInput` (`work`, `venueName`, `abstractText`), derived with the same uPickle
+  * macro as rag's `given ReadWriter[PaperInput] = macroRW`, so the line codec is the one IngestMain
+  * decodes with. (The spark module may not depend on rag.)
+  */
+final case class PaperLine(
+    work: WorkRecord,
+    venueName: Option[String],
+    abstractText: Option[String]
+) derives ReadWriter
+
 class PipelineIntegrationSpec extends AnyFunSuite:
   private val runHex = HadoopRunId.stripPrefix("run:")
   private val base: Path = Files.createTempDirectory("sc-spark-it")
@@ -260,4 +271,86 @@ class PipelineIntegrationSpec extends AnyFunSuite:
         assert(f.sizeBytes == bytes.length.toLong)
       }
     }
+  }
+
+  private def jsonl(out: String, name: String): Vector[String] =
+    Files
+      .readAllLines(base.resolve(s"$out/graph/semantic-jsonl/$name"), StandardCharsets.UTF_8)
+      .toArray(new Array[String](0))
+      .toVector
+
+  test("semantic JSONL export: the three IngestMain input files, decoded with IngestMain's codec") {
+    val _ = first
+    val dir = base.resolve("out-1/graph/semantic-jsonl")
+    // exact file names of rag IngestionInputs, plus the export manifest (hidden files are the
+    // local filesystem's checksum sidecars)
+    val names = Files
+      .list(dir)
+      .toArray
+      .map(p => p.asInstanceOf[Path].getFileName.toString)
+      .filterNot(_.startsWith("."))
+      .sorted
+      .toVector
+    assert(
+      names ==
+        Vector("export-manifest.json", "papers.jsonl", "paths.jsonl", "semantic-facts.jsonl")
+    )
+    val rows = first.tables.map(x => x.name -> x.rowCount).toMap
+
+    val facts = jsonl("out-1", "semantic-facts.jsonl")
+    val decodedFacts = facts.map(read[SemanticFact](_))
+    assert(facts.size.toLong == rows("semantic_fact") && facts.nonEmpty)
+    assert(decodedFacts.forall(f => f.runId == first.runId && f.provenance.runId == first.runId))
+    assert(decodedFacts.map(_.factId) == decodedFacts.map(_.factId).sorted) // stable ordering
+    assert(decodedFacts.map(_.subjectType.toString).toSet.contains("RESEARCHER"))
+    assert(decodedFacts.forall(f => WireCodec.validate(f).isRight))
+
+    val paths = jsonl("out-1", "paths.jsonl")
+    val decodedPaths = paths.map(read[PathEvidence](_))
+    assert(paths.size.toLong == rows("path_evidence") && paths.nonEmpty)
+    assert(decodedPaths.forall(_.runId == first.runId))
+    assert(decodedPaths.map(_.pathId) == decodedPaths.map(_.pathId).sorted)
+
+    val papers = jsonl("out-1", "papers.jsonl")
+    assert(papers.size.toLong == rows("work") && papers.nonEmpty)
+    papers.foreach { l =>
+      val j = ujson.read(l).obj
+      assert(j.keySet == Set("work", "venueName", "abstractText"), l)
+      assert(j("venueName").isNull && j("abstractText").isNull) // uPickle None
+    }
+    val decodedPapers = papers.map(read[PaperLine](_))
+    assert(decodedPapers.map(_.work.workId) == decodedPapers.map(_.work.workId).sorted)
+    assert(decodedPapers.forall(p => WireCodec.validate(p.work).isRight))
+    assert(
+      decodedPapers.map(_.work.workId).toSet ==
+        spark.read
+          .parquet(first.tables.find(_.name == "work").get.path)
+          .select("workId")
+          .collect()
+          .map(_.getString(0))
+          .toSet
+    )
+    assert(decodedPapers.exists(_.work.authors.nonEmpty))
+
+    // the manifest lists the same line counts
+    val manifest = ujson.read(Files.readString(dir.resolve("export-manifest.json")))
+    assert(manifest("runId").str == first.runId)
+    assert(
+      manifest("files").arr.map(f => f("name").str -> f("lines").num.toLong).toMap ==
+        Map(
+          "semantic-facts.jsonl" -> facts.size.toLong,
+          "paths.jsonl" -> paths.size.toLong,
+          "papers.jsonl" -> papers.size.toLong
+        )
+    )
+  }
+
+  test("semantic JSONL export is byte-identical across two runs") {
+    val _ = (first, second)
+    for n <- Vector("semantic-facts.jsonl", "paths.jsonl", "papers.jsonl") do
+      assert(
+        Files.readAllBytes(base.resolve(s"out-1/graph/semantic-jsonl/$n")).toSeq ==
+          Files.readAllBytes(base.resolve(s"out-2/graph/semantic-jsonl/$n")).toSeq,
+        n
+      )
   }
