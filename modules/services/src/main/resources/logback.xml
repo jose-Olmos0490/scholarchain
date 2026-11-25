@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Production logging for query-api, graph-evidence-api and embedding-worker
+  (INC-20261125-debug-credential-logging). Without this file Logback defaults to
+  DEBUG, and the HTTP wire loggers then write signed headers, session tokens and
+  response bodies (including secrets) to the log.
+
+  Rules for editing:
+  - No variable substitution: no environment variable or property may lower a level.
+  - The library loggers below stay at WARN or higher, whatever the root level is.
+  - The line layout is TTLLLayout, the one the services already emitted with no
+    configuration file. Log tooling reads those lines.
+-->
+<configuration>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+      <layout class="ch.qos.logback.classic.layout.TTLLLayout"/>
+    </encoder>
+  </appender>
+
+  <!-- AWS SDK: request logging includes headers and parameters. -->
+  <logger name="software.amazon.awssdk" level="WARN"/>
+  <logger name="software.amazon.awssdk.request" level="WARN"/>
+
+  <!-- Apache HttpClient 5, the SDK's synchronous transport here. -->
+  <logger name="org.apache.hc" level="WARN"/>
+  <logger name="org.apache.hc.client5.http.wire" level="WARN"/>
+  <logger name="org.apache.hc.client5.http.headers" level="WARN"/>
+
+  <!-- Apache HttpClient 4 names, in case a dependency brings it back. -->
+  <logger name="org.apache.http" level="WARN"/>
+  <logger name="org.apache.http.wire" level="WARN"/>
+  <logger name="org.apache.http.headers" level="WARN"/>
+
+  <!-- Netty (SDK asynchronous transport) and the inbound server (Undertow, XNIO). -->
+  <logger name="io.netty" level="WARN"/>
+  <logger name="io.undertow" level="WARN"/>
+  <logger name="org.xnio" level="WARN"/>
+
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+  </root>
+</configuration>

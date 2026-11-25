@@ -33,3 +33,4 @@
 - After the fix is live: rotate API keys, revoke task-role sessions, decide on log retention/deletion.
 - Accepted: incident-responder used simpler read-only command forms when the guard blocked compound commands; no guard or settings changed.
 - Known: AWS account ID appears in 23 earlier tracked evidence files; not rewritten (private repo, ID is not a credential).
+- Bedrock blocked account-wide: authorizationStatus NOT_AUTHORIZED for Titan Embed V1/V2, Cohere Embed v4, Nova Micro in us-east-1/us-east-2/us-west-2. put-foundation-model-entitlement does not exist in the CLI. AWS Support case (Account and billing) opened and instructor emailed on 2026-11-25.
