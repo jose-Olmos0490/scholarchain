@@ -1,0 +1,38 @@
+# Amazon Bedrock access evidence - 2026-11-25T20:35:34Z
+
+## Caller
+arn:aws:iam::<account-id>:user/CS441_Dev
+
+## 1. authorizationStatus by region and model
+us-east-2  amazon.titan-embed-text-v2:0  NOT_AUTHORIZED
+us-east-2  cohere.embed-v4:0  NOT_AUTHORIZED
+us-east-2  amazon.nova-micro-v1:0  NOT_AUTHORIZED
+us-east-1  amazon.titan-embed-text-v2:0  NOT_AUTHORIZED
+us-east-1  cohere.embed-v4:0  NOT_AUTHORIZED
+us-east-1  amazon.nova-micro-v1:0  NOT_AUTHORIZED
+us-west-2  amazon.titan-embed-text-v2:0  NOT_AUTHORIZED
+us-west-2  cohere.embed-v4:0  NOT_AUTHORIZED
+us-west-2  amazon.nova-micro-v1:0  NOT_AUTHORIZED
+
+## 2. Full availability record (us-east-2, Titan Text Embeddings V2)
+{
+    "modelId": "amazon.titan-embed-text-v2",
+    "agreementAvailability": {
+        "status": "AVAILABLE"
+    },
+    "authorizationStatus": "NOT_AUTHORIZED",
+    "entitlementAvailability": "AVAILABLE",
+    "regionAvailability": "AVAILABLE"
+}
+
+## 3. InvokeModel attempt (us-east-2, Titan Text Embeddings V2)
+aws: [ERROR]: An error occurred (ValidationException) when calling the InvokeModel operation: Operation not allowed
+
+## 4. IAM + organization (SCP) policy simulation for bedrock:InvokeModel
+------------------------------
+|   SimulatePrincipalPolicy  |
++---------------+------------+
+| allowedByOrg  | decision   |
++---------------+------------+
+|  True         |  allowed   |
++---------------+------------+
