@@ -68,3 +68,50 @@ output "service_environment_keys" {
   description = "Names (never values) of the environment variables each service receives, for review against the code's configuration contract."
   value       = { for k, v in local.service_environment_raw : k => sort(keys(v)) }
 }
+
+# ---- inputs of experiments/manifests (names and URLs only, no secrets) --------
+
+output "alb_url" {
+  description = "SC_BASE_URL. Null when the ALB has no listener. With a certificate that does not cover the ALB DNS name, use the certificate's domain name instead."
+  value       = module.compute.listener_configured ? "${var.certificate_arn != null ? "https" : "http"}://${module.compute.alb_dns_name}" : null
+}
+
+output "embedding_dlq_url" {
+  description = "SC_EMBEDDING_DLQ_URL."
+  value       = module.messaging.embedding_dlq_url
+}
+
+output "embedding_queue_name" {
+  description = "SC_EMBEDDING_QUEUE_NAME."
+  value       = module.messaging.embedding_queue_name
+}
+
+output "embedding_dlq_name" {
+  description = "SC_EMBEDDING_DLQ_NAME."
+  value       = module.messaging.embedding_dlq_name
+}
+
+output "run_ledger_table_name" {
+  description = "SC_DDB_TABLE_RUN_LEDGER."
+  value       = module.dynamodb.table_names["run_ledger"]
+}
+
+output "alb_arn_suffix" {
+  description = "SC_ALB_ARN_SUFFIX."
+  value       = module.compute.alb_arn_suffix
+}
+
+output "target_group_arn_suffixes" {
+  description = "SC_TG_QUERY_API_ARN_SUFFIX is the query-api entry."
+  value       = module.compute.target_group_arn_suffixes
+}
+
+output "neptune_cluster_identifier" {
+  description = "SC_NEPTUNE_CLUSTER_ID."
+  value       = module.neptune.cluster_identifier
+}
+
+output "log_group_names" {
+  description = "SC_QUERY_API_LOG_GROUP and SC_WORKER_LOG_GROUP are the query-api and embedding-worker entries."
+  value       = module.logging.log_group_names
+}

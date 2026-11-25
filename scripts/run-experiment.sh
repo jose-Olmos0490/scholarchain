@@ -8,6 +8,11 @@
 # repository's experiments/ directory and must be tracked by Git; anything else is refused.
 # The tree must be clean and the environment approved.
 #
+# Approval gate (both runners): the run is refused unless approval.status is APPROVED with a named
+# approver and a YYYY-MM-DD date, `blocked` is the boolean false and no precondition starts with
+# BLOCKED. The rules are approval_problems() in load-tests/sclib.py, the same ones the load tools
+# apply. The manifest's `environment` must equal --env.
+#
 # Manifest (YAML or JSON), required keys:
 #   name:      letters, digits, . _ -
 #   runner:    "pipeline"   runs scripts/run-bounded-pipeline.sh --env <env> (cloud, bounded)
@@ -23,6 +28,10 @@
 #
 # The runner receives SC_EXPERIMENT_OUT, a directory under build/experiments/ for its raw
 # results; raw results are never edited by this script.
+# A load-test runner also receives SC_ENV (the --env value), SC_REGION and, with --profile,
+# AWS_PROFILE. It gets no --env or --profile arguments: the load tools accept only the manifest's
+# `args`. --profile is refused while static credential variables are set, because the AWS CLI
+# would use those instead of the profile.
 #
 # Required environment variables: SCHOLARCHAIN_APPROVED_ENVS (set by the human; must list
 #   --env). AWS credentials come from the standard chain or --profile (AWS_PROFILE) when the
@@ -125,6 +134,28 @@ print(json.dumps({"name": name, "runner": runner, "duration": dur, "args": args,
 PY
 )" || die "invalid manifest ${MANIFEST#"$SC_REPO_ROOT"/}"
 
+step "refuse an unapproved or blocked manifest, or one for another environment"
+python3 -I - "$MANIFEST" "$SC_REPO_ROOT/load-tests" "$ENV_NAME" <<'PY' || die "the manifest may not run; refused"
+import sys
+
+import yaml
+
+manifest, load_tests, env = sys.argv[1:4]
+sys.dont_write_bytecode = True
+sys.path.insert(0, load_tests)
+
+import sclib  # noqa: E402
+
+with open(manifest) as handle:
+    doc = yaml.safe_load(handle)
+problems = sclib.approval_problems(doc)
+if doc.get("environment") != env:
+    problems.append("the manifest `environment` is not the --env value")
+for problem in problems:
+    print("ERROR: " + problem, file=sys.stderr)
+sys.exit(1 if problems else 0)
+PY
+
 jget() { python3 -I -c 'import json,sys; v=json.loads(sys.argv[1])[sys.argv[2]]; print(v if isinstance(v,(str,int)) else json.dumps(v))' "$PARSED" "$1"; }
 NAME="$(jget name)"
 RUNNER="$(jget runner)"
@@ -166,6 +197,13 @@ case "$RUNNER" in
     git -C "$SC_REPO_ROOT" ls-files --error-unmatch -- "${LT_FILE#"$SC_REPO_ROOT"/}" >/dev/null 2>&1 ||
       die "load-test target is not tracked by Git"
     CMD=("$LT_FILE")
+    # The load tools take the environment and the profile from variables, not from arguments.
+    export SC_ENV="$ENV_NAME"
+    if [[ -n "$SC_PROFILE" ]]; then
+      [[ -z "${AWS_ACCESS_KEY_ID:-}" ]] ||
+        die "--profile given while AWS_ACCESS_KEY_ID is set and would take precedence; unset it first"
+      export AWS_PROFILE="$SC_PROFILE"
+    fi
     mapfile -t EXTRA < <(python3 -I -c 'import json,sys; print("\n".join(json.loads(sys.argv[1])["args"]))' "$PARSED")
     for a in "${EXTRA[@]}"; do [[ -z "$a" ]] || CMD+=("$a"); done
     ;;

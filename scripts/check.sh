@@ -15,6 +15,8 @@
 #   contracts     dataset manifest and sample validators (datasets/scripts), no network
 #   schemas       jq parses prompts/manifest.json, prompts/schemas/*.json and the
 #                 entity-resolution schemas
+#   python-tests  python3 -m unittest discover on experiments/tests and load-tests/tests (offline
+#                 fakes; needs PyYAML). Both suites run; either one failing fails the gate
 #   terraform     terraform fmt -check -recursive infra/terraform, then for every directory under
 #                 infra/terraform/environments: init -backend=false and validate
 #
@@ -23,8 +25,9 @@
 #
 # Required environment variables: none.
 # Optional environment variables: SC_SBT_TIMEOUT (seconds, default 5400),
-#   SC_TF_TIMEOUT (seconds per terraform command, default 600), SC_SBT_FULL_LOG=1 (do not filter
-#   the sbt output to its own [info]/[warn]/[error]/[success] lines).
+#   SC_TF_TIMEOUT (seconds per terraform command, default 600), SC_PY_TIMEOUT (seconds per Python
+#   suite, default 600), SC_SBT_FULL_LOG=1 (do not filter the sbt output to its own
+#   [info]/[warn]/[error]/[success] lines).
 # Exit codes: 0 every gate ran and passed ("CHECK RESULT: PASS"),
 #   1 at least one gate failed ("CHECK RESULT: FAIL"),
 #   2 usage error,
@@ -46,6 +49,7 @@ SKIP_TF=false
 SKIP_SHELLCHECK=false
 SBT_TIMEOUT="${SC_SBT_TIMEOUT:-5400}"
 TF_TIMEOUT="${SC_TF_TIMEOUT:-600}"
+PY_TIMEOUT="${SC_PY_TIMEOUT:-600}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -151,6 +155,18 @@ g_schemas() {
   info "parsed $n schema/manifest file(s)"
 }
 
+g_python_tests() {
+  local d rc=0
+  require_cmd python3 timeout
+  for d in experiments/tests load-tests/tests; do
+    [[ -d "$d" ]] || die "missing test directory: $d"
+    info "python tests in $d"
+    # -B: no __pycache__ in the tree
+    timeout --foreground "$PY_TIMEOUT" python3 -B -m unittest discover -s "$d" || rc=1
+  done
+  return "$rc"
+}
+
 g_terraform() {
   local d name
   require_cmd terraform
@@ -179,6 +195,7 @@ fi
 if [[ "$SKIP_SBT" == true ]]; then skip sbt "--skip-sbt"; else gate sbt g_sbt; fi
 gate contracts g_contracts
 gate schemas g_schemas
+gate python-tests g_python_tests
 if [[ "$SKIP_TF" == true ]]; then skip terraform "--skip-terraform"; else gate terraform g_terraform; fi
 
 step "summary"

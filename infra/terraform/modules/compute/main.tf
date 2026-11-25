@@ -349,70 +349,122 @@ resource "aws_appautoscaling_policy" "cpu" {
   }
 }
 
-# Embedding worker: scale on SQS backlog per running task (metric math, no custom
-# publisher). Visible messages divided by running tasks; with zero tasks the divisor
-# defaults to 1 so a backlog still triggers scale-out from zero.
-resource "aws_appautoscaling_policy" "worker_backlog" {
-  name               = "${var.name_prefix}-embedding-worker-backlog"
-  policy_type        = "TargetTrackingScaling"
+# Embedding worker: step scaling directly on SQS queue depth, from and to zero.
+# No running-task divisor: CloudWatch drops a datapoint that divides by zero, so a
+# backlog-per-task expression gives no signal while the service reports no tasks.
+#
+# Scale out: any visible message. ChangeInCapacity only adds (+1, or +2 once more
+# than worker_backlog_per_task messages are waiting), capped by max_capacity, so a
+# shrinking backlog never stops a task that is still working.
+resource "aws_appautoscaling_policy" "worker_scale_out" {
+  name               = "${var.name_prefix}-embedding-worker-scale-out"
+  policy_type        = "StepScaling"
   service_namespace  = aws_appautoscaling_target.this["embedding-worker"].service_namespace
   scalable_dimension = aws_appautoscaling_target.this["embedding-worker"].scalable_dimension
   resource_id        = aws_appautoscaling_target.this["embedding-worker"].resource_id
 
-  target_tracking_scaling_policy_configuration {
-    target_value       = var.worker_backlog_per_task
-    scale_in_cooldown  = 300
-    scale_out_cooldown = 60
+  step_scaling_policy_configuration {
+    adjustment_type         = "ChangeInCapacity"
+    cooldown                = 60
+    metric_aggregation_type = "Maximum"
 
-    customized_metric_specification {
-      metrics {
-        id          = "visible"
-        return_data = false
+    # Bounds are relative to the alarm threshold of 1 message.
+    step_adjustment {
+      metric_interval_lower_bound = 0
+      metric_interval_upper_bound = var.worker_backlog_per_task
+      scaling_adjustment          = 1
+    }
 
-        metric_stat {
-          stat = "Average"
+    step_adjustment {
+      metric_interval_lower_bound = var.worker_backlog_per_task
+      scaling_adjustment          = 2
+    }
+  }
+}
 
-          metric {
-            namespace   = "AWS/SQS"
-            metric_name = "ApproximateNumberOfMessagesVisible"
+resource "aws_cloudwatch_metric_alarm" "worker_scale_out" {
+  alarm_name          = "${var.name_prefix}-embedding-worker-scale-out"
+  alarm_description   = "Embedding queue has visible messages: add worker tasks"
+  namespace           = "AWS/SQS"
+  metric_name         = "ApproximateNumberOfMessagesVisible"
+  statistic           = "Maximum"
+  period              = 60
+  evaluation_periods  = 1
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [aws_appautoscaling_policy.worker_scale_out.arn]
 
-            dimensions {
-              name  = "QueueName"
-              value = var.embedding_queue_name
-            }
-          }
-        }
+  dimensions = {
+    QueueName = var.embedding_queue_name
+  }
+}
+
+# Scale in to zero only after five minutes with nothing visible AND nothing in
+# flight, so a worker that holds a message is not stopped. This alarm is in ALARM
+# whenever the queue is active and idle; that is its normal resting state.
+resource "aws_appautoscaling_policy" "worker_scale_in" {
+  name               = "${var.name_prefix}-embedding-worker-scale-in"
+  policy_type        = "StepScaling"
+  service_namespace  = aws_appautoscaling_target.this["embedding-worker"].service_namespace
+  scalable_dimension = aws_appautoscaling_target.this["embedding-worker"].scalable_dimension
+  resource_id        = aws_appautoscaling_target.this["embedding-worker"].resource_id
+
+  step_scaling_policy_configuration {
+    adjustment_type         = "ExactCapacity"
+    cooldown                = 300
+    metric_aggregation_type = "Maximum"
+
+    step_adjustment {
+      metric_interval_upper_bound = 0
+      scaling_adjustment          = 0
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "worker_scale_in" {
+  alarm_name          = "${var.name_prefix}-embedding-worker-scale-in"
+  alarm_description   = "Embedding queue empty with nothing in flight: scale the worker to zero"
+  evaluation_periods  = 5
+  datapoints_to_alarm = 5
+  comparison_operator = "LessThanOrEqualToThreshold"
+  threshold           = 0
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [aws_appautoscaling_policy.worker_scale_in.arn]
+
+  metric_query {
+    id          = "outstanding"
+    label       = "VisiblePlusInFlight"
+    expression  = "visible + inflight"
+    return_data = true
+  }
+
+  metric_query {
+    id = "visible"
+
+    metric {
+      namespace   = "AWS/SQS"
+      metric_name = "ApproximateNumberOfMessagesVisible"
+      stat        = "Maximum"
+      period      = 60
+
+      dimensions = {
+        QueueName = var.embedding_queue_name
       }
+    }
+  }
 
-      metrics {
-        id          = "running"
-        return_data = false
+  metric_query {
+    id = "inflight"
 
-        metric_stat {
-          stat = "Average"
+    metric {
+      namespace   = "AWS/SQS"
+      metric_name = "ApproximateNumberOfMessagesNotVisible"
+      stat        = "Maximum"
+      period      = 60
 
-          metric {
-            namespace   = "ECS/ContainerInsights"
-            metric_name = "RunningTaskCount"
-
-            dimensions {
-              name  = "ClusterName"
-              value = aws_ecs_cluster.this.name
-            }
-
-            dimensions {
-              name  = "ServiceName"
-              value = "embedding-worker"
-            }
-          }
-        }
-      }
-
-      metrics {
-        id          = "backlog"
-        label       = "BacklogPerTask"
-        expression  = "visible / FILL(running, 1)"
-        return_data = true
+      dimensions = {
+        QueueName = var.embedding_queue_name
       }
     }
   }

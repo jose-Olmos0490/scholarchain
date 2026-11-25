@@ -79,7 +79,7 @@ expected to fire once.
 | Buckets | `raw`, `curated`, `graph`, `rag`, `artifacts`, `logs` | The code names four buckets (raw, curated, graph, rag). `reports/` and `neptune-export/` are **prefixes of the rag bucket**, exactly as the services lay them out (`ObjectLayout`). `force_destroy = false` everywhere. |
 | Deletion protection | `protect_stateful` (default `true`, independent of the environment name) | When true: Neptune `deletion_protection=true`, `skip_final_snapshot=false` with a final snapshot identifier; DynamoDB `deletion_protection_enabled=true` on every table; ALB deletion protection. PITR stays on the run-ledger, query-session, evidence-bundle and artifact-registry tables. Cleanup needs a reviewed apply with `protect_stateful=false` first (see Cleanup). |
 | ALB ingress | `alb_ingress_cidrs`: required, no default | Validation rejects `0.0.0.0/0` and `::/0` in the environment and the network module. Set it to your own public IP /32 (`terraform.tfvars.example` shows `203.0.113.10/32`); `plan.sh` also accepts `--alb-ingress-cidr`. |
-| Fargate | query-api 1 vCPU/2 GB (1-3), graph-evidence-api 0.5/1 (1-2), embedding-worker 0.5/1 (0-2) | Bounded min/max, CPU target tracking for the APIs, SQS backlog-per-task for the worker. On-demand Fargate only. |
+| Fargate | query-api 1 vCPU/2 GB (1-3), graph-evidence-api 0.5/1 (1-2), embedding-worker 0.5/1 (0-2) | Bounded min/max, CPU target tracking for the APIs. The worker uses step scaling on SQS depth: +1 or +2 on visible messages, to 0 after 5 minutes with nothing visible or in flight. On-demand Fargate only. |
 | Rollout | Terraform owns the baseline task definition; `deploy.sh` registers revisions | `aws_ecs_service` ignores `task_definition` and `desired_count`; task definition revisions are never deregistered (`skip_destroy`) so rollback targets exist. |
 | EMR | 1 primary + 2 core (m5.xlarge), managed scaling 2-4, idle auto-termination 1 h, no task group | Spot was left out: a reclaimed node loses shuffle output and the steps have no restart story. |
 | Pipeline | Step Functions: Hadoop step then Spark step, 2 h timeout each, no retry | A re-run is a new run. Entity resolution is not an EMR step (no cluster entry point exists). |
@@ -130,7 +130,7 @@ expected to fire once.
 The named profile `scholarchain-readonly` was not configured in the authoring session, so nothing
 below was checked against AWS: Neptune `engine_version` and parameter-group family
 (`1.4.0.0` / `neptune1.4`), the EMR release label (`emr-spark-8.1.0` as an EC2 cluster label), the
-Application Auto Scaling metric-math expression for the worker, and S3 Vectors quotas. They are
+worker step-scaling behaviour from zero, and S3 Vectors quotas. They are
 variables; confirm before the first apply.
 
 ## Estimated monthly cost (us-east-1, order of magnitude, unverified list prices)

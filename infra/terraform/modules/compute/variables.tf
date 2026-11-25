@@ -96,7 +96,7 @@ variable "cpu_target_percent" {
 }
 
 variable "worker_backlog_per_task" {
-  description = "Target number of visible SQS messages per running embedding-worker task."
+  description = "Worker scale-out adds two tasks instead of one when more than this many SQS messages are visible."
   type        = number
   default     = 5
 }
