@@ -1,0 +1,4 @@
+service,revision,imageTags
+query-api,8,6ce56c9
+graph-evidence-api,8,6ce56c9
+embedding-worker,8,6ce56c9

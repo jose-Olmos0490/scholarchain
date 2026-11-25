@@ -1,0 +1,28 @@
+{
+  "note": "what the service definitions referenced at collection time, not necessarily during the run",
+  "observedAtUtc": "2026-11-25T17:50:26Z",
+  "services": [
+    {
+      "imageTags": [
+        "6ce56c9"
+      ],
+      "revision": 8,
+      "service": "query-api"
+    },
+    {
+      "imageTags": [
+        "6ce56c9"
+      ],
+      "revision": 8,
+      "service": "graph-evidence-api"
+    },
+    {
+      "imageTags": [
+        "6ce56c9"
+      ],
+      "revision": 8,
+      "service": "embedding-worker"
+    }
+  ],
+  "status": "OK"
+}

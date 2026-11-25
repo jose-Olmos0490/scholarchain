@@ -1,0 +1,10 @@
+# Transcribed from deploy-engineer's report; NOT the raw stdout capture (STEP/INFO lines are not included).
+PASS healthz                GET /healthz -> 200
+PASS readyz                 GET /readyz -> 200
+PASS query                  POST /v1/query -> 200
+FAIL evidence            the query returned no evidence ID to fetch
+PASS replay                 POST /v1/query -> 200
+PASS idempotent-replay    same queryId and Idempotent-Replayed: true
+PASS no-token               POST /v1/query -> 401
+PASS bad-operation          POST /v1/query -> 422
+SMOKE RESULT: FAIL (1 check(s) failed)

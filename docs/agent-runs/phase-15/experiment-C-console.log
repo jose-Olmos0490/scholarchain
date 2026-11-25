@@ -1,0 +1,156 @@
+==> [run-experiment.sh] STEP: refuse a dirty tree and an unapproved environment
+==> [run-experiment.sh] STEP: resolve the manifest and refuse anything outside experiments/
+INFO: manifest: experiments/manifests/C-embedding-backlog.yaml
+==> [run-experiment.sh] STEP: validate the manifest
+==> [run-experiment.sh] STEP: refuse an unapproved or blocked manifest, or one for another environment
+INFO: experiment C-embedding-backlog runner load-test, hard timeout 3600s, raw results in /home/olmos/scholarchain/build/experiments/C-embedding-backlog-6ce56c9-20261125T171458Z
+==> [run-experiment.sh] STEP: run the experiment (not retried: a second run is a new experiment)
+INFO: sending 300 messages (0 poison)
+INFO: result: FAILED NO_VECTORS_WRITTEN {"dlqIncrease": 0, "drainedAfterSeconds": 1476.7, "firstTaskRunningAfterSeconds": 140.1, "maxDesiredObserved": 2, "maxRunningObserved": 2, "maxVisibleObserved": 300, "scaledToZeroAfterSeconds": 1868.2}
+==> [run-experiment.sh] STEP: record the run
+{
+  "experiment": "C-embedding-backlog",
+  "manifest": "experiments/manifests/C-embedding-backlog.yaml",
+  "runner": "load-test",
+  "environment": "dev",
+  "commitSha": "6ce56c9",
+  "region": "us-east-2",
+  "startedAtUtc": "2026-11-25T17:14:58Z",
+  "endedAtUtc": "2026-11-25T17:46:43Z",
+  "runnerExitCode": 1,
+  "timedOut": false,
+  "innerWaitTimeoutSeconds": null,
+  "resourceLimits": {
+    "max_duration_seconds": 3600,
+    "ecs_max_tasks": 2,
+    "sqs_max_workers": 2
+  },
+  "rawResultDirectory": "/home/olmos/scholarchain/build/experiments/C-embedding-backlog-6ce56c9-20261125T171458Z",
+  "metricLocations": [
+    {
+      "id": "tasks_desired_worker",
+      "namespace": "ECS/ContainerInsights",
+      "metric": "DesiredTaskCount",
+      "stat": "Average",
+      "dimensions": {
+        "ServiceName": "embedding-worker"
+      },
+      "dimensionsFrom": {
+        "ClusterName": "SC_ECS_CLUSTER"
+      }
+    },
+    {
+      "id": "tasks_running_worker",
+      "namespace": "ECS/ContainerInsights",
+      "metric": "RunningTaskCount",
+      "stat": "Average",
+      "dimensions": {
+        "ServiceName": "embedding-worker"
+      },
+      "dimensionsFrom": {
+        "ClusterName": "SC_ECS_CLUSTER"
+      }
+    },
+    {
+      "id": "tasks_pending_worker",
+      "namespace": "ECS/ContainerInsights",
+      "metric": "PendingTaskCount",
+      "stat": "Average",
+      "dimensions": {
+        "ServiceName": "embedding-worker"
+      },
+      "dimensionsFrom": {
+        "ClusterName": "SC_ECS_CLUSTER"
+      }
+    },
+    {
+      "id": "cpu_worker",
+      "namespace": "AWS/ECS",
+      "metric": "CPUUtilization",
+      "stat": "Average",
+      "dimensions": {
+        "ServiceName": "embedding-worker"
+      },
+      "dimensionsFrom": {
+        "ClusterName": "SC_ECS_CLUSTER"
+      }
+    },
+    {
+      "id": "mem_worker",
+      "namespace": "AWS/ECS",
+      "metric": "MemoryUtilization",
+      "stat": "Average",
+      "dimensions": {
+        "ServiceName": "embedding-worker"
+      },
+      "dimensionsFrom": {
+        "ClusterName": "SC_ECS_CLUSTER"
+      }
+    },
+    {
+      "id": "sqs_depth_visible",
+      "namespace": "AWS/SQS",
+      "metric": "ApproximateNumberOfMessagesVisible",
+      "stat": "Maximum",
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_QUEUE_NAME"
+      }
+    },
+    {
+      "id": "sqs_depth_inflight",
+      "namespace": "AWS/SQS",
+      "metric": "ApproximateNumberOfMessagesNotVisible",
+      "stat": "Maximum",
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_QUEUE_NAME"
+      }
+    },
+    {
+      "id": "sqs_depth_dlq",
+      "namespace": "AWS/SQS",
+      "metric": "ApproximateNumberOfMessagesVisible",
+      "stat": "Maximum",
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_DLQ_NAME"
+      }
+    },
+    {
+      "id": "sqs_age_oldest",
+      "namespace": "AWS/SQS",
+      "metric": "ApproximateAgeOfOldestMessage",
+      "stat": "Maximum",
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_QUEUE_NAME"
+      }
+    },
+    {
+      "id": "sqs_flow_sent",
+      "namespace": "AWS/SQS",
+      "metric": "NumberOfMessagesSent",
+      "stat": "Sum",
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_QUEUE_NAME"
+      }
+    },
+    {
+      "id": "sqs_flow_received",
+      "namespace": "AWS/SQS",
+      "metric": "NumberOfMessagesReceived",
+      "stat": "Sum",
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_QUEUE_NAME"
+      }
+    },
+    {
+      "id": "sqs_flow_deleted",
+      "namespace": "AWS/SQS",
+      "metric": "NumberOfMessagesDeleted",
+      "stat": "Sum",
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_QUEUE_NAME"
+      }
+    }
+  ]
+}
+INFO: EXPERIMENT_RECORD=/home/olmos/scholarchain/build/experiment-C-embedding-backlog-6ce56c9-20261125T171458Z.json
+ERROR: runner exited with status 1

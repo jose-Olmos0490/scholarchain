@@ -1,0 +1,52 @@
+{
+  "allowMissing": false,
+  "collectedAtUtc": "2026-11-25T17:50:49Z",
+  "datasetSnapshot": {
+    "dataset": "dblp",
+    "date": "2026-11-01",
+    "ingestion_run": {
+      "how_to_find": "the --run-id and --snapshot given to the live IngestMain run. Or read-only: the object name ingestion-manifests/<64 hex>.json in the rag bucket gives run:<64 hex>; the artifact registry item pk=artifact#vector-ingestion-manifest-<64 hex> holds its snapshot in provenance",
+      "not_found": "no committed record names a staged ingestion run. docs/agent-runs/phase-14b/load-live.log:6-7 records the run and snapshot of the graph load (serving_run_id above) and docs/agent-runs/phase-14/logs/pipeline-local.log:11 a local Hadoop run; neither is recorded as an ingestion run",
+      "ruling": "human (phase 15): the existing staged ingestion run; all its vectors were rejected before storage fix 55b0d3b, so it is expected to be unindexed (not verified)",
+      "run_id": "run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60",
+      "snapshot": "2026-11-01"
+    },
+    "label": "dblp Monthly Snapshot XML Release of November 2026",
+    "scope": "bounded sample-derived run loaded in phase 14/14b (89 researcher rows); current store contents are unverified",
+    "serving_run_id": "run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60",
+    "source": "phase-14 and phase-14b records (phase-14b/load-live.log), datasets/dataset-manifest.yaml"
+  },
+  "experiment": "C-embedding-backlog",
+  "logs": [
+    {
+      "kind": "worker_outcomes",
+      "rows": 90900,
+      "status": "OK",
+      "unparsedLines": 0
+    }
+  ],
+  "manifestSource": "git:6ce56c9",
+  "metricStatus": {
+    "cpu_worker": "Complete",
+    "mem_worker": "Complete",
+    "sqs_age_oldest": "Complete",
+    "sqs_depth_dlq": "Complete",
+    "sqs_depth_inflight": "Complete",
+    "sqs_depth_visible": "Complete",
+    "sqs_flow_deleted": "Complete",
+    "sqs_flow_received": "Complete",
+    "sqs_flow_sent": "Complete",
+    "tasks_desired_worker": "Complete",
+    "tasks_pending_worker": "Complete",
+    "tasks_running_worker": "Complete"
+  },
+  "missingInputs": [],
+  "postSeconds": 180,
+  "preSeconds": 300,
+  "runId": "C-embedding-backlog-6ce56c9-20261125T171458Z",
+  "runnerFiles": [
+    "sends.jsonl",
+    "observations.jsonl",
+    "run.json"
+  ]
+}

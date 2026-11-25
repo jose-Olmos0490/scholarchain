@@ -1,0 +1,143 @@
+{
+  "commitSha": "6ce56c9",
+  "endedAtUtc": "2026-11-25T17:46:43Z",
+  "environment": "dev",
+  "experiment": "C-embedding-backlog",
+  "innerWaitTimeoutSeconds": null,
+  "manifest": "experiments/manifests/C-embedding-backlog.yaml",
+  "metricLocations": [
+    {
+      "dimensions": {
+        "ServiceName": "embedding-worker"
+      },
+      "dimensionsFrom": {
+        "ClusterName": "SC_ECS_CLUSTER"
+      },
+      "id": "tasks_desired_worker",
+      "metric": "DesiredTaskCount",
+      "namespace": "ECS/ContainerInsights",
+      "stat": "Average"
+    },
+    {
+      "dimensions": {
+        "ServiceName": "embedding-worker"
+      },
+      "dimensionsFrom": {
+        "ClusterName": "SC_ECS_CLUSTER"
+      },
+      "id": "tasks_running_worker",
+      "metric": "RunningTaskCount",
+      "namespace": "ECS/ContainerInsights",
+      "stat": "Average"
+    },
+    {
+      "dimensions": {
+        "ServiceName": "embedding-worker"
+      },
+      "dimensionsFrom": {
+        "ClusterName": "SC_ECS_CLUSTER"
+      },
+      "id": "tasks_pending_worker",
+      "metric": "PendingTaskCount",
+      "namespace": "ECS/ContainerInsights",
+      "stat": "Average"
+    },
+    {
+      "dimensions": {
+        "ServiceName": "embedding-worker"
+      },
+      "dimensionsFrom": {
+        "ClusterName": "SC_ECS_CLUSTER"
+      },
+      "id": "cpu_worker",
+      "metric": "CPUUtilization",
+      "namespace": "AWS/ECS",
+      "stat": "Average"
+    },
+    {
+      "dimensions": {
+        "ServiceName": "embedding-worker"
+      },
+      "dimensionsFrom": {
+        "ClusterName": "SC_ECS_CLUSTER"
+      },
+      "id": "mem_worker",
+      "metric": "MemoryUtilization",
+      "namespace": "AWS/ECS",
+      "stat": "Average"
+    },
+    {
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_QUEUE_NAME"
+      },
+      "id": "sqs_depth_visible",
+      "metric": "ApproximateNumberOfMessagesVisible",
+      "namespace": "AWS/SQS",
+      "stat": "Maximum"
+    },
+    {
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_QUEUE_NAME"
+      },
+      "id": "sqs_depth_inflight",
+      "metric": "ApproximateNumberOfMessagesNotVisible",
+      "namespace": "AWS/SQS",
+      "stat": "Maximum"
+    },
+    {
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_DLQ_NAME"
+      },
+      "id": "sqs_depth_dlq",
+      "metric": "ApproximateNumberOfMessagesVisible",
+      "namespace": "AWS/SQS",
+      "stat": "Maximum"
+    },
+    {
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_QUEUE_NAME"
+      },
+      "id": "sqs_age_oldest",
+      "metric": "ApproximateAgeOfOldestMessage",
+      "namespace": "AWS/SQS",
+      "stat": "Maximum"
+    },
+    {
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_QUEUE_NAME"
+      },
+      "id": "sqs_flow_sent",
+      "metric": "NumberOfMessagesSent",
+      "namespace": "AWS/SQS",
+      "stat": "Sum"
+    },
+    {
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_QUEUE_NAME"
+      },
+      "id": "sqs_flow_received",
+      "metric": "NumberOfMessagesReceived",
+      "namespace": "AWS/SQS",
+      "stat": "Sum"
+    },
+    {
+      "dimensionsFrom": {
+        "QueueName": "SC_EMBEDDING_QUEUE_NAME"
+      },
+      "id": "sqs_flow_deleted",
+      "metric": "NumberOfMessagesDeleted",
+      "namespace": "AWS/SQS",
+      "stat": "Sum"
+    }
+  ],
+  "region": "us-east-2",
+  "resourceLimits": {
+    "ecs_max_tasks": 2,
+    "max_duration_seconds": 3600,
+    "sqs_max_workers": 2
+  },
+  "runner": "load-test",
+  "runnerExitCode": 1,
+  "startedAtUtc": "2026-11-25T17:14:58Z",
+  "timedOut": false
+}

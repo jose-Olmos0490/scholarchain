@@ -1,0 +1,251 @@
+# Experiment C. Format: scripts/run-experiment.sh (name, runner, target, limits, args, metrics).
+# That script also reads approval, blocked, preconditions and environment (approval gate). Other
+# keys are ignored by it and read by load-tests/ and experiments/bin/.
+# A human must approve this file (approval block) and commit it before it runs.
+# To approve, the human (only) sets approval.status: APPROVED, approval.approved_by: their name,
+# approval.approved_on: 'YYYY-MM-DD', then commits. `blocked` must be the boolean false.
+# run-experiment.sh and the load tools refuse to run otherwise, invoked directly or not.
+id: C
+name: C-embedding-backlog
+priority: 1
+purpose: 'Embedding backlog: observe the worker scale 0 -> 2 -> 0 on SQS backlog, with queue depth, task counts,
+  throughput, retries and drain time.'
+approval:
+  status: APPROVED
+  approved_by: Jose Olmos
+  approved_on: '2026-11-25'
+# Human ruling (phase 15): C runs on the existing staged ingestion run. F gets its own, later.
+blocked: false
+region: us-east-2
+environment: dev
+commit_sha: FILLED_AT_RUN_TIME (run record field commitSha)
+identity:
+  iam_user: CS441_Dev
+  aws_profile: cs441
+  risk: 'known least-privilege risk, accepted by human ruling (phase 15): experiments run as IAM user CS441_Dev and no
+    dedicated experiment role is created. The permissions of that user are not verified in this repository'
+dataset_snapshot:
+  dataset: dblp
+  date: '2026-11-01'
+  label: dblp Monthly Snapshot XML Release of November 2026
+  serving_run_id: run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60
+  scope: bounded sample-derived run loaded in phase 14/14b (89 researcher rows); current store contents are unverified
+  source: phase-14 and phase-14b records (phase-14b/load-live.log), datasets/dataset-manifest.yaml
+  ingestion_run:
+    ruling: 'human (phase 15): the existing staged ingestion run; all its vectors were rejected before storage fix
+      55b0d3b, so it is expected to be unindexed (not verified)'
+    run_id: run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60
+    snapshot: '2026-11-01'
+    not_found: 'no committed record names a staged ingestion run. docs/agent-runs/phase-14b/load-live.log:6-7 records the
+      run and snapshot of the graph load (serving_run_id above) and docs/agent-runs/phase-14/logs/pipeline-local.log:11
+      a local Hadoop run; neither is recorded as an ingestion run'
+    how_to_find: 'the --run-id and --snapshot given to the live IngestMain run. Or read-only: the object name
+      ingestion-manifests/<64 hex>.json in the rag bucket gives run:<64 hex>; the artifact registry item
+      pk=artifact#vector-ingestion-manifest-<64 hex> holds its snapshot in provenance'
+runner: load-test
+target: queue_scenario.py
+args:
+- --manifest
+- experiments/manifests/C-embedding-backlog.yaml
+limits:
+  max_duration_seconds: 3600
+  ecs_max_tasks: 2
+  sqs_max_workers: 2
+resource_bounds:
+  services:
+    query-api:
+      min_tasks: 1
+      max_tasks: 3
+      cpu_units: 1024
+      memory_mib: 2048
+      source: infra/terraform/environments/dev/variables.tf:210-216
+    graph-evidence-api:
+      min_tasks: 1
+      max_tasks: 2
+      cpu_units: 512
+      memory_mib: 1024
+      source: infra/terraform/environments/dev/variables.tf:217-223
+    embedding-worker:
+      min_tasks: 0
+      max_tasks: 2
+      cpu_units: 512
+      memory_mib: 1024
+      source: infra/terraform/environments/dev/variables.tf:224-230
+    caveat: repository defaults; the git-ignored terraform.tfvars may override them and was not read
+  worker_autoscaling:
+    policy_type: StepScaling
+    scale_out:
+      metric: ApproximateNumberOfMessagesVisible, Maximum, 60 s period
+      alarm_threshold_messages: 1
+      evaluation_periods: 1
+      adjustment_type: ChangeInCapacity
+      add_one_task_when_visible: 1 to 5
+      add_two_tasks_when_visible: 6 or more
+      backlog_step_threshold: 5
+      cooldown_seconds: 60
+    scale_in:
+      metric: visible plus not-visible messages, Maximum, 60 s period
+      alarm_threshold_messages: 0
+      evaluation_periods: 5
+      adjustment_type: ExactCapacity
+      target_tasks: 0
+      cooldown_seconds: 300
+    state: read from the repository source; whether it is deployed to the environment is not verified
+    source: infra/terraform/environments/dev/variables.tf:328-331; infra/terraform/modules/compute/main.tf:352-471;
+      infra/terraform/modules/compute/variables.tf:98-102
+  queue:
+    visibility_timeout_seconds: 1800
+    redrive_max_receive_count: 10
+    source: infra/terraform/modules/messaging/variables.tf:9-18
+  worker_dead_letter_max_receive_count:
+    value: 5
+    source: modules/services/src/main/resources/scholarchain-services.conf (embeddingWorker.consumer)
+cost_estimate_usd:
+  incremental: 0.11
+  infrastructure: 0.1
+  embedding:
+    model: amazon.titan-embed-text-v2:0
+    model_source: docs/agent-runs/phase-12/agent-report.md:142 (the deployed value is not verified)
+    assumed_items: 500
+    assumed_tokens_per_item: 500
+    usd_per_1000_input_tokens: 0.00002
+    price_source: from memory, unverified
+    expected_full_passes: 2
+    expected_usd: 0.01
+    put_failure_full_passes: 300
+    put_failure_usd: 1.5
+    redelivery_ceiling_full_passes: 1500
+    redelivery_ceiling_usd: 7.5
+  put_failure_total_usd: 1.6
+  cap_covers_put_failure: false
+  note: 'item and token counts are assumptions: no staged ingestion manifest is recorded. Expected: each of 2 workers
+    embeds every item once, then the rest skip as unchanged. If vectors are embedded but never written, every message
+    embeds again and 1.6 exceeds the cap; at 500 tokens per item the cap covers that case up to 300 items. The cap is
+    declared only: no code enforces it'
+cost_cap_usd: 1.0
+stop_conditions:
+- 'precondition: work queue empty and worker desired/running/pending all 0, else nothing is sent'
+- no worker task running 900 s after the send (NO_SCALE_OUT)
+- queue not drained 1500 s after the send (DRAIN_TIMEOUT)
+- worker not back to 0 tasks 1500 s after the drain (NO_SCALE_IN)
+- worker desired count above 2 (WORKER_BOUND_EXCEEDED)
+- 5 consecutive failed observations (OBSERVATION_FAILED)
+- 3420 s watch cap; 3600 s hard timeout by run-experiment.sh
+- dead-letter queue grows at all (UNEXPECTED_DEAD_LETTERS)
+- message cap 500 (planned 300)
+success_condition: 'at least one new SUCCEEDED vector-ingest put batch in the run ledger for SC_EMBEDDING_RUN_ID;
+  otherwise status FAILED (NO_VECTORS_WRITTEN or WRITE_EVIDENCE_UNAVAILABLE)'
+preconditions:
+- 'SC_DDB_TABLE_RUN_LEDGER names the run ledger table (read with dynamodb query)'
+- 'the staged ingestion run has items that are not yet in the vector index (human ruling: expected, because every vector
+  was rejected before storage fix 55b0d3b; not verified): an already indexed run is skipped as unchanged, writes nothing
+  and reports FAILED'
+- 'the deployed embedding worker includes storage fix 55b0d3b: docs/agent-runs/phase-15/repair-01.md:25 records it as not
+  yet deployed (last deployed build 2365bf5). Without it the vectors are rejected again'
+- 'the step-scaling policy in resource_bounds.worker_autoscaling has been deployed by the human (human-only step)'
+- 'the human records the staged run in dataset_snapshot.ingestion_run and sets SC_EMBEDDING_RUN_ID and
+  SC_EMBEDDING_SNAPSHOT to the same values (not enforced by code)'
+queue:
+  worker_service: embedding-worker
+  expected_max_workers: 2
+  poll_interval_seconds: 15
+  scale_out_timeout_seconds: 900
+  drain_timeout_seconds: 1500
+  scale_in_timeout_seconds: 1500
+  max_watch_seconds: 3420
+  scenario: backlog
+  messages: 300
+  max_messages: 500
+collect:
+  pre_seconds: 300
+  post_seconds: 180
+  deployed_services:
+  - query-api
+  - graph-evidence-api
+  - embedding-worker
+  logs:
+  - kind: worker_outcomes
+    logGroupFrom: SC_WORKER_LOG_GROUP
+metrics:
+- id: tasks_desired_worker
+  namespace: ECS/ContainerInsights
+  metric: DesiredTaskCount
+  stat: Average
+  dimensions:
+    ServiceName: embedding-worker
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: tasks_running_worker
+  namespace: ECS/ContainerInsights
+  metric: RunningTaskCount
+  stat: Average
+  dimensions:
+    ServiceName: embedding-worker
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: tasks_pending_worker
+  namespace: ECS/ContainerInsights
+  metric: PendingTaskCount
+  stat: Average
+  dimensions:
+    ServiceName: embedding-worker
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: cpu_worker
+  namespace: AWS/ECS
+  metric: CPUUtilization
+  stat: Average
+  dimensions:
+    ServiceName: embedding-worker
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: mem_worker
+  namespace: AWS/ECS
+  metric: MemoryUtilization
+  stat: Average
+  dimensions:
+    ServiceName: embedding-worker
+  dimensionsFrom:
+    ClusterName: SC_ECS_CLUSTER
+- id: sqs_depth_visible
+  namespace: AWS/SQS
+  metric: ApproximateNumberOfMessagesVisible
+  stat: Maximum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_QUEUE_NAME
+- id: sqs_depth_inflight
+  namespace: AWS/SQS
+  metric: ApproximateNumberOfMessagesNotVisible
+  stat: Maximum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_QUEUE_NAME
+- id: sqs_depth_dlq
+  namespace: AWS/SQS
+  metric: ApproximateNumberOfMessagesVisible
+  stat: Maximum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_DLQ_NAME
+- id: sqs_age_oldest
+  namespace: AWS/SQS
+  metric: ApproximateAgeOfOldestMessage
+  stat: Maximum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_QUEUE_NAME
+- id: sqs_flow_sent
+  namespace: AWS/SQS
+  metric: NumberOfMessagesSent
+  stat: Sum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_QUEUE_NAME
+- id: sqs_flow_received
+  namespace: AWS/SQS
+  metric: NumberOfMessagesReceived
+  stat: Sum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_QUEUE_NAME
+- id: sqs_flow_deleted
+  namespace: AWS/SQS
+  metric: NumberOfMessagesDeleted
+  stat: Sum
+  dimensionsFrom:
+    QueueName: SC_EMBEDDING_QUEUE_NAME

@@ -1,0 +1,6 @@
+outcome,count
+received,300
+acknowledged,300
+retried,0
+deadLettered,0
+reject EMBEDDING_FAILED,90600

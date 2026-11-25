@@ -1,0 +1,36 @@
+{
+  "awsProfile": "cs441",
+  "datasetSnapshot": "2026-11-01",
+  "dlqBaseline": 0,
+  "endedAtUtc": "2026-11-25T17:46:43.886Z",
+  "environment": "dev",
+  "experiment": "C-embedding-backlog",
+  "ingestionRunId": "run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60",
+  "manifestSha256": "284aadc0d4dca911ccfac63a0b8942bcf1e22bf3916fdb29f6e466c48ce15b78",
+  "messagesAccepted": 300,
+  "messagesOutcomeUnknown": 0,
+  "messagesPlanned": 300,
+  "messagesRefused": 0,
+  "milestones": {
+    "dlqIncrease": 0,
+    "drainedAfterSeconds": 1476.7,
+    "firstTaskRunningAfterSeconds": 140.1,
+    "maxDesiredObserved": 2,
+    "maxRunningObserved": 2,
+    "maxVisibleObserved": 300,
+    "scaledToZeroAfterSeconds": 1868.2
+  },
+  "poisonMessages": 0,
+  "region": "us-east-2",
+  "scenario": "backlog",
+  "startedAtUtc": "2026-11-25T17:14:58.541Z",
+  "status": "FAILED",
+  "stopReason": "NO_VECTORS_WRITTEN",
+  "tool": "queue_scenario",
+  "vectorWriteEvidence": {
+    "newFailedPutBatches": 0,
+    "newSucceededPutBatches": 0,
+    "source": "run ledger vector-ingest put batches new since before the send",
+    "status": "OK"
+  }
+}

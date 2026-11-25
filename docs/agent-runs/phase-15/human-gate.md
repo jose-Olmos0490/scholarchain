@@ -18,3 +18,10 @@
 - Known risk: checkov flags Neptune backup retention (pre-existing file).
 - Scope: only experiment C runs in Phase 15. F, D, A, B, E not run; reported as limitations.
 - C run ID and snapshot supplied by the human from shell history (IngestMain run). C approved by Jose Olmos on 2026-11-25.
+
+## 2026-11-25 ~12:30 — deploy 6ce56c9 and experiment C
+- Plan 2a196bb0... (7 add / 0 change / 4 destroy, no IAM or stateful changes) applied by the human; deployed by deploy-engineer. package.sh run by orchestrator because the guard blocks deploy-engineer from it (constitutional gap, routed to factory-engineer).
+- Smoke 7/8: "evidence" check failed, identical to Phase 14. Human kept the build; deploy-engineer's automatic rollback to 2365bf5 was denied by the human (it would have reverted fix 55b0d3b). Dev ALB is plain HTTP; API token sent unencrypted (known risk; token to be rotated).
+- Experiment C (run C-embedding-backlog-6ce56c9-20261125T171458Z): worker scaled 0 -> 2 at 17:17:37Z and 2 -> 0 at 17:46:43Z; 300 messages drained; 0 of 90,600 vectors written (EMBEDDING_FAILED, Bedrock ValidationException). Result FAILED under the no-vector rule; kept as-is.
+- Cost ~$1.50 exceeded the $1.00 cap, mostly CloudWatch log ingestion (2.8 GB) caused by DEBUG logging.
+- New defects: credentials in DEBUG logs (query-api, embedding-worker); rejected items acknowledged instead of retried/dead-lettered; Bedrock rejection cause unknown.
