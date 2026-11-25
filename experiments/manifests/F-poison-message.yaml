@@ -1,9 +1,10 @@
 # Experiment F. Format: scripts/run-experiment.sh (name, runner, target, limits, args, metrics).
-# Other keys are ignored by that script and read by load-tests/ and experiments/bin/.
+# That script also reads approval, blocked, preconditions and environment (approval gate). Other
+# keys are ignored by it and read by load-tests/ and experiments/bin/.
 # A human must approve this file (approval block) and commit it before it runs.
 # To approve, the human (only) sets approval.status: APPROVED, approval.approved_by: their name,
 # approval.approved_on: 'YYYY-MM-DD', then commits. `blocked` must be the boolean false.
-# The load tools refuse to run otherwise, through run-experiment.sh or invoked directly.
+# run-experiment.sh and the load tools refuse to run otherwise, invoked directly or not.
 id: F
 name: F-poison-message
 priority: 2
@@ -13,11 +14,16 @@ approval:
   status: PENDING_HUMAN_APPROVAL
   approved_by: null
   approved_on: null
-# BLOCKED: C and F cannot yet be given disjoint item subsets (see the first precondition).
+# BLOCKED: F needs its own staged run, from a rag-engineer stage-only mode that is not built yet.
 blocked: true
 region: us-east-2
 environment: dev
 commit_sha: FILLED_AT_RUN_TIME (run record field commitSha)
+identity:
+  iam_user: CS441_Dev
+  aws_profile: cs441
+  risk: 'known least-privilege risk, accepted by human ruling (phase 15): experiments run as IAM user CS441_Dev and no
+    dedicated experiment role is created. The permissions of that user are not verified in this repository'
 dataset_snapshot:
   dataset: dblp
   date: '2026-11-01'
@@ -25,8 +31,8 @@ dataset_snapshot:
   serving_run_id: run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60
   scope: bounded sample-derived run loaded in phase 14/14b (89 researcher rows); current store contents are unverified
   source: phase-14 and phase-14b records (phase-14b/load-live.log), datasets/dataset-manifest.yaml
-  ingestion_run: SC_EMBEDDING_RUN_ID and SC_EMBEDDING_SNAPSHOT at run time; no staged ingestion manifest is recorded
-    in the repository
+  ingestion_run: 'none yet: F gets its own staged run, separate from the one C ingests, from a rag-engineer stage-only
+    mode that is not built (human ruling, phase 15)'
 runner: load-test
 target: queue_scenario.py
 args:
@@ -58,10 +64,26 @@ resource_bounds:
       source: infra/terraform/environments/dev/variables.tf:224-230
     caveat: repository defaults; the git-ignored terraform.tfvars may override them and was not read
   worker_autoscaling:
-    backlog_per_task_target: 5
-    scale_out_cooldown_seconds: 60
-    scale_in_cooldown_seconds: 300
-    source: infra/terraform/environments/dev/variables.tf:328; infra/terraform/modules/compute/main.tf:362-365,414
+    policy_type: StepScaling
+    scale_out:
+      metric: ApproximateNumberOfMessagesVisible, Maximum, 60 s period
+      alarm_threshold_messages: 1
+      evaluation_periods: 1
+      adjustment_type: ChangeInCapacity
+      add_one_task_when_visible: 1 to 5
+      add_two_tasks_when_visible: 6 or more
+      backlog_step_threshold: 5
+      cooldown_seconds: 60
+    scale_in:
+      metric: visible plus not-visible messages, Maximum, 60 s period
+      alarm_threshold_messages: 0
+      evaluation_periods: 5
+      adjustment_type: ExactCapacity
+      target_tasks: 0
+      cooldown_seconds: 300
+    state: read from the repository source; whether it is deployed to the environment is not verified
+    source: infra/terraform/environments/dev/variables.tf:328-331; infra/terraform/modules/compute/main.tf:352-471;
+      infra/terraform/modules/compute/variables.tf:98-102
   queue:
     visibility_timeout_seconds: 1800
     redrive_max_receive_count: 10
@@ -105,14 +127,13 @@ stop_conditions:
 success_condition: 'at least one new SUCCEEDED vector-ingest put batch in the run ledger for SC_EMBEDDING_RUN_ID;
   otherwise status FAILED (NO_VECTORS_WRITTEN or WRITE_EVIDENCE_UNAVAILABLE)'
 preconditions:
-- 'BLOCKED: C and F must use disjoint item subsets (human decision, phase 15). A work message names only runId and
-  snapshot and the worker ingests that whole staged manifest, so both would take the same items, and F would depend
-  on C. Needs storage-engineer (item selection) or rag-engineer (stage without indexing)'
+- 'BLOCKED: F has no staged run of its own. Human ruling (phase 15): it comes later from a rag-engineer stage-only mode
+  that is not built yet. F must not use the run C ingests'
 - 'SC_DDB_TABLE_RUN_LEDGER names the run ledger table (read with dynamodb query)'
-- 'the staged ingestion run has items that are not yet in the vector index (the human expects this of the existing
-  staged run; not verified): an already indexed run is skipped as unchanged, writes nothing and reports FAILED'
-- 'the human provides SC_EMBEDDING_RUN_ID and SC_EMBEDDING_SNAPSHOT of a staged ingestion manifest: none is recorded
-  in the repository'
+- 'the staged run of F has items that are not yet in the vector index: an already indexed run is skipped as unchanged,
+  writes nothing and reports FAILED'
+- 'the deployed embedding worker includes storage fix 55b0d3b (docs/agent-runs/phase-15/repair-01.md:25)'
+- 'the human provides SC_EMBEDDING_RUN_ID and SC_EMBEDDING_SNAPSHOT of the staged ingestion manifest of F'
 queue:
   worker_service: embedding-worker
   expected_max_workers: 2

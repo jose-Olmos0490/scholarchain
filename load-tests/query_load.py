@@ -2,12 +2,17 @@
 """Bounded POST /v1/query load generator (experiments D and E).
 
     load-tests/query_load.py --manifest experiments/manifests/<name>.yaml
+                             [--env <name>] [--profile <name>]
 
 Run through run-experiment.sh (runner: load-test), which sets SC_EXPERIMENT_OUT and SC_REGION.
 Refuses unless the manifest is approved and not blocked (sclib.approval_problems), run directly or
 not. Required environment: SCHOLARCHAIN_APPROVED_ENVS, SC_BASE_URL, SCHOLARCHAIN_API_TOKEN (never
 printed or written), SC_EXPERIMENT_OUT, SC_REGION. Plain http to a host other than localhost needs
 SC_ALLOW_PLAINTEXT_HTTP=1 (the bearer token then crosses the network unencrypted).
+
+--env (else SC_ENV) must equal the manifest environment. --profile (else AWS_PROFILE) selects the
+profile of AWS CLI calls, as in queue_scenario.py. This tool currently makes NO AWS CLI call: it
+only sends HTTP requests with the API token, so the profile changes nothing it does.
 
 Stops on the manifest's error-rate, auth, rate-limit, request, time and cost caps. A level that
 reaches level_max_seconds is recorded as incomplete and the next level still runs. The cost cap is
@@ -334,9 +339,10 @@ def check_bounds(load, phases, preflight_count):
         sclib.number(load, "cooldown_seconds", 0, 600)
 
 
-def execute(manifest_path, stop):
+def execute(manifest_path, stop, env_name=None, profile_flag=None):
     manifest, full_path = sclib.load_manifest(manifest_path)
-    sclib.require_runnable(manifest, full_path)
+    sclib.require_runnable(manifest, full_path, env_name)
+    sclib.use_profile(profile_flag)
     load = manifest["load"]
     base_url, token, out_dir = sclib.require_env("SC_BASE_URL", "SCHOLARCHAIN_API_TOKEN", "SC_EXPERIMENT_OUT")
     region = sclib.check_region(manifest)
@@ -412,9 +418,11 @@ def execute(manifest_path, stop):
 def main(argv):
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--manifest", required=True)
+    parser.add_argument("--env", help="environment; falls back to SC_ENV")
+    parser.add_argument("--profile", help="AWS CLI profile; falls back to AWS_PROFILE")
     args = parser.parse_args(argv)
     try:
-        return execute(args.manifest, sclib.stop_event_on_signals())
+        return execute(args.manifest, sclib.stop_event_on_signals(), args.env, args.profile)
     except sclib.ConfigError as error:
         return sclib.fail(str(error))
 

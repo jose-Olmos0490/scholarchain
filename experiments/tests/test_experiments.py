@@ -6,6 +6,7 @@ A test name ending in _fNN guards phase 15 review finding NN. The collector and 
 from a throwaway copy of the tools (fakes.make_repo), so nothing is written into the repository.
 """
 
+import datetime
 import json
 import os
 import re
@@ -41,6 +42,37 @@ def read(path):
         return handle.read()
 
 
+def approval_form_problems(doc):
+    """Why a committed approval state is not acceptable: neither the untouched pending block nor a
+    well-formed approval, or an approval on a blocked manifest."""
+    approval = doc.get("approval")
+    if not isinstance(approval, dict) or set(approval) != {"status", "approved_by", "approved_on"}:
+        return ["the approval block must hold status, approved_by and approved_on"]
+    if approval["status"] == "PENDING_HUMAN_APPROVAL":
+        if approval["approved_by"] is None and approval["approved_on"] is None:
+            return []
+        return ["a pending approval names an approver or a date"]
+    problems = []
+    if approval["status"] != "APPROVED":
+        problems.append("status is %r, not exactly APPROVED" % approval["status"])
+    who, when = approval["approved_by"], approval["approved_on"]
+    if not isinstance(who, str) or not who.strip():
+        problems.append("approved_by is empty")
+    if isinstance(when, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", when):
+        try:
+            when = datetime.date.fromisoformat(when)
+        except ValueError:
+            pass
+    if type(when) is not datetime.date:
+        problems.append("approved_on is %r, not a YYYY-MM-DD date" % approval["approved_on"])
+    blocked_precondition = any(str(text).strip().upper().startswith("BLOCKED")
+                               for entry in doc.get("preconditions") or []
+                               for text in (entry if isinstance(entry, dict) else [entry]))
+    if doc.get("blocked") is not False or blocked_precondition:
+        problems.append("a blocked manifest is approved")
+    return problems
+
+
 class ManifestTest(unittest.TestCase):
     def test_one_manifest_per_experiment_with_the_required_fields(self):
         self.assertEqual([load(n)["id"] for n in NAMES], list("ABCDEF"))
@@ -56,14 +88,63 @@ class ManifestTest(unittest.TestCase):
             if doc["runner"] == "load-test":
                 self.assertEqual(doc["args"], ["--manifest", "experiments/manifests/" + name])
 
-    def test_blocked_is_stated_and_b_c_f_are_blocked_f03(self):
+    def test_blocked_is_stated_and_b_and_f_are_blocked_f03(self):
         self.assertEqual({load(n)["id"]: load(n).get("blocked") for n in NAMES},
-                         {"A": False, "B": True, "C": True, "D": False, "E": False, "F": True})
+                         {"A": False, "B": True, "C": False, "D": False, "E": False, "F": True})
+        # a BLOCKED precondition blocks as much as the flag does
+        held = {load(n)["id"] for n in NAMES
+                if any(str(p).startswith("BLOCKED") for p in load(n).get("preconditions") or [])}
+        self.assertEqual(held, {"B", "F"})
 
-    def test_no_manifest_is_approved(self):
+    def test_every_approval_is_pending_or_well_formed_and_no_blocked_manifest_is_approved(self):
+        found = {name: approval_form_problems(load(name)) for name in NAMES}
+        self.assertEqual({name: problems for name, problems in found.items() if problems}, {})
+
+    def test_the_approval_check_refuses_malformed_and_blocked_approvals(self):
+        good = {"blocked": False,
+                "approval": {"status": "APPROVED", "approved_by": "A Person", "approved_on": "2026-01-01"}}
+        self.assertEqual(approval_form_problems(good), [])
+        dated = dict(good["approval"], approved_on=datetime.date(2026, 1, 1))
+        self.assertEqual(approval_form_problems(dict(good, approval=dated)), [])
+        for field, value in (("status", "Approved"), ("status", "REJECTED"), ("approved_by", ""),
+                             ("approved_by", None), ("approved_on", "11/25/2026"), ("approved_on", "2026-13-01"),
+                             ("approved_on", "20260101"), ("approved_on", None)):
+            doc = dict(good, approval=dict(good["approval"], **{field: value}))
+            self.assertTrue(approval_form_problems(doc), (field, value))
+        for blocked in (dict(good, blocked=True), dict(good, preconditions=["BLOCKED: x"])):
+            self.assertEqual(approval_form_problems(blocked), ["a blocked manifest is approved"])
+        pending = {"status": "PENDING_HUMAN_APPROVAL", "approved_by": "A Person", "approved_on": None}
+        self.assertTrue(approval_form_problems(dict(good, approval=pending)))
+
+    def test_every_manifest_records_the_identity_and_its_least_privilege_risk(self):
         for name in NAMES:
-            self.assertEqual(load(name)["approval"],
-                             {"status": "PENDING_HUMAN_APPROVAL", "approved_by": None, "approved_on": None}, name)
+            identity = load(name)["identity"]
+            self.assertEqual((identity["iam_user"], identity["aws_profile"]), ("CS441_Dev", "cs441"), name)
+            self.assertIn("least-privilege risk", identity["risk"], name)
+
+    def test_worker_autoscaling_matches_the_step_scaling_source(self):
+        source = read("infra/terraform/modules/compute/main.tf")
+
+        def resource(kind, name):
+            return re.search(r'resource "%s" "%s" \{\n(.*?)\n\}\n' % (kind, name), source, re.S).group(1)
+
+        def value(block, key):
+            return re.search(r'^\s*%s\s*=\s*"?(\w+)' % key, block, re.M).group(1)
+
+        threshold = re.search(r'variable "worker_backlog_per_task" \{.*?default\s*=\s*(\d+)',
+                              read("infra/terraform/environments/dev/variables.tf"), re.S).group(1)
+        for name in ("C-embedding-backlog.yaml", "F-poison-message.yaml"):
+            scaling = load(name)["resource_bounds"]["worker_autoscaling"]
+            self.assertEqual(scaling["scale_out"]["backlog_step_threshold"], int(threshold))
+            for side in ("scale_out", "scale_in"):
+                policy = resource("aws_appautoscaling_policy", "worker_" + side)
+                alarm = resource("aws_cloudwatch_metric_alarm", "worker_" + side)
+                recorded = scaling[side]
+                self.assertEqual(value(policy, "policy_type"), scaling["policy_type"])
+                self.assertEqual(value(policy, "adjustment_type"), recorded["adjustment_type"])
+                self.assertEqual(int(value(policy, "cooldown")), recorded["cooldown_seconds"])
+                self.assertEqual(int(value(alarm, "evaluation_periods")), recorded["evaluation_periods"])
+                self.assertEqual(int(value(alarm, "threshold")), recorded["alarm_threshold_messages"])
 
     def test_c_and_f_costs_include_embedding_calls(self):
         for name, valid in (("C-embedding-backlog.yaml", "messages"), ("F-poison-message.yaml", "valid_duplicates")):

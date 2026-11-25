@@ -300,6 +300,22 @@ class ApprovalTest(LoadToolTest):
         self.assertEqual(done.returncode, 1)
         self.assertEqual(api.bodies, [])
 
+    def test_query_load_env_flag_and_variable_must_match_the_manifest(self):
+        for label, flags, env in (("flag", ["--env", "prod"], {}), ("variable", [], {"SC_ENV": "prod"}),
+                                  ("empty flag", ["--env", ""], {})):
+            api = fakes.FakeApi()
+            args, environment = self.load_args(api, env=env)
+            done = fakes.run_tool("load-tests/query_load.py", args + flags, environment)
+            self.assertEqual(done.returncode, 1, label + done.stderr)
+            self.assertIn("--env", done.stderr, label)
+            self.assertEqual(api.bodies, [], label)
+
+    def test_query_load_accepts_env_and_profile_flags_and_the_flag_wins_over_sc_env(self):
+        api = fakes.FakeApi()
+        args, environment = self.load_args(api, env={"SC_ENV": "prod"})
+        done = fakes.run_tool("load-tests/query_load.py", args + ["--env", "dev", "--profile", "p1"], environment)
+        self.assertEqual(done.returncode, 0, done.stderr)
+
     def test_a_manifest_whose_args_name_another_file_is_refused_f18(self):
         api = fakes.FakeApi()
         stale = ["--manifest", "experiments/manifests/D-query-load.yaml"]
@@ -335,9 +351,9 @@ class QueueTest(ToolTest):
             del environment[name]
         return ["--manifest", manifest], environment
 
-    def run_queue(self, source, **kwargs):
+    def run_queue(self, source, flags=(), **kwargs):
         args, env = self.queue_args(source, **kwargs)
-        done = fakes.run_tool("load-tests/queue_scenario.py", args, env)
+        done = fakes.run_tool("load-tests/queue_scenario.py", args + list(flags), env)
         with open(env["STUB_STATE"]) as handle:
             return done, json.load(handle)
 
@@ -356,17 +372,77 @@ class QueueScenarioTest(QueueTest):
             self.assertIn("may not run", done.stderr, label)
             self.assertEqual(state["calls"], [], label)
 
-    def test_c_and_f_send_nothing_while_their_items_cannot_be_disjoint(self):
-        """Human decision 1. Approving the committed manifest is not enough, nor is flipping `blocked`."""
-        for source in ("C-embedding-backlog.yaml", "F-poison-message.yaml"):
-            with open(os.path.join(fakes.REPO, "experiments", "manifests", source)) as handle:
-                committed = yaml.safe_load(handle)
-            for label, blocked in (("approved as committed", committed["blocked"]), ("boolean flipped", False)):
-                change = lambda d: d.update(blocked=blocked, preconditions=committed["preconditions"])
-                done, state = self.run_queue(source, change=change)
-                self.assertEqual(done.returncode, 1, source + label)
-                self.assertIn("may not run", done.stderr, source + label)
-                self.assertEqual(state["calls"], [], source + label)
+    def committed(self, source):
+        with open(os.path.join(fakes.REPO, "experiments", "manifests", source)) as handle:
+            return yaml.safe_load(handle)
+
+    def test_f_sends_nothing_while_it_has_no_staged_run_of_its_own(self):
+        """Human ruling. Approving the committed manifest is not enough, nor is flipping `blocked`."""
+        committed = self.committed("F-poison-message.yaml")
+        for label, blocked in (("approved as committed", committed["blocked"]), ("boolean flipped", False)):
+            change = lambda d: d.update(blocked=blocked, preconditions=committed["preconditions"])
+            done, state = self.run_queue("F-poison-message.yaml", change=change)
+            self.assertEqual(done.returncode, 1, label)
+            self.assertIn("may not run", done.stderr, label)
+            self.assertEqual(state["calls"], [], label)
+
+    def test_committed_c_is_held_back_by_nothing_but_its_approval(self):
+        committed = self.committed("C-embedding-backlog.yaml")
+        change = lambda d: d.update(blocked=committed["blocked"], preconditions=committed["preconditions"])
+        done, state = self.run_queue("C-embedding-backlog.yaml", change=change, queue={"messages": 2})
+        self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+        self.assertIn("sqs send-message-batch", state["calls"])
+
+    def assert_every_call_used(self, state, profile):
+        self.assertTrue({"sqs get-queue-attributes", "sqs send-message-batch", "ecs describe-services",
+                         "dynamodb query"} <= set(state["calls"]), state["calls"])
+        self.assertEqual(len(state["profiles"]), len(state["calls"]))
+        self.assertEqual(set(state["profiles"]), {profile})
+        self.assertEqual(self.run_json()["awsProfile"], profile)
+
+    def test_the_profile_flag_reaches_every_aws_call_and_wins_over_aws_profile(self):
+        done, state = self.run_queue("C-embedding-backlog.yaml", flags=["--profile", "flag-profile"],
+                                     env={"AWS_PROFILE": "variable-profile"}, queue={"messages": 2})
+        self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+        self.assert_every_call_used(state, "flag-profile")
+
+    def test_aws_profile_is_the_fallback_for_every_aws_call(self):
+        done, state = self.run_queue("C-embedding-backlog.yaml", env={"AWS_PROFILE": "variable-profile"},
+                                     queue={"messages": 2})
+        self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+        self.assert_every_call_used(state, "variable-profile")
+
+    def test_without_a_profile_flag_or_variable_none_is_passed(self):
+        done, state = self.run_queue("C-embedding-backlog.yaml", visible=3)
+        self.assertEqual(done.returncode, 1)
+        self.assertEqual(set(state["profiles"]), {None})
+        self.assertIsNone(self.run_json()["awsProfile"])
+
+    def test_an_empty_profile_flag_makes_no_call(self):
+        done, state = self.run_queue("C-embedding-backlog.yaml", flags=["--profile", " "],
+                                     env={"AWS_PROFILE": "variable-profile"})
+        self.assertEqual(done.returncode, 1)
+        self.assertIn("--profile needs a value", done.stderr)
+        self.assertEqual(state["calls"], [])
+
+    def test_a_wrong_or_unapproved_env_makes_no_call(self):
+        mismatch, unlisted = "differs from the manifest environment", "SCHOLARCHAIN_APPROVED_ENVS"
+        for label, flags, env, words in (
+                ("flag", ["--env", "prod"], {}, mismatch),
+                ("variable", [], {"SC_ENV": "prod"}, mismatch),
+                ("approved but not the manifest's", ["--env", "prod"], {unlisted: "dev,prod"}, mismatch),
+                ("a flag does not approve", ["--env", "dev"], {unlisted: ""}, unlisted)):
+            done, state = self.run_queue("C-embedding-backlog.yaml", flags=flags, env=env)
+            self.assertEqual(done.returncode, 1, label + done.stderr)
+            self.assertIn(words, done.stderr, label)
+            self.assertEqual(state["calls"], [], label)
+
+    def test_the_env_flag_wins_over_sc_env(self):
+        done, state = self.run_queue("C-embedding-backlog.yaml", flags=["--env", "dev"], env={"SC_ENV": "prod"},
+                                     visible=3)
+        self.assertEqual(done.returncode, 1, done.stderr)
+        self.assertEqual(self.run_json()["stopReason"], "PRECONDITION_QUEUE_NOT_EMPTY", done.stderr)
+        self.assertTrue(state["calls"])
 
     def test_backlog_records_scale_out_drain_and_scale_in_without_resource_names(self):
         done, state = self.run_queue("C-embedding-backlog.yaml", queue={"messages": 25})

@@ -1,9 +1,10 @@
 # Experiment E. Format: scripts/run-experiment.sh (name, runner, target, limits, args, metrics).
-# Other keys are ignored by that script and read by load-tests/ and experiments/bin/.
+# That script also reads approval, blocked, preconditions and environment (approval gate). Other
+# keys are ignored by it and read by load-tests/ and experiments/bin/.
 # A human must approve this file (approval block) and commit it before it runs.
 # To approve, the human (only) sets approval.status: APPROVED, approval.approved_by: their name,
 # approval.approved_on: 'YYYY-MM-DD', then commits. `blocked` must be the boolean false.
-# The load tools refuse to run otherwise, through run-experiment.sh or invoked directly.
+# run-experiment.sh and the load tools refuse to run otherwise, invoked directly or not.
 id: E
 name: E-retrieval-modes
 priority: 6
@@ -16,6 +17,11 @@ blocked: false
 region: us-east-2
 environment: dev
 commit_sha: FILLED_AT_RUN_TIME (run record field commitSha)
+identity:
+  iam_user: CS441_Dev
+  aws_profile: cs441
+  risk: 'known least-privilege risk, accepted by human ruling (phase 15): experiments run as IAM user CS441_Dev and no
+    dedicated experiment role is created. The permissions of that user are not verified in this repository'
 dataset_snapshot:
   dataset: dblp
   date: '2026-11-01'

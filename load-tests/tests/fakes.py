@@ -1,6 +1,6 @@
 """Offline fakes: a localhost /v1/query server, a stub AWS CLI, a stub git, fixture manifests and a
-throwaway copy of the tools. Nothing here reaches AWS, and no committed manifest is approved:
-fixture approvals exist only in temporary directories."""
+throwaway copy of the tools. Nothing here reaches AWS. Fixture approvals exist only in temporary
+directories and never depend on a committed approval block."""
 
 import hashlib
 import http.server
@@ -80,7 +80,9 @@ state = json.load(open(state_path))
 argv = sys.argv[1:]
 # skip the global options (all take a value)
 i = 0
+options = {}
 while argv[i].startswith("--"):
+    options[argv[i]] = argv[i + 1]
     i += 2
 service, operation, rest = argv[i], argv[i + 1], argv[i + 2:]
 def opt(name):
@@ -92,6 +94,7 @@ def refuse():
     sys.stderr.write("An error occurred (AccessDenied) arn:aws:x:123456789012 secret-cluster secret-queue")
     sys.exit(254)
 state["calls"].append(service + " " + operation)
+state["profiles"].append(options.get("--profile"))
 count = state["calls"].count(service + " " + operation)
 if operation in state["fail_ops"] and count >= state["fail_ops"][operation]:
     refuse()
@@ -171,7 +174,7 @@ def make_stub(directory, tasks=0, scales=True, visible=0, **options):
         handle.write(STUB.replace("%(python)s", sys.executable).replace("%%", "%"))
     os.chmod(stub, 0o755)
     state = os.path.join(directory, "stub-state.json")
-    doc = {"visible": visible, "dlq": 0, "tasks": tasks, "scales": scales, "bodies": [], "calls": [],
+    doc = {"visible": visible, "dlq": 0, "tasks": tasks, "scales": scales, "bodies": [], "calls": [], "profiles": [],
            "queries": [], "ledger": [OLD_PUT_BATCH], "writes": True, "fail_send": 0, "fail_send_mode": "error",
            "fail_ops": {}, "lag": 0, "absent_services": [], "no_data": [], "log_messages": None,
            "image": "123456789012.dkr.ecr.x.amazonaws.com/app:abc1234"}
@@ -191,7 +194,7 @@ def fixture_manifest(directory, source, change=None, **sections):
     path = os.path.join(directory, doc["name"] + ".yaml")
     doc["approval"] = {"status": "APPROVED", "approved_by": "offline-test-fixture", "approved_on": "2026-01-01"}
     doc["blocked"] = False
-    if "preconditions" in doc:  # C and F are committed as blocked; the tool tests need them runnable
+    if "preconditions" in doc:  # F is committed as blocked; the tool tests need it runnable
         doc["preconditions"] = [p for p in doc["preconditions"] if not str(p).startswith("BLOCKED")]
     doc["args"] = ["--manifest", path]
     for section, values in sections.items():

@@ -109,16 +109,22 @@ def approval_problems(manifest):
     return problems
 
 
-def require_runnable(manifest, full_path):
+def require_runnable(manifest, full_path, env_flag=None):
     """Refuses a load tool unless the manifest it was given is approved, is not blocked, names an
     approved environment and is the manifest this run was launched for. Applies to direct
-    invocation and to run-experiment.sh alike."""
+    invocation and to run-experiment.sh alike.
+
+    env_flag is the tool's --env; without it SC_ENV (set by run-experiment.sh) is used. Either
+    one must equal the manifest environment. It never widens SCHOLARCHAIN_APPROVED_ENVS."""
     problems = approval_problems(manifest)
     if problems:
         raise ConfigError("the manifest may not run: " + "; ".join(problems))
     approved = [e.strip() for e in os.environ.get("SCHOLARCHAIN_APPROVED_ENVS", "").split(",") if e.strip()]
     if manifest.get("environment") not in approved:
         raise ConfigError("the manifest environment is not listed in SCHOLARCHAIN_APPROVED_ENVS")
+    requested = env_flag if env_flag is not None else os.environ.get("SC_ENV", "").strip() or None
+    if requested is not None and requested != manifest.get("environment"):
+        raise ConfigError("--env (or SC_ENV) differs from the manifest environment; refused")
     name = manifest.get("name")
     if os.path.splitext(os.path.basename(full_path))[0] != name:
         raise ConfigError("the manifest file name differs from its `name`; refused")
@@ -180,6 +186,22 @@ def stop_event_on_signals():
     return event
 
 
+# The profile of every aws_json call, set by use_profile(). None: the CLI's own credential chain.
+_profile = None
+
+
+def use_profile(flag):
+    """Selects the profile of every later aws_json call: the --profile value, else AWS_PROFILE.
+
+    It is passed to the CLI as --profile: AWS_PROFILE alone loses to static credential
+    variables (AWS_ACCESS_KEY_ID)."""
+    global _profile
+    if flag is not None and not flag.strip():
+        raise ConfigError("--profile needs a value")
+    _profile = (flag if flag is not None else os.environ.get("AWS_PROFILE", "")).strip() or None
+    return _profile
+
+
 def aws_json(args, region, timeout=60, max_attempts=None):
     """Runs one AWS CLI command and returns its parsed JSON output ({} when empty).
 
@@ -190,7 +212,7 @@ def aws_json(args, region, timeout=60, max_attempts=None):
         "--output", "json",
         "--cli-connect-timeout", "10",
         "--cli-read-timeout", "30",
-    ] + list(args)
+    ] + (["--profile", _profile] if _profile else []) + list(args)
     env = dict(os.environ)
     if max_attempts is not None:
         env["AWS_MAX_ATTEMPTS"] = str(max_attempts)

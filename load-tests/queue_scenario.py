@@ -2,6 +2,7 @@
 """Embedding-queue scenarios (experiments C and F).
 
     load-tests/queue_scenario.py --manifest experiments/manifests/<name>.yaml
+                                 [--env <name>] [--profile <name>]
 
 THIS TOOL WRITES TO SQS (SendMessage on the embedding work queue). It refuses to start unless the
 manifest is approved and not blocked (sclib.approval_problems), run directly or not, and the
@@ -12,8 +13,11 @@ Run through run-experiment.sh (runner: load-test). Required environment:
 SCHOLARCHAIN_APPROVED_ENVS, SC_DDB_TABLE_RUN_LEDGER (read only), SC_EXPERIMENT_OUT, SC_REGION,
 SC_ALLOW_QUEUE_WRITES=1, SC_EMBEDDING_QUEUE_URL, SC_EMBEDDING_DLQ_URL, SC_ECS_CLUSTER,
 SC_EMBEDDING_RUN_ID (a run whose ingestion manifest is already staged in S3),
-SC_EMBEDDING_SNAPSHOT. The AWS profile must come from AWS_PROFILE: run-experiment.sh --profile
-does not reach a load-test runner.
+SC_EMBEDDING_SNAPSHOT.
+
+--env (else SC_ENV) must equal the manifest environment. --profile (else AWS_PROFILE) is passed
+to every AWS CLI call. run-experiment.sh passes neither flag: it sets SC_ENV and, with its own
+--profile, AWS_PROFILE. The profile name is recorded in run.json.
 
 Writes sends.jsonl, observations.jsonl and run.json. No URL or resource name is written.
 
@@ -222,9 +226,10 @@ def check_times(spec):
         sclib.number(spec, key, 0.1, 3600)
 
 
-def execute(manifest_path, stop):
+def execute(manifest_path, stop, env_name=None, profile_flag=None):
     manifest, full_path = sclib.load_manifest(manifest_path)
-    sclib.require_runnable(manifest, full_path)
+    sclib.require_runnable(manifest, full_path, env_name)
+    profile = sclib.use_profile(profile_flag)
     spec = manifest["queue"]
     if os.environ.get("SC_ALLOW_QUEUE_WRITES") != "1":
         raise sclib.ConfigError("this scenario writes to SQS: the human must set SC_ALLOW_QUEUE_WRITES=1")
@@ -287,6 +292,7 @@ def execute(manifest_path, stop):
         status = "COMPLETED" if reason is None else "STOPPED" if written else "FAILED"
         sclib.write_json(os.path.join(out_dir, "run.json"), {
             "experiment": manifest["name"], "tool": "queue_scenario", "region": region,
+            "environment": manifest["environment"], "awsProfile": profile,
             "scenario": spec["scenario"], "status": status,
             "stopReason": reason, "startedAtUtc": sclib.iso(started),
             "endedAtUtc": sclib.iso(sclib.utc_now()), "messagesPlanned": len(messages),
@@ -304,9 +310,11 @@ def execute(manifest_path, stop):
 def main(argv):
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--manifest", required=True)
+    parser.add_argument("--env", help="environment; falls back to SC_ENV")
+    parser.add_argument("--profile", help="AWS CLI profile; falls back to AWS_PROFILE")
     args = parser.parse_args(argv)
     try:
-        return execute(args.manifest, sclib.stop_event_on_signals())
+        return execute(args.manifest, sclib.stop_event_on_signals(), args.env, args.profile)
     except sclib.ConfigError as error:
         return sclib.fail(str(error))
 

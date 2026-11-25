@@ -1,10 +1,12 @@
 # Experiment B. Format: scripts/run-experiment.sh (name, runner, target, limits, args, metrics).
-# Other keys are ignored by that script and read by load-tests/ and experiments/bin/.
+# That script also reads approval, blocked, preconditions and environment (approval gate). Other
+# keys are ignored by it and read by load-tests/ and experiments/bin/.
 # A human must approve this file (approval block) and commit it before it runs.
 # To approve, the human (only) sets approval.status: APPROVED, approval.approved_by: their name,
 # approval.approved_on: 'YYYY-MM-DD', then commits. `blocked` must be the boolean false.
-# NOT ENFORCED for runner: pipeline: neither run-experiment.sh nor the pipeline script reads
-# approval or `blocked` (owner of that check: infra-engineer).
+# scripts/run-experiment.sh refuses an unapproved or blocked manifest for runner: pipeline too.
+# NOT GATED: running scripts/run-bounded-pipeline.sh directly reads no manifest, so neither
+# approval nor `blocked` applies there (owner of that script: infra-engineer).
 id: B
 name: B-emr-burst
 priority: 5
@@ -19,6 +21,11 @@ blocked_reason: the pipeline runner cannot select a larger input or partition co
 region: us-east-2
 environment: dev
 commit_sha: FILLED_AT_RUN_TIME (run record field commitSha)
+identity:
+  iam_user: CS441_Dev
+  aws_profile: cs441
+  risk: 'known least-privilege risk, accepted by human ruling (phase 15): experiments run as IAM user CS441_Dev and no
+    dedicated experiment role is created. The permissions of that user are not verified in this repository'
 dataset_snapshot:
   dblp: '2026-11-01'
   openalex: '2026-10-14'
