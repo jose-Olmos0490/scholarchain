@@ -25,3 +25,11 @@
 - Experiment C (run C-embedding-backlog-6ce56c9-20261125T171458Z): worker scaled 0 -> 2 at 17:17:37Z and 2 -> 0 at 17:46:43Z; 300 messages drained; 0 of 90,600 vectors written (EMBEDDING_FAILED, Bedrock ValidationException). Result FAILED under the no-vector rule; kept as-is.
 - Cost ~$1.50 exceeded the $1.00 cap, mostly CloudWatch log ingestion (2.8 GB) caused by DEBUG logging.
 - New defects: credentials in DEBUG logs (query-api, embedding-worker); rejected items acknowledged instead of retried/dead-lettered; Bedrock rejection cause unknown.
+
+## 2026-11-25 ~13:10 — incident INC-20261125-debug-credential-logging
+- Reviewed incident report; account IDs redacted by incident-responder at human request (2 replacements; greps 0).
+- Decision: do not scale APIs to 0 (autoscaling min 1, Terraform drift, temporary credentials in private logs); contain by shipping the production logback fix today as a separate change.
+- Deferred to the next fix batch: Neptune audit log credential capture, TLS on the dev ALB.
+- After the fix is live: rotate API keys, revoke task-role sessions, decide on log retention/deletion.
+- Accepted: incident-responder used simpler read-only command forms when the guard blocked compound commands; no guard or settings changed.
+- Known: AWS account ID appears in 23 earlier tracked evidence files; not rewritten (private repo, ID is not a credential).
