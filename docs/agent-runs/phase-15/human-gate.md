@@ -41,3 +41,10 @@
   - New tasks (194a6c8e..., 72763c57...): 136 log lines, 0 credential/DEBUG matches, including 10 min before task start.
   - All matches since rollout are in the old task streams (query-api 6031e502...: 2130, last 20:05:06Z; graph-evidence-api ba974696...: 860, last 20:05:34Z), ending at old-task shutdown.
 - Still open: rotate API token (sent over plain HTTP), old log material (30-day retention), Neptune audit log, TLS on the dev ALB.
+- Bedrock: simulate-principal-policy for bedrock:InvokeModel (us-east-2) = allowed, AllowedByOrganizations = True; not IAM or SCP. Treated as an AWS-side account restriction; AWS Support case and instructor follow-up sent.
+
+## 2026-11-25 ~14:30 — Phase 15 closed by the human architect
+- Gate met: one measured scale-out (0 -> 2) and scale-in (2 -> 0) of the embedding worker (experiment C), UTC-synchronized metrics, raw data sealed with SHA256SUMS and committed, cost stated (~$1.50, over the $1 cap), failures reported (0 vectors written: Bedrock account block).
+- Incident INC-20261125 CONTAINED (logging fix 3c3e1a1, code-reviewer APPROVE in review-report-04.md); not resolved.
+- Not run, reported as limitations: D (query load), E (retrieval modes), F (poison message) — Bedrock-dependent or blocked by the ack-on-reject defect; A/B (EMR) moved to phase 15b.
+- Open items carried forward: Bedrock account restriction (AWS Support case + instructor), "evidence" smoke failure, rejected items acknowledged instead of dead-lettered, API token rotation, existing log material, Neptune audit log, TLS on the dev ALB, embedding-worker log containment check on first run, tfstate read guard gap and guard false positives (factory-engineer), missing read-only AWS profile for agents.

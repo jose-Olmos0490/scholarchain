@@ -6,13 +6,67 @@ CloudWatch Logs.
 | Field | Value |
 |---|---|
 | Incident ID | INC-20261125-debug-credential-logging |
+| Status | **CONTAINED** (not RESOLVED). Open items are listed under "Containment" |
 | Environment | dev, us-east-2, account `<account-id>` |
 | Start (UTC) | 2026-11-24T13:58:52Z (first SigV4 authorization header found) |
-| End (UTC) | **Not ended. Exposure is ongoing.** 530 new query-api authorization header lines matched after 2026-11-25T18:45:00Z (checked about 18:54Z) |
+| End (UTC) | Not ended; the incident is not resolved. Last matches in the old API task streams: query-api 2026-11-25T20:05:06Z, graph-evidence-api 2026-11-25T20:05:34Z (human-run counts, see "Containment"). At diagnosis, 530 new query-api authorization header lines matched after 2026-11-25T18:45:00Z (checked about 18:54Z) |
 | Deployed at diagnosis | commit 6ce56c9, task revision 8 on all three services; query-api 1/1, graph-evidence-api 1/1, embedding-worker 0/0 |
 | Severity (assessment) | High for confidentiality of logs. No evidence of misuse (see limits below) |
-| Report type | Diagnosis only. Nothing was changed, deleted, redeployed, scaled or stopped |
+| Report type | Diagnosis, with a later "Containment" update. At diagnosis, nothing was changed, deleted, redeployed, scaled or stopped |
 | Author | incident-responder |
+
+## Containment
+
+Status: **CONTAINED**, not RESOLVED. The sections after this one record the
+diagnosis as it stood before the fix was deployed.
+
+**Source of these facts:** HUMAN-RUN, counts-only CloudWatch Logs Insights
+results, supplied by the human architect. No agent ran or verified these
+queries, and no agent verified the deployment for this update.
+
+### Fix
+
+Commit `3c3e1a1` was deployed at about 2026-11-25T20:05Z.
+
+### New tasks
+
+| Service | New task ID |
+|---|---|
+| query-api | `194a6c8e91fb48de928ae91902467fe4` |
+| graph-evidence-api | `72763c5753c74ebfad1d6a4b487d358d` |
+
+The two new tasks together produced 136 log lines, with **0 matches** for
+`X-Amz-Security-Token`, `Authorization: AWS4`, `SecretString` or `DEBUG`,
+including 10 minutes before task start.
+
+### Old tasks
+
+All matches after rollout came from the old task streams.
+
+| Service | Old task ID | Matches | Last match (UTC) |
+|---|---|---|---|
+| query-api | `6031e50296a34b86a0014826c7dc2fec` | 2130 | 2026-11-25T20:05:06Z |
+| graph-evidence-api | `ba974696b5e6461a91dd3af2c236bdb8` | 860 | 2026-11-25T20:05:34Z |
+
+### Scope and limits
+
+- The result covers the two new API tasks. No result for embedding-worker under
+  the fix is recorded here.
+- The result does not cover the Neptune audit log, which the service logging
+  fix does not change.
+- 136 lines is a small sample. These results do not show how the new tasks
+  behave under all request paths.
+
+### Open items
+
+The status stays CONTAINED because these remain open.
+
+| Open item | Detail |
+|---|---|
+| API token rotation | Not done. The post-deploy smoke test also sent the bearer token over plain HTTP to the internet-facing ALB |
+| Existing logged material | Still in the log groups |
+| Neptune audit log | Still open. See "Second source: Neptune audit log" |
+| TLS | Still open. The diagnosis found only an HTTP:80 listener on the ALB |
 
 ## Detection source
 
@@ -40,8 +94,8 @@ No alarm or automated control detected this. Both detections were incidental.
 |---|---|
 | Experiment run | `C-embedding-backlog-6ce56c9-20261125T171458Z` |
 | Ingestion run | `run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60` |
-| query-api task, current | `6031e50296a34b86a0014826c7dc2fec` |
-| graph-evidence-api task, current | `ba974696b5e6461a91dd3af2c236bdb8` |
+| query-api task, at diagnosis | `6031e50296a34b86a0014826c7dc2fec` |
+| graph-evidence-api task, at diagnosis | `ba974696b5e6461a91dd3af2c236bdb8` |
 | embedding-worker tasks (stopped) | `692cf1bddaf848e398863e00406099a1`, `9245b2c349a6480397df515d2354e023` |
 | Earlier query-api tasks with matches | `4775d98fe553485bbd091b79efbc3741`, `d3c3bf01d15449d5a4ae28b38d811298` |
 | Earlier graph-evidence-api tasks with matches | `5cb4975c3cc94e18b1c00928f06bb153`, `bea8268bacaa48bc9acdd5d915553995`, `21e3170c4c024a9dbeef07b37c58a0c1`, `77315b6442794dda8061df766999a047` |
@@ -54,8 +108,9 @@ IDs were read, because no raw message was read.
 ### What is in the logs
 
 Counts are matching log events (CloudWatch Logs Insights `recordsMatched`),
-window 2026-11-24 to the time of the query on 2026-11-25. The API services are
-still running, so their counts keep growing.
+window 2026-11-24 to the time of the query on 2026-11-25. The API services were
+still running the unfixed revision at query time, so these counts are not final
+totals.
 
 | Indicator | query-api | graph-evidence-api | embedding-worker |
 |---|---|---|---|
@@ -158,6 +213,9 @@ second part is inference). Transcripts were not opened.
 | 2026-11-25 17:17:50 | embedding-worker first credential header (experiment C) |
 | 2026-11-25 17:46:35 | embedding-worker scaled to 0; its logging stops |
 | 2026-11-25 about 18:10 to 18:54 | Diagnosis; API services still logging credential headers |
+| 2026-11-25 about 20:05 | Fix `3c3e1a1` deployed (human-run results, see "Containment") |
+| 2026-11-25 20:05:06 | Last match in the old query-api task stream (human-run) |
+| 2026-11-25 20:05:34 | Last match in the old graph-evidence-api task stream (human-run) |
 
 ## Root cause
 
@@ -216,8 +274,8 @@ is inferred from the match counts.
   window (minutes). The AWS endpoints involved limit where it could be used,
   and Neptune is not publicly accessible.
 - ECS task credentials are temporary and are believed to expire within about
-  6 hours (from general AWS knowledge, not verified). Running tasks keep
-  receiving and logging fresh ones.
+  6 hours (from general AWS knowledge, not verified). At diagnosis, running
+  tasks kept receiving and logging fresh ones.
 - The logged secret holds token **digests**, key IDs and scopes by design
   (`Auth.scala:23-24`, `Auth.scala:69`). That the live secret holds nothing
   else is inferred; no `token` text appeared on those lines. A high-entropy
@@ -239,10 +297,13 @@ Blast radius if a task role were misused (from the live inline policies):
 
 ## Recovery action
 
-**None taken.** The work order was diagnosis only. No rollback was authorized
-and a rollback would not fix this.
+**None taken at diagnosis.** The work order was diagnosis only. No rollback was
+authorized and a rollback would not fix this. The fix deployed afterwards is
+recorded under "Containment".
 
 ### Proposed actions (each needs its own work order or human approval)
+
+As proposed at diagnosis. See "Containment" for what has been recorded since.
 
 | # | Action | Owner | Approval |
 |---|---|---|---|

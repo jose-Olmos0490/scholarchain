@@ -2,7 +2,13 @@
 
 Assembled by the orchestrator from deploy-engineer's reports.
 
-**STATUS: BLOCKED-ON human. Deployed; log containment NOT yet verified.**
+**STATUS: Deployed; CONTAINED (not RESOLVED) per human-run counts.**
+
+## Update after human-run checks
+This update supersedes the "Containment: NOT VERIFIED" section, the containment and gate 6 risks, and the containment part of "Exit gate" below, which record the state at deploy time.
+- Containment (human-run, counts only, not verified by any agent): new API tasks produced 136 log lines and 0 matches, including 10 minutes before task start. All post-rollout matches came from old task streams (query-api 2130, last 20:05:06Z; graph-evidence-api 860, last 20:05:34Z).
+- Gate 6: code-reviewer returned APPROVE for the logback fix on 2026-11-25T19:51:07Z (review-report-04.md). It covers that fix only; phase-15 round 3 remains REQUEST_CHANGES, accepted in human-gate.md.
+- Still open: API token rotation, existing log material, Neptune audit log, TLS.
 
 ## Identity
 | Item | Value |
