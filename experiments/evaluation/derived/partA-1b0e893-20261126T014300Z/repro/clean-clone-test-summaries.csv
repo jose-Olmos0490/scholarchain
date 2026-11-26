@@ -1,0 +1,9 @@
+summary_line_in_log_order,succeeded,failed,canceled,ignored,pending
+1,695,0,0,0,0
+2,212,0,0,0,0
+3,244,0,0,0,0
+4,369,0,0,0,0
+5,148,0,0,0,0
+6,69,0,0,0,0
+7,75,0,0,0,0
+8,579,0,0,24,0

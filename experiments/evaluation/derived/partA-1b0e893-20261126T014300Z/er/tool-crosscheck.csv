@@ -1,0 +1,9 @@
+kind,count,tool,recomputed,match
+researcher,tp,59,59,yes
+researcher,fp,0,0,yes
+researcher,fn,9,9,yes
+researcher,tn,3,3,yes
+work,tp,18,18,yes
+work,fp,0,0,yes
+work,fn,2,2,yes
+work,tn,1,1,yes

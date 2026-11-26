@@ -1,0 +1,16 @@
+group,pairs,same,different,tp,fp,fn,tn,precision,recall,f1,specificity,coverage,unresolved_rate,conflict_rate
+overall,92,88,4,77,0,11,4,1.0000,0.8750,0.9333,1.0000,0.8478,0.1196,0.0326
+researcher,71,68,3,59,0,9,3,1.0000,0.8676,0.9291,1.0000,0.8310,0.1549,0.0141
+work,21,20,1,18,0,2,1,1.0000,0.9000,0.9474,1.0000,0.9048,0.0000,0.0952
+researcher/EXACT_ID,11,11,0,10,0,1,0,1.0000,0.9091,0.9524,n/a,0.9091,0.0000,0.0909
+researcher/DETERMINISTIC_BIBLIOGRAPHIC,49,49,0,41,0,8,0,1.0000,0.8367,0.9111,n/a,0.8367,0.1633,0.0000
+researcher/PROBABILISTIC,11,8,3,8,0,0,3,1.0000,1.0000,1.0000,1.0000,0.7273,0.2727,0.0000
+researcher/LLM_ADJUDICATED,0,0,0,0,0,0,0,n/a,n/a,n/a,n/a,n/a,n/a,n/a
+work/EXACT_ID,21,20,1,18,0,2,1,1.0000,0.9000,0.9474,1.0000,0.9048,0.0000,0.0952
+work/DETERMINISTIC_BIBLIOGRAPHIC,0,0,0,0,0,0,0,n/a,n/a,n/a,n/a,n/a,n/a,n/a
+work/PROBABILISTIC,0,0,0,0,0,0,0,n/a,n/a,n/a,n/a,n/a,n/a,n/a
+work/LLM_ADJUDICATED,0,0,0,0,0,0,0,n/a,n/a,n/a,n/a,n/a,n/a,n/a
+all/EXACT_ID,32,31,1,28,0,3,1,1.0000,0.9032,0.9492,1.0000,0.9062,0.0000,0.0938
+all/DETERMINISTIC_BIBLIOGRAPHIC,49,49,0,41,0,8,0,1.0000,0.8367,0.9111,n/a,0.8367,0.1633,0.0000
+all/PROBABILISTIC,11,8,3,8,0,0,3,1.0000,1.0000,1.0000,1.0000,0.7273,0.2727,0.0000
+all/LLM_ADJUDICATED,0,0,0,0,0,0,0,n/a,n/a,n/a,n/a,n/a,n/a,n/a

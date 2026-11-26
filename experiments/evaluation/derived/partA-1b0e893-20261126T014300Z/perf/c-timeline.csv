@@ -1,0 +1,11 @@
+event,utc,seconds_after_first_send
+first send,2026-11-25T17:15:03.727Z,0.0
+first poll with visible > 0,2026-11-25T17:15:49.989Z,46.3
+scale-out: first poll with desired > 0,2026-11-25T17:17:37.101Z,153.4
+first poll with running > 0,2026-11-25T17:17:54.794Z,171.1
+first poll with in flight > 0,2026-11-25T17:18:12.565Z,188.8
+first worker batch line,2026-11-25T17:18:19.552Z,195.8
+last worker batch line,2026-11-25T17:39:34.130Z,1470.4
+"first empty poll (visible 0, in flight 0)",2026-11-25T17:39:53.760Z,1490.0
+scale-in: first poll with desired 0,2026-11-25T17:46:43.027Z,1899.3
+first later poll with running 0,2026-11-25T17:46:43.027Z,1899.3

@@ -1,0 +1,8 @@
+check,nodes,orphans,rate
+researcher without authored edge,89,0,0.000000
+researcher without coauthor edge (any window),89,0,0.000000
+work without authored edge,24,0,0.000000
+work without HAS_TOPIC,24,20,0.833333
+venue without work,13,11,0.846154
+topic without HAS_TOPIC,63,57,0.904762
+institution without affiliated researcher,32,28,0.875000

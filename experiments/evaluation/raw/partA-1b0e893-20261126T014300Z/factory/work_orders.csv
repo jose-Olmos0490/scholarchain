@@ -1,0 +1,32 @@
+phase,agent,work_order,first_pass,reason,needs_confirmation,source_file,source_line,anchor
+01,factory-engineer,agent control plane,unknown,no human-gate.md in phase-01,yes,docs/agent-runs/phase-01/agent-report.md,3,The control plane is built
+02,build-engineer,sbt build,no,"v1 BLOCKED-ON, repairs 02 and 03 after review",no,docs/agent-runs/phase-02/repair-01.md,3,returned BLOCKED-ON factory-engineer
+03,dataset-engineer,A dataset manifest,no,"run 1 BLOCKED-ON, review repairs",no,docs/agent-runs/phase-03/agent-report.md,3,run 1 (STATUS: BLOCKED-ON)
+03,domain-engineer,B domain contracts,no,repair 1 for review findings,no,docs/agent-runs/phase-03/agent-report.md,416,repair 1 for review findings 1 and 9-15
+04,domain-engineer,A ingestion contracts,no,"later repairs 02, 04, 06 changed its contracts",yes,docs/agent-runs/phase-04/test-report.md,147,"repair-04 (domain-engineer, defect 6)"
+04,hadoop-engineer,B MapReduce jobs,no,"attempt 1 BLOCKED-ON, then defect repairs",no,docs/agent-runs/phase-04/agent-report.md,137,attempt 1 (BLOCKED-ON)
+04,test-engineer,C adversarial tests,no,attempt 1 BLOCKED-ON,no,docs/agent-runs/phase-04/test-report.md,3,attempt 1 (BLOCKED-ON)
+05,entity-resolution-engineer,A and B entity resolution,no,repair-01 after review and tests,no,docs/agent-runs/phase-05/repair-01.md,11,The first code review returned REQUEST_CHANGES
+05,test-engineer,adversarial ER tests,no,report status BLOCKED-ON,no,docs/agent-runs/phase-05/test-report.md,1,STATUS: BLOCKED-ON
+06,spark-engineer,A and B graph analytics,no,repair rounds 01 and 02,no,docs/agent-runs/phase-06/human-gate.md,9,repair-02: LPA ID-order dependence
+06,test-engineer,adversarial Spark tests,yes,"COMPLETE, no production defect",no,docs/agent-runs/phase-06/test-report.md,5,no production defect was found
+07,storage-engineer,storage ports and adapters,no,attempt 1 BLOCKED-ON; accepted with deferred findings,no,docs/agent-runs/phase-07/agent-report-attempt1.md,1,STATUS: BLOCKED-ON
+08,storage-engineer,WO1 vector write path,yes,"COMPLETE, executed inline by the orchestrator, not reviewed",yes,docs/agent-runs/phase-08/agent-report-storage.md,4,executed inline by the orchestrator
+08,rag-engineer,WO2 rendering and ingestion,no,BLOCKED-ON build-engineer,no,docs/agent-runs/phase-08/repair-01.md,2,Blocked agent: rag-engineer
+09,rag-engineer,A deterministic workflow,no,first run BLOCKED-ON,no,docs/agent-runs/phase-09/agent-report-A-blocked.md,1,STATUS: BLOCKED-ON
+09,rag-engineer,B synthesis and verification,no,"review REQUEST_CHANGES, repairs 02-04",no,docs/agent-runs/phase-09/review-report-01.md,4,VERDICT: REQUEST_CHANGES
+10,service-engineer,REST services,yes,ACCEPTED; code-reviewer and test-engineer not run,yes,docs/agent-runs/phase-10/human-gate.md,13,were not run for Phase 10
+10b,rag-engineer,WO1 live LLM adapter,yes,COMPLETE; not reviewed,yes,docs/agent-runs/phase-10b/agent-report.md,4,"Phase 10b, work order 1 of 4"
+10b,storage-engineer,WO2 job store,yes,COMPLETE with a routing note; not reviewed,yes,docs/agent-runs/phase-10b/agent-report.md,94,"Phase 10b, work order 2 of 4"
+10b,service-engineer,WO3 composition roots,no,BLOCKED-ON storage-engineer,no,docs/agent-runs/phase-10b/repair-01.md,2,service-engineer returned BLOCKED-ON
+10b,build-engineer,WO4 images,yes,COMPLETE; not reviewed,yes,docs/agent-runs/phase-10b/agent-report.md,445,"Phase 10b, work order 4 of 4"
+11,test-engineer,repository adversarial tests,no,attempt 1 BLOCKED-ON,no,docs/agent-runs/phase-11/test-report.md,4,STATUS: BLOCKED-ON build-engineer
+12,infra-engineer,Terraform,no,"attempt 1 BLOCKED-ON, repair-01 after review",no,docs/agent-runs/phase-12/agent-report.md,3,STATUS: BLOCKED-ON
+13,infra-engineer,scripts,no,"review REQUEST_CHANGES, repairs 01 and 02",no,docs/agent-runs/phase-13/repair-02.md,3,round 1 REQUEST_CHANGES
+14,deploy-engineer,first deployment,no,attempts FAILED,no,docs/agent-runs/phase-14/agent-report-attempt1.md,1,STATUS: FAILED
+14b,storage-engineer,loader entry point,no,"review REQUEST_CHANGES, repair-01",no,docs/agent-runs/phase-14b/human-gate.md,3,"REQUEST_CHANGES (2 major, 5 minor)"
+15,experiment-engineer,experiment tooling,no,"BLOCKED-ON, then review repairs",no,docs/agent-runs/phase-15/agent-report.md,1,STATUS: BLOCKED-ON
+15,infra-engineer,"gaps for experiments C, F, D",no,report status BLOCKED-ON,yes,docs/agent-runs/phase-15/agent-report-03.md,1,STATUS: BLOCKED-ON
+15,storage-engineer,index comparison fix,yes,reviewed sound with one nit,yes,docs/agent-runs/phase-15/repair-01.md,13,code-reviewer (read-only) found the storage change sound
+15,service-engineer,logging fix,yes,review APPROVE,no,docs/agent-runs/phase-15/review-report-04.md,4,VERDICT: APPROVE
+15,deploy-engineer,deploy 6ce56c9,no,report status FAILED (smoke),yes,docs/agent-runs/phase-15/deploy-report.md,5,STATUS: FAILED

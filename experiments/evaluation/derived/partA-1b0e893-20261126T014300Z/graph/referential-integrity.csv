@@ -1,0 +1,20 @@
+check,references,violations,satisfied_rate
+authored.researcherId -> researcher,89,0,1.000000
+authored.workId -> work,89,0,1.000000
+coauthored_with.endpoints -> researcher,668,0,1.000000
+support.edgeId -> coauthored_with,334,0,1.000000
+support.workId -> work,334,0,1.000000
+"support (endpoint, work) -> authored",668,0,1.000000
+support endpoints equal edge endpoints,334,0,1.000000
+has_topic.fromId -> work,12,0,1.000000
+has_topic.toId -> topic,12,0,1.000000
+work.venueId -> venue,24,0,1.000000
+researcher.affiliationInstitutionIds -> institution,11,0,1.000000
+researcher_collaboration.researcherId -> researcher,178,0,1.000000
+components.researcherId -> researcher,178,0,1.000000
+community_membership.researcherId -> researcher,178,0,1.000000
+bridge_measures.researcherId -> researcher,178,0,1.000000
+coreness.researcherId -> researcher,178,0,1.000000
+researcher_window_change.researcherId -> researcher,123,0,1.000000
+path hop edgeId -> coauthored_with,28,0,1.000000
+path hop supporting works -> work,28,0,1.000000

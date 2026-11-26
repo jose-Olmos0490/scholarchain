@@ -1,0 +1,8 @@
+measure,value
+gold pairs,92
+target pairs,200
+shortfall,108
+SAME,88
+DIFFERENT,4
+UNSURE,0
+gold set sha256,sha256:3767a6ca3e43e03053878aa7a90f9516408cf4d13157a6d871ceab8b67493f73

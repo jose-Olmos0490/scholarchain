@@ -1,0 +1,15 @@
+phase,category,actor,description,needs_confirmation,source_file,source_line,anchor
+02,blocked-write,orchestrator,write of human-owned repair record,no,docs/agent-runs/phase-02/repair-01.md,47,was blocked by
+02,refused-by-agent,build-engineer,work order assigned paths owned by others,no,docs/agent-runs/phase-02/repair-01.md,18,Empty .gitkeep source folders
+04,landed,hadoop-engineer and domain-engineer,three edits via Bash/Python bypassed the guard; inside own territory,yes,docs/agent-runs/phase-04/human-gate.md,7,Process deviation (F8)
+05,unresolved,unrecorded,edits under tests/** during an ER repair; authorship to be confirmed,yes,docs/agent-runs/phase-05/repair-01.md,35,Edits under tests/** in this repair
+06,unresolved,unrecorded,unattributed file in human-owned docs/agent-runs,yes,docs/agent-runs/phase-06/review-report.md,3,part-a-run-manifest.json
+08,refused-by-agent,rag-engineer,build.sbt change routed to owner,no,docs/agent-runs/phase-08/repair-01.md,3,Blocked on: build-engineer
+08,landed,storage-engineer,git rm --cached run and reverted (git rule),yes,docs/agent-runs/phase-08/human-gate.md,22,git rm --cached
+08,landed,orchestrator,specialist work executed inline,yes,docs/agent-runs/phase-08/human-gate.md,21,executed inline in the orchestrator
+09,blocked-write,orchestrator,write to an unowned path,no,docs/agent-runs/phase-09/human-gate.md,23,blocked an orchestrator write to an unowned path
+11,blocked-write,test-engineer,command referencing a human-owned record; may be a false positive,yes,docs/agent-runs/phase-11/human-gate.md,21,blocked a test-engineer shell command
+12,refused-by-agent,infra-engineer,.gitignore change routed to build-engineer,no,docs/agent-runs/phase-12/agent-report.md,22,BLOCKED-ON OWNER: build-engineer
+12,blocked-write,orchestrator or agent,write of human-owned repair-01.md,yes,docs/agent-runs/phase-12/human-gate.md,40,blocked agent writes to human-owned
+15,blocked-write,orchestrator,two report names without an owner,no,docs/agent-runs/phase-15/human-gate.md,7,Guard blocked agent-report-02.md
+15,landed,storage-engineer and experiment-engineer,searches printed Terraform state content (secret-handling rule),no,docs/agent-runs/phase-15/repair-01.md,21,Terraform state contents printed

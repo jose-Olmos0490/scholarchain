@@ -1,0 +1,7 @@
+phase,gap
+02,review-report-02.md is empty (0 bytes); the human gate records APPROVE
+05,"first review (findings F1-F14) is not archived, so its severities are not counted"
+06,the human gate cites a review round 2 and repair-02; neither is archived
+08,code review skipped by human decision
+10,code review not run
+10b,code review not run

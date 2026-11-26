@@ -1,0 +1,113 @@
+[
+ {
+  "account": "<ACCOUNT_ID>",
+  "approvedPlanSha256": "993bf21abdd89e843f8dffdd1e4949851b88a4ae623d2f77a3eb4c81bca5b59c",
+  "deployedAtUtc": "2026-11-24T17:16:52Z",
+  "environment": "dev",
+  "gitSha": "2365bf5",
+  "region": "us-east-2",
+  "services": [
+   {
+    "digest": "sha256:a9ff2cedf08c54b375da986b3e50a45613ec9d4b3419c429124472726378935c",
+    "image": "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/query-api:2365bf5",
+    "previousTaskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-query-api:1",
+    "previousTaskDefinitionRevision": 1,
+    "service": "query-api",
+    "taskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-query-api:5",
+    "taskDefinitionRevision": 5
+   },
+   {
+    "digest": "sha256:c032adcfc1f7aff1434cb91b326f3c84f94b532a04ae5a7da82d92e9b26e6104",
+    "image": "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/graph-evidence-api:2365bf5",
+    "previousTaskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-graph-evidence-api:2",
+    "previousTaskDefinitionRevision": 2,
+    "service": "graph-evidence-api",
+    "taskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-graph-evidence-api:5",
+    "taskDefinitionRevision": 5
+   },
+   {
+    "digest": "sha256:6557937a8be186f319a664686a36fe3345a80871bcc98f8843dcd6653b3af254",
+    "image": "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/embedding-worker:2365bf5",
+    "previousTaskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-embedding-worker:2",
+    "previousTaskDefinitionRevision": 2,
+    "service": "embedding-worker",
+    "taskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-embedding-worker:5",
+    "taskDefinitionRevision": 5
+   }
+  ]
+ },
+ {
+  "account": "<ACCOUNT_ID>",
+  "approvedPlanSha256": "47dd1a5c6eec644af747780ea97ec0cd3814bbe389fbb4e33121839b215c42d6",
+  "deployedAtUtc": "2026-11-25T20:05:54Z",
+  "environment": "dev",
+  "gitSha": "3c3e1a1",
+  "region": "us-east-2",
+  "services": [
+   {
+    "digest": "sha256:697621aa2e9f5c49af0885f280ef5c939d00c15f23f2d4476ceada3a49788498",
+    "image": "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/query-api:3c3e1a1",
+    "previousTaskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-query-api:8",
+    "previousTaskDefinitionRevision": 8,
+    "service": "query-api",
+    "taskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-query-api:10",
+    "taskDefinitionRevision": 10
+   },
+   {
+    "digest": "sha256:ec8ac7405ca5c7807fb99230735c4ef3e80208effdf71e3609baa9b0065d750b",
+    "image": "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/graph-evidence-api:3c3e1a1",
+    "previousTaskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-graph-evidence-api:8",
+    "previousTaskDefinitionRevision": 8,
+    "service": "graph-evidence-api",
+    "taskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-graph-evidence-api:10",
+    "taskDefinitionRevision": 10
+   },
+   {
+    "digest": "sha256:7fb0bf74bf64f58374eadcfad98d8e1f1266f7b96b09adaca0c5dd55f6bbe0bb",
+    "image": "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/embedding-worker:3c3e1a1",
+    "previousTaskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-embedding-worker:8",
+    "previousTaskDefinitionRevision": 8,
+    "service": "embedding-worker",
+    "taskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-embedding-worker:10",
+    "taskDefinitionRevision": 10
+   }
+  ]
+ },
+ {
+  "account": "<ACCOUNT_ID>",
+  "approvedPlanSha256": "2a196bb0bdd1da82fe9006d68797a24639d21bd6412e020bcf3ce70160fd87db",
+  "deployedAtUtc": "2026-11-25T16:52:57Z",
+  "environment": "dev",
+  "gitSha": "6ce56c9",
+  "region": "us-east-2",
+  "services": [
+   {
+    "digest": "sha256:887ebe5ad8da86b4c29c1a59c6a50fa975835dac3f4a30846b81cde96249bae1",
+    "image": "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/query-api:6ce56c9",
+    "previousTaskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-query-api:5",
+    "previousTaskDefinitionRevision": 5,
+    "service": "query-api",
+    "taskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-query-api:8",
+    "taskDefinitionRevision": 8
+   },
+   {
+    "digest": "sha256:4fe0cb046f5907910156ba628c9ef1793c0cd520e762e8ba0919088104334d37",
+    "image": "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/graph-evidence-api:6ce56c9",
+    "previousTaskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-graph-evidence-api:5",
+    "previousTaskDefinitionRevision": 5,
+    "service": "graph-evidence-api",
+    "taskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-graph-evidence-api:8",
+    "taskDefinitionRevision": 8
+   },
+   {
+    "digest": "sha256:11840f0b5f09dd9ba0020333a921a3cb2255260c66c840a4183c9e5811d2466f",
+    "image": "<ACCOUNT_ID>.dkr.ecr.us-east-2.amazonaws.com/scholarchain/dev/embedding-worker:6ce56c9",
+    "previousTaskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-embedding-worker:5",
+    "previousTaskDefinitionRevision": 5,
+    "service": "embedding-worker",
+    "taskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-embedding-worker:8",
+    "taskDefinitionRevision": 8
+   }
+  ]
+ }
+]

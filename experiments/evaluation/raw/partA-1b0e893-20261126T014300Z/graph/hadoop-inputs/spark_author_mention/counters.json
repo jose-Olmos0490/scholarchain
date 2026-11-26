@@ -1,0 +1,60 @@
+{
+  "slug": "j09",
+  "name": "GraphCandidateExportJob",
+  "status": "SUCCEEDED",
+  "mapTasks": 59,
+  "reduceTasks": 2,
+  "counters": {
+    "org.apache.hadoop.mapreduce.TaskCounter": {
+      "COMBINE_INPUT_RECORDS": 1138,
+      "COMBINE_OUTPUT_RECORDS": 1138,
+      "MAP_INPUT_RECORDS": 1138,
+      "MAP_OUTPUT_BYTES": 1269245,
+      "MAP_OUTPUT_MATERIALIZED_BYTES": 196224,
+      "MAP_OUTPUT_RECORDS": 1138,
+      "REDUCE_INPUT_GROUPS": 1138,
+      "REDUCE_INPUT_RECORDS": 1138
+    },
+    "scholarchain.hadoop.HadoopCounter": {
+      "ACCEPTED": 1138,
+      "BLOCKS_EMITTED": 0,
+      "CAPPED_WORKS": 0,
+      "CONFLICT": 0,
+      "DUPLICATE": 0,
+      "DUPLICATE_AUTHOR_IN_TEAM": 0,
+      "EMITTED_MATCH_CANDIDATES": 0,
+      "EMITTED_PAIRS": 0,
+      "EXACT_ID_OUTCOMES": 0,
+      "EXACT_ID_SINGLETONS": 0,
+      "INPUT_RECORDS": 1138,
+      "LARGE_AUTHOR_TEAM": 0,
+      "MISSING_KEY": 0,
+      "OUT_OF_SUBSET": 0,
+      "OVERSIZE_AUTHOR_TEAM": 0,
+      "OVERSIZE_BLOCK": 0,
+      "OVERSIZE_BLOCK_MEMBERS": 0,
+      "REJECTED": 0,
+      "REKEYED_MEMBERS": 0,
+      "SCHEMA_FAILURE": 0,
+      "SIDE_OUTPUT_RECORDS": 0,
+      "UNKNOWN_ENTITY": 0
+    }
+  },
+  "tables": [
+    "scholarchain/rejects_j09/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_author_mention/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_author_paper/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_coauthor_pair/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_exact_identifier_outcome/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_graph_edge/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_graph_node/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_institution/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_large_team/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_match_candidate/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_oversize_team/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_publication_team/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_topic/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_venue/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4",
+    "scholarchain/spark_work/snapshot=2026-11-01/run_id=dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4"
+  ]
+}

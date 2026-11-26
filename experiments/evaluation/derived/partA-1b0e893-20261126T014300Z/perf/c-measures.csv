@@ -1,0 +1,21 @@
+measure,value,source
+run status,FAILED,runner/run.json
+stop reason,NO_VECTORS_WRITTEN,runner/run.json
+scaling delay: first send to desired > 0 (s),153.4,observations
+scaling delay: first visible poll to desired > 0 (s),107.1,observations
+scale-out: desired > 0 to running > 0 (s),17.7,observations
+drain: first send to first empty poll (s),1490.0,"sends, observations"
+drain: runner milestone drainedAfterSeconds,1476.7,runner/run.json
+scale-in: first empty poll to desired 0 (s),409.3,observations
+runner milestone scaledToZeroAfterSeconds,1868.2,runner/run.json
+max desired / running tasks,2 / 2,observations
+"poll interval, median (s)",17.8,observations
+messages sent / accepted,300 / 300,sends
+messages received / acknowledged / retried / dead-lettered,300 / 300 / 0 / 0,worker_outcomes
+"message throughput, acknowledged per second of batch-line span",0.2354,worker_outcomes
+item rejections per second of batch-line span,71.08,worker_outcomes
+new SUCCEEDED vector put batches,0,runner/run.json
+maximum DLQ visible,0,observations
+"running task-seconds (poll integration, approximate)",3456,observations
+billed cost (USD),not measured: no billing data in raw,-
+"cost estimate (USD), from the Phase 15 report, not from raw",about 1.5 (cap 1.0; prices unverified),docs/agent-runs/phase-15/experiment-C-report.md

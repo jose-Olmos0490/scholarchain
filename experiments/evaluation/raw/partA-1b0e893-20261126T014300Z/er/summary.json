@@ -1,0 +1,5918 @@
+{
+  "schemaVersion": "er-gold-eval-v1",
+  "evaluationId": "gold-eval:dcac98d504aecf6a7fbddb1a104b3bf63c29ea73ccd734858b92873d63d694b7",
+  "codeFingerprint": "sha256:be7c3a8936e49a12678c176eb27294fb3ff405253497ac5289fe1ff8c0a42f12",
+  "goldSet": {
+    "path": "docs/agent-runs/phase-05/gold-set-v1.csv",
+    "sha256": "sha256:3767a6ca3e43e03053878aa7a90f9516408cf4d13157a6d871ceab8b67493f73",
+    "pairs": 92,
+    "labels": {
+      "SAME": 88,
+      "DIFFERENT": 4,
+      "UNSURE": 0
+    },
+    "labelsByKind": {
+      "researcher": {
+        "SAME": 68,
+        "DIFFERENT": 3,
+        "UNSURE": 0
+      },
+      "work": {
+        "SAME": 20,
+        "DIFFERENT": 1,
+        "UNSURE": 0
+      }
+    }
+  },
+  "reviewKey": {
+    "path": "modules/entity-resolution/local-run/er-v1/review-queue-v1-key.csv",
+    "sha256": "sha256:6eabd7a4c6aa35b86653f46137a5d2361dc8ad671afc72cc22ed4f219d285e31"
+  },
+  "run": {
+    "runId": "run:7449422852604780fd2de54fcaa1ff18ebe1cf761c260d8cf4de08b368ce4e15",
+    "runDir": "modules/entity-resolution/local-run/er-v1/run_id=7449422852604780fd2de54fcaa1ff18ebe1cf761c260d8cf4de08b368ce4e15",
+    "policyVersion": "er-v1",
+    "policyRevision": "er-v1-r2",
+    "featureVersion": "er-features-v2",
+    "codeVersion": "scholarchain-entity-resolution-0.1.0-phase05-r2@sha256:f6ebe3b7e045fa61ad0957faea1c28d5867c1ff0a0bc6a793d942dd8cf371ff4",
+    "thresholds": {
+      "acceptThreshold": 0.8,
+      "rejectThreshold": 0.45,
+      "llmBandMin": 0.6,
+      "llmBandMax": 0.8
+    },
+    "adjudicator": "fake",
+    "adjudicatorIsFake": true,
+    "adjudicationModelVersion": "fake-deterministic-adjudicator-v1",
+    "adjudicationPromptVersion": "er-adj-prompt-v1",
+    "llmPairsInBand": 0,
+    "llmDecided": 0,
+    "inputSha256": "sha256:0edc208f08113c07f4dab7190bd20beb406166cc9dc676cf45e47c1d4cdcac89"
+  },
+  "countingRules": [
+    "Gold SAME is a positive, DIFFERENT a negative; UNSURE is excluded from every rate and counted separately.",
+    "Only ACCEPTED is a predicted match (merge). REJECTED, UNRESOLVED and CONFLICT are all 'not merged'.",
+    "TP = SAME and ACCEPTED; FP = DIFFERENT and ACCEPTED; FN = SAME and not ACCEPTED (UNRESOLVED and CONFLICT on a SAME pair cost recall); TN = DIFFERENT and not ACCEPTED.",
+    "CONFLICT is never merged, so it is never a TP or FP.",
+    "Coverage = (ACCEPTED + REJECTED) / included pairs. Unresolved rate = UNRESOLVED / included. Conflict rate = CONFLICT / included.",
+    "Decided-only recall = TP / (SAME pairs that were ACCEPTED or REJECTED)."
+  ],
+  "llmPath": "LLM-adjudicated path: the run used only the deterministic FAKE adjudicator (`fake-deterministic-adjudicator-v1`), never a model. Pairs in the LLM band: 0; decided by the adjudicator: 0. Every LLM-path figure is fake-adjudicator output or not applicable, never a model result.",
+  "metrics": {
+    "byKind": {
+      "researcher": {
+        "matrix": {
+          "SAME": {
+            "ACCEPTED": 59,
+            "REJECTED": 0,
+            "UNRESOLVED": 8,
+            "CONFLICT": 1
+          },
+          "DIFFERENT": {
+            "ACCEPTED": 0,
+            "REJECTED": 0,
+            "UNRESOLVED": 3,
+            "CONFLICT": 0
+          }
+        },
+        "included": 71,
+        "goldSame": 68,
+        "goldDifferent": 3,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "f1": 0.929134,
+        "specificity": {
+          "numerator": 3,
+          "denominator": 3,
+          "value": 1,
+          "wilson95": [
+            0.438503,
+            1
+          ]
+        },
+        "coverage": {
+          "numerator": 59,
+          "denominator": 71,
+          "value": 0.830986,
+          "wilson95": [
+            0.727409,
+            0.900585
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 11,
+          "denominator": 71,
+          "value": 0.15493,
+          "wilson95": [
+            0.088773,
+            0.25651
+          ]
+        },
+        "conflictRate": {
+          "numerator": 1,
+          "denominator": 71,
+          "value": 0.014085,
+          "wilson95": [
+            0.002491,
+            0.075561
+          ]
+        },
+        "decidedOnlyRecall": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        }
+      },
+      "work": {
+        "matrix": {
+          "SAME": {
+            "ACCEPTED": 18,
+            "REJECTED": 0,
+            "UNRESOLVED": 0,
+            "CONFLICT": 2
+          },
+          "DIFFERENT": {
+            "ACCEPTED": 0,
+            "REJECTED": 1,
+            "UNRESOLVED": 0,
+            "CONFLICT": 0
+          }
+        },
+        "included": 21,
+        "goldSame": 20,
+        "goldDifferent": 1,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "f1": 0.947368,
+        "specificity": {
+          "numerator": 1,
+          "denominator": 1,
+          "value": 1,
+          "wilson95": [
+            0.206549,
+            1
+          ]
+        },
+        "coverage": {
+          "numerator": 19,
+          "denominator": 21,
+          "value": 0.904762,
+          "wilson95": [
+            0.710859,
+            0.973481
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        },
+        "conflictRate": {
+          "numerator": 2,
+          "denominator": 21,
+          "value": 0.095238,
+          "wilson95": [
+            0.026519,
+            0.289141
+          ]
+        },
+        "decidedOnlyRecall": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        }
+      }
+    },
+    "byKindAndPath": {
+      "researcher": {
+        "EXACT_ID": {
+          "matrix": {
+            "SAME": {
+              "ACCEPTED": 10,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 1
+            },
+            "DIFFERENT": {
+              "ACCEPTED": 0,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            }
+          },
+          "included": 11,
+          "goldSame": 11,
+          "goldDifferent": 0,
+          "tp": 10,
+          "fp": 0,
+          "fn": 1,
+          "tn": 0,
+          "precision": {
+            "numerator": 10,
+            "denominator": 10,
+            "value": 1,
+            "wilson95": [
+              0.722467,
+              1
+            ]
+          },
+          "recall": {
+            "numerator": 10,
+            "denominator": 11,
+            "value": 0.909091,
+            "wilson95": [
+              0.622642,
+              0.983768
+            ]
+          },
+          "f1": 0.952381,
+          "specificity": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "coverage": {
+            "numerator": 10,
+            "denominator": 11,
+            "value": 0.909091,
+            "wilson95": [
+              0.622642,
+              0.983768
+            ]
+          },
+          "unresolvedRate": {
+            "numerator": 0,
+            "denominator": 11,
+            "value": 0,
+            "wilson95": [
+              0,
+              0.258833
+            ]
+          },
+          "conflictRate": {
+            "numerator": 1,
+            "denominator": 11,
+            "value": 0.090909,
+            "wilson95": [
+              0.016232,
+              0.377358
+            ]
+          },
+          "decidedOnlyRecall": {
+            "numerator": 10,
+            "denominator": 10,
+            "value": 1,
+            "wilson95": [
+              0.722467,
+              1
+            ]
+          }
+        },
+        "DETERMINISTIC_BIBLIOGRAPHIC": {
+          "matrix": {
+            "SAME": {
+              "ACCEPTED": 41,
+              "REJECTED": 0,
+              "UNRESOLVED": 8,
+              "CONFLICT": 0
+            },
+            "DIFFERENT": {
+              "ACCEPTED": 0,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            }
+          },
+          "included": 49,
+          "goldSame": 49,
+          "goldDifferent": 0,
+          "tp": 41,
+          "fp": 0,
+          "fn": 8,
+          "tn": 0,
+          "precision": {
+            "numerator": 41,
+            "denominator": 41,
+            "value": 1,
+            "wilson95": [
+              0.914332,
+              1
+            ]
+          },
+          "recall": {
+            "numerator": 41,
+            "denominator": 49,
+            "value": 0.836735,
+            "wilson95": [
+              0.709637,
+              0.914873
+            ]
+          },
+          "f1": 0.911111,
+          "specificity": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "coverage": {
+            "numerator": 41,
+            "denominator": 49,
+            "value": 0.836735,
+            "wilson95": [
+              0.709637,
+              0.914873
+            ]
+          },
+          "unresolvedRate": {
+            "numerator": 8,
+            "denominator": 49,
+            "value": 0.163265,
+            "wilson95": [
+              0.085127,
+              0.290363
+            ]
+          },
+          "conflictRate": {
+            "numerator": 0,
+            "denominator": 49,
+            "value": 0,
+            "wilson95": [
+              0,
+              0.072698
+            ]
+          },
+          "decidedOnlyRecall": {
+            "numerator": 41,
+            "denominator": 41,
+            "value": 1,
+            "wilson95": [
+              0.914332,
+              1
+            ]
+          }
+        },
+        "PROBABILISTIC": {
+          "matrix": {
+            "SAME": {
+              "ACCEPTED": 8,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            },
+            "DIFFERENT": {
+              "ACCEPTED": 0,
+              "REJECTED": 0,
+              "UNRESOLVED": 3,
+              "CONFLICT": 0
+            }
+          },
+          "included": 11,
+          "goldSame": 8,
+          "goldDifferent": 3,
+          "tp": 8,
+          "fp": 0,
+          "fn": 0,
+          "tn": 3,
+          "precision": {
+            "numerator": 8,
+            "denominator": 8,
+            "value": 1,
+            "wilson95": [
+              0.675592,
+              1
+            ]
+          },
+          "recall": {
+            "numerator": 8,
+            "denominator": 8,
+            "value": 1,
+            "wilson95": [
+              0.675592,
+              1
+            ]
+          },
+          "f1": 1,
+          "specificity": {
+            "numerator": 3,
+            "denominator": 3,
+            "value": 1,
+            "wilson95": [
+              0.438503,
+              1
+            ]
+          },
+          "coverage": {
+            "numerator": 8,
+            "denominator": 11,
+            "value": 0.727273,
+            "wilson95": [
+              0.434355,
+              0.902539
+            ]
+          },
+          "unresolvedRate": {
+            "numerator": 3,
+            "denominator": 11,
+            "value": 0.272727,
+            "wilson95": [
+              0.097461,
+              0.565645
+            ]
+          },
+          "conflictRate": {
+            "numerator": 0,
+            "denominator": 11,
+            "value": 0,
+            "wilson95": [
+              0,
+              0.258833
+            ]
+          },
+          "decidedOnlyRecall": {
+            "numerator": 8,
+            "denominator": 8,
+            "value": 1,
+            "wilson95": [
+              0.675592,
+              1
+            ]
+          }
+        },
+        "LLM_ADJUDICATED": {
+          "matrix": {
+            "SAME": {
+              "ACCEPTED": 0,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            },
+            "DIFFERENT": {
+              "ACCEPTED": 0,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            }
+          },
+          "included": 0,
+          "goldSame": 0,
+          "goldDifferent": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "f1": null,
+          "specificity": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "coverage": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "unresolvedRate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "conflictRate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "decidedOnlyRecall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          }
+        }
+      },
+      "work": {
+        "EXACT_ID": {
+          "matrix": {
+            "SAME": {
+              "ACCEPTED": 18,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 2
+            },
+            "DIFFERENT": {
+              "ACCEPTED": 0,
+              "REJECTED": 1,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            }
+          },
+          "included": 21,
+          "goldSame": 20,
+          "goldDifferent": 1,
+          "tp": 18,
+          "fp": 0,
+          "fn": 2,
+          "tn": 1,
+          "precision": {
+            "numerator": 18,
+            "denominator": 18,
+            "value": 1,
+            "wilson95": [
+              0.824121,
+              1
+            ]
+          },
+          "recall": {
+            "numerator": 18,
+            "denominator": 20,
+            "value": 0.9,
+            "wilson95": [
+              0.698966,
+              0.972134
+            ]
+          },
+          "f1": 0.947368,
+          "specificity": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1,
+            "wilson95": [
+              0.206549,
+              1
+            ]
+          },
+          "coverage": {
+            "numerator": 19,
+            "denominator": 21,
+            "value": 0.904762,
+            "wilson95": [
+              0.710859,
+              0.973481
+            ]
+          },
+          "unresolvedRate": {
+            "numerator": 0,
+            "denominator": 21,
+            "value": 0,
+            "wilson95": [
+              0,
+              0.154639
+            ]
+          },
+          "conflictRate": {
+            "numerator": 2,
+            "denominator": 21,
+            "value": 0.095238,
+            "wilson95": [
+              0.026519,
+              0.289141
+            ]
+          },
+          "decidedOnlyRecall": {
+            "numerator": 18,
+            "denominator": 18,
+            "value": 1,
+            "wilson95": [
+              0.824121,
+              1
+            ]
+          }
+        },
+        "DETERMINISTIC_BIBLIOGRAPHIC": {
+          "matrix": {
+            "SAME": {
+              "ACCEPTED": 0,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            },
+            "DIFFERENT": {
+              "ACCEPTED": 0,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            }
+          },
+          "included": 0,
+          "goldSame": 0,
+          "goldDifferent": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "f1": null,
+          "specificity": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "coverage": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "unresolvedRate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "conflictRate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "decidedOnlyRecall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          }
+        },
+        "PROBABILISTIC": {
+          "matrix": {
+            "SAME": {
+              "ACCEPTED": 0,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            },
+            "DIFFERENT": {
+              "ACCEPTED": 0,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            }
+          },
+          "included": 0,
+          "goldSame": 0,
+          "goldDifferent": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "f1": null,
+          "specificity": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "coverage": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "unresolvedRate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "conflictRate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "decidedOnlyRecall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          }
+        },
+        "LLM_ADJUDICATED": {
+          "matrix": {
+            "SAME": {
+              "ACCEPTED": 0,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            },
+            "DIFFERENT": {
+              "ACCEPTED": 0,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            }
+          },
+          "included": 0,
+          "goldSame": 0,
+          "goldDifferent": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "f1": null,
+          "specificity": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "coverage": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "unresolvedRate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "conflictRate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          },
+          "decidedOnlyRecall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson95": null
+          }
+        }
+      }
+    },
+    "excludedUnsureByKind": {
+      "researcher": 0,
+      "work": 0
+    }
+  },
+  "errors": {
+    "falsePositivesTotal": 0,
+    "falseNegativesTotal": 11,
+    "falsePositives": [],
+    "falseNegatives": [
+      {
+        "pairId": "rq1-0ae39d9a32c58d6b",
+        "kind": "researcher",
+        "humanLabel": "SAME",
+        "humanNotes": "",
+        "matchPath": "DETERMINISTIC_BIBLIOGRAPHIC",
+        "decision": "UNRESOLVED",
+        "score": 0.86,
+        "confidence": 0,
+        "reasonCodes": [
+          "SAME_WORK_DIFFERENT_POSITION"
+        ],
+        "rulesFired": [
+          "POLICY_REVISION:er-v1-r2",
+          "FEATURE_VERSION:er-features-v2",
+          "HADOOP_FEATURE_VERSION:hadoop-blocking-features-v2",
+          "SAME_WORK_DISTINCT_POSITIONS",
+          "PATH:DETERMINISTIC_BIBLIOGRAPHIC"
+        ],
+        "features": {
+          "authorOrder": 0.8,
+          "coauthorOverlap": 0.75,
+          "externalIdAgreement": 0,
+          "hadoop.coauthorSurnameJaccard": 0.75,
+          "hadoop.givenNameTokenJaccard": 1,
+          "hadoop.initialEqual": 1,
+          "hadoop.orcidBothPresent": 0,
+          "hadoop.orcidEqual": 0,
+          "hadoop.sameSource": 0,
+          "hadoop.sharedCoauthorSurnames": 3,
+          "hadoop.sourceAuthorKeyBothPresent": 0,
+          "hadoop.sourceAuthorKeyEqual": 0,
+          "hadoop.surnameEqual": 1,
+          "hadoop.titleTokenJaccard": 1,
+          "hadoop.yearDelta": 0,
+          "hadoop.yearKnown": 1,
+          "initialsCompatibility": 1,
+          "nameSimilarity": 1,
+          "sameWorkBibliographic": 0,
+          "sameWorkContext": 1,
+          "score": 0.86,
+          "sourceReliability": 0.95,
+          "surnameSimilarity": 1,
+          "titleSimilarity": 1,
+          "venueCompatibility": 1,
+          "yearDistance": 1
+        }
+      },
+      {
+        "pairId": "rq1-3118e91420c49d24",
+        "kind": "work",
+        "humanLabel": "SAME",
+        "humanNotes": "Same paper; dual ACM/IEEE DOIs (DAC co-published). Relabeled after review.",
+        "matchPath": "EXACT_ID",
+        "decision": "CONFLICT",
+        "score": 0.96,
+        "confidence": 1,
+        "reasonCodes": [
+          "EXACT_ID_DISAGREES_WITH_EVIDENCE"
+        ],
+        "rulesFired": [
+          "POLICY_REVISION:er-v1-r2",
+          "FEATURE_VERSION:er-features-v2",
+          "HADOOP_FEATURE_VERSION:hadoop-blocking-features-v2",
+          "EXACT_ID_DISAGREE:DOI",
+          "EXACT_BIBLIOGRAPHIC_MATCH",
+          "SCORE_AT_OR_ABOVE_ACCEPT",
+          "PATH:EXACT_ID"
+        ],
+        "features": {
+          "authorOrder": 1,
+          "coauthorOverlap": 1,
+          "exactBibliographic": 1,
+          "externalIdAgreement": -1,
+          "genericTitle": 0,
+          "hadoop.authorCountDelta": 0,
+          "hadoop.authorSurnameJaccard": 1,
+          "hadoop.doiBothPresent": 1,
+          "hadoop.doiEqual": 0,
+          "hadoop.sameSource": 0,
+          "hadoop.titleTokenJaccard": 1,
+          "hadoop.titleTokensEqual": 1,
+          "hadoop.yearDelta": 0,
+          "hadoop.yearKnown": 1,
+          "score": 0.96,
+          "sourceReliability": 0.85,
+          "titlePrefix": 1,
+          "titleSimilarity": 1,
+          "venueCompatibility": 1,
+          "yearDistance": 1
+        }
+      },
+      {
+        "pairId": "rq1-3a9be336b5a7fc37",
+        "kind": "researcher",
+        "humanLabel": "SAME",
+        "humanNotes": "",
+        "matchPath": "DETERMINISTIC_BIBLIOGRAPHIC",
+        "decision": "UNRESOLVED",
+        "score": 0.813333,
+        "confidence": 0,
+        "reasonCodes": [
+          "SAME_WORK_DIFFERENT_POSITION"
+        ],
+        "rulesFired": [
+          "POLICY_REVISION:er-v1-r2",
+          "FEATURE_VERSION:er-features-v2",
+          "HADOOP_FEATURE_VERSION:hadoop-blocking-features-v2",
+          "SAME_WORK_DISTINCT_POSITIONS",
+          "PATH:DETERMINISTIC_BIBLIOGRAPHIC"
+        ],
+        "features": {
+          "authorOrder": 0.8,
+          "coauthorOverlap": 0.75,
+          "externalIdAgreement": 0,
+          "hadoop.coauthorSurnameJaccard": 0.75,
+          "hadoop.givenNameTokenJaccard": 1,
+          "hadoop.initialEqual": 1,
+          "hadoop.orcidBothPresent": 0,
+          "hadoop.orcidEqual": 0,
+          "hadoop.sameSource": 0,
+          "hadoop.sharedCoauthorSurnames": 3,
+          "hadoop.sourceAuthorKeyBothPresent": 1,
+          "hadoop.sourceAuthorKeyEqual": 0,
+          "hadoop.surnameEqual": 1,
+          "hadoop.titleTokenJaccard": 1,
+          "hadoop.yearDelta": 0,
+          "hadoop.yearKnown": 1,
+          "initialsCompatibility": 1,
+          "nameSimilarity": 1,
+          "sameWorkBibliographic": 0,
+          "sameWorkContext": 1,
+          "score": 0.813333,
+          "sourceReliability": 0.85,
+          "surnameSimilarity": 1,
+          "titleSimilarity": 1,
+          "venueCompatibility": 0.166667,
+          "yearDistance": 1
+        }
+      },
+      {
+        "pairId": "rq1-5f29587100673379",
+        "kind": "researcher",
+        "humanLabel": "SAME",
+        "humanNotes": "",
+        "matchPath": "DETERMINISTIC_BIBLIOGRAPHIC",
+        "decision": "UNRESOLVED",
+        "score": 0.86,
+        "confidence": 0,
+        "reasonCodes": [
+          "SAME_WORK_DIFFERENT_POSITION"
+        ],
+        "rulesFired": [
+          "POLICY_REVISION:er-v1-r2",
+          "FEATURE_VERSION:er-features-v2",
+          "HADOOP_FEATURE_VERSION:hadoop-blocking-features-v2",
+          "SAME_WORK_DISTINCT_POSITIONS",
+          "PATH:DETERMINISTIC_BIBLIOGRAPHIC"
+        ],
+        "features": {
+          "authorOrder": 0.8,
+          "coauthorOverlap": 0.75,
+          "externalIdAgreement": 0,
+          "hadoop.coauthorSurnameJaccard": 0.75,
+          "hadoop.givenNameTokenJaccard": 1,
+          "hadoop.initialEqual": 1,
+          "hadoop.orcidBothPresent": 0,
+          "hadoop.orcidEqual": 0,
+          "hadoop.sameSource": 0,
+          "hadoop.sharedCoauthorSurnames": 3,
+          "hadoop.sourceAuthorKeyBothPresent": 0,
+          "hadoop.sourceAuthorKeyEqual": 0,
+          "hadoop.surnameEqual": 1,
+          "hadoop.titleTokenJaccard": 1,
+          "hadoop.yearDelta": 0,
+          "hadoop.yearKnown": 1,
+          "initialsCompatibility": 1,
+          "nameSimilarity": 1,
+          "sameWorkBibliographic": 0,
+          "sameWorkContext": 1,
+          "score": 0.86,
+          "sourceReliability": 0.95,
+          "surnameSimilarity": 1,
+          "titleSimilarity": 1,
+          "venueCompatibility": 1,
+          "yearDistance": 1
+        }
+      },
+      {
+        "pairId": "rq1-6f20bfc83555230b",
+        "kind": "researcher",
+        "humanLabel": "SAME",
+        "humanNotes": "",
+        "matchPath": "DETERMINISTIC_BIBLIOGRAPHIC",
+        "decision": "UNRESOLVED",
+        "score": 0.813333,
+        "confidence": 0,
+        "reasonCodes": [
+          "SAME_WORK_DIFFERENT_POSITION"
+        ],
+        "rulesFired": [
+          "POLICY_REVISION:er-v1-r2",
+          "FEATURE_VERSION:er-features-v2",
+          "HADOOP_FEATURE_VERSION:hadoop-blocking-features-v2",
+          "SAME_WORK_DISTINCT_POSITIONS",
+          "PATH:DETERMINISTIC_BIBLIOGRAPHIC"
+        ],
+        "features": {
+          "authorOrder": 0.8,
+          "coauthorOverlap": 0.75,
+          "externalIdAgreement": 0,
+          "hadoop.coauthorSurnameJaccard": 0.75,
+          "hadoop.givenNameTokenJaccard": 1,
+          "hadoop.initialEqual": 1,
+          "hadoop.orcidBothPresent": 0,
+          "hadoop.orcidEqual": 0,
+          "hadoop.sameSource": 0,
+          "hadoop.sharedCoauthorSurnames": 3,
+          "hadoop.sourceAuthorKeyBothPresent": 1,
+          "hadoop.sourceAuthorKeyEqual": 0,
+          "hadoop.surnameEqual": 1,
+          "hadoop.titleTokenJaccard": 1,
+          "hadoop.yearDelta": 0,
+          "hadoop.yearKnown": 1,
+          "initialsCompatibility": 1,
+          "nameSimilarity": 1,
+          "sameWorkBibliographic": 0,
+          "sameWorkContext": 1,
+          "score": 0.813333,
+          "sourceReliability": 0.85,
+          "surnameSimilarity": 1,
+          "titleSimilarity": 1,
+          "venueCompatibility": 0.166667,
+          "yearDistance": 1
+        }
+      },
+      {
+        "pairId": "rq1-752498b811b17e66",
+        "kind": "researcher",
+        "humanLabel": "SAME",
+        "humanNotes": "Same paper, same author slot; ORCID mismatch likely duplicate ORCID or source error. Relabeled after review.",
+        "matchPath": "EXACT_ID",
+        "decision": "CONFLICT",
+        "score": 0.9775,
+        "confidence": 1,
+        "reasonCodes": [
+          "EXACT_ID_DISAGREES_WITH_EVIDENCE"
+        ],
+        "rulesFired": [
+          "POLICY_REVISION:er-v1-r2",
+          "FEATURE_VERSION:er-features-v2",
+          "HADOOP_FEATURE_VERSION:hadoop-blocking-features-v2",
+          "EXACT_ID_DISAGREE:ORCID",
+          "SAME_WORK_SAME_POSITION",
+          "SCORE_AT_OR_ABOVE_ACCEPT",
+          "PATH:EXACT_ID"
+        ],
+        "features": {
+          "affiliationCompatibility": 1,
+          "authorOrder": 1,
+          "coauthorOverlap": 1,
+          "externalIdAgreement": -1,
+          "hadoop.coauthorSurnameJaccard": 1,
+          "hadoop.givenNameTokenJaccard": 1,
+          "hadoop.initialEqual": 1,
+          "hadoop.orcidBothPresent": 1,
+          "hadoop.orcidEqual": 0,
+          "hadoop.sameSource": 0,
+          "hadoop.sharedCoauthorSurnames": 8,
+          "hadoop.sourceAuthorKeyBothPresent": 0,
+          "hadoop.sourceAuthorKeyEqual": 0,
+          "hadoop.surnameEqual": 1,
+          "hadoop.titleTokenJaccard": 1,
+          "hadoop.yearDelta": 0,
+          "hadoop.yearKnown": 1,
+          "initialsCompatibility": 1,
+          "nameSimilarity": 1,
+          "sameWorkBibliographic": 1,
+          "sameWorkContext": 1,
+          "score": 0.9775,
+          "sourceReliability": 0.85,
+          "surnameSimilarity": 1,
+          "titleSimilarity": 1,
+          "venueCompatibility": 1,
+          "yearDistance": 1
+        }
+      },
+      {
+        "pairId": "rq1-91719fdcc665fafe",
+        "kind": "researcher",
+        "humanLabel": "SAME",
+        "humanNotes": "",
+        "matchPath": "DETERMINISTIC_BIBLIOGRAPHIC",
+        "decision": "UNRESOLVED",
+        "score": 0.813333,
+        "confidence": 0,
+        "reasonCodes": [
+          "SAME_WORK_DIFFERENT_POSITION"
+        ],
+        "rulesFired": [
+          "POLICY_REVISION:er-v1-r2",
+          "FEATURE_VERSION:er-features-v2",
+          "HADOOP_FEATURE_VERSION:hadoop-blocking-features-v2",
+          "SAME_WORK_DISTINCT_POSITIONS",
+          "PATH:DETERMINISTIC_BIBLIOGRAPHIC"
+        ],
+        "features": {
+          "authorOrder": 0.8,
+          "coauthorOverlap": 0.75,
+          "externalIdAgreement": 0,
+          "hadoop.coauthorSurnameJaccard": 0.75,
+          "hadoop.givenNameTokenJaccard": 1,
+          "hadoop.initialEqual": 1,
+          "hadoop.orcidBothPresent": 0,
+          "hadoop.orcidEqual": 0,
+          "hadoop.sameSource": 0,
+          "hadoop.sharedCoauthorSurnames": 3,
+          "hadoop.sourceAuthorKeyBothPresent": 1,
+          "hadoop.sourceAuthorKeyEqual": 0,
+          "hadoop.surnameEqual": 1,
+          "hadoop.titleTokenJaccard": 1,
+          "hadoop.yearDelta": 0,
+          "hadoop.yearKnown": 1,
+          "initialsCompatibility": 1,
+          "nameSimilarity": 1,
+          "sameWorkBibliographic": 0,
+          "sameWorkContext": 1,
+          "score": 0.813333,
+          "sourceReliability": 0.85,
+          "surnameSimilarity": 1,
+          "titleSimilarity": 1,
+          "venueCompatibility": 0.166667,
+          "yearDistance": 1
+        }
+      },
+      {
+        "pairId": "rq1-d74d45943c3b23bb",
+        "kind": "researcher",
+        "humanLabel": "SAME",
+        "humanNotes": "",
+        "matchPath": "DETERMINISTIC_BIBLIOGRAPHIC",
+        "decision": "UNRESOLVED",
+        "score": 0.86,
+        "confidence": 0,
+        "reasonCodes": [
+          "SAME_WORK_DIFFERENT_POSITION"
+        ],
+        "rulesFired": [
+          "POLICY_REVISION:er-v1-r2",
+          "FEATURE_VERSION:er-features-v2",
+          "HADOOP_FEATURE_VERSION:hadoop-blocking-features-v2",
+          "SAME_WORK_DISTINCT_POSITIONS",
+          "PATH:DETERMINISTIC_BIBLIOGRAPHIC"
+        ],
+        "features": {
+          "authorOrder": 0.8,
+          "coauthorOverlap": 0.75,
+          "externalIdAgreement": 0,
+          "hadoop.coauthorSurnameJaccard": 0.75,
+          "hadoop.givenNameTokenJaccard": 1,
+          "hadoop.initialEqual": 1,
+          "hadoop.orcidBothPresent": 0,
+          "hadoop.orcidEqual": 0,
+          "hadoop.sameSource": 0,
+          "hadoop.sharedCoauthorSurnames": 3,
+          "hadoop.sourceAuthorKeyBothPresent": 0,
+          "hadoop.sourceAuthorKeyEqual": 0,
+          "hadoop.surnameEqual": 1,
+          "hadoop.titleTokenJaccard": 1,
+          "hadoop.yearDelta": 0,
+          "hadoop.yearKnown": 1,
+          "initialsCompatibility": 1,
+          "nameSimilarity": 1,
+          "sameWorkBibliographic": 0,
+          "sameWorkContext": 1,
+          "score": 0.86,
+          "sourceReliability": 0.95,
+          "surnameSimilarity": 1,
+          "titleSimilarity": 1,
+          "venueCompatibility": 1,
+          "yearDistance": 1
+        }
+      },
+      {
+        "pairId": "rq1-d7551f3449b531b4",
+        "kind": "researcher",
+        "humanLabel": "SAME",
+        "humanNotes": "",
+        "matchPath": "DETERMINISTIC_BIBLIOGRAPHIC",
+        "decision": "UNRESOLVED",
+        "score": 0.813333,
+        "confidence": 0,
+        "reasonCodes": [
+          "SAME_WORK_DIFFERENT_POSITION"
+        ],
+        "rulesFired": [
+          "POLICY_REVISION:er-v1-r2",
+          "FEATURE_VERSION:er-features-v2",
+          "HADOOP_FEATURE_VERSION:hadoop-blocking-features-v2",
+          "SAME_WORK_DISTINCT_POSITIONS",
+          "PATH:DETERMINISTIC_BIBLIOGRAPHIC"
+        ],
+        "features": {
+          "authorOrder": 0.8,
+          "coauthorOverlap": 0.75,
+          "externalIdAgreement": 0,
+          "hadoop.coauthorSurnameJaccard": 0.75,
+          "hadoop.givenNameTokenJaccard": 1,
+          "hadoop.initialEqual": 1,
+          "hadoop.orcidBothPresent": 0,
+          "hadoop.orcidEqual": 0,
+          "hadoop.sameSource": 0,
+          "hadoop.sharedCoauthorSurnames": 3,
+          "hadoop.sourceAuthorKeyBothPresent": 1,
+          "hadoop.sourceAuthorKeyEqual": 0,
+          "hadoop.surnameEqual": 1,
+          "hadoop.titleTokenJaccard": 1,
+          "hadoop.yearDelta": 0,
+          "hadoop.yearKnown": 1,
+          "initialsCompatibility": 1,
+          "nameSimilarity": 1,
+          "sameWorkBibliographic": 0,
+          "sameWorkContext": 1,
+          "score": 0.813333,
+          "sourceReliability": 0.85,
+          "surnameSimilarity": 1,
+          "titleSimilarity": 1,
+          "venueCompatibility": 0.166667,
+          "yearDistance": 1
+        }
+      },
+      {
+        "pairId": "rq1-f5ddae5a4d51c57b",
+        "kind": "work",
+        "humanLabel": "SAME",
+        "humanNotes": "Same paper; dual ACM/IEEE DOIs (DAC co-published). Relabeled after review.",
+        "matchPath": "EXACT_ID",
+        "decision": "CONFLICT",
+        "score": 0.96,
+        "confidence": 1,
+        "reasonCodes": [
+          "EXACT_ID_DISAGREES_WITH_EVIDENCE"
+        ],
+        "rulesFired": [
+          "POLICY_REVISION:er-v1-r2",
+          "FEATURE_VERSION:er-features-v2",
+          "HADOOP_FEATURE_VERSION:hadoop-blocking-features-v2",
+          "EXACT_ID_DISAGREE:DOI",
+          "EXACT_BIBLIOGRAPHIC_MATCH",
+          "SCORE_AT_OR_ABOVE_ACCEPT",
+          "PATH:EXACT_ID"
+        ],
+        "features": {
+          "authorOrder": 1,
+          "coauthorOverlap": 1,
+          "exactBibliographic": 1,
+          "externalIdAgreement": -1,
+          "genericTitle": 0,
+          "hadoop.authorCountDelta": 0,
+          "hadoop.authorSurnameJaccard": 1,
+          "hadoop.doiBothPresent": 1,
+          "hadoop.doiEqual": 0,
+          "hadoop.sameSource": 0,
+          "hadoop.titleTokenJaccard": 1,
+          "hadoop.titleTokensEqual": 1,
+          "hadoop.yearDelta": 0,
+          "hadoop.yearKnown": 1,
+          "score": 0.96,
+          "sourceReliability": 0.85,
+          "titlePrefix": 1,
+          "titleSimilarity": 1,
+          "venueCompatibility": 1,
+          "yearDistance": 1
+        }
+      }
+    ]
+  },
+  "thresholdSensitivity": {
+    "note": "Counterfactual over the run's recorded weighted scores; reporting only, the er-v1 thresholds are not changed. `policy-score-path` re-thresholds only decisions the thresholds governed (PROBABILISTIC or LLM_ADJUDICATED path decided by score; exact-ID, bibliographic, name-gate and generic-title decisions keep their recorded outcome). `score-only` decides every non-CONFLICT pair by score alone, ignoring all deterministic rules (CONFLICT stays CONFLICT). In both, a score between reject and accept is UNRESOLVED: no adjudicator is run.",
+    "acceptGrid": [
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95
+    ],
+    "rejectGrid": [
+      0.35,
+      0.45,
+      0.55,
+      0.65
+    ],
+    "policyVariantAtConfiguredThresholdsReproducesRun": true,
+    "rows": [
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.7,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 11,
+          "denominator": 71,
+          "value": 0.15493,
+          "wilson95": [
+            0.088773,
+            0.25651
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.7,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 11,
+          "denominator": 71,
+          "value": 0.15493,
+          "wilson95": [
+            0.088773,
+            0.25651
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.7,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 9,
+          "denominator": 71,
+          "value": 0.126761,
+          "wilson95": [
+            0.068145,
+            0.223691
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.7,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 8,
+          "denominator": 71,
+          "value": 0.112676,
+          "wilson95": [
+            0.058213,
+            0.2069
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.75,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 11,
+          "denominator": 71,
+          "value": 0.15493,
+          "wilson95": [
+            0.088773,
+            0.25651
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.75,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 11,
+          "denominator": 71,
+          "value": 0.15493,
+          "wilson95": [
+            0.088773,
+            0.25651
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.75,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 9,
+          "denominator": 71,
+          "value": 0.126761,
+          "wilson95": [
+            0.068145,
+            0.223691
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.75,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 8,
+          "denominator": 71,
+          "value": 0.112676,
+          "wilson95": [
+            0.058213,
+            0.2069
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.8,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 11,
+          "denominator": 71,
+          "value": 0.15493,
+          "wilson95": [
+            0.088773,
+            0.25651
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.8,
+        "reject": 0.45,
+        "configured": true,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 11,
+          "denominator": 71,
+          "value": 0.15493,
+          "wilson95": [
+            0.088773,
+            0.25651
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.8,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 9,
+          "denominator": 71,
+          "value": 0.126761,
+          "wilson95": [
+            0.068145,
+            0.223691
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.8,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 8,
+          "denominator": 71,
+          "value": 0.112676,
+          "wilson95": [
+            0.058213,
+            0.2069
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.85,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 11,
+          "denominator": 71,
+          "value": 0.15493,
+          "wilson95": [
+            0.088773,
+            0.25651
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.85,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 11,
+          "denominator": 71,
+          "value": 0.15493,
+          "wilson95": [
+            0.088773,
+            0.25651
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.85,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 9,
+          "denominator": 71,
+          "value": 0.126761,
+          "wilson95": [
+            0.068145,
+            0.223691
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.85,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 8,
+          "denominator": 71,
+          "value": 0.112676,
+          "wilson95": [
+            0.058213,
+            0.2069
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.9,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 11,
+          "denominator": 71,
+          "value": 0.15493,
+          "wilson95": [
+            0.088773,
+            0.25651
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.9,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 11,
+          "denominator": 71,
+          "value": 0.15493,
+          "wilson95": [
+            0.088773,
+            0.25651
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.9,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 9,
+          "denominator": 71,
+          "value": 0.126761,
+          "wilson95": [
+            0.068145,
+            0.223691
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.9,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 59,
+        "fp": 0,
+        "fn": 9,
+        "tn": 3,
+        "precision": {
+          "numerator": 59,
+          "denominator": 59,
+          "value": 1,
+          "wilson95": [
+            0.938871,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 59,
+          "denominator": 68,
+          "value": 0.867647,
+          "wilson95": [
+            0.767199,
+            0.928778
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 8,
+          "denominator": 71,
+          "value": 0.112676,
+          "wilson95": [
+            0.058213,
+            0.2069
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.95,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 51,
+        "fp": 0,
+        "fn": 17,
+        "tn": 3,
+        "precision": {
+          "numerator": 51,
+          "denominator": 51,
+          "value": 1,
+          "wilson95": [
+            0.929953,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 51,
+          "denominator": 68,
+          "value": 0.75,
+          "wilson95": [
+            0.635614,
+            0.83765
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 19,
+          "denominator": 71,
+          "value": 0.267606,
+          "wilson95": [
+            0.178528,
+            0.38054
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.95,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 51,
+        "fp": 0,
+        "fn": 17,
+        "tn": 3,
+        "precision": {
+          "numerator": 51,
+          "denominator": 51,
+          "value": 1,
+          "wilson95": [
+            0.929953,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 51,
+          "denominator": 68,
+          "value": 0.75,
+          "wilson95": [
+            0.635614,
+            0.83765
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 19,
+          "denominator": 71,
+          "value": 0.267606,
+          "wilson95": [
+            0.178528,
+            0.38054
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.95,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 51,
+        "fp": 0,
+        "fn": 17,
+        "tn": 3,
+        "precision": {
+          "numerator": 51,
+          "denominator": 51,
+          "value": 1,
+          "wilson95": [
+            0.929953,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 51,
+          "denominator": 68,
+          "value": 0.75,
+          "wilson95": [
+            0.635614,
+            0.83765
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 17,
+          "denominator": 71,
+          "value": 0.239437,
+          "wilson95": [
+            0.155209,
+            0.350412
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "researcher",
+        "accept": 0.95,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 11,
+        "tp": 51,
+        "fp": 0,
+        "fn": 17,
+        "tn": 3,
+        "precision": {
+          "numerator": 51,
+          "denominator": 51,
+          "value": 1,
+          "wilson95": [
+            0.929953,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 51,
+          "denominator": 68,
+          "value": 0.75,
+          "wilson95": [
+            0.635614,
+            0.83765
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 16,
+          "denominator": 71,
+          "value": 0.225352,
+          "wilson95": [
+            0.143747,
+            0.335152
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.7,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.7,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.7,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.7,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.75,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.75,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.75,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.75,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.8,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.8,
+        "reject": 0.45,
+        "configured": true,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.8,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.8,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.85,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.85,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.85,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.85,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.9,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.9,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.9,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.9,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.95,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.95,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.95,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "policy-score-path",
+        "kind": "work",
+        "accept": 0.95,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 2,
+        "tn": 1,
+        "precision": {
+          "numerator": 18,
+          "denominator": 18,
+          "value": 1,
+          "wilson95": [
+            0.824121,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 18,
+          "denominator": 20,
+          "value": 0.9,
+          "wilson95": [
+            0.698966,
+            0.972134
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.7,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 67,
+        "fp": 0,
+        "fn": 1,
+        "tn": 3,
+        "precision": {
+          "numerator": 67,
+          "denominator": 67,
+          "value": 1,
+          "wilson95": [
+            0.945774,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 67,
+          "denominator": 68,
+          "value": 0.985294,
+          "wilson95": [
+            0.92129,
+            0.997399
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 3,
+          "denominator": 71,
+          "value": 0.042254,
+          "wilson95": [
+            0.014473,
+            0.117024
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.7,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 67,
+        "fp": 0,
+        "fn": 1,
+        "tn": 3,
+        "precision": {
+          "numerator": 67,
+          "denominator": 67,
+          "value": 1,
+          "wilson95": [
+            0.945774,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 67,
+          "denominator": 68,
+          "value": 0.985294,
+          "wilson95": [
+            0.92129,
+            0.997399
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 3,
+          "denominator": 71,
+          "value": 0.042254,
+          "wilson95": [
+            0.014473,
+            0.117024
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.7,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 67,
+        "fp": 0,
+        "fn": 1,
+        "tn": 3,
+        "precision": {
+          "numerator": 67,
+          "denominator": 67,
+          "value": 1,
+          "wilson95": [
+            0.945774,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 67,
+          "denominator": 68,
+          "value": 0.985294,
+          "wilson95": [
+            0.92129,
+            0.997399
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 1,
+          "denominator": 71,
+          "value": 0.014085,
+          "wilson95": [
+            0.002491,
+            0.075561
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.7,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 67,
+        "fp": 0,
+        "fn": 1,
+        "tn": 3,
+        "precision": {
+          "numerator": 67,
+          "denominator": 67,
+          "value": 1,
+          "wilson95": [
+            0.945774,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 67,
+          "denominator": 68,
+          "value": 0.985294,
+          "wilson95": [
+            0.92129,
+            0.997399
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 71,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.051328
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.75,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 67,
+        "fp": 0,
+        "fn": 1,
+        "tn": 3,
+        "precision": {
+          "numerator": 67,
+          "denominator": 67,
+          "value": 1,
+          "wilson95": [
+            0.945774,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 67,
+          "denominator": 68,
+          "value": 0.985294,
+          "wilson95": [
+            0.92129,
+            0.997399
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 3,
+          "denominator": 71,
+          "value": 0.042254,
+          "wilson95": [
+            0.014473,
+            0.117024
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.75,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 67,
+        "fp": 0,
+        "fn": 1,
+        "tn": 3,
+        "precision": {
+          "numerator": 67,
+          "denominator": 67,
+          "value": 1,
+          "wilson95": [
+            0.945774,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 67,
+          "denominator": 68,
+          "value": 0.985294,
+          "wilson95": [
+            0.92129,
+            0.997399
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 3,
+          "denominator": 71,
+          "value": 0.042254,
+          "wilson95": [
+            0.014473,
+            0.117024
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.75,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 67,
+        "fp": 0,
+        "fn": 1,
+        "tn": 3,
+        "precision": {
+          "numerator": 67,
+          "denominator": 67,
+          "value": 1,
+          "wilson95": [
+            0.945774,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 67,
+          "denominator": 68,
+          "value": 0.985294,
+          "wilson95": [
+            0.92129,
+            0.997399
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 1,
+          "denominator": 71,
+          "value": 0.014085,
+          "wilson95": [
+            0.002491,
+            0.075561
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.75,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 67,
+        "fp": 0,
+        "fn": 1,
+        "tn": 3,
+        "precision": {
+          "numerator": 67,
+          "denominator": 67,
+          "value": 1,
+          "wilson95": [
+            0.945774,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 67,
+          "denominator": 68,
+          "value": 0.985294,
+          "wilson95": [
+            0.92129,
+            0.997399
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 71,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.051328
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.8,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 67,
+        "fp": 0,
+        "fn": 1,
+        "tn": 3,
+        "precision": {
+          "numerator": 67,
+          "denominator": 67,
+          "value": 1,
+          "wilson95": [
+            0.945774,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 67,
+          "denominator": 68,
+          "value": 0.985294,
+          "wilson95": [
+            0.92129,
+            0.997399
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 3,
+          "denominator": 71,
+          "value": 0.042254,
+          "wilson95": [
+            0.014473,
+            0.117024
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.8,
+        "reject": 0.45,
+        "configured": true,
+        "pairsRethresholded": 70,
+        "tp": 67,
+        "fp": 0,
+        "fn": 1,
+        "tn": 3,
+        "precision": {
+          "numerator": 67,
+          "denominator": 67,
+          "value": 1,
+          "wilson95": [
+            0.945774,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 67,
+          "denominator": 68,
+          "value": 0.985294,
+          "wilson95": [
+            0.92129,
+            0.997399
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 3,
+          "denominator": 71,
+          "value": 0.042254,
+          "wilson95": [
+            0.014473,
+            0.117024
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.8,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 67,
+        "fp": 0,
+        "fn": 1,
+        "tn": 3,
+        "precision": {
+          "numerator": 67,
+          "denominator": 67,
+          "value": 1,
+          "wilson95": [
+            0.945774,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 67,
+          "denominator": 68,
+          "value": 0.985294,
+          "wilson95": [
+            0.92129,
+            0.997399
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 1,
+          "denominator": 71,
+          "value": 0.014085,
+          "wilson95": [
+            0.002491,
+            0.075561
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.8,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 67,
+        "fp": 0,
+        "fn": 1,
+        "tn": 3,
+        "precision": {
+          "numerator": 67,
+          "denominator": 67,
+          "value": 1,
+          "wilson95": [
+            0.945774,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 67,
+          "denominator": 68,
+          "value": 0.985294,
+          "wilson95": [
+            0.92129,
+            0.997399
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 71,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.051328
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.85,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 63,
+        "fp": 0,
+        "fn": 5,
+        "tn": 3,
+        "precision": {
+          "numerator": 63,
+          "denominator": 63,
+          "value": 1,
+          "wilson95": [
+            0.942529,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 63,
+          "denominator": 68,
+          "value": 0.926471,
+          "wilson95": [
+            0.839148,
+            0.968185
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 7,
+          "denominator": 71,
+          "value": 0.098592,
+          "wilson95": [
+            0.048583,
+            0.189807
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.85,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 63,
+        "fp": 0,
+        "fn": 5,
+        "tn": 3,
+        "precision": {
+          "numerator": 63,
+          "denominator": 63,
+          "value": 1,
+          "wilson95": [
+            0.942529,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 63,
+          "denominator": 68,
+          "value": 0.926471,
+          "wilson95": [
+            0.839148,
+            0.968185
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 7,
+          "denominator": 71,
+          "value": 0.098592,
+          "wilson95": [
+            0.048583,
+            0.189807
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.85,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 63,
+        "fp": 0,
+        "fn": 5,
+        "tn": 3,
+        "precision": {
+          "numerator": 63,
+          "denominator": 63,
+          "value": 1,
+          "wilson95": [
+            0.942529,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 63,
+          "denominator": 68,
+          "value": 0.926471,
+          "wilson95": [
+            0.839148,
+            0.968185
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 5,
+          "denominator": 71,
+          "value": 0.070423,
+          "wilson95": [
+            0.030454,
+            0.15449
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.85,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 63,
+        "fp": 0,
+        "fn": 5,
+        "tn": 3,
+        "precision": {
+          "numerator": 63,
+          "denominator": 63,
+          "value": 1,
+          "wilson95": [
+            0.942529,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 63,
+          "denominator": 68,
+          "value": 0.926471,
+          "wilson95": [
+            0.839148,
+            0.968185
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 4,
+          "denominator": 71,
+          "value": 0.056338,
+          "wilson95": [
+            0.022125,
+            0.136096
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.9,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 56,
+        "fp": 0,
+        "fn": 12,
+        "tn": 3,
+        "precision": {
+          "numerator": 56,
+          "denominator": 56,
+          "value": 1,
+          "wilson95": [
+            0.935806,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 56,
+          "denominator": 68,
+          "value": 0.823529,
+          "wilson95": [
+            0.716396,
+            0.896064
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 14,
+          "denominator": 71,
+          "value": 0.197183,
+          "wilson95": [
+            0.121255,
+            0.304197
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.9,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 56,
+        "fp": 0,
+        "fn": 12,
+        "tn": 3,
+        "precision": {
+          "numerator": 56,
+          "denominator": 56,
+          "value": 1,
+          "wilson95": [
+            0.935806,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 56,
+          "denominator": 68,
+          "value": 0.823529,
+          "wilson95": [
+            0.716396,
+            0.896064
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 14,
+          "denominator": 71,
+          "value": 0.197183,
+          "wilson95": [
+            0.121255,
+            0.304197
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.9,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 56,
+        "fp": 0,
+        "fn": 12,
+        "tn": 3,
+        "precision": {
+          "numerator": 56,
+          "denominator": 56,
+          "value": 1,
+          "wilson95": [
+            0.935806,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 56,
+          "denominator": 68,
+          "value": 0.823529,
+          "wilson95": [
+            0.716396,
+            0.896064
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 12,
+          "denominator": 71,
+          "value": 0.169014,
+          "wilson95": [
+            0.099415,
+            0.272591
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.9,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 56,
+        "fp": 0,
+        "fn": 12,
+        "tn": 3,
+        "precision": {
+          "numerator": 56,
+          "denominator": 56,
+          "value": 1,
+          "wilson95": [
+            0.935806,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 56,
+          "denominator": 68,
+          "value": 0.823529,
+          "wilson95": [
+            0.716396,
+            0.896064
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 11,
+          "denominator": 71,
+          "value": 0.15493,
+          "wilson95": [
+            0.088773,
+            0.25651
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.95,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 20,
+        "fp": 0,
+        "fn": 48,
+        "tn": 3,
+        "precision": {
+          "numerator": 20,
+          "denominator": 20,
+          "value": 1,
+          "wilson95": [
+            0.838875,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 20,
+          "denominator": 68,
+          "value": 0.294118,
+          "wilson95": [
+            0.19919,
+            0.411063
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 50,
+          "denominator": 71,
+          "value": 0.704225,
+          "wilson95": [
+            0.589815,
+            0.797671
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.95,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 20,
+        "fp": 0,
+        "fn": 48,
+        "tn": 3,
+        "precision": {
+          "numerator": 20,
+          "denominator": 20,
+          "value": 1,
+          "wilson95": [
+            0.838875,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 20,
+          "denominator": 68,
+          "value": 0.294118,
+          "wilson95": [
+            0.19919,
+            0.411063
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 50,
+          "denominator": 71,
+          "value": 0.704225,
+          "wilson95": [
+            0.589815,
+            0.797671
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.95,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 20,
+        "fp": 0,
+        "fn": 48,
+        "tn": 3,
+        "precision": {
+          "numerator": 20,
+          "denominator": 20,
+          "value": 1,
+          "wilson95": [
+            0.838875,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 20,
+          "denominator": 68,
+          "value": 0.294118,
+          "wilson95": [
+            0.19919,
+            0.411063
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 48,
+          "denominator": 71,
+          "value": 0.676056,
+          "wilson95": [
+            0.560612,
+            0.773428
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "researcher",
+        "accept": 0.95,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 70,
+        "tp": 20,
+        "fp": 0,
+        "fn": 48,
+        "tn": 3,
+        "precision": {
+          "numerator": 20,
+          "denominator": 20,
+          "value": 1,
+          "wilson95": [
+            0.838875,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 20,
+          "denominator": 68,
+          "value": 0.294118,
+          "wilson95": [
+            0.19919,
+            0.411063
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 47,
+          "denominator": 71,
+          "value": 0.661972,
+          "wilson95": [
+            0.546166,
+            0.76115
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.7,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 17,
+        "fp": 0,
+        "fn": 3,
+        "tn": 1,
+        "precision": {
+          "numerator": 17,
+          "denominator": 17,
+          "value": 1,
+          "wilson95": [
+            0.815682,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 17,
+          "denominator": 20,
+          "value": 0.85,
+          "wilson95": [
+            0.639581,
+            0.947631
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 2,
+          "denominator": 21,
+          "value": 0.095238,
+          "wilson95": [
+            0.026519,
+            0.289141
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.7,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 17,
+        "fp": 0,
+        "fn": 3,
+        "tn": 1,
+        "precision": {
+          "numerator": 17,
+          "denominator": 17,
+          "value": 1,
+          "wilson95": [
+            0.815682,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 17,
+          "denominator": 20,
+          "value": 0.85,
+          "wilson95": [
+            0.639581,
+            0.947631
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 2,
+          "denominator": 21,
+          "value": 0.095238,
+          "wilson95": [
+            0.026519,
+            0.289141
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.7,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 17,
+        "fp": 0,
+        "fn": 3,
+        "tn": 1,
+        "precision": {
+          "numerator": 17,
+          "denominator": 17,
+          "value": 1,
+          "wilson95": [
+            0.815682,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 17,
+          "denominator": 20,
+          "value": 0.85,
+          "wilson95": [
+            0.639581,
+            0.947631
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 2,
+          "denominator": 21,
+          "value": 0.095238,
+          "wilson95": [
+            0.026519,
+            0.289141
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.7,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 17,
+        "fp": 0,
+        "fn": 3,
+        "tn": 1,
+        "precision": {
+          "numerator": 17,
+          "denominator": 17,
+          "value": 1,
+          "wilson95": [
+            0.815682,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 17,
+          "denominator": 20,
+          "value": 0.85,
+          "wilson95": [
+            0.639581,
+            0.947631
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.75,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 17,
+        "fp": 0,
+        "fn": 3,
+        "tn": 1,
+        "precision": {
+          "numerator": 17,
+          "denominator": 17,
+          "value": 1,
+          "wilson95": [
+            0.815682,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 17,
+          "denominator": 20,
+          "value": 0.85,
+          "wilson95": [
+            0.639581,
+            0.947631
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 2,
+          "denominator": 21,
+          "value": 0.095238,
+          "wilson95": [
+            0.026519,
+            0.289141
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.75,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 17,
+        "fp": 0,
+        "fn": 3,
+        "tn": 1,
+        "precision": {
+          "numerator": 17,
+          "denominator": 17,
+          "value": 1,
+          "wilson95": [
+            0.815682,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 17,
+          "denominator": 20,
+          "value": 0.85,
+          "wilson95": [
+            0.639581,
+            0.947631
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 2,
+          "denominator": 21,
+          "value": 0.095238,
+          "wilson95": [
+            0.026519,
+            0.289141
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.75,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 17,
+        "fp": 0,
+        "fn": 3,
+        "tn": 1,
+        "precision": {
+          "numerator": 17,
+          "denominator": 17,
+          "value": 1,
+          "wilson95": [
+            0.815682,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 17,
+          "denominator": 20,
+          "value": 0.85,
+          "wilson95": [
+            0.639581,
+            0.947631
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 2,
+          "denominator": 21,
+          "value": 0.095238,
+          "wilson95": [
+            0.026519,
+            0.289141
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.75,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 17,
+        "fp": 0,
+        "fn": 3,
+        "tn": 1,
+        "precision": {
+          "numerator": 17,
+          "denominator": 17,
+          "value": 1,
+          "wilson95": [
+            0.815682,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 17,
+          "denominator": 20,
+          "value": 0.85,
+          "wilson95": [
+            0.639581,
+            0.947631
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 0,
+          "denominator": 21,
+          "value": 0,
+          "wilson95": [
+            0,
+            0.154639
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.8,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 16,
+        "fp": 0,
+        "fn": 4,
+        "tn": 1,
+        "precision": {
+          "numerator": 16,
+          "denominator": 16,
+          "value": 1,
+          "wilson95": [
+            0.806392,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 16,
+          "denominator": 20,
+          "value": 0.8,
+          "wilson95": [
+            0.583983,
+            0.919342
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 3,
+          "denominator": 21,
+          "value": 0.142857,
+          "wilson95": [
+            0.04981,
+            0.346361
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.8,
+        "reject": 0.45,
+        "configured": true,
+        "pairsRethresholded": 19,
+        "tp": 16,
+        "fp": 0,
+        "fn": 4,
+        "tn": 1,
+        "precision": {
+          "numerator": 16,
+          "denominator": 16,
+          "value": 1,
+          "wilson95": [
+            0.806392,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 16,
+          "denominator": 20,
+          "value": 0.8,
+          "wilson95": [
+            0.583983,
+            0.919342
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 3,
+          "denominator": 21,
+          "value": 0.142857,
+          "wilson95": [
+            0.04981,
+            0.346361
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.8,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 16,
+        "fp": 0,
+        "fn": 4,
+        "tn": 1,
+        "precision": {
+          "numerator": 16,
+          "denominator": 16,
+          "value": 1,
+          "wilson95": [
+            0.806392,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 16,
+          "denominator": 20,
+          "value": 0.8,
+          "wilson95": [
+            0.583983,
+            0.919342
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 3,
+          "denominator": 21,
+          "value": 0.142857,
+          "wilson95": [
+            0.04981,
+            0.346361
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.8,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 16,
+        "fp": 0,
+        "fn": 4,
+        "tn": 1,
+        "precision": {
+          "numerator": 16,
+          "denominator": 16,
+          "value": 1,
+          "wilson95": [
+            0.806392,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 16,
+          "denominator": 20,
+          "value": 0.8,
+          "wilson95": [
+            0.583983,
+            0.919342
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 1,
+          "denominator": 21,
+          "value": 0.047619,
+          "wilson95": [
+            0.008456,
+            0.226694
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.85,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 16,
+        "fp": 0,
+        "fn": 4,
+        "tn": 1,
+        "precision": {
+          "numerator": 16,
+          "denominator": 16,
+          "value": 1,
+          "wilson95": [
+            0.806392,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 16,
+          "denominator": 20,
+          "value": 0.8,
+          "wilson95": [
+            0.583983,
+            0.919342
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 3,
+          "denominator": 21,
+          "value": 0.142857,
+          "wilson95": [
+            0.04981,
+            0.346361
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.85,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 16,
+        "fp": 0,
+        "fn": 4,
+        "tn": 1,
+        "precision": {
+          "numerator": 16,
+          "denominator": 16,
+          "value": 1,
+          "wilson95": [
+            0.806392,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 16,
+          "denominator": 20,
+          "value": 0.8,
+          "wilson95": [
+            0.583983,
+            0.919342
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 3,
+          "denominator": 21,
+          "value": 0.142857,
+          "wilson95": [
+            0.04981,
+            0.346361
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.85,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 16,
+        "fp": 0,
+        "fn": 4,
+        "tn": 1,
+        "precision": {
+          "numerator": 16,
+          "denominator": 16,
+          "value": 1,
+          "wilson95": [
+            0.806392,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 16,
+          "denominator": 20,
+          "value": 0.8,
+          "wilson95": [
+            0.583983,
+            0.919342
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 3,
+          "denominator": 21,
+          "value": 0.142857,
+          "wilson95": [
+            0.04981,
+            0.346361
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.85,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 16,
+        "fp": 0,
+        "fn": 4,
+        "tn": 1,
+        "precision": {
+          "numerator": 16,
+          "denominator": 16,
+          "value": 1,
+          "wilson95": [
+            0.806392,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 16,
+          "denominator": 20,
+          "value": 0.8,
+          "wilson95": [
+            0.583983,
+            0.919342
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 1,
+          "denominator": 21,
+          "value": 0.047619,
+          "wilson95": [
+            0.008456,
+            0.226694
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.9,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 15,
+        "fp": 0,
+        "fn": 5,
+        "tn": 1,
+        "precision": {
+          "numerator": 15,
+          "denominator": 15,
+          "value": 1,
+          "wilson95": [
+            0.796117,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 15,
+          "denominator": 20,
+          "value": 0.75,
+          "wilson95": [
+            0.531299,
+            0.888138
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 4,
+          "denominator": 21,
+          "value": 0.190476,
+          "wilson95": [
+            0.076676,
+            0.400006
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.9,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 15,
+        "fp": 0,
+        "fn": 5,
+        "tn": 1,
+        "precision": {
+          "numerator": 15,
+          "denominator": 15,
+          "value": 1,
+          "wilson95": [
+            0.796117,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 15,
+          "denominator": 20,
+          "value": 0.75,
+          "wilson95": [
+            0.531299,
+            0.888138
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 4,
+          "denominator": 21,
+          "value": 0.190476,
+          "wilson95": [
+            0.076676,
+            0.400006
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.9,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 15,
+        "fp": 0,
+        "fn": 5,
+        "tn": 1,
+        "precision": {
+          "numerator": 15,
+          "denominator": 15,
+          "value": 1,
+          "wilson95": [
+            0.796117,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 15,
+          "denominator": 20,
+          "value": 0.75,
+          "wilson95": [
+            0.531299,
+            0.888138
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 4,
+          "denominator": 21,
+          "value": 0.190476,
+          "wilson95": [
+            0.076676,
+            0.400006
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.9,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 15,
+        "fp": 0,
+        "fn": 5,
+        "tn": 1,
+        "precision": {
+          "numerator": 15,
+          "denominator": 15,
+          "value": 1,
+          "wilson95": [
+            0.796117,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 15,
+          "denominator": 20,
+          "value": 0.75,
+          "wilson95": [
+            0.531299,
+            0.888138
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 2,
+          "denominator": 21,
+          "value": 0.095238,
+          "wilson95": [
+            0.026519,
+            0.289141
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.95,
+        "reject": 0.35,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 15,
+        "fp": 0,
+        "fn": 5,
+        "tn": 1,
+        "precision": {
+          "numerator": 15,
+          "denominator": 15,
+          "value": 1,
+          "wilson95": [
+            0.796117,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 15,
+          "denominator": 20,
+          "value": 0.75,
+          "wilson95": [
+            0.531299,
+            0.888138
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 4,
+          "denominator": 21,
+          "value": 0.190476,
+          "wilson95": [
+            0.076676,
+            0.400006
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.95,
+        "reject": 0.45,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 15,
+        "fp": 0,
+        "fn": 5,
+        "tn": 1,
+        "precision": {
+          "numerator": 15,
+          "denominator": 15,
+          "value": 1,
+          "wilson95": [
+            0.796117,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 15,
+          "denominator": 20,
+          "value": 0.75,
+          "wilson95": [
+            0.531299,
+            0.888138
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 4,
+          "denominator": 21,
+          "value": 0.190476,
+          "wilson95": [
+            0.076676,
+            0.400006
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.95,
+        "reject": 0.55,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 15,
+        "fp": 0,
+        "fn": 5,
+        "tn": 1,
+        "precision": {
+          "numerator": 15,
+          "denominator": 15,
+          "value": 1,
+          "wilson95": [
+            0.796117,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 15,
+          "denominator": 20,
+          "value": 0.75,
+          "wilson95": [
+            0.531299,
+            0.888138
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 4,
+          "denominator": 21,
+          "value": 0.190476,
+          "wilson95": [
+            0.076676,
+            0.400006
+          ]
+        }
+      },
+      {
+        "variant": "score-only",
+        "kind": "work",
+        "accept": 0.95,
+        "reject": 0.65,
+        "configured": false,
+        "pairsRethresholded": 19,
+        "tp": 15,
+        "fp": 0,
+        "fn": 5,
+        "tn": 1,
+        "precision": {
+          "numerator": 15,
+          "denominator": 15,
+          "value": 1,
+          "wilson95": [
+            0.796117,
+            1
+          ]
+        },
+        "recall": {
+          "numerator": 15,
+          "denominator": 20,
+          "value": 0.75,
+          "wilson95": [
+            0.531299,
+            0.888138
+          ]
+        },
+        "unresolvedRate": {
+          "numerator": 2,
+          "denominator": 21,
+          "value": 0.095238,
+          "wilson95": [
+            0.026519,
+            0.289141
+          ]
+        }
+      }
+    ]
+  },
+  "comparison": {
+    "run": {
+      "runId": "run:9241e65ed83f7441e3935f5cce00aa48a5a8216398a2c1205f716d8a3508e423",
+      "runDir": "modules/entity-resolution/local-run/er-v1/run_id=9241e65ed83f7441e3935f5cce00aa48a5a8216398a2c1205f716d8a3508e423",
+      "policyVersion": "er-v1",
+      "policyRevision": "unrecorded",
+      "featureVersion": "er-features-v1",
+      "codeVersion": "scholarchain-entity-resolution-0.1.0-phase05",
+      "thresholds": {
+        "acceptThreshold": 0.8,
+        "rejectThreshold": 0.45,
+        "llmBandMin": 0.6,
+        "llmBandMax": 0.8
+      },
+      "adjudicator": "fake",
+      "adjudicatorIsFake": true,
+      "adjudicationModelVersion": "fake-deterministic-adjudicator-v1",
+      "adjudicationPromptVersion": "er-adj-prompt-v1",
+      "llmPairsInBand": 0,
+      "llmDecided": 0,
+      "inputSha256": "sha256:43a5ed3463446e9b57b8af8f4ace1e78219cce5aa276b89c8dc306ea7377d66f"
+    },
+    "metrics": {
+      "byKind": {
+        "researcher": {
+          "matrix": {
+            "SAME": {
+              "ACCEPTED": 67,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 1
+            },
+            "DIFFERENT": {
+              "ACCEPTED": 0,
+              "REJECTED": 3,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            }
+          },
+          "included": 71,
+          "goldSame": 68,
+          "goldDifferent": 3,
+          "tp": 67,
+          "fp": 0,
+          "fn": 1,
+          "tn": 3,
+          "precision": {
+            "numerator": 67,
+            "denominator": 67,
+            "value": 1,
+            "wilson95": [
+              0.945774,
+              1
+            ]
+          },
+          "recall": {
+            "numerator": 67,
+            "denominator": 68,
+            "value": 0.985294,
+            "wilson95": [
+              0.92129,
+              0.997399
+            ]
+          },
+          "f1": 0.992593,
+          "specificity": {
+            "numerator": 3,
+            "denominator": 3,
+            "value": 1,
+            "wilson95": [
+              0.438503,
+              1
+            ]
+          },
+          "coverage": {
+            "numerator": 70,
+            "denominator": 71,
+            "value": 0.985915,
+            "wilson95": [
+              0.924439,
+              0.997509
+            ]
+          },
+          "unresolvedRate": {
+            "numerator": 0,
+            "denominator": 71,
+            "value": 0,
+            "wilson95": [
+              0,
+              0.051328
+            ]
+          },
+          "conflictRate": {
+            "numerator": 1,
+            "denominator": 71,
+            "value": 0.014085,
+            "wilson95": [
+              0.002491,
+              0.075561
+            ]
+          },
+          "decidedOnlyRecall": {
+            "numerator": 67,
+            "denominator": 67,
+            "value": 1,
+            "wilson95": [
+              0.945774,
+              1
+            ]
+          }
+        },
+        "work": {
+          "matrix": {
+            "SAME": {
+              "ACCEPTED": 18,
+              "REJECTED": 0,
+              "UNRESOLVED": 0,
+              "CONFLICT": 2
+            },
+            "DIFFERENT": {
+              "ACCEPTED": 0,
+              "REJECTED": 1,
+              "UNRESOLVED": 0,
+              "CONFLICT": 0
+            }
+          },
+          "included": 21,
+          "goldSame": 20,
+          "goldDifferent": 1,
+          "tp": 18,
+          "fp": 0,
+          "fn": 2,
+          "tn": 1,
+          "precision": {
+            "numerator": 18,
+            "denominator": 18,
+            "value": 1,
+            "wilson95": [
+              0.824121,
+              1
+            ]
+          },
+          "recall": {
+            "numerator": 18,
+            "denominator": 20,
+            "value": 0.9,
+            "wilson95": [
+              0.698966,
+              0.972134
+            ]
+          },
+          "f1": 0.947368,
+          "specificity": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1,
+            "wilson95": [
+              0.206549,
+              1
+            ]
+          },
+          "coverage": {
+            "numerator": 19,
+            "denominator": 21,
+            "value": 0.904762,
+            "wilson95": [
+              0.710859,
+              0.973481
+            ]
+          },
+          "unresolvedRate": {
+            "numerator": 0,
+            "denominator": 21,
+            "value": 0,
+            "wilson95": [
+              0,
+              0.154639
+            ]
+          },
+          "conflictRate": {
+            "numerator": 2,
+            "denominator": 21,
+            "value": 0.095238,
+            "wilson95": [
+              0.026519,
+              0.289141
+            ]
+          },
+          "decidedOnlyRecall": {
+            "numerator": 18,
+            "denominator": 18,
+            "value": 1,
+            "wilson95": [
+              0.824121,
+              1
+            ]
+          }
+        }
+      },
+      "byKindAndPath": {
+        "researcher": {
+          "EXACT_ID": {
+            "matrix": {
+              "SAME": {
+                "ACCEPTED": 10,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 1
+              },
+              "DIFFERENT": {
+                "ACCEPTED": 0,
+                "REJECTED": 3,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              }
+            },
+            "included": 14,
+            "goldSame": 11,
+            "goldDifferent": 3,
+            "tp": 10,
+            "fp": 0,
+            "fn": 1,
+            "tn": 3,
+            "precision": {
+              "numerator": 10,
+              "denominator": 10,
+              "value": 1,
+              "wilson95": [
+                0.722467,
+                1
+              ]
+            },
+            "recall": {
+              "numerator": 10,
+              "denominator": 11,
+              "value": 0.909091,
+              "wilson95": [
+                0.622642,
+                0.983768
+              ]
+            },
+            "f1": 0.952381,
+            "specificity": {
+              "numerator": 3,
+              "denominator": 3,
+              "value": 1,
+              "wilson95": [
+                0.438503,
+                1
+              ]
+            },
+            "coverage": {
+              "numerator": 13,
+              "denominator": 14,
+              "value": 0.928571,
+              "wilson95": [
+                0.685313,
+                0.987278
+              ]
+            },
+            "unresolvedRate": {
+              "numerator": 0,
+              "denominator": 14,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.215311
+              ]
+            },
+            "conflictRate": {
+              "numerator": 1,
+              "denominator": 14,
+              "value": 0.071429,
+              "wilson95": [
+                0.012722,
+                0.314687
+              ]
+            },
+            "decidedOnlyRecall": {
+              "numerator": 10,
+              "denominator": 10,
+              "value": 1,
+              "wilson95": [
+                0.722467,
+                1
+              ]
+            }
+          },
+          "DETERMINISTIC_BIBLIOGRAPHIC": {
+            "matrix": {
+              "SAME": {
+                "ACCEPTED": 41,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              },
+              "DIFFERENT": {
+                "ACCEPTED": 0,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              }
+            },
+            "included": 41,
+            "goldSame": 41,
+            "goldDifferent": 0,
+            "tp": 41,
+            "fp": 0,
+            "fn": 0,
+            "tn": 0,
+            "precision": {
+              "numerator": 41,
+              "denominator": 41,
+              "value": 1,
+              "wilson95": [
+                0.914332,
+                1
+              ]
+            },
+            "recall": {
+              "numerator": 41,
+              "denominator": 41,
+              "value": 1,
+              "wilson95": [
+                0.914332,
+                1
+              ]
+            },
+            "f1": 1,
+            "specificity": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "coverage": {
+              "numerator": 41,
+              "denominator": 41,
+              "value": 1,
+              "wilson95": [
+                0.914332,
+                1
+              ]
+            },
+            "unresolvedRate": {
+              "numerator": 0,
+              "denominator": 41,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.085668
+              ]
+            },
+            "conflictRate": {
+              "numerator": 0,
+              "denominator": 41,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.085668
+              ]
+            },
+            "decidedOnlyRecall": {
+              "numerator": 41,
+              "denominator": 41,
+              "value": 1,
+              "wilson95": [
+                0.914332,
+                1
+              ]
+            }
+          },
+          "PROBABILISTIC": {
+            "matrix": {
+              "SAME": {
+                "ACCEPTED": 16,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              },
+              "DIFFERENT": {
+                "ACCEPTED": 0,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              }
+            },
+            "included": 16,
+            "goldSame": 16,
+            "goldDifferent": 0,
+            "tp": 16,
+            "fp": 0,
+            "fn": 0,
+            "tn": 0,
+            "precision": {
+              "numerator": 16,
+              "denominator": 16,
+              "value": 1,
+              "wilson95": [
+                0.806392,
+                1
+              ]
+            },
+            "recall": {
+              "numerator": 16,
+              "denominator": 16,
+              "value": 1,
+              "wilson95": [
+                0.806392,
+                1
+              ]
+            },
+            "f1": 1,
+            "specificity": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "coverage": {
+              "numerator": 16,
+              "denominator": 16,
+              "value": 1,
+              "wilson95": [
+                0.806392,
+                1
+              ]
+            },
+            "unresolvedRate": {
+              "numerator": 0,
+              "denominator": 16,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.193608
+              ]
+            },
+            "conflictRate": {
+              "numerator": 0,
+              "denominator": 16,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.193608
+              ]
+            },
+            "decidedOnlyRecall": {
+              "numerator": 16,
+              "denominator": 16,
+              "value": 1,
+              "wilson95": [
+                0.806392,
+                1
+              ]
+            }
+          },
+          "LLM_ADJUDICATED": {
+            "matrix": {
+              "SAME": {
+                "ACCEPTED": 0,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              },
+              "DIFFERENT": {
+                "ACCEPTED": 0,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              }
+            },
+            "included": 0,
+            "goldSame": 0,
+            "goldDifferent": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "tn": 0,
+            "precision": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "recall": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "f1": null,
+            "specificity": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "coverage": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "unresolvedRate": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "conflictRate": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "decidedOnlyRecall": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            }
+          }
+        },
+        "work": {
+          "EXACT_ID": {
+            "matrix": {
+              "SAME": {
+                "ACCEPTED": 18,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 2
+              },
+              "DIFFERENT": {
+                "ACCEPTED": 0,
+                "REJECTED": 1,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              }
+            },
+            "included": 21,
+            "goldSame": 20,
+            "goldDifferent": 1,
+            "tp": 18,
+            "fp": 0,
+            "fn": 2,
+            "tn": 1,
+            "precision": {
+              "numerator": 18,
+              "denominator": 18,
+              "value": 1,
+              "wilson95": [
+                0.824121,
+                1
+              ]
+            },
+            "recall": {
+              "numerator": 18,
+              "denominator": 20,
+              "value": 0.9,
+              "wilson95": [
+                0.698966,
+                0.972134
+              ]
+            },
+            "f1": 0.947368,
+            "specificity": {
+              "numerator": 1,
+              "denominator": 1,
+              "value": 1,
+              "wilson95": [
+                0.206549,
+                1
+              ]
+            },
+            "coverage": {
+              "numerator": 19,
+              "denominator": 21,
+              "value": 0.904762,
+              "wilson95": [
+                0.710859,
+                0.973481
+              ]
+            },
+            "unresolvedRate": {
+              "numerator": 0,
+              "denominator": 21,
+              "value": 0,
+              "wilson95": [
+                0,
+                0.154639
+              ]
+            },
+            "conflictRate": {
+              "numerator": 2,
+              "denominator": 21,
+              "value": 0.095238,
+              "wilson95": [
+                0.026519,
+                0.289141
+              ]
+            },
+            "decidedOnlyRecall": {
+              "numerator": 18,
+              "denominator": 18,
+              "value": 1,
+              "wilson95": [
+                0.824121,
+                1
+              ]
+            }
+          },
+          "DETERMINISTIC_BIBLIOGRAPHIC": {
+            "matrix": {
+              "SAME": {
+                "ACCEPTED": 0,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              },
+              "DIFFERENT": {
+                "ACCEPTED": 0,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              }
+            },
+            "included": 0,
+            "goldSame": 0,
+            "goldDifferent": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "tn": 0,
+            "precision": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "recall": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "f1": null,
+            "specificity": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "coverage": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "unresolvedRate": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "conflictRate": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "decidedOnlyRecall": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            }
+          },
+          "PROBABILISTIC": {
+            "matrix": {
+              "SAME": {
+                "ACCEPTED": 0,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              },
+              "DIFFERENT": {
+                "ACCEPTED": 0,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              }
+            },
+            "included": 0,
+            "goldSame": 0,
+            "goldDifferent": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "tn": 0,
+            "precision": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "recall": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "f1": null,
+            "specificity": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "coverage": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "unresolvedRate": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "conflictRate": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "decidedOnlyRecall": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            }
+          },
+          "LLM_ADJUDICATED": {
+            "matrix": {
+              "SAME": {
+                "ACCEPTED": 0,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              },
+              "DIFFERENT": {
+                "ACCEPTED": 0,
+                "REJECTED": 0,
+                "UNRESOLVED": 0,
+                "CONFLICT": 0
+              }
+            },
+            "included": 0,
+            "goldSame": 0,
+            "goldDifferent": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "tn": 0,
+            "precision": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "recall": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "f1": null,
+            "specificity": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "coverage": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "unresolvedRate": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "conflictRate": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            },
+            "decidedOnlyRecall": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null,
+              "wilson95": null
+            }
+          }
+        }
+      },
+      "excludedUnsureByKind": {
+        "researcher": 0,
+        "work": 0
+      }
+    }
+  }
+}

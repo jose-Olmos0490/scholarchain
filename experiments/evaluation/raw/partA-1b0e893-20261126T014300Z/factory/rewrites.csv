@@ -1,0 +1,17 @@
+phase,artifact,substantial_human_rewrite,needs_confirmation,source_file,source_line,anchor
+00,.claude/agents/factory-engineer.md,"no (2 insertions, 3 deletions in commit c84390f, from git, not from this file)",yes,docs/agent-runs/phase-00/human-gate.md,5,Manual changes: none
+02,build files,no,no,docs/agent-runs/phase-02/human-gate.md,11,Manual changes: none to build files
+03,source,no,no,docs/agent-runs/phase-03/human-gate.md,4,No source edits
+04,source,no,no,docs/agent-runs/phase-04/human-gate.md,4,Manual changes: none to source
+05,production and test code,no,no,docs/agent-runs/phase-05/human-gate.md,19,No manual edits to production or test code
+06,source,no,no,docs/agent-runs/phase-06/human-gate.md,12,Manual changes: none to source code
+07,generated artifacts,no,no,docs/agent-runs/phase-07/human-gate.md,12,Manual changes: none to generated artifacts
+08,code,no,no,docs/agent-runs/phase-08/human-gate.md,29,No manual code edits
+09,code,no,no,docs/agent-runs/phase-09/human-gate.md,15,No manual code edits
+10,any,no,no,docs/agent-runs/phase-10/human-gate.md,15,## Manual changes
+10b,any,no,no,docs/agent-runs/phase-10b/human-gate.md,27,## Manual changes
+11,code,no,no,docs/agent-runs/phase-11/human-gate.md,54,No code was edited by hand
+12,Terraform and scripts,no,no,docs/agent-runs/phase-12/human-gate.md,43,No Terraform or script edited by hand
+13,source,no,no,docs/agent-runs/phase-13/human-gate.md,16,Manual changes: none to source
+14b,code,no,no,docs/agent-runs/phase-14b/human-gate.md,6,Manual changes: none to code
+15,code,no,yes,docs/agent-runs/phase-15/human-gate.md,8,Manual changes: none to code

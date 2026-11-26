@@ -1,0 +1,10 @@
+[
+ {"item": 1, "startedUtc": "2026-11-26T01:23:01Z", "endedUtc": "2026-11-26T01:23:11Z", "exit": 0,
+  "command": "sbt -batch \"entityResolution/runMain scholarchain.er.evaluation.EvaluateGoldSet docs/agent-runs/phase-05/gold-set-v1.csv --output-dir <stage>/er --compare-run-dir modules/entity-resolution/local-run/er-v1/run_id=9241e65ed83f7441e3935f5cce00aa48a5a8216398a2c1205f716d8a3508e423\""},
+ {"item": 2, "command": "aws s3api list-objects-v2 on the dev graph bucket (all keys) and the dev rag bucket (prefix run_id=<run hex>/), then aws s3api get-object per key, --profile cs441 --region us-east-2", "note": "read-only; 368 graph-bucket objects and 94 rag-bucket semantic_fact objects"},
+ {"item": 2, "startedUtc": "2026-11-26T01:23:17Z", "endedUtc": "2026-11-26T01:41:59Z", "exit": 0,
+  "command": "sbt -batch sparkAnalytics/test \"adversarialTests/testOnly scholarchain.adversarial.spark.*\""},
+ {"item": 4, "command": "experiments/evaluation/bin/factory_extract.py --out <stage>/factory"},
+ {"item": 5, "command": "aws ecs describe-services, aws ecr describe-images (tag 3c3e1a1), aws emr list-clusters; read-only, --profile cs441 --region us-east-2"},
+ {"item": 5, "command": "clean-clone build log supplied by the human at ~/clean-check.log; the agent did not run that build"}
+]

@@ -1,0 +1,114 @@
+module,suite,case,status
+adversarialTests,scholarchain.adversarial.spark.SparkDeterminismSpec,case 12 (oracle): a seeded random graph agrees with the reference in every window,passed
+adversarialTests,scholarchain.adversarial.spark.SparkDeterminismSpec,case 12: reversed input order and 7 shuffle partitions produce identical output,passed
+adversarialTests,scholarchain.adversarial.spark.SparkDeterminismSpec,"case 12: the fixture is non-trivial (edges, a merge, a conflict, sampled paths)",passed
+adversarialTests,scholarchain.adversarial.spark.SparkDeterminismSpec,"case 12: two identical runs produce identical output (every table, row by row)",passed
+adversarialTests,scholarchain.adversarial.spark.SparkDriverCollectScanSpec,case 13: a bound comment satisfies the rule; Scala collection calls are not actions,passed
+adversarialTests,scholarchain.adversarial.spark.SparkDriverCollectScanSpec,case 13: a comment far above the statement does not count,passed
+adversarialTests,scholarchain.adversarial.spark.SparkDriverCollectScanSpec,case 13: every allow-listed Scala-collection line still exists verbatim,passed
+adversarialTests,scholarchain.adversarial.spark.SparkDriverCollectScanSpec,case 13: every driver action in modules/spark/src/main carries a bound comment,passed
+adversarialTests,scholarchain.adversarial.spark.SparkDriverCollectScanSpec,"case 13: no node, edge or path table is collected by name, bounded comment or not",passed
+adversarialTests,scholarchain.adversarial.spark.SparkDriverCollectScanSpec,case 13: the scanner flags planted unbounded collects on node/edge/path tables,passed
+adversarialTests,scholarchain.adversarial.spark.SparkGraphShapeSpec,"case 1: empty graph through PART A and PART B: no rows, NO_PATH benchmarks, converged",passed
+adversarialTests,scholarchain.adversarial.spark.SparkGraphShapeSpec,"case 2: a graph with researchers but no edge at all: all singletons, converged",passed
+adversarialTests,scholarchain.adversarial.spark.SparkGraphShapeSpec,"case 2: component counts, singletons and cross-component paths in the all-years window",passed
+adversarialTests,scholarchain.adversarial.spark.SparkGraphShapeSpec,case 2: disconnected graph matches the reference in every window (PART A and B),passed
+adversarialTests,scholarchain.adversarial.spark.SparkGraphShapeSpec,"case 6: 50-author team in PART B: one community, coreness 49, paths of length <= 2",passed
+adversarialTests,scholarchain.adversarial.spark.SparkGraphShapeSpec,"case 6: 50-author team: 1225 edges and support rows, M = 49 for every member",passed
+adversarialTests,scholarchain.adversarial.spark.SparkGraphShapeSpec,"case 9: hub degree, weight, coreness and paths through the hub",passed
+adversarialTests,scholarchain.adversarial.spark.SparkGraphShapeSpec,case 9: skewed hub matches the reference in every window (PART A and B),passed
+adversarialTests,scholarchain.adversarial.spark.SparkIdentityAdvSpec,case 14: chain through an OpenAlex-OpenAlex link stays split with an IdentityConflict,passed
+adversarialTests,scholarchain.adversarial.spark.SparkIdentityAdvSpec,case 14: cluster size == maxClusterSize merges; maxClusterSize + 1 splits; unlinked never,passed
+adversarialTests,scholarchain.adversarial.spark.SparkIdentityAdvSpec,case 14: every conflict member keeps a fallback ID; conflict rows meet the contract,passed
+adversarialTests,scholarchain.adversarial.spark.SparkIdentityAdvSpec,"case 14: homonym DBLP keys are never merged, even when linked to one external author",passed
+adversarialTests,scholarchain.adversarial.spark.SparkIdentityAdvSpec,case 14: three clean clusters proposing one ORCID ID are evaluated together and split,passed
+adversarialTests,scholarchain.adversarial.spark.SparkIdentityAdvSpec,case 14: two ORCIDs across sources split; format variants of one ORCID merge,passed
+adversarialTests,scholarchain.adversarial.spark.SparkIdentityAdvSpec,case 14: two OpenAlex author IDs split; format variants of one OpenAlex ID merge,passed
+adversarialTests,scholarchain.adversarial.spark.SparkIdentityAdvSpec,"case 5: CONFLICT and REJECTED decisions never merge, and leave no conflict record",passed
+adversarialTests,scholarchain.adversarial.spark.SparkIdentityAdvSpec,case 5: an UNRESOLVED link never joins a cluster: the coauthor merges cleanly instead,passed
+adversarialTests,scholarchain.adversarial.spark.SparkLpaTieSpec,case 11: a tie between two labels with 2 votes each goes to the smaller one,passed
+adversarialTests,scholarchain.adversarial.spark.SparkLpaTieSpec,case 11: all votes tied at 1: the smallest label wins (own label included),passed
+adversarialTests,scholarchain.adversarial.spark.SparkLpaTieSpec,"case 11: end to end, LPA equals the reference rule on tie-heavy shapes; weights ignored",passed
+adversarialTests,scholarchain.adversarial.spark.SparkLpaTieSpec,case 11: more votes beat a smaller label,passed
+adversarialTests,scholarchain.adversarial.spark.SparkLpaTieSpec,case 11: the node's own label counts as one vote,passed
+adversarialTests,scholarchain.adversarial.spark.SparkLpaTieSpec,"case 11: ties use ordinal string order, not numeric or case-insensitive order",passed
+adversarialTests,scholarchain.adversarial.spark.SparkLpaTieSpec,case 11: updates are synchronous (every node reads the previous labels only),passed
+adversarialTests,scholarchain.adversarial.spark.SparkLpaTieSpec,case 11: windows never exchange votes,passed
+adversarialTests,scholarchain.adversarial.spark.SparkPairsWindowsSpec,"case 3: a duplicated key linked to an external author splits (SAME_WORK), still no self-edge",passed
+adversarialTests,scholarchain.adversarial.spark.SparkPairsWindowsSpec,"case 3: two mentions resolving to one researcher: pair dropped and counted, paper once",passed
+adversarialTests,scholarchain.adversarial.spark.SparkPairsWindowsSpec,"case 4: duplicate, swapped and repeated pair rows: jointPublicationCount = distinct works",passed
+adversarialTests,scholarchain.adversarial.spark.SparkPairsWindowsSpec,case 7: works with no year exist only in the all-years window and make no edges,passed
+adversarialTests,scholarchain.adversarial.spark.SparkPairsWindowsSpec,case 8: window boundary years are inclusive at both ends,passed
+adversarialTests,scholarchain.adversarial.spark.SparkPathsAdvSpec,case 10: maxDepth = 1 with a 1-hop and a 2-hop query,passed
+adversarialTests,scholarchain.adversarial.spark.SparkPathsAdvSpec,case 10: maxDepth = 6: the 7-hop chain is NOT_FOUND_WITHIN_DEPTH; 6 hops still FOUND,passed
+adversarialTests,scholarchain.adversarial.spark.SparkPathsAdvSpec,"case 10: maxDepth = 7: the 7-hop chain is FOUND (length == maxDepth), both directions",passed
+adversarialTests,scholarchain.adversarial.spark.SparkPathsAdvSpec,"case 10: no route: other component, unknown researcher, endpoints cut by the window",passed
+sparkAnalytics,scholarchain.spark.CommunitySpec,LPA stopped by maxIterations: converged=false is reported,passed
+sparkAnalytics,scholarchain.spark.CommunitySpec,"coreness A..F = 2, G,H = 1, I = 0 (both key orders); converged",passed
+sparkAnalytics,scholarchain.spark.CommunitySpec,"coreness in window 2010-2015 (A,B,C triangle plus pendant D): A,B,C = 2, D = 1",passed
+sparkAnalytics,scholarchain.spark.CommunitySpec,"default IDs: hand-derived LPA result {A,B,C,D}, {E,F}, {G,H}, {I}, converged in 2",passed
+sparkAnalytics,scholarchain.spark.CommunitySpec,every PART B community/bridge/k-core row satisfies its core contract,passed
+sparkAnalytics,scholarchain.spark.CommunitySpec,k-core stopped by maxIterations: converged=false and unpeeled nodes get no coreness row,passed
+sparkAnalytics,scholarchain.spark.CommunitySpec,"ordered IDs: communities {A,B,C}, {D,E,F}, {G,H}, {I}; converged (3 iterations)",passed
+sparkAnalytics,scholarchain.spark.CommunitySpec,ordered IDs: crossCommunityDegree C=1 D=1 others 0; communitiesConnected C=2 D=2 others 1,passed
+sparkAnalytics,scholarchain.spark.CommunitySpec,"ordered IDs: participationCoefficient C = D = 4/9, every other researcher 0",passed
+sparkAnalytics,scholarchain.spark.CommunitySpec,ordered IDs: the only cross-community edge is C-D,passed
+sparkAnalytics,scholarchain.spark.CommunitySpec,"ordered fixture keys really sort A < B < ... < I; default keys sort C,E,G,H,I,F,D,A,B",passed
+sparkAnalytics,scholarchain.spark.CommunitySpec,researcher metrics carry communityId and coreness; no single bridge score is set,passed
+sparkAnalytics,scholarchain.spark.CommunitySpec,"window summary: community count and size histogram, max coreness, three iteration reports",passed
+sparkAnalytics,scholarchain.spark.ConnectedComponentsSpec,a path converges to its smallest node; iterations = diameter + 1 confirming round,passed
+sparkAnalytics,scholarchain.spark.ConnectedComponentsSpec,groups never mix; a group with no edges converges in one iteration; empty groups report,passed
+sparkAnalytics,scholarchain.spark.ConnectedComponentsSpec,"maxIterations reached before the fixed point: converged = false, partial labels only",passed
+sparkAnalytics,scholarchain.spark.ExtraCasesSpec,a 50-author paper yields 1225 edges and M = 49 for every author,passed
+sparkAnalytics,scholarchain.spark.ExtraCasesSpec,a missing pair row is detected as a W_r/T_r invariant failure,passed
+sparkAnalytics,scholarchain.spark.ExtraCasesSpec,"a pair row with no year is rejected, never turned into an edge",passed
+sparkAnalytics,scholarchain.spark.ExtraCasesSpec,duplicate pair rows of one work count once in jointPublicationCount,passed
+sparkAnalytics,scholarchain.spark.ExtraCasesSpec,"empty graph: no rows, zero summaries, converged components",passed
+sparkAnalytics,scholarchain.spark.ExtraCasesSpec,integrity: authorship of a missing work and a pair of an unknown mention are rejected,passed
+sparkAnalytics,scholarchain.spark.ExtraCasesSpec,"oversize-team work: counted in P/T/M, no edges, W_r/T_r exception (not a failure)",passed
+sparkAnalytics,scholarchain.spark.ExtraCasesSpec,"self-pair: two mentions resolving to one researcher drop their pair, paper counted once",passed
+sparkAnalytics,scholarchain.spark.ExtraCasesSpec,"year-less work: only in the all-years window, counted, W_r/T_r exception",passed
+sparkAnalytics,scholarchain.spark.IdentityResolverSpec,"UNRESOLVED, CONFLICT and REJECTED decisions never merge",passed
+sparkAnalytics,scholarchain.spark.IdentityResolverSpec,a cluster larger than graph.identity.maxClusterSize is not merged,passed
+sparkAnalytics,scholarchain.spark.IdentityResolverSpec,an ACCEPTED decision naming an unknown mention is ignored and rejected,passed
+sparkAnalytics,scholarchain.spark.IdentityResolverSpec,an ACCEPTED link to a mention with one ORCID merges every mention of the DBLP key,passed
+sparkAnalytics,scholarchain.spark.IdentityResolverSpec,an ACCEPTED link to an OpenAlex author with no ORCID gives an OpenAlex researcher ID,passed
+sparkAnalytics,scholarchain.spark.IdentityResolverSpec,chain case: X and Y share a paper and both link to A1; the cluster stays split,passed
+sparkAnalytics,scholarchain.spark.IdentityResolverSpec,"cross-source mentions of one author slot merge (DBLP, OpenAlex, Crossref of one paper)",passed
+sparkAnalytics,scholarchain.spark.IdentityResolverSpec,homonym-disambiguated DBLP keys with similar names never merge without a link,passed
+sparkAnalytics,scholarchain.spark.IdentityResolverSpec,"more than one ORCID in a cluster: not merged, MULTIPLE_ORCIDS conflict",passed
+sparkAnalytics,scholarchain.spark.IdentityResolverSpec,more than one OpenAlex author ID in a cluster: not merged,passed
+sparkAnalytics,scholarchain.spark.IdentityResolverSpec,two DBLP keys linked to different mentions carrying one ORCID are not silently merged,passed
+sparkAnalytics,scholarchain.spark.KnownGraphSpec,W_r == T_r holds for every researcher in every window (no oversize or year-less works),passed
+sparkAnalytics,scholarchain.spark.KnownGraphSpec,"all-years window: P, C, T, A, M, maximumTeamWorkIds and W per researcher",passed
+sparkAnalytics,scholarchain.spark.KnownGraphSpec,all-years window: exactly the 8 expected edges with weights and first/last years,passed
+sparkAnalytics,scholarchain.spark.KnownGraphSpec,"components: {A..F} size 6, {G,H} size 2, {I} size 1; componentId is the smallest member",passed
+sparkAnalytics,scholarchain.spark.KnownGraphSpec,edge support table lists every supporting work; representative works are capped at K,passed
+sparkAnalytics,scholarchain.spark.KnownGraphSpec,every output row satisfies its core contract and carries run and window fields,passed
+sparkAnalytics,scholarchain.spark.KnownGraphSpec,"researchers: 9 fallback identities, no merge without an ACCEPTED link",passed
+sparkAnalytics,scholarchain.spark.KnownGraphSpec,"window 2010-2015: edges AB, AC, BC, CD only; D has P1 C1; E..I have no row",passed
+sparkAnalytics,scholarchain.spark.KnownGraphSpec,"window summary: largest-component fraction 6/9, one singleton, converged",passed
+sparkAnalytics,scholarchain.spark.LoadManifestsSpec,"relative table location is qualified (file: scheme, absolute) and prefixes its file paths",passed
+sparkAnalytics,scholarchain.spark.PathsSpec,A->F beyond maxDepth = 2: NOT_FOUND_WITHIN_DEPTH (same component),passed
+sparkAnalytics,scholarchain.spark.PathsSpec,"A->F: FOUND, length 3 via A-C-D-F, every hop with weight and all supporting work IDs",passed
+sparkAnalytics,scholarchain.spark.PathsSpec,"A->G: NO_PATH (different components), no hops and no length",passed
+sparkAnalytics,scholarchain.spark.PathsSpec,among equal-length paths the lexicographically smallest node sequence is chosen,passed
+sparkAnalytics,scholarchain.spark.PathsSpec,an endpoint absent from the window (F in 2010-2015) gives NO_PATH,passed
+sparkAnalytics,scholarchain.spark.PathsSpec,distance estimate with k < component size is labelled an estimate and seeded,passed
+sparkAnalytics,scholarchain.spark.PathsSpec,"distance estimate with k >= component size is exact: mean 27/15 = 1.8, p90 = 3",passed
+sparkAnalytics,scholarchain.spark.PathsSpec,"no benchmark pairs: samplePairCount seeded pairs from the largest component, deterministic",passed
+sparkAnalytics,scholarchain.spark.PathsSpec,path evidence rows satisfy the core contract,passed
+sparkAnalytics,scholarchain.spark.PathsSpec,semantic facts: structured values from computed data; PATH fact lists hop nodes,passed
+sparkAnalytics,scholarchain.spark.PathsSpec,temporal: consecutive fixed windows 2010-2015 -> 2016-2020; only sizes compared,passed
+sparkAnalytics,scholarchain.spark.PipelineIntegrationSpec,PART B tables are written with zero contract violations; sampled paths recorded,passed
+sparkAnalytics,scholarchain.spark.PipelineIntegrationSpec,determinism: a second run gives the same run ID and identical rows,passed
+sparkAnalytics,scholarchain.spark.PipelineIntegrationSpec,every written row satisfies its core contract; counts match the fixture,passed
+sparkAnalytics,scholarchain.spark.PipelineIntegrationSpec,layout: graph/<kind>/type=<t>[/window=<s-e>]/run_id=<hex>,passed
+sparkAnalytics,scholarchain.spark.PipelineIntegrationSpec,"one valid load manifest per target with files, checksums and row counts",passed
+sparkAnalytics,scholarchain.spark.PipelineIntegrationSpec,semantic JSONL export is byte-identical across two runs,passed
+sparkAnalytics,scholarchain.spark.PipelineIntegrationSpec,"semantic JSONL export: the three IngestMain input files, decoded with IngestMain's codec",passed
+sparkAnalytics,scholarchain.spark.PipelineIntegrationSpec,the run ID is the hash of the written manifest and every written row carries it,passed
+sparkAnalytics,scholarchain.spark.SettingsSpec,a missing key is reported with its environment variable,passed
+sparkAnalytics,scholarchain.spark.SettingsSpec,an unsupported community algorithm is rejected,passed
+sparkAnalytics,scholarchain.spark.SettingsSpec,"loads the PART A section; the all-years window comes first, then the dev windows",passed
+sparkAnalytics,scholarchain.spark.SettingsSpec,loads the PART B parameters; they are logical parameters (part of the run ID),passed

@@ -1,0 +1,7 @@
+experiment,status
+A EMR baseline,not run
+B EMR burst,not run
+C embedding backlog,run once: FAILED NO_VECTORS_WRITTEN
+D query load,not run
+E retrieval modes,not run
+F poison message,not run

@@ -1,0 +1,15 @@
+phase,agent,blocked_on,archived_verbatim,needs_confirmation,source_file,source_line,anchor
+02,build-engineer,factory-engineer,no,no,docs/agent-runs/phase-02/repair-01.md,3,returned BLOCKED-ON factory-engineer
+03,dataset-engineer,factory-engineer,yes,no,docs/agent-runs/phase-03/agent-report.md,3,STATUS: BLOCKED-ON
+04,hadoop-engineer,"build-engineer, domain-engineer",yes,no,docs/agent-runs/phase-04/agent-report.md,140,STATUS: BLOCKED-ON
+04,test-engineer,build-engineer,yes,no,docs/agent-runs/phase-04/test-report.md,6,STATUS: BLOCKED-ON
+05,test-engineer,"build-engineer, entity-resolution-engineer",yes,no,docs/agent-runs/phase-05/test-report.md,1,STATUS: BLOCKED-ON
+07,storage-engineer,"build-engineer, domain-engineer",yes,no,docs/agent-runs/phase-07/agent-report-attempt1.md,1,STATUS: BLOCKED-ON
+08,rag-engineer,build-engineer,no,no,docs/agent-runs/phase-08/repair-01.md,3,Blocked on: build-engineer
+09,rag-engineer,"storage-engineer, domain-engineer",yes,no,docs/agent-runs/phase-09/agent-report-A-blocked.md,1,STATUS: BLOCKED-ON
+10b,service-engineer,storage-engineer,yes,no,docs/agent-runs/phase-10b/agent-report.md,218,STATUS: BLOCKED-ON
+11,test-engineer,build-engineer,yes,no,docs/agent-runs/phase-11/test-report.md,4,STATUS: BLOCKED-ON build-engineer
+12,infra-engineer,build-engineer,yes,no,docs/agent-runs/phase-12/agent-report.md,3,STATUS: BLOCKED-ON
+15,experiment-engineer,infra-engineer and others,yes,no,docs/agent-runs/phase-15/agent-report.md,1,STATUS: BLOCKED-ON
+15,infra-engineer,see report,yes,no,docs/agent-runs/phase-15/agent-report-03.md,2,OWNER: infra-engineer
+15,experiment-engineer,human architect,yes,no,docs/agent-runs/phase-15/agent-report-03.md,145,OWNER: experiment-engineer

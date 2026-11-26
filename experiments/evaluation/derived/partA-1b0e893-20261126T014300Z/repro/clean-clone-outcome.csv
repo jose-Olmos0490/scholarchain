@@ -1,0 +1,16 @@
+measure,value
+log sha256 (uncompressed),4938fe2fda79876acac6ba3f33e022e7b66065cc63760278d9fe41feb58fec30
+log bytes,91869422
+commit named in the log,no
+clone HEAD observed on disk,1b0e89339a60cdc1d3f097153b070202bff1049b
+clone git status lines observed (porcelain),0
+[success] lines,6
+first [success] time (local),"Nov 25, 2026, 6:34:45 PM"
+last [success] time (local),"Nov 25, 2026, 7:15:01 PM"
+test summary lines,8
+"tests succeeded, summed over summary lines",2391
+"tests failed, summed",0
+"tests ignored, summed",24
+[error] lines,0
+lines containing *** FAILED ***,0
+markTestRun success line present,yes

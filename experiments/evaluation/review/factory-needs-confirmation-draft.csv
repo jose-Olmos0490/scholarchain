@@ -1,0 +1,42 @@
+table,row,source_file,source_line
+work_orders,phase=01; agent=factory-engineer; work_order=agent control plane; first_pass=unknown; reason=no human-gate.md in phase-01,docs/agent-runs/phase-01/agent-report.md,3
+work_orders,"phase=04; agent=domain-engineer; work_order=A ingestion contracts; first_pass=no; reason=later repairs 02, 04, 06 changed its contracts",docs/agent-runs/phase-04/test-report.md,147
+work_orders,"phase=08; agent=storage-engineer; work_order=WO1 vector write path; first_pass=yes; reason=COMPLETE, executed inline by the orchestrator, not reviewed",docs/agent-runs/phase-08/agent-report-storage.md,4
+work_orders,phase=10; agent=service-engineer; work_order=REST services; first_pass=yes; reason=ACCEPTED; code-reviewer and test-engineer not run,docs/agent-runs/phase-10/human-gate.md,13
+work_orders,phase=10b; agent=rag-engineer; work_order=WO1 live LLM adapter; first_pass=yes; reason=COMPLETE; not reviewed,docs/agent-runs/phase-10b/agent-report.md,4
+work_orders,phase=10b; agent=storage-engineer; work_order=WO2 job store; first_pass=yes; reason=COMPLETE with a routing note; not reviewed,docs/agent-runs/phase-10b/agent-report.md,94
+work_orders,phase=10b; agent=build-engineer; work_order=WO4 images; first_pass=yes; reason=COMPLETE; not reviewed,docs/agent-runs/phase-10b/agent-report.md,445
+work_orders,"phase=15; agent=infra-engineer; work_order=gaps for experiments C, F, D; first_pass=no; reason=report status BLOCKED-ON",docs/agent-runs/phase-15/agent-report-03.md,1
+work_orders,phase=15; agent=storage-engineer; work_order=index comparison fix; first_pass=yes; reason=reviewed sound with one nit,docs/agent-runs/phase-15/repair-01.md,13
+work_orders,phase=15; agent=deploy-engineer; work_order=deploy 6ce56c9; first_pass=no; reason=report status FAILED (smoke),docs/agent-runs/phase-15/deploy-report.md,5
+hook_blocks,phase=03; actor=domain-engineer; mechanism=permission; count=1; count_basis=exact; note=dev.conf write denied; mechanism not named,docs/agent-runs/phase-03/agent-report.md,402
+hook_blocks,phase=07; actor=storage-engineer; mechanism=guard; count=2; count_basis=minimum; note=reported as 'several',docs/agent-runs/phase-07/agent-report.md,256
+hook_blocks,phase=08; actor=build-engineer; mechanism=guard; count=1; count_basis=minimum; note=grep of the evidence directory,docs/agent-runs/phase-08/agent-report-build-repair01.md,45
+hook_blocks,phase=09; actor=orchestrator; mechanism=stop-hook; count=1; count_basis=minimum; note=refused completion on stale tests,docs/agent-runs/phase-09/human-gate.md,23
+hook_blocks,phase=10b; actor=orchestrator; mechanism=guard; count=2; count_basis=minimum; note=unapproved-path writes and a heredoc,docs/agent-runs/phase-10b/human-gate.md,33
+hook_blocks,phase=11; actor=orchestrator; mechanism=stop-hook; count=1; count_basis=minimum; note=refused completion on stale tests,docs/agent-runs/phase-11/human-gate.md,20
+hook_blocks,phase=12; actor=orchestrator or agent; mechanism=guard; count=1; count_basis=minimum; note=write of human-owned repair-01.md,docs/agent-runs/phase-12/human-gate.md,40
+hook_blocks,phase=13; actor=infra-engineer; mechanism=guard; count=1; count_basis=minimum; note=script execution incl. --help; command count not given,docs/agent-runs/phase-13/agent-report.md,169
+hook_blocks,phase=15; actor=deploy-engineer; mechanism=guard; count=6; count_basis=exact; note=five listed plus one batched call,docs/agent-runs/phase-15/deploy-report.md,100
+hook_blocks,phase=15; actor=incident-responder; mechanism=guard; count=1; count_basis=minimum; note=compound read-only commands,docs/agent-runs/phase-15/human-gate.md,34
+ownership,phase=04; category=landed; actor=hadoop-engineer and domain-engineer; description=three edits via Bash/Python bypassed the guard; inside own territory,docs/agent-runs/phase-04/human-gate.md,7
+ownership,phase=05; category=unresolved; actor=unrecorded; description=edits under tests/** during an ER repair; authorship to be confirmed,docs/agent-runs/phase-05/repair-01.md,35
+ownership,phase=06; category=unresolved; actor=unrecorded; description=unattributed file in human-owned docs/agent-runs,docs/agent-runs/phase-06/review-report.md,3
+ownership,phase=08; category=landed; actor=storage-engineer; description=git rm --cached run and reverted (git rule),docs/agent-runs/phase-08/human-gate.md,22
+ownership,phase=08; category=landed; actor=orchestrator; description=specialist work executed inline,docs/agent-runs/phase-08/human-gate.md,21
+ownership,phase=11; category=blocked-write; actor=test-engineer; description=command referencing a human-owned record; may be a false positive,docs/agent-runs/phase-11/human-gate.md,21
+ownership,phase=12; category=blocked-write; actor=orchestrator or agent; description=write of human-owned repair-01.md,docs/agent-runs/phase-12/human-gate.md,40
+interventions,phase=00; category=unplanned; description=human edited factory-engineer after review (commit c84390f),docs/agent-runs/phase-00/human-gate.md,5
+interventions,phase=10b; category=unplanned; description=recovered from a terminal crash in a fresh session,docs/agent-runs/phase-10b/repair-01.md,7
+interventions,phase=14b; category=gate-action; description=ran the graph loader (live log archived),docs/agent-runs/phase-14/human-gate.md,32
+rewrites,"phase=00; artifact=.claude/agents/factory-engineer.md; substantial_human_rewrite=no (2 insertions, 3 deletions in commit c84390f, from git, not from this file)",docs/agent-runs/phase-00/human-gate.md,5
+rewrites,phase=15; artifact=code; substantial_human_rewrite=no,docs/agent-runs/phase-15/human-gate.md,8
+repairs,phase=00; repair_files_present=0; repair_rounds_documented=0; note=commit history has 'phase-00 repair'; no repair file,docs/agent-runs/phase-00/human-gate.md,
+repairs,phase=01; repair_files_present=0; repair_rounds_documented=0; note=no human gate,docs/agent-runs/phase-01/agent-report.md,
+repairs,phase=03; repair_files_present=2; files=repair-01.md;repair-02.md; repair_rounds_documented=2; note=repair-01 (guard) and repair-02; the reports also name per-agent repairs 1 and 2,docs/agent-runs/phase-03/human-gate.md,2
+repairs,phase=04; repair_files_present=0; repair_rounds_documented=8; note=repairs 01-08 cited; no repair file archived,docs/agent-runs/phase-04/human-gate.md,2
+repairs,phase=06; repair_files_present=1; files=repair-01.md; repair_rounds_documented=2; note=repair-02 cited; only repair-01.md archived,docs/agent-runs/phase-06/human-gate.md,3
+repairs,phase=07; repair_files_present=0; repair_rounds_documented=2; note=repair-01 and 02 cited and said added; no repair file present,docs/agent-runs/phase-07/human-gate.md,41
+repairs,"phase=09; repair_files_present=0; repair_rounds_documented=4; note=agent reports for repairs 01-04; human gate cites repair-01.md, none archived",docs/agent-runs/phase-09/human-gate.md,11
+repairs,phase=11; repair_files_present=0; repair_rounds_documented=0; note=no repair loop; three test attempts; findings deferred,docs/agent-runs/phase-11/human-gate.md,14
+repairs,phase=15; repair_files_present=1; files=repair-01.md; repair_rounds_documented=1; note=repair-01.md archived; review rounds 2 and 3 also drove further changes,docs/agent-runs/phase-15/repair-01.md,1

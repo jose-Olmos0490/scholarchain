@@ -1,0 +1,8 @@
+item,value,source
+"Hadoop run id (local, Phase 14)",run:dc970f17ed36a1ca8265fd4201d89ad6903ce3389bbcaeac10fe3504b73742f4,docs/agent-runs/phase-14/logs/pipeline-local.log
+"Spark run id (local, Phase 14)",run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60,docs/agent-runs/phase-14/logs/spark-local.log
+first Spark stage attempt,failed,docs/agent-runs/phase-14/logs/pipeline-local.log
+"later local pipeline record (commit 298d78e, stage spark)","status FAILED, exit 1",raw repro/pipeline-run-phase14.json
+full replay of the bounded pipeline with output comparison,no evidence found,"docs/agent-runs/phase-14, phase-15"
+EMR clusters listed in us-east-2,0,raw aws/emr-list-clusters.json
+S3 copy of the run matches the local Spark manifest checksums,see graph/s3-vs-load-manifest.csv,derived

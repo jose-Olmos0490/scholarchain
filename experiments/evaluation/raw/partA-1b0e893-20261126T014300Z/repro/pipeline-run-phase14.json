@@ -1,0 +1,40 @@
+{
+  "name": "phase14",
+  "mode": "local",
+  "commitSha": "298d78e",
+  "region": null,
+  "startedAtUtc": "2026-11-24T18:36:06Z",
+  "endedAtUtc": "2026-11-24T18:36:22Z",
+  "status": "FAILED",
+  "stages": [
+    "spark"
+  ],
+  "datasetSnapshots": {
+    "dblp": {
+      "date": "2026-11-01",
+      "label": "dblp Monthly Snapshot XML Release of November 2026"
+    },
+    "openalex": {
+      "date": "2026-10-14",
+      "label": "OpenAlex public snapshot RELEASE 2026-10-14 (quarterly)"
+    },
+    "orcid": {
+      "date": "2026-10-13",
+      "label": "ORCID Public Data File 2026 (public data as of October 13, 2026; published 2026-10-22)"
+    },
+    "crossref": {
+      "date": "${RETRIEVAL_DATE}",
+      "label": "REST API route: Crossref metadata is live, so the snapshot of record is the UTC date of <out>/RETRIEVED_AT (the latest batch retrieval time; per-batch times are in the .meta files and the span in <out>/RETRIEVAL_WINDOW), written by download.sh and recorded in the run manifest. The committed sample reflects API state at 2026-11-20T02:06:32Z."
+    }
+  },
+  "runIds": {
+    "localRunName": "phase14"
+  },
+  "configuration": {
+    "stages": "spark",
+    "exitCode": 1
+  },
+  "outputs": {
+    "hadoop": "/home/olmos/scholarchain/target/pipeline-local/phase14/hadoop"
+  }
+}

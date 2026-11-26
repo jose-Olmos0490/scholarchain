@@ -1,0 +1,9 @@
+check,rows,violations,rate
+coauthored_with edgeId,334,0,0.000000
+"coauthored_with (window, unordered pair)",334,0,0.000000
+"coauthored_with_support (edgeId, workId)",334,0,0.000000
+"authored (researcher, work)",89,0,0.000000
+authored authorshipId,89,0,0.000000
+has_topic edgeId,12,0,0.000000
+coauthored_with self-loops,334,0,0.000000
+coauthored_with not in canonical order (A < B),334,0,0.000000

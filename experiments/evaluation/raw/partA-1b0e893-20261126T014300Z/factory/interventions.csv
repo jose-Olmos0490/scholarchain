@@ -1,0 +1,30 @@
+phase,category,description,needs_confirmation,source_file,source_line,anchor
+00,unplanned,human edited factory-engineer after review (commit c84390f),yes,docs/agent-runs/phase-00/human-gate.md,5,Manual changes: none
+02,process,work order amended twice,no,docs/agent-runs/phase-02/human-gate.md,11,Work order amended twice
+03,unplanned,removed a generated __pycache__ folder,no,docs/agent-runs/phase-03/human-gate.md,4,removed the generated
+04,process,human escalation ended the adversarial loop after repair 08,no,docs/agent-runs/phase-04/human-gate.md,4,Human escalation ended
+04,unplanned,phase code committed late and commit hash corrected,no,docs/agent-runs/phase-04/human-gate.md,14,The original commit.txt recorded
+05,unplanned,merged Excel-saved labels back into the gold CSV by script,no,docs/agent-runs/phase-05/human-gate.md,17,Labels were first saved by Excel
+06,unplanned,deleted invalid and superseded run directories; placed run manifest,no,docs/agent-runs/phase-06/human-gate.md,12,Human deleted invalid run
+07,unplanned,restarted session from repo root; installed uv,no,docs/agent-runs/phase-07/human-gate.md,26,Installed uv/uvx
+07,process,committed and pushed before review findings were resolved,no,docs/agent-runs/phase-07/human-gate.md,40,was committed and pushed by the human
+08,unplanned,evidence files filled in afterwards from session logs,no,docs/agent-runs/phase-08/human-gate.md,25,Files were filled in afterward
+09,unplanned,changed shell variables for subagent timeouts,no,docs/agent-runs/phase-09/human-gate.md,22,CLAUDE_CODE_DISABLE_BACKGROUND_TASKS
+09,unplanned,renamed report files after a guard block,no,docs/agent-runs/phase-09/human-gate.md,23,the human renamed files
+10b,unplanned,recovered from a terminal crash in a fresh session,yes,docs/agent-runs/phase-10b/repair-01.md,7,Previous session crash
+11,gate-action,saved a report whose path had no owner,no,docs/agent-runs/phase-11/human-gate.md,54,Human saved blocked-on-01
+12,gate-action,saved the repair report,no,docs/agent-runs/phase-12/human-gate.md,43,Human saved repair-01.md
+13,unplanned,ran seven hook-blocked --help probes,no,docs/agent-runs/phase-13/human-gate.md,13,the 7 hook-blocked scripts were run by the human
+14,unplanned,moved Region after account SCP denials,no,docs/agent-runs/phase-14/human-gate.md,10,Region moved us-east-1 -> us-east-2
+14,unplanned,upgraded the AWS account plan,no,docs/agent-runs/phase-14/human-gate.md,11,upgraded Free -> Paid
+14,unplanned,edited terraform.tfvars,no,docs/agent-runs/phase-14/human-gate.md,12,terraform.tfvars (git-ignored) edited
+14,unplanned,set API key secret and forced a redeployment by CLI,no,docs/agent-runs/phase-14/human-gate.md,14,put-secret-value
+14,unplanned,unplanned terraform apply started and cancelled,no,docs/agent-runs/phase-14/human-gate.md,15,An unplanned `terraform apply`
+14,unplanned,changed ALB ingress and allowed plaintext HTTP,no,docs/agent-runs/phase-14/human-gate.md,36,Human fix: tfvars alb_ingress_cidrs
+14,gate-action,ran the smoke test by hand,no,docs/agent-runs/phase-14/human-gate.md,37,Human ran scripts/smoke-test.sh
+14b,gate-action,ran the graph loader (live log archived),yes,docs/agent-runs/phase-14/human-gate.md,32,loaded into the DynamoDB graph read model
+15,unplanned,copied two reports the guard refused to write,no,docs/agent-runs/phase-15/human-gate.md,7,human copied them
+15,unplanned,"ran LoadMain and IngestMain from the shell, about 5 attempts",no,docs/agent-runs/phase-15/human-gate.md,9,the human ran LoadMain and IngestMain
+15,gate-action,denied the automatic rollback,no,docs/agent-runs/phase-15/human-gate.md,24,automatic rollback to 2365bf5 was denied
+15,unplanned,ran log-containment queries agents are blocked from,no,docs/agent-runs/phase-15/human-gate.md,40,Containment verified by the human
+15,unplanned,opened an AWS Support case for the Bedrock restriction,no,docs/agent-runs/phase-15/human-gate.md,36,AWS Support case (Account and billing) opened

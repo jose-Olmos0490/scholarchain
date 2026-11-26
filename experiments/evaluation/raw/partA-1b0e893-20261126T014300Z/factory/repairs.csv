@@ -1,0 +1,19 @@
+phase,repair_files_present,files,repair_rounds_documented,needs_confirmation,note,source_file,source_line,anchor
+00,0,,0,yes,commit history has 'phase-00 repair'; no repair file,docs/agent-runs/phase-00/human-gate.md,,
+01,0,,0,yes,no human gate,docs/agent-runs/phase-01/agent-report.md,,
+02,3,repair-01.md;repair-02.md;repair-03.md,3,no,repair-01..03,docs/agent-runs/phase-02/human-gate.md,4,repair-01/02/03
+03,2,repair-01.md;repair-02.md,2,yes,repair-01 (guard) and repair-02; the reports also name per-agent repairs 1 and 2,docs/agent-runs/phase-03/human-gate.md,2,repair-01 and repair-02
+04,0,,8,yes,repairs 01-08 cited; no repair file archived,docs/agent-runs/phase-04/human-gate.md,2,repairs 01-08
+05,1,repair-01.md,1,no,repair-01 with follow-up,docs/agent-runs/phase-05/human-gate.md,6,repair-01.md
+06,1,repair-01.md,2,yes,repair-02 cited; only repair-01.md archived,docs/agent-runs/phase-06/human-gate.md,3,repair-02.md
+07,0,,2,yes,repair-01 and 02 cited and said added; no repair file present,docs/agent-runs/phase-07/human-gate.md,41,repair-01.md and repair-02.md were missing
+08,1,repair-01.md,1,no,repair-01,docs/agent-runs/phase-08/repair-01.md,6,build-engineer added rag -> storage dependency
+09,0,,4,yes,"agent reports for repairs 01-04; human gate cites repair-01.md, none archived",docs/agent-runs/phase-09/human-gate.md,11,rag-engineer repairs 02-04
+10,0,,0,no,none,docs/agent-runs/phase-10/human-gate.md,,
+10b,1,repair-01.md,1,no,repair-01,docs/agent-runs/phase-10b/human-gate.md,11,ACCEPTED after repair-01
+11,0,,0,yes,no repair loop; three test attempts; findings deferred,docs/agent-runs/phase-11/human-gate.md,14,5 MAJOR findings are deferred
+12,1,repair-01.md,1,no,repair-01,docs/agent-runs/phase-12/human-gate.md,6,after repair-01: APPROVE
+13,2,repair-01.md;repair-02.md,2,no,repair-01 and 02,docs/agent-runs/phase-13/repair-02.md,1,# Phase 13 Repair 02
+14,3,repair-01.md;repair-02.md;repair-03.md,3,no,repair-01..03,docs/agent-runs/phase-14/human-gate.md,34,repair-03 (infra-engineer)
+14b,1,repair-01.md,1,no,repair-01,docs/agent-runs/phase-14b/human-gate.md,3,repair-01
+15,1,repair-01.md,1,yes,repair-01.md archived; review rounds 2 and 3 also drove further changes,docs/agent-runs/phase-15/repair-01.md,1,"# Phase 15, repair 01"

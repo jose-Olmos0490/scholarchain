@@ -1,0 +1,23 @@
+[
+    {
+        "service": "query-api",
+        "taskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-query-api:10",
+        "desired": 1,
+        "running": 1,
+        "pending": 0
+    },
+    {
+        "service": "graph-evidence-api",
+        "taskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-graph-evidence-api:10",
+        "desired": 1,
+        "running": 1,
+        "pending": 0
+    },
+    {
+        "service": "embedding-worker",
+        "taskDefinition": "arn:aws:ecs:us-east-2:<ACCOUNT_ID>:task-definition/scholarchain-dev-embedding-worker:10",
+        "desired": 0,
+        "running": 0,
+        "pending": 0
+    }
+]

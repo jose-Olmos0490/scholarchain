@@ -1,0 +1,61 @@
+window,check,compared,mismatches
+2000-2005,coauthor edges and supporting works,23,0
+2000-2005,degree C_r,20,0
+2000-2005,weighted degree W_r,20,0
+2000-2005,component id and size,20,0
+2000-2005,k-core coreness,20,0
+2000-2005,community size field,20,0
+2000-2005,community lies in one component (labels not recomputed),7,0
+2000-2005,"bridge degree, cross-community degree, communities connected",20,0
+2000-2005,stored paths are shortest walks (or correctly not found),5,0
+2000-2005,"window summary researcher, edge, component counts",3,0
+2000-2025,coauthor edges and supporting works,167,0
+2000-2025,degree C_r,89,0
+2000-2025,weighted degree W_r,89,0
+2000-2025,component id and size,89,0
+2000-2025,k-core coreness,89,0
+2000-2025,community size field,89,0
+2000-2025,community lies in one component (labels not recomputed),24,0
+2000-2025,"bridge degree, cross-community degree, communities connected",89,0
+2000-2025,stored paths are shortest walks (or correctly not found),5,0
+2000-2025,"window summary researcher, edge, component counts",3,0
+2006-2010,coauthor edges and supporting works,4,0
+2006-2010,degree C_r,5,0
+2006-2010,weighted degree W_r,5,0
+2006-2010,component id and size,5,0
+2006-2010,k-core coreness,5,0
+2006-2010,community size field,5,0
+2006-2010,community lies in one component (labels not recomputed),2,0
+2006-2010,"bridge degree, cross-community degree, communities connected",5,0
+2006-2010,stored paths are shortest walks (or correctly not found),3,0
+2006-2010,"window summary researcher, edge, component counts",3,0
+2011-2015,coauthor edges and supporting works,32,0
+2011-2015,degree C_r,16,0
+2011-2015,weighted degree W_r,16,0
+2011-2015,component id and size,16,0
+2011-2015,k-core coreness,16,0
+2011-2015,community size field,16,0
+2011-2015,community lies in one component (labels not recomputed),5,0
+2011-2015,"bridge degree, cross-community degree, communities connected",16,0
+2011-2015,stored paths are shortest walks (or correctly not found),5,0
+2011-2015,"window summary researcher, edge, component counts",3,0
+2016-2020,coauthor edges and supporting works,26,0
+2016-2020,degree C_r,13,0
+2016-2020,weighted degree W_r,13,0
+2016-2020,component id and size,13,0
+2016-2020,k-core coreness,13,0
+2016-2020,community size field,13,0
+2016-2020,community lies in one component (labels not recomputed),3,0
+2016-2020,"bridge degree, cross-community degree, communities connected",13,0
+2016-2020,stored paths are shortest walks (or correctly not found),5,0
+2016-2020,"window summary researcher, edge, component counts",3,0
+2021-2025,coauthor edges and supporting works,82,0
+2021-2025,degree C_r,35,0
+2021-2025,weighted degree W_r,35,0
+2021-2025,component id and size,35,0
+2021-2025,k-core coreness,35,0
+2021-2025,community size field,35,0
+2021-2025,community lies in one component (labels not recomputed),7,0
+2021-2025,"bridge degree, cross-community degree, communities connected",35,0
+2021-2025,stored paths are shortest walks (or correctly not found),5,0
+2021-2025,"window summary researcher, edge, component counts",3,0

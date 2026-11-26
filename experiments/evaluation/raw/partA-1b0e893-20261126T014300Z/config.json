@@ -1,0 +1,70 @@
+{
+ "awsProfile": "cs441",
+ "commands": [
+  {
+   "command": "sbt -batch \"entityResolution/runMain scholarchain.er.evaluation.EvaluateGoldSet docs/agent-runs/phase-05/gold-set-v1.csv --output-dir <stage>/er --compare-run-dir modules/entity-resolution/local-run/er-v1/run_id=9241e65ed83f7441e3935f5cce00aa48a5a8216398a2c1205f716d8a3508e423\"",
+   "endedUtc": "2026-11-26T01:23:11Z",
+   "exit": 0,
+   "item": 1,
+   "startedUtc": "2026-11-26T01:23:01Z"
+  },
+  {
+   "command": "aws s3api list-objects-v2 on the dev graph bucket (all keys) and the dev rag bucket (prefix run_id=<run hex>/), then aws s3api get-object per key, --profile cs441 --region us-east-2",
+   "item": 2,
+   "note": "read-only; 368 graph-bucket objects and 94 rag-bucket semantic_fact objects"
+  },
+  {
+   "command": "sbt -batch sparkAnalytics/test \"adversarialTests/testOnly scholarchain.adversarial.spark.*\"",
+   "endedUtc": "2026-11-26T01:41:59Z",
+   "exit": 0,
+   "item": 2,
+   "startedUtc": "2026-11-26T01:23:17Z"
+  },
+  {
+   "command": "experiments/evaluation/bin/factory_extract.py --out <stage>/factory",
+   "item": 4
+  },
+  {
+   "command": "aws ecs describe-services, aws ecr describe-images (tag 3c3e1a1), aws emr list-clusters; read-only, --profile cs441 --region us-east-2",
+   "item": 5
+  },
+  {
+   "command": "clean-clone build log supplied by the human at ~/clean-check.log; the agent did not run that build",
+   "item": 5
+  }
+ ],
+ "commitSha": "1b0e89339a60cdc1d3f097153b070202bff1049b",
+ "deployedGraphRun": {
+  "runId": "run:f6023de34a312366583b3eacbc2b2a689234cf1abe79e184fb66875bac297a60",
+  "snapshot": "2026-11-01",
+  "sparkCodeVersion": "a75b607",
+  "sparkExecution": "local (not EMR), per run-summary executionParameters"
+ },
+ "environment": "dev",
+ "goldSetFiles": [
+  {
+   "path": "docs/agent-runs/phase-05/gold-set-v1.csv",
+   "sha256": "3767a6ca3e43e03053878aa7a90f9516408cf4d13157a6d871ceab8b67493f73"
+  }
+ ],
+ "goldTopupPresent": false,
+ "labelsDirectoryEntries": [],
+ "pythonPackages": {
+  "pyarrow": "21.0.0",
+  "pyyaml": "6.0.2"
+ },
+ "region": "us-east-2",
+ "runId": "partA-1b0e893-20261126T014300Z",
+ "sealedAtUtc": "2026-11-26T01:42:48Z",
+ "seeds": {
+  "auditEdges": 50,
+  "bootstrap": 20261125,
+  "edgeAudit": 20261125,
+  "resamples": 1000
+ },
+ "startedAtUtc": "2026-11-26T00:39:58Z",
+ "workOrder": "Phase 16 Part A (items 1-5)",
+ "workingTreeAtSeal": [
+  "?? experiments/evaluation/"
+ ]
+}

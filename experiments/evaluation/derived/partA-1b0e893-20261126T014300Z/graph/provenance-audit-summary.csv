@@ -1,0 +1,8 @@
+measure,value
+"population (coauthored_with rows, all windows)",334
+sampled,50
+seed,20261125
+distinct researcher pairs sampled,46
+distinct DBLP keys sampled,15
+provenance fields ok,50
+traced to DBLP XML,50
