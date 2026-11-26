@@ -18,7 +18,7 @@ Apply complete! Resources: 4 added, 0 changed, 3 destroyed.[0m
 Outputs:
 
 [0malarm_topic_arn = "arn:aws:sns:us-east-2:<ACCOUNT_ID>:scholarchain-dev-alarms"
-alb_dns_name = "<DEV_ALB_DNS>"
+alb_dns_name = "<ALB_HOSTNAME>"
 api_keys_secret_name = "scholarchain/dev/api-keys"
 bucket_names = {
   "artifacts" = "scholarchain-dev-artifacts-<ACCOUNT_ID>-us-east-2"

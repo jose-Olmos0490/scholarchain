@@ -1,5 +1,5 @@
 ==> [smoke-test.sh] STEP: locate the load balancer
-INFO: base url: http://<DEV_ALB_DNS>
+INFO: base url: http://<ALB_HOSTNAME>
 ==> [smoke-test.sh] STEP: liveness: GET /healthz
 PASS healthz                GET /healthz -> 200
 ==> [smoke-test.sh] STEP: readiness: GET /readyz

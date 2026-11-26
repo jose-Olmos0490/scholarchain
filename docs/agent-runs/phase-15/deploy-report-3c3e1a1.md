@@ -33,7 +33,7 @@ ECR digests equal the local image IDs from scripts/package.sh (run by the orches
 ## Commands
 - scripts/package.sh (orchestrator): exit 0
 - scripts/deploy.sh --env dev --region us-east-2: succeeded
-- scripts/smoke-test.sh --env dev --region us-east-2 --base-url http://<DEV_ALB_DNS>: exit 1 (ALB listens on HTTP:80 only)
+- scripts/smoke-test.sh --env dev --region us-east-2 --base-url http://<ALB_HOSTNAME>: exit 1 (ALB listens on HTTP:80 only)
 - rollback.sh: NOT run
 
 ## Smoke test

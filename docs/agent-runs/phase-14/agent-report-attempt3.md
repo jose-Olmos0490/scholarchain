@@ -18,7 +18,7 @@ DEPLOYED IMAGE DIGESTS AND TASK REVISIONS (from the deploy.sh release record, de
 - All three images are tagged :2365bf5.
 - deploy.sh reported query-api and graph-evidence-api stable within the 900s timeout.
 - embedding-worker has desired count 0, so deploy.sh did not wait for it.
-TEST RESULTS: Smoke test FAILED with 10 checks failed. Every HTTP call to https://<DEV_ALB_DNS> on port 443 hit "curl: (28) Failed to connect ... Timeout was reached" after 10s. The code was 000.
+TEST RESULTS: Smoke test FAILED with 10 checks failed. Every HTTP call to https://<ALB_HOSTNAME> on port 443 hit "curl: (28) Failed to connect ... Timeout was reached" after 10s. The code was 000.
 - healthz: FAIL (000, expected 200)
 - readyz: FAIL (000, expected 200)
 - query: FAIL (000, expected 200)
@@ -51,7 +51,7 @@ MANUAL ACTION REQUIRED:
 - The human or infra-engineer needs to check ALB reachability: scheme, security group ingress for this host, and the 443 listener. The cause may be Terraform.
 - The human needs to decide between a rollback with a named previous SHA and a re-run of the smoke test once connectivity is fixed. A `--base-url` override is possible only for a dev environment with allow_plaintext_http.
 BLOCKED-ON OWNER: infra-engineer (ALB or network path, if confirmed a Terraform or script defect); human architect (rollback decision and previous SHA, AWS read-only profile). On a confirmed post-deploy incident, route to incident-responder.
-BLOCKED-ON EVIDENCE: The smoke-test output above (10 failures, all connect timeouts to port 443 on <DEV_ALB_DNS>). The aws-api MCP error "config profile (scholarchain-readonly) could not be found". The deploy.sh release record, which has no previous-SHA field. The deploy record is at /tmp/scholarchain-plans/deploy-dev-2365bf5.json and /home/olmos/scholarchain/build/deploy-record-dev-2365bf5.json.
+BLOCKED-ON EVIDENCE: The smoke-test output above (10 failures, all connect timeouts to port 443 on <ALB_HOSTNAME>). The aws-api MCP error "config profile (scholarchain-readonly) could not be found". The deploy.sh release record, which has no previous-SHA field. The deploy record is at /tmp/scholarchain-plans/deploy-dev-2365bf5.json and /home/olmos/scholarchain/build/deploy-record-dev-2365bf5.json.
 NEXT GATE: human decision on connectivity diagnosis and rollback. Human acceptance of the deployment report is not yet appropriate because the deployment is unverified.
 
 Notice: the AWS API MCP server is entering end of development. Migration guide: https://github.com/awslabs/mcp/blob/main/src/aws-api-mcp-server/MIGRATION.md

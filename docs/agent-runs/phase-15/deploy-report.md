@@ -52,7 +52,7 @@ STATUS: FAILED
 
 ## Smoke test
 
-Command: `scripts/smoke-test.sh --env dev --region us-east-2 --base-url http://<DEV_ALB_DNS>`
+Command: `scripts/smoke-test.sh --env dev --region us-east-2 --base-url http://<ALB_HOSTNAME>`
 
 Plaintext HTTP was used. The only listener on the ALB is HTTP:80 with path forwarding rules. At this commit, modules/compute/main.tf creates that listener only with no certificate and allow_plaintext_http=true. The https default was not attempted. The ALB is internet-facing.
 
