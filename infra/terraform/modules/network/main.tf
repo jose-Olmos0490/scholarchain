@@ -1,6 +1,7 @@
 # VPC across two AZs. One NAT gateway only (cost-bounded): the three service
 # tasks and the EMR cluster reach AWS APIs (Bedrock, S3 Vectors, SQS, Secrets
-# Manager, ECR) through it. A single NAT is a single point of failure for egress
+# Manager, ECR) through it, and the services reach the external model APIs
+# (Anthropic, Voyage AI) the same way, on 443 only. A single NAT is a single point of failure for egress
 # and for cross-AZ data charges; accepted for the course environment and
 # documented in infra/terraform/README.md. S3 and DynamoDB use gateway endpoints
 # so their traffic never touches the NAT.

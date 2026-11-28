@@ -75,8 +75,14 @@ maximum team size 8, largest pair expansion 28, largest blocking group 3.
   `summary.json`.
 - Policy `er-v1`, revision `er-v1-r2`, features `er-features-v2`; thresholds and
   cutoffs in `modules/entity-resolution/config/er-v1-thresholds.properties`.
-- Adjudicator: `fake` only (`fake-deterministic-adjudicator-v1`, prompt
-  `er-adj-prompt-v1`). `--adjudicator bedrock` is refused by the entrypoint.
+- Adjudicator in the runs recorded here: `fake`
+  (`fake-deterministic-adjudicator-v1`, prompt `er-adj-prompt-v1`).
+  `--adjudicator bedrock` is refused by the entrypoint. `--adjudicator llm`
+  (Anthropic provider only) exists; no run of it is recorded here.
+- Every mode, `fake` and `off` included, requires a complete LLM provider
+  setting (`SCHOLARCHAIN_LLM_PROVIDER` and that provider's keys). The
+  [README command](../README.md#bounded-local-data-run-no-cloud) sets `bedrock`
+  with placeholder model IDs; fake mode needs no API key and calls no model.
 - Committed runs: `modules/entity-resolution/local-run/er-v1/`.
 
 **Replayed 2026-11-25**: run ID `run:ea28cea8...`, researcher ACCEPTED 59,
@@ -85,6 +91,11 @@ equal the committed run `run:74494228...`; the run ID differs because it covers
 a code fingerprint
 ([known limitations](../modules/entity-resolution/KNOWN-LIMITATIONS.md)).
 Quality metrics: [evaluation.md section 1](evaluation.md#1-entity-resolution).
+
+**Replayed 2026-11-27** with the corrected README command and no API key: run ID
+`run:500d8308...`, the same outcome counts, 0 pairs in the LLM band. The run ID
+changed with the code. The Spark replay in section 5 was not repeated over this
+run.
 
 ## 5. Spark (`scholarchain.spark.run.GraphPipeline`)
 

@@ -4,13 +4,9 @@ import java.nio.file.Paths
 import org.slf4j.LoggerFactory
 import scala.util.control.NonFatal
 import scholarchain.rag.answer.SynthesisConfig
-import scholarchain.rag.embed.{BedrockEmbedder, EmbeddingModelSpec}
-import scholarchain.rag.llm.{
-  BedrockLlmClient,
-  BedrockRetryPolicy,
-  BedrockSdkInvoker,
-  PromptRepository
-}
+import scholarchain.rag.embed.Embedder
+import scholarchain.rag.llm.{BedrockRetryPolicy, LlmClient, PromptRepository}
+import scholarchain.rag.provider.{BedrockLlmSettings, EmbeddingPurpose, RetryDelays}
 import scholarchain.rag.workflow.{
   SystemWorkflowClock,
   WorkflowComposition,
@@ -19,15 +15,17 @@ import scholarchain.rag.workflow.{
 }
 import scholarchain.services.config.{
   EntrypointSettings,
+  LlmSettings,
+  ProviderKeySettings,
   QueryApiSettings,
   RuntimeLimits,
   ServiceSettings
 }
-import scholarchain.services.http.SystemServiceClock
+import scholarchain.services.http.{ServiceClock, SystemServiceClock}
 import scholarchain.services.ops.ReadinessProbe
 import scholarchain.services.query.{DynamoJobStore, JobStore, QueryEngine, RagQueryEngine}
 import scholarchain.services.runtime.{QueryApiPorts, RuntimeEnvironment, ServiceRuntime}
-import scholarchain.services.security.Authenticator
+import scholarchain.services.security.{Authenticator, SecretStringSource}
 import scholarchain.storage.aws.{NeptuneGraphReader, NeptuneMetricReader}
 import scholarchain.storage.common.StorageError
 import scholarchain.storage.directory.{NameCandidate, ResearcherDirectory}
@@ -125,6 +123,57 @@ object QueryJobs:
       )
     )
 
+/** The model adapters of the query API and the readiness checks of their keys. */
+final case class QueryModels(llm: Wired[LlmClient], embedder: Wired[Embedder]):
+  def probes: Vector[ReadinessProbe] = llm.probes ++ embedder.probes
+
+/** Builds the query API's models from the selected providers. Anthropic takes its attempts and
+  * deadlines from the core `llm.anthropic.*` keys and only the retry delays from the services'
+  * `llm.*`; Bedrock takes everything from the services' `llm.*`. Voyage embeds queries, with the
+  * storage retry delays.
+  */
+object QueryModels:
+  def open(
+      env: Map[String, String],
+      core: QueryCoreConfig,
+      llmSettings: LlmSettings,
+      keys: ProviderKeySettings,
+      secrets: () => Either[String, SecretStringSource],
+      clock: ServiceClock
+  ): Either[String, QueryModels] =
+    val s = core.storage
+    // one Secrets Manager client serves both keys, and none is built for Bedrock
+    lazy val source = secrets()
+    for
+      llm <- ProviderWiring.llm(
+        core.llm,
+        keys,
+        () => source,
+        clock,
+        RetryDelays(llmSettings.baseDelayMs, llmSettings.maxDelayMs),
+        BedrockLlmSettings(
+          s.awsRegion,
+          None,
+          llmSettings.attemptTimeoutMillis,
+          BedrockRetryPolicy(
+            llmSettings.maxAttempts,
+            llmSettings.baseDelayMs,
+            llmSettings.maxDelayMs
+          )
+        )
+      )
+      embedder <- ProviderWiring.embedder(
+        core.embedding,
+        env,
+        EmbeddingPurpose.Retrieval,
+        keys,
+        () => source,
+        clock,
+        RetryDelays(s.runtime.retry.baseDelayMs.toLong, s.runtime.retry.maxDelayMs.toLong),
+        s.awsRegion
+      )
+    yield QueryModels(llm, embedder)
+
 /** The live query API: real adapters, configuration only. */
 object QueryApiMain:
   private val log = LoggerFactory.getLogger("scholarchain.services.query-api")
@@ -149,9 +198,10 @@ object QueryApiMain:
     for
       svc <- ServiceSettings.load()
       entry <- EntrypointSettings.queryApi()
+      keys <- EntrypointSettings.providerKeys()
       core <- CoreConfigs.query(env).left.map(e => Vector(e.message))
       stores <- LiveStores.open(core.storage).left.map(Vector(_))
-      built <- wire(env, svc, entry, core, stores) match
+      built <- wire(env, svc, entry, keys, core, stores) match
         case l @ Left(_) =>
           stores.close()
           l
@@ -162,18 +212,23 @@ object QueryApiMain:
       env: Map[String, String],
       svc: ServiceSettings,
       entry: QueryApiSettings,
+      keys: ProviderKeySettings,
       core: QueryCoreConfig,
       stores: LiveStores
   ): Either[Vector[String], QueryApiInputs] =
     val s = core.storage
-    val dimensions = stores.definitions.map(_.dimension).distinct
     for
-      _ <- Either.cond(
-        dimensions.size == 1,
-        (),
-        Vector("all vector indexes must share one dimension: one embedder serves them")
-      )
-      spec <- EmbeddingModelSpec.load(env, dimensions.head).left.map(p => Vector(p.message))
+      models <- QueryModels
+        .open(
+          env,
+          core,
+          entry.llm,
+          keys,
+          () => ProviderWiring.secretsManager(s.awsRegion, keys),
+          SystemServiceClock
+        )
+        .left
+        .map(Vector(_))
       prompts <- PromptRepository
         .load(Paths.get(entry.workflow.promptsDir))
         .left
@@ -182,18 +237,12 @@ object QueryApiMain:
       adapters <- ReadAdapters.open(stores.items, s, svc.serving.runId).left.map(Vector(_))
     yield
       val (reads, readProbes) = adapters
-      val retry = entry.llm
-      val llm = BedrockLlmClient.forSynthesis(
-        BedrockSdkInvoker.live(s.awsRegion, None, retry.attemptTimeoutMillis),
-        core.models,
-        BedrockRetryPolicy(retry.maxAttempts, retry.baseDelayMs, retry.maxDelayMs)
-      )
       val graphLimits = s.graphReaderLimits
       val neptuneGraph = new NeptuneGraphReader(stores.clients.neptune, graphLimits, stores.retrier)
       val dependencies = WorkflowDependencies(
-        llm = llm,
+        llm = models.llm.adapter,
         prompts = prompts,
-        embedder = BedrockEmbedder.live(s.awsRegion, None, spec),
+        embedder = models.embedder.adapter,
         audit = scholarchain.rag.workflow.AuditPorts(
           stores.dynamo.querySessions,
           stores.dynamo.evidence,
@@ -243,7 +292,7 @@ object QueryApiMain:
             stores.vectorProbe,
             stores.objectProbe,
             auth._2
-          ) ++ readProbes
+          ) ++ readProbes ++ models.probes
         ),
         auth._1
       )

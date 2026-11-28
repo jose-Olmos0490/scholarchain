@@ -10,11 +10,14 @@ import scholarchain.rag.agents.{SResult, StageFailure}
   * items, minItems, maxItems, minLength, maxLength, minimum, maximum; annotations `$schema`,
   * `$id`, `title`, `description`.
   *
-  * Violation messages name the path and the rule, never the offending value, so that they are
-  * safe to log and to return.
+  * Violation messages name the path and the rule, never the offending value or the name of a
+  * property the schema does not declare, so that they are safe to log and to return.
   */
 final class JsonSchema private (val version: String, root: ujson.Obj):
   import JsonSchema.*
+
+  /** The schema as JSON text. */
+  val text: String = root.render()
 
   def validate(value: ujson.Value): Vector[String] = check(root, value, "$")
 
@@ -70,13 +73,15 @@ final class JsonSchema private (val version: String, root: ujson.Obj):
             if !o.value.contains(k) then out += s"$path.$k: required but missing"
           }
         }
+        var extra = false
         o.value.foreach { (k, child) =>
           props.get(k) match
             case Some(ps: ujson.Obj) => out ++= check(ps, child, s"$path.$k")
             case _ =>
-              if s.value.get("additionalProperties").contains(ujson.False) then
-                out += s"$path.$k: property is not allowed"
+              if s.value.get("additionalProperties").contains(ujson.False) then extra = true
         }
+        // the name of an extra property is chosen by the sender, so it is not repeated
+        if extra then out += s"$path: a property is not allowed"
       case _ => ()
     out.result()
 

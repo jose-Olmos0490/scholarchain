@@ -35,7 +35,13 @@ class LiveRetrievalSmokeIT extends RagSuite:
     if !sys.env.get("SCHOLARCHAIN_AWS_IT").contains("true") then
       Some("SCHOLARCHAIN_AWS_IT is not 'true'")
     else if profile.isEmpty then Some("no explicit AWS profile")
-    else StorageSettings.load(sys.env).left.toOption.map(e => s"configuration: ${e.message}")
+    else
+      StorageSettings
+        .load(sys.env)
+        .left
+        .toOption
+        .orElse(scholarchain.rag.provider.ModelProviders.load(sys.env).left.toOption)
+        .map(e => s"configuration: ${e.message}")
 
   test("ingest, then query: top-1, filters and the textS3Uri round trip", AwsIntegration) {
     skipReason.foreach(r => cancel(r))

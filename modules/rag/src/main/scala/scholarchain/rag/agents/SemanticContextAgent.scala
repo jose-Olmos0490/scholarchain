@@ -5,7 +5,8 @@ import scholarchain.core.ids.StableIds
 import scholarchain.core.model.Provenance
 import scholarchain.core.validation.RecordContract
 import scholarchain.rag.context.SemanticContextItem
-import scholarchain.rag.embed.Embedder
+import scholarchain.rag.embed.{Embedder, EmbeddingProviderException}
+import scholarchain.rag.provider.ProviderFailureKind
 import scholarchain.rag.render.TextSanitizer
 import scholarchain.storage.objects.{ObjectArea, ObjectLayout, ObjectRef, ObjectStore}
 import scholarchain.storage.vectors.*
@@ -97,8 +98,24 @@ final class SemanticContextAgent(
   private def embed(text: String): SResult[Vector[Float]] =
     try Right(embedder.embed(Seq(text)).head.toVector)
     catch
+      case e: EmbeddingProviderException => Left(embeddingFailure(e.kind))
       case scala.util.control.NonFatal(_) =>
         Left(StageFailure.Failed("embedder", "the query could not be embedded"))
+
+  /** The embedding service's typed failure, mapped as model failures are: throttling is
+    * overloaded, a deadline is a time-out (both retryable) and a refusal is not retryable. A
+    * transient failure is retryable. The text is fixed; nothing from the provider is repeated.
+    */
+  private def embeddingFailure(kind: ProviderFailureKind): StageFailure =
+    kind match
+      case ProviderFailureKind.Overloaded =>
+        StageFailure.Overloaded("embedder", "the embedding service is overloaded")
+      case ProviderFailureKind.TimedOut =>
+        StageFailure.Timeout("embedder", "the embedding call timed out")
+      case ProviderFailureKind.Transient =>
+        StageFailure.Retryable("embedder", "the embedding service was unavailable")
+      case ProviderFailureKind.Permanent =>
+        StageFailure.Failed("embedder", "the embedding service refused the query")
 
   private def queryAll(
       vector: Vector[Float],

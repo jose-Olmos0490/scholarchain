@@ -91,6 +91,34 @@ variable "verification_model_id" {
   default = ""
 }
 
+variable "llm_provider" {
+  description = "bedrock or anthropic. Bedrock LLM invoke rights exist only for bedrock; the Anthropic secret is readable only for anthropic."
+  type        = string
+
+  validation {
+    condition     = contains(["bedrock", "anthropic"], var.llm_provider)
+    error_message = "llm_provider must be bedrock or anthropic."
+  }
+}
+
+variable "embedding_provider" {
+  description = "bedrock or voyage. Bedrock embedding invoke rights exist only for bedrock; the Voyage secret is readable only for voyage."
+  type        = string
+
+  validation {
+    condition     = contains(["bedrock", "voyage"], var.embedding_provider)
+    error_message = "embedding_provider must be bedrock or voyage."
+  }
+}
+
+variable "anthropic_secret_arn" {
+  type = string
+}
+
+variable "voyage_secret_arn" {
+  type = string
+}
+
 variable "emr_enabled" {
   type = bool
 }

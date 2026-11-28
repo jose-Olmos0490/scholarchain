@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path, Paths}
 import java.time.Instant
 import scala.util.Try
+import scholarchain.core.config.*
 import scholarchain.core.ids.StableIds
 import scholarchain.core.json.WireCodec
 import scholarchain.core.model.*
@@ -20,9 +21,10 @@ import scholarchain.er.review.*
   * {{{
   * SCHOLARCHAIN_ENV=dev SCHOLARCHAIN_ER_POLICY_VERSION=er-v1 SCHOLARCHAIN_ER_ACCEPT_THRESHOLD=…
   * SCHOLARCHAIN_ER_REJECT_THRESHOLD=… SCHOLARCHAIN_ER_LLM_BAND_MIN=… SCHOLARCHAIN_ER_LLM_BAND_MAX=…
+  * SCHOLARCHAIN_LLM_PROVIDER=bedrock|anthropic (and that provider's settings)
   * sbt "entityResolution/runMain scholarchain.er.run.ResolveSample
   *   --hadoop-root <phase4 output root> [--hadoop-run-id <hex>]
-  *   --output-root <dir> --adjudicator off|fake|bedrock --decided-at <ISO instant>
+  *   --output-root <dir> --adjudicator off|fake|llm|bedrock --decided-at <ISO instant>
   *   --er-policy-properties modules/entity-resolution/config/er-v1-thresholds.properties
   *   [--review-queue <csv> --review-key <csv> --queue-likely-match <n>
   *    --queue-likely-non-match <n> --queue-borderline <n>]"
@@ -33,6 +35,13 @@ import scholarchain.er.review.*
   * by the required `--er-policy-properties` argument ([[DecisionCutoffs.load]]); there is no
   * default path and no fallback value. `--adjudicator fake` uses [[FakeAdjudicator]] (not a model).
   * `--adjudicator bedrock` is refused: configuration has no adjudication model-ID key yet.
+  *
+  * Every run loads core's `llm.provider` section first, so an unknown or incompletely configured
+  * provider stops the run before any output, whatever the adjudicator mode. `--adjudicator llm`
+  * calls the model of that provider: with `anthropic`, [[AnthropicAdjudicator]] (key from the
+  * environment variable `ANTHROPIC_API_KEY`, response bound `rag.llm.maxOutputTokens`, retry
+  * delays `retry.baseDelayMs` and `retry.maxDelayMs`); with `bedrock` it is refused like
+  * `--adjudicator bedrock`. Only `llm` mode adds the provider settings to the run manifest.
   *
   * `--decided-at` is required: it is the `decidedAt` of every decision, and a wall-clock default
   * would make the output differ between two runs of the same inputs (finding F8).
@@ -91,8 +100,8 @@ object ResolveSample:
       if unknown.nonEmpty then Left(s"unknown arguments: ${unknown.toVector.sorted.mkString(", ")}")
       else if !m.contains("hadoop-root") || !m.contains("output-root") then
         Left("--hadoop-root and --output-root are required")
-      else if !m.get("adjudicator").exists(Set("off", "fake", "bedrock")) then
-        Left("--adjudicator must be off, fake or bedrock")
+      else if !m.get("adjudicator").exists(Set("off", "fake", "llm", "bedrock")) then
+        Left("--adjudicator must be off, fake, llm or bedrock")
       else if !m.contains("decided-at") then
         Left("--decided-at <ISO-8601 instant> is required (decisions must be reproducible)")
       else if Try(Instant.parse(m("decided-at"))).isFailure then
@@ -147,7 +156,8 @@ object ResolveSample:
       policy: Policy,
       adjudicatorMode: String,
       service: Option[AdjudicationService],
-      codeFingerprint: String
+      codeFingerprint: String,
+      modelParameters: Map[String, String] = Map.empty
   ): Either[String, RunManifest] =
     val th = policy.thresholds
     val cut = policy.cutoffs
@@ -174,7 +184,7 @@ object ResolveSample:
           s"entityResolution.$k" -> cut.valueOf(k).toString,
           s"entityResolution.$k.source" -> cut.sources(k)
         )
-      ),
+      ) ++ modelParameters,
       policyVersions = Map(
         "entityResolutionPolicyVersion" -> policy.policyVersion,
         "entityResolutionPolicyRevision" -> policy.policyRevision,
@@ -203,26 +213,72 @@ object ResolveSample:
     for
       args <- parseArgs(argv)
       policy <- Policy.load(env, args.policyProperties)
+      llm <- ConfigLoader.loadSection(LlmProviderConfig, env).left.map(_.message)
       data <- Phase4Input.load(args.hadoopRoot, args.hadoopRunId)
       cache = JsonlAdjudicationCache(args.outputRoot.resolve("adjudication-cache.jsonl"))
-      service <- args.adjudicator match
+      model <- args.adjudicator match
         case "off" => Right(None)
-        case "fake" =>
-          Prompt.adjudication.map(p =>
-            Some(AdjudicationService(FakeAdjudicator(), cache, p, policy.cacheVersion))
-          )
+        case "fake" => Right(Some(ModelChoice(FakeAdjudicator())))
+        case "llm" => configuredModel(llm, env).map(Some(_))
         case _ =>
           Left(
-            "--adjudicator bedrock is not available: the configuration contract has no key for " +
-              "the adjudication model ID or an enable flag (owner: domain-engineer)"
+            s"--adjudicator bedrock is not available: ${ConfiguredAdjudicator.BedrockUnavailable}"
+          )
+      service <- model match
+        case None => Right(None)
+        case Some(chosen) =>
+          Prompt.adjudication.map(p =>
+            Some(AdjudicationService(chosen.adjudicator, cache, p, policy.cacheVersion))
           )
       fingerprint <- CodeFingerprint.of(classOf[Policy])
-      m <- manifest(data.files, policy, args.adjudicator, service, fingerprint)
+      parameters = model.fold(Map.empty[String, String])(_.parameters)
+      m <- manifest(data.files, policy, args.adjudicator, service, fingerprint, parameters)
       runId <- StableIds.runId(m)
       summary <- execute(args, policy, data, service, m, runId)
     yield
       cache.flush()
       summary
+
+  /** The adjudicator of a run and the settings of it that the run manifest records. */
+  final private case class ModelChoice(
+      adjudicator: Adjudicator,
+      parameters: Map[String, String] = Map.empty
+  )
+
+  private def configuredModel(
+      llm: LlmProviderConfig,
+      env: Map[String, String]
+  ): Either[String, ModelChoice] =
+    def section[A](s: ConfigSection[A]): Either[String, A] =
+      ConfigLoader.loadSection(s, env).left.map(_.message)
+    val key = env.getOrElse(ConfiguredAdjudicator.AnthropicKeyVariable, "")
+    for
+      limits <- section(RagLlmConfig)
+      retry <- section(RetryPolicyConfig)
+      adjudicator <- ConfiguredAdjudicator(
+        llm,
+        () => key,
+        limits.maxOutputTokens,
+        retry.baseDelayMs.toLong,
+        retry.maxDelayMs.toLong
+      ).left.map(e => s"--adjudicator llm is not available for ${llm.provider.wire}: $e")
+      // Without a key every pair would end LLM_UNAVAILABLE, so the run does not start.
+      _ <- Either.cond(
+        key.trim.nonEmpty,
+        (),
+        s"--adjudicator llm needs ${ConfiguredAdjudicator.AnthropicKeyVariable}"
+      )
+    yield
+      val apiVersion = llm match
+        case LlmProviderConfig.Anthropic(settings) => Map("llm.apiVersion" -> settings.apiVersion)
+        case _: LlmProviderConfig.Bedrock => Map.empty[String, String]
+      ModelChoice(
+        adjudicator,
+        Map(
+          "llm.provider" -> llm.provider.wire,
+          "llm.maxOutputTokens" -> limits.maxOutputTokens.toString
+        ) ++ apiVersion
+      )
 
   /** Writes every output, write-once: when any target exists with different bytes, nothing is
     * written and the run fails (a run ID never silently replaces earlier decisions). Targets
@@ -402,6 +458,19 @@ object ResolveSample:
           "reviewQueue" -> queueSummary,
           "outputDir" -> runDir.toString
         )
+        // Only a model run reports these. They describe the answers used, cached or not, so they
+        // are the same for a warm and a cold cache.
+        if args.adjudicator == "llm" then
+          val answers = results.flatMap(_._2.adjudication).filter(_.rawOutput.isDefined)
+          summary("adjudicationProvider") = m.parameters("llm.provider")
+          summary("adjudicationAnswers") = ujson.Obj(
+            "count" -> answers.size,
+            "modelVersions" -> ujson.Arr.from(
+              answers.map(_.modelVersion).distinct.sorted.map(ujson.Str(_))
+            ),
+            "inputTokens" -> answers.flatMap(_.usage).map(_.inputTokens).sum.toDouble,
+            "outputTokens" -> answers.flatMap(_.usage).map(_.outputTokens).sum.toDouble
+          )
         val text = summary.render(indent = 2)
         write(runDir.resolve("summary.json"), text + "\n")
         commit(outputs.result()).map(_ => text)

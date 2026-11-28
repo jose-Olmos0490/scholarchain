@@ -48,6 +48,14 @@ output "api_keys_secret_name" {
   value       = module.security.api_keys_secret_name
 }
 
+output "provider_secret_names" {
+  description = "Provider API-key secrets the human must populate before deploying (names only; Terraform holds no value)."
+  value = {
+    anthropic = module.security.anthropic_secret_name
+    voyage    = module.security.voyage_secret_name
+  }
+}
+
 output "deployer_role_arn" {
   value = module.iam.deployer_role_arn
 }

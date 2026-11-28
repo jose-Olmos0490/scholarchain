@@ -86,3 +86,23 @@ resource "aws_secretsmanager_secret" "api_keys" {
   kms_key_id              = aws_kms_key.main.arn
   recovery_window_in_days = var.secret_recovery_window_days
 }
+
+# Model-provider API keys (Phase 16b). Names only: a human writes each value out of
+# band as a plain string holding only the key (no JSON, no quotes). Both secrets exist
+# whatever provider is selected, so that switching provider never schedules a secret for
+# deletion. IAM grants read access only for the selected provider.
+resource "aws_secretsmanager_secret" "anthropic_api_key" {
+  #checkov:skip=CKV2_AWS_57:Third-party API key issued by the provider and rotated by a human out of band; no rotation function applies
+  name                    = "scholarchain/${var.environment}/anthropic-api-key"
+  description             = "Anthropic API key (plain string). Value set by a human, never by Terraform."
+  kms_key_id              = aws_kms_key.main.arn
+  recovery_window_in_days = var.secret_recovery_window_days
+}
+
+resource "aws_secretsmanager_secret" "voyage_api_key" {
+  #checkov:skip=CKV2_AWS_57:Third-party API key issued by the provider and rotated by a human out of band; no rotation function applies
+  name                    = "scholarchain/${var.environment}/voyage-api-key"
+  description             = "Voyage AI API key (plain string). Value set by a human, never by Terraform."
+  kms_key_id              = aws_kms_key.main.arn
+  recovery_window_in_days = var.secret_recovery_window_days
+}

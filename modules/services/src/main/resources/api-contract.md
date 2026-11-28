@@ -50,6 +50,7 @@ which an absent option is `null`.
 | `graph-neighbors.json` | `GET /v1/graph/nodes/{nodeId}/neighbors` |
 | `error-422.json` | a typed error |
 | `error-503-not-ready.json` | `GET /readyz` while not ready |
+| `error-503-provider-key.json` | `GET /readyz` while a model-provider API key is missing |
 
 ## Query body
 
@@ -86,6 +87,15 @@ Every error body is
 | 502 | DOWNSTREAM_FAILURE | per cause | a store or workflow stage failed |
 | 503 | UNAVAILABLE | true | open circuit, full executor, not ready, job store unavailable (`JOB_STORE_UNAVAILABLE`), a typed workflow `Overloaded` failure (`OVERLOADED`) |
 | 504 | DOWNSTREAM_TIMEOUT | true | a deadline passed, including a typed workflow `Timeout` failure (`STAGE_TIMEOUT`) |
+
+## Model-provider keys and readiness
+
+With an external model provider selected, `/readyz` also checks that the provider's API key is
+held: `anthropicApiKey` (query API) and `voyageApiKey` (query API and embedding worker). A missing,
+empty or unreadable secret makes the check `failing`; nothing else about the secret is reported.
+`/healthz` stays 200. The read is tried again, so the service becomes ready without a restart.
+While `voyageApiKey` fails, the embedding worker takes no message from its queue. Bedrock has no
+key and adds no check. `error-503-provider-key.json` shows such an answer.
 
 ## Failed authentication attempts
 

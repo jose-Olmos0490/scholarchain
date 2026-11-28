@@ -1,0 +1,17 @@
+{
+  "error": {
+    "code": "UNAVAILABLE",
+    "status": 503,
+    "message": "the service is not ready",
+    "retryable": true,
+    "reason": "NOT_READY",
+    "details": {
+      "checks": {
+        "anthropicApiKey": "failing",
+        "voyageApiKey": "failing"
+      }
+    }
+  },
+  "requestId": "req-00000000000000000000000000000016",
+  "traceId": "trace-00000000000000000000000000000017"
+}

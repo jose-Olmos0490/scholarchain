@@ -17,6 +17,8 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
 
   /** Every required key with its environment variable, as frozen by this contract. */
   private val requiredKeys: Vector[(String, String)] = Vector(
+    "llm.provider" -> "SCHOLARCHAIN_LLM_PROVIDER",
+    "embedding.provider" -> "SCHOLARCHAIN_EMBEDDING_PROVIDER",
     "application.awsRegion" -> "AWS_REGION",
     "application.awsAccountId" -> "SCHOLARCHAIN_AWS_ACCOUNT_ID",
     "storage.rawBucket" -> "RAW_BUCKET",
@@ -57,9 +59,6 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
     "retrieval.maxPathDepth" -> "SCHOLARCHAIN_RETRIEVAL_MAX_PATH_DEPTH",
     "retrieval.contextTokenBudget" -> "SCHOLARCHAIN_RETRIEVAL_CONTEXT_TOKEN_BUDGET",
     "retrieval.fusionPolicyVersion" -> "SCHOLARCHAIN_RETRIEVAL_FUSION_POLICY_VERSION",
-    "models.embeddingModelId" -> "EMBEDDING_MODEL_ID",
-    "models.synthesisModelId" -> "SYNTHESIS_MODEL_ID",
-    "models.verificationModelId" -> "VERIFICATION_MODEL_ID",
     "operations.synchronousDeadlineMs" -> "SCHOLARCHAIN_OPS_SYNCHRONOUS_DEADLINE_MS",
     "operations.maxWorkflowRetries" -> "SCHOLARCHAIN_OPS_MAX_WORKFLOW_RETRIES",
     "operations.maxConcurrentLlmCalls" -> "SCHOLARCHAIN_OPS_MAX_CONCURRENT_LLM_CALLS",
@@ -85,6 +84,8 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
 
   /** Valid fictitious values for every required environment variable. */
   private val allEnvVars: Map[String, String] = Map(
+    "SCHOLARCHAIN_LLM_PROVIDER" -> "bedrock",
+    "SCHOLARCHAIN_EMBEDDING_PROVIDER" -> "bedrock",
     "AWS_REGION" -> "eu-west-1",
     "SCHOLARCHAIN_AWS_ACCOUNT_ID" -> "111111111111",
     "RAW_BUCKET" -> "env-raw-bucket",
@@ -259,6 +260,8 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
       "scholarchain.hadoop.maxPairExpansionTeamSize" -> "2000",
       "scholarchain.hadoop.intermediateCodec" -> "org.apache.hadoop.io.compress.DefaultCodec",
       "scholarchain.hadoop.outputCodec" -> "org.apache.hadoop.io.compress.GzipCodec",
+      // Phase 16b human decision: Voyage inputs per request.
+      "scholarchain.embedding.voyage.batchSize" -> "128",
       // Phase 07 repair (human-authored work order): storage defaults.
       "scholarchain.dynamodb.tablePrefix" -> "scholarchain",
       "scholarchain.s3Prefixes.reports" -> "reports/",
@@ -483,6 +486,8 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
       "scholarchain.neptune",
       "scholarchain.vectorIndexes",
       "scholarchain.models",
+      "scholarchain.llm",
+      "scholarchain.embedding",
       "scholarchain.application",
       "scholarchain.entityResolution",
       "scholarchain.bridge",
@@ -686,7 +691,10 @@ class ConfigLoaderSpec extends AnyFunSuite with Matchers:
 
   test("only variables bound in env-overrides.conf, plus SCHOLARCHAIN_ENV, are read") {
     ConfigLoader.boundVariables() shouldBe Right(
-      requiredKeys.map(_._2).toSet ++ Set(
+      requiredKeys.map(_._2).toSet ++ ProviderConfigSpec.providerVariables ++ Set(
+        "EMBEDDING_MODEL_ID",
+        "SYNTHESIS_MODEL_ID",
+        "VERIFICATION_MODEL_ID",
         "SCHOLARCHAIN_CONFIG_SCHEMA_VERSION",
         "SCHOLARCHAIN_APPLICATION_NAME",
         "SCHOLARCHAIN_ENV",

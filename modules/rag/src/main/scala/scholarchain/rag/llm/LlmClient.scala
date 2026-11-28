@@ -3,12 +3,17 @@ package scholarchain.rag.llm
 /** One model call. `system` is a versioned prompt from `prompts/`. `untrustedInput` is data that
   * the model must not obey (a user question, retrieved text); it is always passed as a JSON
   * document, never concatenated into `system`.
+  *
+  * @param outputSchema
+  *   the JSON Schema text the answer must follow; an adapter whose API can constrain generation
+  *   sends it. The caller validates the answer either way.
   */
 final case class LlmRequest(
     promptVersion: String,
     system: String,
     untrustedInput: String,
-    maxOutputTokens: Int
+    maxOutputTokens: Int,
+    outputSchema: Option[String] = None
 )
 
 /** @param modelVersion

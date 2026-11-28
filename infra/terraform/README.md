@@ -17,7 +17,7 @@ infra/terraform/
     backend.tf.example              S3 backend with use_lockfile (not active)
     terraform.tfvars.example        placeholders only, no secrets
   modules/
-    security/       KMS key, Secrets Manager secret NAME (no value)
+    security/       KMS key, Secrets Manager secret NAMES (no values)
     foundation/     alarm SNS topic, AWS Budgets alert
     network/        VPC, 2 AZ, subnets, 1 NAT, S3+DynamoDB gateway endpoints, security groups
     datalake/       raw, curated, graph, rag, artifacts, logs buckets
@@ -58,14 +58,47 @@ roles, and only the Step Functions role policy needs the cluster ARN.
 3. The human reviews the plan, checks the account, Region and cost, and **applies that exact
    plan file by hand** (`terraform -chdir=... apply <plan file>`). No script and no agent
    does this.
-4. Put the API-key digests into the secret named by the output `api_keys_secret_name`
-   (out of band; Terraform never sees a value).
+4. Put the API-key digests into the secret named by the output `api_keys_secret_name`, and
+   each provider API key (a plain string holding only the key) into the secrets named by the
+   output `provider_secret_names` (all out of band; Terraform never sees a value). Do this
+   **before** deploying: the ALB health check is `/readyz`, which fails while the key of a
+   selected provider is missing.
 5. `APPROVED_PLAN_SHA256=<sha256> scripts/deploy.sh --env dev` pushes images tagged by Git
    SHA and rolls the services. Then `scripts/smoke-test.sh --env dev`.
 
 First apply creates ECS services with desired count 0 and no image. Until `deploy.sh` pushes the
 first images the target groups have no healthy targets, so the no-healthy-targets alarm is
 expected to fire once.
+
+## Model providers (Phase 16b)
+
+Bedrock is not authorized for the account; the instructor approved the Anthropic API
+(generation) and Voyage AI `voyage-4-lite` (embeddings). Bedrock stays selectable.
+
+| Topic | Behaviour |
+|---|---|
+| Selection | `llm_provider` and `embedding_provider` are required, with no default. They select the environment variables and the IAM rights. |
+| Secrets | `scholarchain/<env>/anthropic-api-key` and `scholarchain/<env>/voyage-api-key`, encrypted with the environment key. Both always exist; Terraform holds no value. |
+| IAM, query-api | `GetSecretValue` on exactly the secrets of the selected providers. `bedrock:InvokeModel` only for a provider set to `bedrock`. |
+| IAM, embedding-worker | With `voyage`: `GetSecretValue` on the Voyage secret, and key decrypt through Secrets Manager for that secret only. |
+| IAM, graph-evidence-api | No provider secret and no model. |
+| Network | No rule changed. The services security group already allows egress on 443 to `0.0.0.0/0` through the NAT gateway; it is not limited to the provider hosts. |
+| Embedding identity | With `voyage`, `EMBEDDING_MODEL_ID` and `EMBEDDING_MODEL_VERSION` come from the `voyage_*` variables. Index names stay `-v1` (no vector had been written). Changing the model after vectors exist needs new index versions. |
+| Cost | Provider charges are outside AWS Budgets and no code caps them; they are tracked by hand. |
+
+Request fan-out of one query with the defaults: at most 8 Anthropic requests (2 model stages x
+(1 + `llm_max_retries` 1) x (1 + Anthropic `max_retries` 1) x (1 + `max_workflow_retries` 0))
+and 2 Voyage requests (1 + `query_max_retries` 1). A client that resubmits starts a new count.
+`max_workflow_retries = 0` also means a retryable failure of any stage, stores included, is
+returned to the caller instead of re-running the workflow.
+
+Local tools: `IngestMain` (module `rag`; no script here runs it) does not read Secrets Manager.
+It needs both provider variables and their settings, and a live Voyage run needs
+`VOYAGE_API_KEY` in its environment. Never write a key into a file or a logged command. Never
+set the JVM property `jdk.httpclient.HttpClient.log`: it can print key headers.
+
+Rollback: task definition revisions older than this change call Bedrock, and after an apply
+with the external providers the task roles no longer have Bedrock rights.
 
 ## Decisions and trade-offs
 
@@ -74,7 +107,7 @@ expected to fire once.
 | State | Local state in dev | Course environment. No locking, no history: one applier only, state kept out of the repository. `backend.tf.example` shows the S3 backend with `use_lockfile = true` for persistent environments. |
 | Provider pins | Terraform `>= 1.10.0`, aws `= 6.74.0` | 6.74.0 provides `aws_s3vectors_vector_bucket` and `aws_s3vectors_index` (verified by `terraform validate`). |
 | Account | `aws_account_id` variable, provider `allowed_account_ids` | Nothing hardcoded; a wrong account makes the provider refuse. `offline_plan` turns the check off for review plans that can never be applied. |
-| NAT | One NAT gateway | Cost bound. Single point of failure for egress; tasks reach Bedrock, S3 Vectors, SQS, Secrets Manager and ECR through it. S3 and DynamoDB use gateway endpoints. |
+| NAT | One NAT gateway | Cost bound. Single point of failure for egress; tasks reach Anthropic, Voyage AI, Bedrock, S3 Vectors, SQS, Secrets Manager and ECR through it. S3 and DynamoDB use gateway endpoints. |
 | Encryption | One customer-managed KMS key for S3, DynamoDB, SQS, SNS, Neptune, logs, ECR, secret | One key to review. The logs bucket uses SSE-S3 because ALB and S3 log delivery cannot write SSE-KMS objects. The vector bucket uses default SSE-S3 (S3 Vectors key-policy needs not verified). |
 | Buckets | `raw`, `curated`, `graph`, `rag`, `artifacts`, `logs` | The code names four buckets (raw, curated, graph, rag). `reports/` and `neptune-export/` are **prefixes of the rag bucket**, exactly as the services lay them out (`ObjectLayout`). `force_destroy = false` everywhere. |
 | Deletion protection | `protect_stateful` (default `true`, independent of the environment name) | When true: Neptune `deletion_protection=true`, `skip_final_snapshot=false` with a final snapshot identifier; DynamoDB `deletion_protection_enabled=true` on every table; ALB deletion protection. PITR stays on the run-ledger, query-session, evidence-bundle and artifact-registry tables. Cleanup needs a reviewed apply with `protect_stateful=false` first (see Cleanup). |
@@ -105,11 +138,13 @@ expected to fire once.
 6. **Non-filterable keys.** The code (`IndexDefinition.NonFilterableMetadataKeys`) declares six:
    `textS3Uri`, `textHash`, `embeddingModel`, `embeddingModelVersion`, `runId`, `schemaVersion`.
    Terraform creates all six, not only the two named in the work order.
-7. **Embedding shape.** `reference.conf` defaults dimension 1024 and cosine; the Bedrock embedder
-   sends `{inputText, dimensions, normalize}` (Titan Text Embeddings V2). Default model:
-   `amazon.titan-embed-text-v2:0`.
+7. **Embedding shape.** `reference.conf` defaults dimension 1024 and cosine. With
+   `embedding_provider = voyage` the requested output dimension is `vector_dimension`. With
+   `bedrock` the embedder sends `{inputText, dimensions, normalize}` (Titan Text Embeddings V2,
+   default `amazon.titan-embed-text-v2:0`).
 8. **Required values with no code default.** Retrieval limits, context budget, fusion policy
-   version and operations limits (`runtime_settings`), the synthesis and verification model IDs,
+   version and operations limits (`runtime_settings`), the provider selection, the Bedrock synthesis
+   and verification model IDs,
    `SCHOLARCHAIN_SVC_RUN_ID` and `SCHOLARCHAIN_SVC_SNAPSHOT`, and every Hadoop, ER, graph, bridge,
    community and Spark key (`pipeline_environment`) are application decisions. Defaults here are
    assumptions for the owning engineers to confirm.
@@ -145,7 +180,10 @@ variables; confirm before the first apply.
 | KMS, secret, logs, dashboard, DynamoDB on-demand, S3, ECR | small | 10-25 |
 
 With Neptune enabled the baseline is roughly 230 USD per month; without it, roughly 115. The
-default budget alert is 250 USD (`budget_limit_usd`).
+variable default of the budget alert is 250 USD; `terraform.tfvars.example` sets
+`budget_limit_usd = 25`, the project budget, which this baseline exceeds within days if the
+environment stays up. The two provider secrets add about 0.80 USD per month (unverified list
+price).
 
 ## Security scan
 

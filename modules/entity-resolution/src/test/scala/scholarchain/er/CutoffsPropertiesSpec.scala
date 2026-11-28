@@ -45,6 +45,9 @@ class CutoffsPropertiesSpec extends AnyFunSuite with Matchers:
 
   private val env = Map(
     "SCHOLARCHAIN_ENV" -> "er-test",
+    "SCHOLARCHAIN_LLM_PROVIDER" -> "bedrock",
+    "SYNTHESIS_MODEL_ID" -> "test-synthesis-model",
+    "VERIFICATION_MODEL_ID" -> "test-verification-model",
     "SCHOLARCHAIN_ER_POLICY_VERSION" -> "er-v1",
     "SCHOLARCHAIN_ER_ACCEPT_THRESHOLD" -> "0.999",
     "SCHOLARCHAIN_ER_REJECT_THRESHOLD" -> "0.01",

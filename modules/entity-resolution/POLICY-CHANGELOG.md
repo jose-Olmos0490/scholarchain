@@ -74,3 +74,25 @@ KNOWN-LIMITATIONS.md (N5).
 The initial Phase 05 PART A policy. Its run is
 `local-run/er-v1/run_id=9241e65e…`, and the review queue `review-queue-v1.csv` was generated
 from it.
+
+## Phase 16b: Anthropic adjudication adapter (no decision-logic change)
+
+Policy version er-v1, revision er-v1-r2, feature version er-features-v2, thresholds, cutoffs,
+prompt `er-adj-prompt-v1` and response schema `er-adjudication-response-v1` are unchanged.
+
+- Every `ResolveSample` run loads `llm.provider` (`SCHOLARCHAIN_LLM_PROVIDER`).
+- `--adjudicator llm` calls the configured provider. Only `anthropic` is available;
+  `bedrock` is refused as before. The adapter is in this module because it may depend only on
+  `core` (pending human ratification).
+- The cache key holds the configured model ID. Cache entries also keep the answering model and
+  token usage. No live model has been called, so there are no model results.
+- Model output nested deeper than 64 levels is refused before parsing (`TOO_DEEP`, so
+  `LLM_OUTPUT_INVALID`); the same bound applies to provider response and error bodies.
+- The response `model` is recorded only when it is the configured ID, alone or with a
+  `-YYYYMMDD` suffix; otherwise the configured ID is recorded.
+- The module code changed, so decision runs and evaluations get new IDs.
+- Review finding F5: an answer is used and cached only when `stop_reason` is `end_turn`. A
+  truncated (`max_tokens`), otherwise unfinished or unlabelled answer is a transport error: the
+  pair stays UNRESOLVED (`LLM_UNAVAILABLE`), nothing is cached, and a later run asks again. The
+  token usage of such a call is not recorded. The cache format and key are unchanged; no live
+  call had been made, so no existing entry needs removal.

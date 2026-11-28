@@ -8,6 +8,10 @@ locals {
     neptune_export = "neptune-export/"
   }
 
+  # With Voyage the code requires EMBEDDING_MODEL_ID to equal the Voyage model ID, and
+  # both values are recorded as vector provenance: a Bedrock value must never leak through.
+  active_embedding_model_id      = var.embedding_provider == "voyage" ? var.voyage_model_id : var.embedding_model_id
+  active_embedding_model_version = var.embedding_provider == "voyage" ? var.voyage_model_version : var.embedding_model_version
 }
 
 # ---------------------------------------------------------------------------
@@ -138,6 +142,11 @@ module "iam" {
   synthesis_model_id    = var.synthesis_model_id
   verification_model_id = var.verification_model_id
 
+  llm_provider         = var.llm_provider
+  embedding_provider   = var.embedding_provider
+  anthropic_secret_arn = module.security.anthropic_secret_arn
+  voyage_secret_arn    = module.security.voyage_secret_arn
+
   emr_enabled     = var.enable_emr
   emr_cluster_arn = module.emr.cluster_arn
 
@@ -220,7 +229,7 @@ locals {
 
       SCHOLARCHAIN_RETRIEVAL_GRAPH_LIMIT    = tostring(var.runtime_settings.graph_limit)
       SCHOLARCHAIN_RETRIEVAL_MAX_PATH_DEPTH = tostring(var.runtime_settings.max_path_depth)
-      EMBEDDING_MODEL_ID                    = var.embedding_model_id
+      EMBEDDING_MODEL_ID                    = local.active_embedding_model_id
     },
     local.vector_env,
     local.table_env,
@@ -240,32 +249,79 @@ locals {
     SCHOLARCHAIN_SVC_TRUSTED_PROXY_HOPS = "1"
   }
 
+  # Model providers. Secrets are referenced by NAME; the task role reads the value.
+  llm_env = merge(
+    { SCHOLARCHAIN_LLM_PROVIDER = var.llm_provider },
+    {
+      for k, v in {
+        SCHOLARCHAIN_ANTHROPIC_MODEL_ID            = var.anthropic_model_id
+        SCHOLARCHAIN_ANTHROPIC_BASE_URL            = var.anthropic_base_url
+        SCHOLARCHAIN_ANTHROPIC_VERSION             = var.anthropic_api_version
+        SCHOLARCHAIN_ANTHROPIC_CONNECT_TIMEOUT_MS  = tostring(var.anthropic_settings.connect_timeout_ms)
+        SCHOLARCHAIN_ANTHROPIC_REQUEST_TIMEOUT_MS  = tostring(var.anthropic_settings.request_timeout_ms)
+        SCHOLARCHAIN_ANTHROPIC_MAX_RETRIES         = tostring(var.anthropic_settings.max_retries)
+        SCHOLARCHAIN_SVC_ANTHROPIC_KEY_SECRET_NAME = module.security.anthropic_secret_name
+      } : k => v if var.llm_provider == "anthropic"
+    },
+  )
+
+  # The query API and the embedding worker both embed; deadlines differ by use.
+  embedding_use = {
+    "query-api" = {
+      request_timeout_ms = var.voyage_settings.query_request_timeout_ms
+      max_retries        = var.voyage_settings.query_max_retries
+    }
+    "embedding-worker" = {
+      request_timeout_ms = var.voyage_settings.ingest_request_timeout_ms
+      max_retries        = var.voyage_settings.ingest_max_retries
+    }
+  }
+
+  embedding_env = {
+    for service, use in local.embedding_use : service => merge(
+      {
+        SCHOLARCHAIN_EMBEDDING_PROVIDER  = var.embedding_provider
+        EMBEDDING_MODEL_VERSION          = local.active_embedding_model_version
+        SCHOLARCHAIN_EMBEDDING_NORMALIZE = tostring(var.runtime_settings.embedding_normalize)
+      },
+      {
+        for k, v in {
+          SCHOLARCHAIN_VOYAGE_MODEL_ID = var.voyage_model_id
+          SCHOLARCHAIN_VOYAGE_BASE_URL = var.voyage_base_url
+          # One source for the dimension: it must equal every vector index dimension.
+          SCHOLARCHAIN_VOYAGE_OUTPUT_DIMENSION    = tostring(var.vector_dimension)
+          SCHOLARCHAIN_VOYAGE_BATCH_SIZE          = tostring(var.voyage_settings.batch_size)
+          SCHOLARCHAIN_VOYAGE_CONNECT_TIMEOUT_MS  = tostring(var.voyage_settings.connect_timeout_ms)
+          SCHOLARCHAIN_VOYAGE_REQUEST_TIMEOUT_MS  = tostring(use.request_timeout_ms)
+          SCHOLARCHAIN_VOYAGE_MAX_RETRIES         = tostring(use.max_retries)
+          SCHOLARCHAIN_SVC_VOYAGE_KEY_SECRET_NAME = module.security.voyage_secret_name
+        } : k => v if var.embedding_provider == "voyage"
+      },
+    )
+  }
+
   # Values the operator has not set are left out, so the application reports the missing
   # key by name instead of failing on an empty string. Built from variables only, so the
   # key set is known at plan time.
   optional_query_env = {
     for k, v in {
-      SYNTHESIS_MODEL_ID        = var.synthesis_model_id
-      VERIFICATION_MODEL_ID     = var.verification_model_id
+      SYNTHESIS_MODEL_ID        = var.llm_provider == "bedrock" ? var.synthesis_model_id : ""
+      VERIFICATION_MODEL_ID     = var.llm_provider == "bedrock" ? var.verification_model_id : ""
       SCHOLARCHAIN_SVC_RUN_ID   = var.serving_run_id
       SCHOLARCHAIN_SVC_SNAPSHOT = var.serving_snapshot
     } : k => v if v != ""
   }
 
   service_environment_raw = {
-    "query-api" = merge(local.common_env, local.api_env, local.optional_query_env, {
-      EMBEDDING_MODEL_VERSION          = var.embedding_model_version
-      SCHOLARCHAIN_EMBEDDING_NORMALIZE = tostring(var.runtime_settings.embedding_normalize)
+    "query-api" = merge(local.common_env, local.api_env, local.optional_query_env, local.llm_env, local.embedding_env["query-api"], {
+      SCHOLARCHAIN_RAG_LLM_MAX_RETRIES = tostring(var.runtime_settings.llm_max_retries)
       # dockerStageContexts copies prompts/ to the image payload (payload/ -> /app/).
       SCHOLARCHAIN_SVC_PROMPTS_DIR = "/app/prompts"
     })
 
     "graph-evidence-api" = merge(local.common_env, local.api_env)
 
-    "embedding-worker" = merge(local.common_env, {
-      EMBEDDING_MODEL_VERSION          = var.embedding_model_version
-      SCHOLARCHAIN_EMBEDDING_NORMALIZE = tostring(var.runtime_settings.embedding_normalize)
-
+    "embedding-worker" = merge(local.common_env, local.embedding_env["embedding-worker"], {
       SCHOLARCHAIN_SVC_EMBEDDING_QUEUE_URL = module.messaging.embedding_queue_url
       SCHOLARCHAIN_SVC_EMBEDDING_DLQ_URL   = module.messaging.embedding_dlq_url
 

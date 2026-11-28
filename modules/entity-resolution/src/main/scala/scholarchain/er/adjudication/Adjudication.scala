@@ -87,7 +87,8 @@ object Canonical:
   * resource [[SchemaResource]].
   *
   * Rules: the whole output must be one JSON object (surrounding whitespace allowed, nothing
-  * else); no object anywhere in the output may repeat a key, even with different escaping
+  * else), nested at most [[BoundedJson.MaxDepth]] levels (`TOO_DEEP`, checked before parsing);
+  * no object anywhere in the output may repeat a key, even with different escaping
   * (`{"outcome":"REJECT",...,"outcome":"ACCEPT"}` is rejected with `DUPLICATE_KEY`: a JSON
   * reader keeps only one of the values, so such an output has no single meaning; finding F1);
   * exactly the keys `outcome`, `candidateIds`, `citedFields`, `confidence`,
@@ -151,9 +152,12 @@ object AdjudicationSchema:
       raw: String,
       request: AdjudicationRequest
   ): Either[Vector[String], AdjudicationResponse] =
+    val text = if raw == null then "" else raw.trim
     val json =
-      try Right(ujson.read(if raw == null then "" else raw.trim))
-      catch case NonFatal(e) => Left(Vector(s"NOT_JSON: ${e.getClass.getSimpleName}"))
+      if BoundedJson.tooDeep(text) then Left(Vector("TOO_DEEP"))
+      else
+        try Right(ujson.read(text))
+        catch case NonFatal(e) => Left(Vector(s"NOT_JSON: ${e.getClass.getSimpleName}"))
     json.flatMap {
       case o: ujson.Obj =>
         val dups = duplicateKeys(raw.trim)
@@ -251,14 +255,37 @@ object Prompt:
       else Left(s"prompt version ${p.version} != $AdjudicationVersion")
     )
 
+/** Tokens one model call consumed. */
+final case class TokenUsage(inputTokens: Long, outputTokens: Long)
+
+/** A model's raw text and, when the transport reports them, the model that answered and the
+  * token usage.
+  */
+final case class AdjudicatorReply(
+    text: String,
+    modelVersion: Option[String] = None,
+    usage: Option[TokenUsage] = None
+)
+
 /** Port to an LLM. Implementations receive the prompt and the request JSON only; they return
   * the model's raw text or a transport error. The output is validated by
   * [[AdjudicationSchema.parse]] before any use.
   */
 trait Adjudicator:
-  /** Model ID and version, recorded on every decision this adjudicator contributes to. */
+  /** Model ID and version in effect: part of the cache key, and recorded on every decision this
+    * adjudicator contributes to unless a reply names the model that answered.
+    */
   def modelVersion: String
   def adjudicate(prompt: Prompt, request: AdjudicationRequest): Either[String, String]
+
+  /** [[adjudicate]] with what the transport reports about the call; adapters that know it
+    * override this.
+    */
+  def adjudicateWithUsage(
+      prompt: Prompt,
+      request: AdjudicationRequest
+  ): Either[String, AdjudicatorReply] =
+    adjudicate(prompt, request).map(AdjudicatorReply(_))
 
 /** Cache key components: `hash(inputHash, promptVersion, promptSha256, modelVersion,
   * policyVersion)`. The prompt text hash is part of the key (finding F13): editing the prompt
@@ -283,7 +310,12 @@ final case class AdjudicationKey(
       policyVersion
     )
 
-/** One cached raw model output with its key components. */
+/** One cached raw model output with its key components.
+  *
+  * `modelVersion` is the model in effect (part of the key). `answeredModelVersion` is the model
+  * the provider named in its answer, empty when it named none; the token counts are those of the
+  * call that produced the output, 0 when unknown.
+  */
 final case class CachedAdjudication(
     cacheKey: String,
     inputHash: String,
@@ -292,7 +324,10 @@ final case class CachedAdjudication(
     policyVersion: String,
     candidateId: String,
     rawOutput: String,
-    promptSha256: String = ""
+    promptSha256: String = "",
+    answeredModelVersion: String = "",
+    inputTokens: Long = 0L,
+    outputTokens: Long = 0L
 ) derives upickle.default.ReadWriter
 
 trait AdjudicationCache:
@@ -306,18 +341,28 @@ final class InMemoryAdjudicationCache extends AdjudicationCache:
   def put(entry: CachedAdjudication): Unit = entries.getOrElseUpdate(entry.cacheKey, entry)
   def all: Vector[CachedAdjudication] = entries.values.toVector
 
-/** Result of one adjudication attempt through [[AdjudicationService]]. */
+/** Result of one adjudication attempt through [[AdjudicationService]].
+  *
+  * @param modelVersion
+  *   the model that answered (for a cache hit, the one that gave the cached answer), or the model
+  *   in effect when none was named
+  * @param usage
+  *   tokens of the call that produced the answer, also when it is replayed from the cache
+  */
 final case class AdjudicationResult(
     key: AdjudicationKey,
     modelVersion: String,
     promptVersion: String,
     cacheHit: Boolean,
     rawOutput: Option[String],
-    parsed: Either[Vector[String], AdjudicationResponse]
+    parsed: Either[Vector[String], AdjudicationResponse],
+    usage: Option[TokenUsage] = None
 )
 
 /** Cache-first adjudication. A transport error is not cached (a later run may retry); every
-  * model output, valid or not, is cached so a re-run never re-asks the same question.
+  * model output, valid or not, is cached so a re-run never re-asks the same question. An
+  * adapter returns an unfinished (for example truncated) answer as a transport error, not as a
+  * model output: the cache key holds no token limit.
   */
 final class AdjudicationService(
     adjudicator: Adjudicator,
@@ -332,18 +377,21 @@ final class AdjudicationService(
   def adjudicate(request: AdjudicationRequest): AdjudicationResult =
     val key =
       AdjudicationKey(request.inputHash, prompt.version, prompt.sha256, modelVersion, policyVersion)
+    def answered(entry: CachedAdjudication, cacheHit: Boolean): AdjudicationResult =
+      AdjudicationResult(
+        key,
+        Some(entry.answeredModelVersion).filter(_.nonEmpty).getOrElse(modelVersion),
+        prompt.version,
+        cacheHit,
+        Some(entry.rawOutput),
+        AdjudicationSchema.parse(entry.rawOutput, request),
+        Some(TokenUsage(entry.inputTokens, entry.outputTokens))
+          .filter(u => u.inputTokens > 0 || u.outputTokens > 0)
+      )
     cache.get(key.cacheKey) match
-      case Some(hit) =>
-        AdjudicationResult(
-          key,
-          modelVersion,
-          prompt.version,
-          cacheHit = true,
-          Some(hit.rawOutput),
-          AdjudicationSchema.parse(hit.rawOutput, request)
-        )
+      case Some(hit) => answered(hit, cacheHit = true)
       case None =>
-        adjudicator.adjudicate(prompt, request) match
+        adjudicator.adjudicateWithUsage(prompt, request) match
           case Left(err) =>
             AdjudicationResult(
               key,
@@ -353,27 +401,22 @@ final class AdjudicationService(
               None,
               Left(Vector(s"TRANSPORT_ERROR: $err"))
             )
-          case Right(raw) =>
-            cache.put(
-              CachedAdjudication(
-                key.cacheKey,
-                key.inputHash,
-                key.promptVersion,
-                key.modelVersion,
-                key.policyVersion,
-                request.candidateId,
-                raw,
-                key.promptSha256
-              )
+          case Right(reply) =>
+            val entry = CachedAdjudication(
+              key.cacheKey,
+              key.inputHash,
+              key.promptVersion,
+              key.modelVersion,
+              key.policyVersion,
+              request.candidateId,
+              reply.text,
+              key.promptSha256,
+              reply.modelVersion.getOrElse(""),
+              reply.usage.fold(0L)(_.inputTokens),
+              reply.usage.fold(0L)(_.outputTokens)
             )
-            AdjudicationResult(
-              key,
-              modelVersion,
-              prompt.version,
-              cacheHit = false,
-              Some(raw),
-              AdjudicationSchema.parse(raw, request)
-            )
+            cache.put(entry)
+            answered(entry, cacheHit = false)
 
 /** Deterministic stand-in for the LLM, for tests and local runs. It is NOT a model: decisions
   * it contributes to are labelled with [[FakeAdjudicator.ModelVersion]] and must never be

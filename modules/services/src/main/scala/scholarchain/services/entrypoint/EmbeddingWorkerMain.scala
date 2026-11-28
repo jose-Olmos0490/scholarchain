@@ -11,8 +11,15 @@ import java.util.concurrent.{
 }
 import org.slf4j.LoggerFactory
 import scala.util.control.NonFatal
-import scholarchain.rag.embed.{BedrockEmbedder, Embedder, EmbeddingModelSpec}
-import scholarchain.services.config.{EntrypointSettings, ServiceSettings, WorkerSettings}
+import scholarchain.core.config.EmbeddingProviderConfig
+import scholarchain.rag.embed.Embedder
+import scholarchain.rag.provider.{EmbeddingPurpose, RetryDelays}
+import scholarchain.services.config.{
+  EntrypointSettings,
+  ProviderKeySettings,
+  ServiceSettings,
+  WorkerSettings
+}
 import scholarchain.services.http.{ServiceClock, SystemServiceClock}
 import scholarchain.services.ops.ReadinessProbe
 import scholarchain.services.runtime.{RuntimeEnvironment, ServiceRuntime}
@@ -230,10 +237,12 @@ object EmbeddingWorkerMain:
     for
       svc <- ServiceSettings.load(requireServing = false)
       entry <- EntrypointSettings.embeddingWorker()
+      keys <- EntrypointSettings.providerKeys()
       storage <- StorageSettings.load(env).left.map(e => Vector(e.message))
+      embedding <- CoreConfigs.embedding(env).left.map(e => Vector(e.message))
       ingestion <- IngestionSettings.load(storage, env).left.map(e => Vector(e.message))
       stores <- LiveStores.open(storage).left.map(Vector(_))
-      built <- wire(env, svc, entry, storage, ingestion, stores) match
+      built <- wire(env, svc, entry, keys, storage, embedding, ingestion, stores) match
         case l @ Left(_) =>
           stores.close()
           l
@@ -244,7 +253,9 @@ object EmbeddingWorkerMain:
       env: Map[String, String],
       svc: ServiceSettings,
       entry: WorkerSettings,
+      keys: ProviderKeySettings,
       storage: StorageSettings,
+      embedding: EmbeddingProviderConfig,
       ingestion: IngestionSettings,
       stores: LiveStores
   ): Either[Vector[String], (EmbeddingWorkerInputs, Resources)] =
@@ -255,13 +266,24 @@ object EmbeddingWorkerMain:
         (),
         Vector("all vector indexes must share one dimension: one embedder serves them")
       )
-      spec <- EmbeddingModelSpec.load(env, defs.head.dimension).left.map(p => Vector(p.message))
-      embed <- Embedder
-        .forIndex(
-          BedrockEmbedder.live(storage.awsRegion, None, spec),
-          defs.head.name,
-          defs.head.dimension
+      model <- ProviderWiring
+        .embedder(
+          embedding,
+          env,
+          EmbeddingPurpose.Ingest,
+          keys,
+          () => ProviderWiring.secretsManager(storage.awsRegion, keys),
+          SystemServiceClock,
+          RetryDelays(
+            storage.runtime.retry.baseDelayMs.toLong,
+            storage.runtime.retry.maxDelayMs.toLong
+          ),
+          storage.awsRegion
         )
+        .left
+        .map(Vector(_))
+      embed <- Embedder
+        .forIndex(model.adapter, defs.head.name, defs.head.dimension)
         .left
         .map(p => Vector(p.message))
     yield
@@ -301,8 +323,8 @@ object EmbeddingWorkerMain:
         EmbeddingWorkerInputs(
           svc,
           entry,
-          () => consumer.runOnce(),
-          Vector(stores.vectorProbe),
+          ProviderWiring.gated(() => consumer.runOnce(), model.key),
+          stores.vectorProbe +: model.probes,
           RuntimeEnvironment(clock = SystemServiceClock)
         ),
         new Resources(stores, Seq(sqs))

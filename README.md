@@ -166,7 +166,12 @@ SCHOLARCHAIN_HADOOP_DBLP_DTD_PATH=datasets/samples/dblp/dblp-2023-06-28.dtd \
 sbt "hadoop/runMain scholarchain.hadoop.driver.PipelineDriver --input-root datasets/samples --output-root target/phase04/run-b4"
 
 # 2. Entity resolution (fake adjudicator, not a model)
+# The tool requires a complete LLM provider setting in every adjudicator mode.
+# The model IDs are placeholders: fake mode calls no model and needs no API key.
 env $(grep -v '^#' modules/entity-resolution/config/er-v1-thresholds.properties | xargs) SCHOLARCHAIN_ENV=dev \
+SCHOLARCHAIN_LLM_PROVIDER=bedrock \
+SYNTHESIS_MODEL_ID=unused-by-fake-adjudicator \
+VERIFICATION_MODEL_ID=unused-by-fake-adjudicator \
 sbt "entityResolution/runMain scholarchain.er.run.ResolveSample --hadoop-root target/phase04/run-b4 --output-root target/er-replay --adjudicator fake --decided-at 2026-11-20T21:40:18Z --er-policy-properties modules/entity-resolution/config/er-v1-thresholds.properties"
 
 # 3. Spark graph and analytics

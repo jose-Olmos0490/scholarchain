@@ -13,3 +13,19 @@ output "api_keys_secret_arn" {
 output "api_keys_secret_name" {
   value = aws_secretsmanager_secret.api_keys.name
 }
+
+output "anthropic_secret_arn" {
+  value = aws_secretsmanager_secret.anthropic_api_key.arn
+}
+
+output "anthropic_secret_name" {
+  value = aws_secretsmanager_secret.anthropic_api_key.name
+}
+
+output "voyage_secret_arn" {
+  value = aws_secretsmanager_secret.voyage_api_key.arn
+}
+
+output "voyage_secret_name" {
+  value = aws_secretsmanager_secret.voyage_api_key.name
+}

@@ -98,6 +98,8 @@ class LoggingCanarySpec extends AnyFunSuite with Matchers:
     SessionToken,
     AccessKey,
     SecretKey,
+    AnthropicKey,
+    VoyageKey,
     "Authorization",
     "AWS4-HMAC-SHA256",
     "X-Amz-Security-Token"
@@ -113,6 +115,17 @@ class LoggingCanarySpec extends AnyFunSuite with Matchers:
       .filter(l => l.contains(" DEBUG ") || l.contains(" TRACE "))
       .toVector shouldBe
       empty
+  }
+
+  test("provider failures are logged without the key a provider echoed or a secret held") {
+    val output = runUnder(production)
+    // the lines the canary is looking in were really written
+    output should include("model call failed")
+    output should include("embedding call failed")
+    output should include("provider key not loaded check=anthropicApiKey")
+    output should include("HTTP 401 (authentication_error)")
+    output should not include AnthropicKey
+    output should not include VoyageKey
   }
 
   test("under the production configuration the application lines keep their shape and trace ID") {
@@ -135,6 +148,8 @@ class LoggingCanarySpec extends AnyFunSuite with Matchers:
       SecretValue,
       SessionToken,
       AccessKey,
+      AnthropicKey,
+      VoyageKey,
       "Authorization",
       "AWS4-HMAC-SHA256",
       "X-Amz-Security-Token"

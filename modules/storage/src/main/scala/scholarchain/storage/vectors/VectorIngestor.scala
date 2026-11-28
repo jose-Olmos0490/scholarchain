@@ -72,7 +72,8 @@ final case class StagedIngestion(
   * and listed in an immutable per-run manifest.
   * Stage 2, [[ingest]]: driven only by the manifest, per index: derive the key
   * ([[VectorKeys]]), refuse same-key/different-text within the run, compare with what the index
-  * holds (GetVectors), then read the text from S3, embed, validate and PutVectors in batches.
+  * holds (GetVectors), then read the text from S3, check the metadata, embed, validate and
+  * PutVectors in batches.
   *
   * Residual race: PutVectors is an unconditional upsert, so a second writer on the same index
   * between the lookup and the put is not detected. Run one ingestor per index.
@@ -464,41 +465,9 @@ final class VectorIngestor(
           None
         case Right((r, d)) => Some((p, r, d))
     }
-    if loaded.isEmpty then return (0, 0, 0L)
-
-    // b. embed (the injected function; its failures are rejects, not crashes)
-    val embedded: Option[Vector[Vector[Float]]] =
-      try
-        val out = embed(loaded.map(_._3.text)).toVector
-        if out.size == loaded.size then Some(out.map(_.toVector))
-        else
-          loaded.foreach((p, _, _) =>
-            reject(
-              st,
-              p.item,
-              Some(p.key),
-              "EMBEDDING_FAILED",
-              s"embedder returned ${out.size} vectors for ${loaded.size} texts"
-            )
-          )
-          None
-      catch
-        case NonFatal(e) =>
-          loaded.foreach((p, _, _) =>
-            reject(
-              st,
-              p.item,
-              Some(p.key),
-              "EMBEDDING_FAILED",
-              s"${e.getClass.getSimpleName}: ${Option(e.getMessage).getOrElse("")}"
-            )
-          )
-          None
-    if embedded.isEmpty then return (0, 0, 0L)
-
-    // c. validate every record; nothing is truncated
+    // b. metadata checks come before the embed call, so a record refused for it is never paid for
     val policy = settings.metadataPolicy
-    val ready = loaded.zip(embedded.get).flatMap { case ((p, r, d), emb) =>
+    val checked = loaded.flatMap { (p, r, d) =>
       val meta = VectorMetadata(
         entityId = d.entityId,
         documentType = d.documentType,
@@ -515,6 +484,28 @@ final class VectorIngestor(
         runId = st.run.runId,
         schemaVersion = MetadataSchema.Version
       )
+      val problems = VectorGuards.metadataProblems(defn, meta, policy)
+      problems.foreach(pr => reject(st, p.item, Some(p.key), pr.code, pr.detail))
+      Option.when(problems.isEmpty)((p, d.text, meta))
+    }
+    if checked.isEmpty then return (0, 0, 0L)
+
+    // c. embed (the injected function; its failures are rejects, not crashes)
+    def embeddingFailed(detail: String): Option[Vector[Vector[Float]]] =
+      checked.foreach((p, _, _) => reject(st, p.item, Some(p.key), "EMBEDDING_FAILED", detail))
+      None
+    val embedded: Option[Vector[Vector[Float]]] =
+      try
+        val out = embed(checked.map(_._2)).toVector
+        if out.size == checked.size then Some(out.map(_.toVector))
+        else embeddingFailed(s"embedder returned ${out.size} vectors for ${checked.size} texts")
+      catch
+        case NonFatal(e) =>
+          embeddingFailed(s"${e.getClass.getSimpleName}: ${Option(e.getMessage).getOrElse("")}")
+    if embedded.isEmpty then return (0, 0, 0L)
+
+    // d. validate every record; nothing is truncated
+    val ready = checked.zip(embedded.get).flatMap { case ((p, _, meta), emb) =>
       val rec = VectorRecord(p.key, emb, meta)
       val problems = VectorGuards.recordProblems(defn, rec, policy)
       if problems.nonEmpty then
@@ -524,7 +515,7 @@ final class VectorIngestor(
     }
     if ready.isEmpty then return (0, 0, 0L)
 
-    // d. rate-limited put with bounded retries
+    // e. rate-limited put with bounded retries
     var waited = 0L
     val (res, attempts) = Backoff.run(settings.retry, sleeper, jitter) {
       waited += limiter.acquire(defn.name)

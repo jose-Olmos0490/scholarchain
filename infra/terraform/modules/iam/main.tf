@@ -17,7 +17,10 @@ locals {
   # (account-scoped ARN) that routes to the underlying foundation model in several Regions.
   profile_pattern = "^(us|eu|apac|jp|au|ca|global|us-gov)\\."
 
-  all_model_ids = distinct(compact([var.embedding_model_id, var.synthesis_model_id, var.verification_model_id]))
+  # Bedrock rights exist only for the provider that is selected.
+  bedrock_embedding_ids = var.embedding_provider == "bedrock" ? compact([var.embedding_model_id]) : []
+  bedrock_llm_ids       = var.llm_provider == "bedrock" ? compact([var.synthesis_model_id, var.verification_model_id]) : []
+  all_model_ids         = distinct(concat(local.bedrock_embedding_ids, local.bedrock_llm_ids))
 
   model_arns = {
     for id in local.all_model_ids : id => can(regex(local.profile_pattern, id)) ? [
@@ -27,7 +30,15 @@ locals {
   }
 
   query_bedrock_arns  = flatten([for id in local.all_model_ids : local.model_arns[id]])
-  worker_bedrock_arns = flatten([for id in compact([var.embedding_model_id]) : local.model_arns[id]])
+  worker_bedrock_arns = flatten([for id in local.bedrock_embedding_ids : local.model_arns[id]])
+
+  # Provider API keys: exactly the secrets of the selected external providers.
+  # The lists are chosen from variables only, so their length is known at plan time.
+  query_provider_secret_arns = concat(
+    var.llm_provider == "anthropic" ? [var.anthropic_secret_arn] : [],
+    var.embedding_provider == "voyage" ? [var.voyage_secret_arn] : [],
+  )
+  worker_provider_secret_arns = var.embedding_provider == "voyage" ? [var.voyage_secret_arn] : []
 
   kms_via_query  = ["dynamodb.${var.region}.amazonaws.com", "s3.${var.region}.amazonaws.com", "secretsmanager.${var.region}.amazonaws.com"]
   kms_via_graph  = ["dynamodb.${var.region}.amazonaws.com", "secretsmanager.${var.region}.amazonaws.com"]
@@ -154,6 +165,18 @@ data "aws_iam_policy_document" "query_api" {
     resources = [var.api_keys_secret_arn]
   }
 
+  # Key use for reading these secrets is covered by UseEnvironmentKeyThroughServices
+  # below, whose kms:ViaService list includes Secrets Manager.
+  dynamic "statement" {
+    for_each = length(local.query_provider_secret_arns) > 0 ? [1] : []
+
+    content {
+      sid       = "ReadSelectedProviderApiKeys"
+      actions   = ["secretsmanager:GetSecretValue"]
+      resources = local.query_provider_secret_arns
+    }
+  }
+
   statement {
     sid       = "UseEnvironmentKeyThroughServices"
     actions   = ["kms:Decrypt", "kms:GenerateDataKey", "kms:DescribeKey"]
@@ -255,6 +278,40 @@ data "aws_iam_policy_document" "embedding_worker" {
       sid       = "InvokeEmbeddingModelOnly"
       actions   = ["bedrock:InvokeModel"]
       resources = local.worker_bedrock_arns
+    }
+  }
+
+  dynamic "statement" {
+    for_each = length(local.worker_provider_secret_arns) > 0 ? [1] : []
+
+    content {
+      sid       = "ReadVoyageApiKeyOnly"
+      actions   = ["secretsmanager:GetSecretValue"]
+      resources = local.worker_provider_secret_arns
+    }
+  }
+
+  # Decrypt only, only through Secrets Manager and only for that one secret: the
+  # worker's general key statement below does not include Secrets Manager.
+  dynamic "statement" {
+    for_each = length(local.worker_provider_secret_arns) > 0 ? [1] : []
+
+    content {
+      sid       = "DecryptVoyageSecretOnly"
+      actions   = ["kms:Decrypt"]
+      resources = [var.kms_key_arn]
+
+      condition {
+        test     = "StringEquals"
+        variable = "kms:ViaService"
+        values   = ["secretsmanager.${var.region}.amazonaws.com"]
+      }
+
+      condition {
+        test     = "StringEquals"
+        variable = "kms:EncryptionContext:SecretARN"
+        values   = local.worker_provider_secret_arns
+      }
     }
   }
 

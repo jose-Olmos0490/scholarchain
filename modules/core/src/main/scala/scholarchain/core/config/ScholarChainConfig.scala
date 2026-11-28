@@ -774,6 +774,10 @@ object RagConfig extends ConfigSection[RagConfig]:
   def read(c: ConfigCursor): RagConfig =
     RagConfig(ResolverConfig.read(c), RagLlmConfig.read(c), PlannerConfig.read(c))
 
+/** Model IDs. Loaded as a section, it reads the three `models.*` keys (the Bedrock IDs). In
+  * [[ScholarChainConfig]] it holds the IDs in effect for the selected providers
+  * ([[ModelConfig.active]]).
+  */
 final case class ModelConfig(
     embeddingModelId: String,
     synthesisModelId: String,
@@ -781,6 +785,13 @@ final case class ModelConfig(
 )
 
 object ModelConfig extends ConfigSection[ModelConfig]:
+  /** The model IDs in effect for the selected providers. */
+  def active(llm: LlmProviderConfig, embedding: EmbeddingProviderConfig): ModelConfig = ModelConfig(
+    embeddingModelId = embedding.activeModelId,
+    synthesisModelId = llm.activeSynthesisModelId,
+    verificationModelId = llm.activeVerificationModelId
+  )
+
   def read(c: ConfigCursor): ModelConfig = ModelConfig(
     embeddingModelId = c.string("models.embeddingModelId", "EMBEDDING_MODEL_ID"),
     synthesisModelId = c.string("models.synthesisModelId", "SYNTHESIS_MODEL_ID"),
@@ -824,6 +835,8 @@ final case class ScholarChainConfig(
     community: CommunityConfig,
     retrieval: RetrievalConfig,
     rag: RagConfig,
+    llm: LlmProviderConfig,
+    embedding: EmbeddingProviderConfig,
     models: ModelConfig,
     operations: OperationsConfig,
     spark: SparkJobConfig,
@@ -834,7 +847,17 @@ final case class ScholarChainConfig(
 object ScholarChainConfig:
   def section(environment: String): ConfigSection[ScholarChainConfig] =
     new ConfigSection[ScholarChainConfig]:
-      def read(c: ConfigCursor): ScholarChainConfig = ScholarChainConfig(
+      def read(c: ConfigCursor): ScholarChainConfig = build(
+        c,
+        llm = LlmProviderConfig.read(c),
+        embedding = EmbeddingProviderConfig.read(c)
+      )
+
+      private def build(
+          c: ConfigCursor,
+          llm: LlmProviderConfig,
+          embedding: EmbeddingProviderConfig
+      ): ScholarChainConfig = ScholarChainConfig(
         environment = environment,
         application = ApplicationConfig.read(c),
         storage = StorageConfig.read(c),
@@ -848,7 +871,9 @@ object ScholarChainConfig:
         community = CommunityConfig.read(c),
         retrieval = RetrievalConfig.read(c),
         rag = RagConfig.read(c),
-        models = ModelConfig.read(c),
+        llm = llm,
+        embedding = embedding,
+        models = ModelConfig.active(llm, embedding),
         operations = OperationsConfig.read(c),
         spark = SparkJobConfig.read(c),
         analytics = GraphAnalyticsConfig.read(c),

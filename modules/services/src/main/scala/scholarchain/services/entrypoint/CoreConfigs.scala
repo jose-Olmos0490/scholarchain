@@ -13,8 +13,11 @@ final case class QueryCoreConfig(
     retrieval: RetrievalConfig,
     operations: OperationsConfig,
     rag: RagConfig,
-    models: ModelConfig
+    llm: LlmProviderConfig,
+    embedding: EmbeddingProviderConfig
 ):
+  /** The model IDs in effect for the selected providers. */
+  def models: ModelConfig = ModelConfig.active(llm, embedding)
   def limits: RuntimeLimits = RuntimeLimits.from(operations, retrieval)
 
 final case class ResourceCoreConfig(
@@ -37,11 +40,16 @@ object CoreConfigs:
           RetrievalConfig.read(c),
           OperationsConfig.read(c),
           RagConfig.read(c),
-          ModelConfig.read(c)
+          LlmProviderConfig.read(c),
+          EmbeddingProviderConfig.read(c)
         )
       ,
       env
     )
+
+  /** The embedding worker's model section: it needs no LLM provider. */
+  def embedding(env: Map[String, String]): Either[ConfigError, EmbeddingProviderConfig] =
+    ConfigLoader.loadSection(EmbeddingProviderConfig, env)
 
   def resource(env: Map[String, String]): Either[ConfigError, ResourceCoreConfig] =
     val name = environment(env)

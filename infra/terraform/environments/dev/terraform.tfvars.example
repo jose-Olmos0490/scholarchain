@@ -4,16 +4,16 @@
 # aws_account_id and git_sha are normally passed by scripts/plan.sh
 # (TF_VAR_aws_account_id from the read-only profile, git_sha from `git rev-parse`).
 
-aws_region     = "us-east-1"
+aws_region     = "us-east-2"
 aws_account_id = "CHANGE_ME_12_DIGITS"
 aws_profile    = "CHANGE_ME_PROFILE"
 
 environment = "dev"
-owner       = "CHANGE_ME"   # your name or team; plan.sh refuses CHANGE_ME
-expiration  = "2027-01-31"  # tear the environment down after this date
+owner       = "CHANGE_ME"  # your name or team; plan.sh refuses CHANGE_ME
+expiration  = "2027-01-31" # tear the environment down after this date
 
 # Cost guards
-budget_limit_usd    = 250
+budget_limit_usd    = 25 # project budget; model-API charges count toward it but AWS Budgets cannot see them
 budget_alert_emails = ["CHANGE_ME@example.org"]
 
 # Expensive toggles. Both are off unless you need them.
@@ -24,7 +24,7 @@ enable_neptune = true
 #   allow_plaintext_http = true   (bearer tokens cross the internet unencrypted)
 # Required, no default; 0.0.0.0/0 and ::/0 are rejected.
 alb_ingress_cidrs    = ["203.0.113.10/32"] # set to your own public IP /32
-certificate_arn      = null          # arn:aws:acm:...:certificate/... when you have one
+certificate_arn      = null                # arn:aws:acm:...:certificate/... when you have one
 allow_plaintext_http = false
 
 # Stateful protection (default true, independent of the environment name). Teardown needs a
@@ -35,10 +35,44 @@ protect_stateful = true
 neptune_min_ncu = 1
 neptune_max_ncu = 4
 
-# Models. The synthesis and verification models must be enabled for the account in Bedrock.
-embedding_model_id    = "amazon.titan-embed-text-v2:0"
-synthesis_model_id    = "CHANGE_ME"
-verification_model_id = "CHANGE_ME"
+# Model providers (both required, no default): llm_provider "anthropic" or "bedrock",
+# embedding_provider "voyage" or "bedrock". No API key belongs in this file. After apply,
+# write each key (a plain string holding only the key) into its secret by hand:
+#   scholarchain/<environment>/anthropic-api-key
+#   scholarchain/<environment>/voyage-api-key
+llm_provider       = "anthropic"
+embedding_provider = "voyage"
+
+# Anthropic (llm_provider = "anthropic").
+anthropic_model_id    = "claude-haiku-5-5"
+anthropic_base_url    = "https://api.anthropic.com" # verify against the provider documentation
+anthropic_api_version = "2023-06-01"                # verify against the provider documentation
+anthropic_settings = {
+  connect_timeout_ms = 3000
+  request_timeout_ms = 7000 # below the 8000 ms stage timeout
+  max_retries        = 1
+}
+
+# Voyage AI (embedding_provider = "voyage"). The output dimension is vector_dimension (1024).
+voyage_model_id      = "voyage-4-lite"
+voyage_model_version = "voyage-4-lite"
+voyage_base_url      = "https://api.voyageai.com" # verify against the provider documentation
+voyage_settings = {
+  connect_timeout_ms        = 3000
+  query_request_timeout_ms  = 5000
+  query_max_retries         = 1
+  ingest_request_timeout_ms = 30000
+  ingest_max_retries        = 2
+  batch_size                = 128
+}
+
+# Bedrock, read only for a provider set to "bedrock" (models enabled for the account):
+# embedding_model_id    = "amazon.titan-embed-text-v2:0"
+# synthesis_model_id    = "CHANGE_ME"
+# verification_model_id = "CHANGE_ME"
+
+# Retry bounds: runtime_settings (variables.tf) defaults to max_workflow_retries = 0 and
+# llm_max_retries = 1. If you override runtime_settings here, keep both low.
 
 # Set after the first pipeline run exists:
 serving_run_id   = ""

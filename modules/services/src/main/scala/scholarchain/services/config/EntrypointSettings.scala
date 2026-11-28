@@ -6,8 +6,8 @@ import scholarchain.storage.queue.ConsumerSettings
 /** Where an entrypoint listens. */
 final case class BindSettings(host: String, port: Int)
 
-/** Model-call retry bounds of the live Bedrock client. They are the services' own configuration:
-  * the shared core configuration defines none.
+/** Model-call retry bounds of the services. Bedrock uses all four. Anthropic uses only the two
+  * delays: its attempts and per-attempt deadline are the core `llm.anthropic.*` keys.
   */
 final case class LlmSettings(
     maxAttempts: Int,
@@ -41,6 +41,24 @@ final case class QueryApiSettings(
 )
 
 final case class GraphEvidenceApiSettings(bind: BindSettings)
+
+/** Where the model-provider API keys are. The names have no default; which one is required
+  * depends on the selected provider.
+  *
+  * @param refreshSeconds
+  *   how long a key that was read is reused (a rotation takes effect within this time)
+  * @param retrySeconds
+  *   how soon a failed read is tried again
+  * @param readTimeoutMillis
+  *   the longest one Secrets Manager call may take
+  */
+final case class ProviderKeySettings(
+    anthropicSecretName: Option[String],
+    voyageSecretName: Option[String],
+    refreshSeconds: Int,
+    retrySeconds: Int,
+    readTimeoutMillis: Long
+)
 
 /** The embedding worker.
   *
@@ -105,6 +123,8 @@ final private class ConfReader(cfg: Config, root: String):
       case _: ConfigException =>
         problems += s"${at(path)} is required"
         ""
+  def optStr(path: String): Option[String] =
+    if cfg.hasPath(at(path)) then Some(cfg.getString(at(path)).trim).filter(_.nonEmpty) else None
   def optInt(path: String): Option[Int] =
     if cfg.hasPath(at(path)) then Some(int(path, Int.MinValue)) else None
   def bind(path: String): BindSettings =
@@ -158,6 +178,20 @@ object EntrypointSettings:
         )
       )
     }
+
+  def providerKeys(
+      extra: Config = ConfigFactory.empty()
+  ): Either[Vector[String], ProviderKeySettings] =
+    val r = new ConfReader(resolved(extra), Root)
+    r.result(
+      ProviderKeySettings(
+        r.optStr("providerKeys.anthropicSecretName"),
+        r.optStr("providerKeys.voyageSecretName"),
+        r.int("providerKeys.refreshSeconds", 1),
+        r.int("providerKeys.retrySeconds", 1),
+        r.long("providerKeys.readTimeoutMillis", 1)
+      )
+    )
 
   def graphEvidenceApi(
       extra: Config = ConfigFactory.empty()
